@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" translate="no">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="google" content="notranslate">
 <title>Ancient Temenos</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Cormorant+Garamond:wght@300;400&family=Cinzel:wght@300;400&family=Almendra:ital,wght@0,400;1,400&family=GFS+Didot&family=Noto+Sans+Old+Italic&display=swap" rel="stylesheet">
 <style>
@@ -12,8 +13,19 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
 /* ── SCREENS ── */
-.screen{position:fixed;inset:0;z-index:10;display:none;flex-direction:column;align-items:center;justify-content:center;}
+.screen{position:fixed;inset:0;z-index:10;display:none;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity .6s ease;}
 .screen.active{display:flex;}
+.screen.visible{opacity:1;}
+
+/* foyer stagger */
+.foyer-inner>*{opacity:0;transform:translateY(12px);transition:opacity .7s ease, transform .7s ease;}
+.foyer-inner.arrived>*{opacity:1;transform:translateY(0);}
+.foyer-inner.arrived>*:nth-child(1){transition-delay:.1s;}
+.foyer-inner.arrived>*:nth-child(2){transition-delay:.2s;}
+.foyer-inner.arrived>*:nth-child(3){transition-delay:.3s;}
+.foyer-inner.arrived>*:nth-child(4){transition-delay:.4s;}
+.foyer-inner.arrived>*:nth-child(5){transition-delay:.5s;}
+.foyer-inner.arrived>*:nth-child(6){transition-delay:.6s;}
 
 /* ── SHARED ORN ── */
 .orn{display:flex;align-items:center;gap:10px;width:160px;margin:0 auto;}
@@ -52,9 +64,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
   width:100%;
   height:100%;
   object-fit:cover;
-  /* crop bottom-right to hide watermark */
-  object-position:center 20%;
-  transform:scale(1.08);
+  object-position:center center;
   filter:brightness(.65) saturate(.9);
 }
 
@@ -198,44 +208,6 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 .altar-enter{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.35em;color:rgba(196,158,72,0.28);text-transform:uppercase;margin-top:.5rem;transition:color .4s;}
 .altar-door:hover .altar-enter{color:rgba(196,158,72,0.7);}
 .foyer-divider{width:1px;background:rgba(196,158,72,0.08);}
-
-/* ══════════════════════════════════════
-   VENUS ALTAR — REBUILT
-══════════════════════════════════════ */
-#venusAltar{overflow-y:auto;justify-content:flex-start;background:#080604;}
-#venusAltar::-webkit-scrollbar{width:0;}
-.va-arrival{position:relative;width:100%;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 1.5rem 4rem;}
-.va-glow{position:absolute;inset:0;background:radial-gradient(ellipse 60% 70% at 50% 40%, rgba(196,158,72,0.07) 0%, transparent 70%);pointer-events:none;}
-.va-arch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:min(620px,110vw);z-index:2;pointer-events:none;opacity:0;animation:archRise 3s ease 2.5s forwards;}
-@keyframes archRise{from{opacity:0;}to{opacity:1;}}
-.va-star{position:absolute;top:max(2vh,16px);left:50%;transform:translateX(-50%);z-index:5;animation:starPulse 4s ease-in-out infinite;}
-@keyframes starPulse{0%,100%{filter:drop-shadow(0 0 8px rgba(255,220,120,0.5));}50%{filter:drop-shadow(0 0 22px rgba(255,230,140,0.95));}}
-.va-statue{position:relative;z-index:3;width:min(340px,70vw);margin-top:min(6vh,48px);opacity:0;animation:statueEmerge 3.5s cubic-bezier(.2,.8,.3,1) 0.4s forwards;}
-@keyframes statueEmerge{0%{opacity:0;filter:brightness(0) blur(4px);}40%{opacity:.15;filter:brightness(.2) blur(2px);}100%{opacity:1;filter:brightness(1) blur(0);}}
-.va-statue img{width:100%;display:block;}
-.va-name-wrap{position:relative;z-index:4;text-align:center;margin-top:1.6rem;opacity:0;animation:fadeUp 1.2s ease 3.2s forwards;}
-.va-epithet{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.55em;color:rgba(196,158,72,0.4);text-transform:uppercase;margin-bottom:.5rem;}
-.va-name{font-family:'Almendra',serif;font-style:italic;font-size:38px;color:rgba(238,220,168,0.88);text-shadow:0 0 40px rgba(196,158,72,0.25);letter-spacing:.05em;}
-.va-fracture{width:min(480px,90vw);height:1px;position:relative;margin:2.8rem auto 0;opacity:0;animation:fadeUp 1s ease 3.8s forwards;}
-.va-fracture::before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(196,158,72,0.35) 20%,rgba(196,158,72,0.6) 50%,rgba(196,158,72,0.35) 80%,transparent);}
-.va-fracture-gem{position:absolute;top:50%;left:50%;width:7px;height:7px;background:rgba(196,158,72,0.7);transform:translate(-50%,-50%) rotate(45deg);box-shadow:0 0 12px rgba(196,158,72,0.6);}
-.va-myth{width:100%;max-width:540px;padding:3rem 1.5rem 0;margin:0 auto;opacity:0;animation:fadeUp 1.4s ease 4.4s forwards;}
-.va-myth-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.52em;color:rgba(196,158,72,0.3);text-transform:uppercase;text-align:center;margin-bottom:2rem;}
-.va-myth-body{display:flex;flex-direction:column;gap:1.2rem;}
-.va-myth-body p{font-family:'Cormorant Garamond',serif;font-size:18px;color:rgba(238,220,168,0.62);line-height:1.85;text-align:center;}
-.va-myth-body em{font-style:italic;color:rgba(196,158,72,0.65);}
-.va-myth-body .va-quote{font-family:'Cormorant',serif;font-style:italic;font-size:21px;color:rgba(196,158,72,0.6);padding:.6rem 1.4rem;border-left:.5px solid rgba(196,158,72,0.22);text-align:left;}
-.va-myth-body .va-climax{font-family:'Almendra',serif;font-style:italic;font-size:26px;color:rgba(238,220,168,0.82);letter-spacing:.04em;text-shadow:0 0 20px rgba(196,158,72,0.2);}
-.va-fracture2{width:min(320px,80vw);height:.5px;background:linear-gradient(90deg,transparent,rgba(196,158,72,0.25),transparent);margin:3rem auto 0;}
-.va-oracle-call{width:100%;max-width:480px;margin:0 auto;padding:3rem 1.5rem 5rem;display:flex;flex-direction:column;align-items:center;gap:1.4rem;opacity:0;animation:fadeUp 1.2s ease 5s forwards;}
-.va-oracle-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.5em;color:rgba(196,158,72,0.28);text-transform:uppercase;text-align:center;}
-.va-oracle-question{font-family:'Cormorant',serif;font-style:italic;font-size:20px;color:rgba(238,220,168,0.5);line-height:1.7;text-align:center;}
-.va-oracle-btn{background:transparent;border:.5px solid rgba(196,158,72,0.3);cursor:pointer;padding:1rem 3rem;transition:all .5s;position:relative;overflow:hidden;}
-.va-oracle-btn::before{content:'';position:absolute;inset:0;background:rgba(196,158,72,0.04);opacity:0;transition:opacity .5s;}
-.va-oracle-btn:hover{border-color:rgba(196,158,72,0.6);}
-.va-oracle-btn:hover::before{opacity:1;}
-.va-oracle-btn-text{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.48em;color:rgba(196,158,72,0.55);text-transform:uppercase;transition:color .5s;position:relative;z-index:1;}
-.va-oracle-btn:hover .va-oracle-btn-text{color:rgba(238,220,168,0.85);}
 
 /* ── VENUS ORACLE ── */
 #venusOracle{overflow-y:auto;justify-content:flex-start;background:rgba(6,4,2,0.98);}
@@ -471,7 +443,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 <button class="nav-btn" id="teachingsBtn" onclick="openTeachings()">The Teachings ✦</button>
 
 <!-- ══ THRESHOLD ══ -->
-<div class="screen active" id="threshold">
+<div class="screen active visible" id="threshold">
 
   <!-- video background -->
   <div class="t-video-wrap">
@@ -539,9 +511,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 <!-- ══ FOYER ══ -->
 <div class="screen" id="foyer">
   <div class="foyer-inner">
-    <p class="foyer-entered">You have entered the Temenos</p>
-    <p class="foyer-title">Ancient Temenos</p>
-    <p class="foyer-sub">Choose your altar</p>
+    <p class="foyer-entered">Choose your altar</p>
     <div class="orn" style="margin-bottom:2rem;"><div class="orn-l"></div><div class="orn-d"></div><div class="orn-l"></div></div>
     <div class="altars-row">
       <div class="altar-door altar-venus" onclick="enterVenusAltar()" style="background-image:url('https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus.jpg');background-size:cover;background-position:center top;min-height:420px;">
@@ -586,38 +556,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
   </div>
 </div>
 
-<!-- ══ VENUS ALTAR ══ -->
-<div class="screen" id="venusAltar">
-  <div class="va-arrival">
-    <!-- Venus video background -->
-    <div style="position:absolute;inset:0;z-index:0;overflow:hidden;">
-      <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.65) saturate(.9);transform:scale(1.05);">
-        <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus.mp4" type="video/mp4">
-      </video>
-      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 50%,transparent 30%,rgba(4,3,2,0.75) 100%);"></div>
-    </div>
-    <div class="va-glow"></div>
-    <div class="va-star">
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-        <line x1="10" y1="0" x2="10" y2="20" stroke="rgba(255,230,140,0.9)" stroke-width=".7"/>
-        <line x1="0" y1="10" x2="20" y2="10" stroke="rgba(255,230,140,0.9)" stroke-width=".7"/>
-        <line x1="3" y1="3" x2="17" y2="17" stroke="rgba(255,230,140,0.5)" stroke-width=".5"/>
-        <line x1="17" y1="3" x2="3" y2="17" stroke="rgba(255,230,140,0.5)" stroke-width=".5"/>
-        <circle cx="10" cy="10" r="2.5" fill="rgba(255,240,160,0.95)"/>
-      </svg>
-    </div>
-    <div class="va-arch">
-      <svg id="archSvg" viewBox="0 0 600 520" fill="none" xmlns="http://www.w3.org/2000/svg" style="width:100%;"></svg>
-    </div>
-    <div class="va-statue">
-      <img src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus.jpg" alt="Venus · Ancient Temenos by Ellis Liu" onerror="this.onerror=null;this.src='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus.jpg';"/>
-    </div>
-    <div class="va-name-wrap">
-      <p class="va-epithet">Altar of Venus · Ancient Temenos</p>
-      <p class="va-name">Aphrodite</p>
-    </div>
-  </div>
-</div>
+
 
 <!-- ══ VENUS ORACLE ══ -->
 <div class="screen" id="venusOracle" style="justify-content:flex-start;">
@@ -628,16 +567,10 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
     </video>
     <div style="position:absolute;inset:0;background:rgba(6,4,2,0.7);"></div>
   </div>
-  <div class="oracle-top" style="position:relative;overflow:hidden;padding-bottom:2rem;">
-    <div style="position:absolute;inset:0;z-index:0;">
-      <img src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center top;filter:brightness(.45) saturate(.75);"/>
-      <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(6,4,2,0.3),rgba(6,4,2,0.98));"></div>
-    </div>
-    <div style="position:relative;z-index:1;padding-top:3.5rem;">
-      <p class="o-entered">Altar of Venus · Ancient Temenos</p>
-      <h2 class="o-title">She is listening</h2>
-      <p class="o-sub">Speak what you carry. She will show you what you already know.</p>
-    </div>
+  <div class="oracle-top" style="position:relative;z-index:1;padding:3.5rem 2rem 1.2rem;">
+    <p class="o-entered">Altar of Venus · Ancient Temenos</p>
+    <h2 class="o-title">She is listening</h2>
+    <p class="o-sub">Speak what you carry. She will show you what you already know.</p>
   </div>
   <div class="thread" id="vthread"></div>
   <div class="v-closing" id="vClosing">
@@ -864,29 +797,35 @@ function mainLoop(){drawBg();if(inCave)drawCave();drawPool();drawWell();requestA
 mainLoop();
 
 // ══ ARCH ══
-function buildArch(){
-  const svg=document.getElementById('archSvg');
-  const numPairs=14,archRx=220,archRy=210,cx=300,cy=340;
-  for(let i=0;i<numPairs;i++){
-    const t=i/(numPairs-1),angle=Math.PI+t*Math.PI;
-    const px=cx+archRx*Math.cos(angle),py=cy+archRy*Math.sin(angle);
-    const handAngle=Math.atan2(-Math.sin(angle),Math.cos(angle))*180/Math.PI;
-    const col=`rgba(175,145,95,${0.05+Math.random()*0.05})`;
-    const g=document.createElementNS('http://www.w3.org/2000/svg','g');
-    g.setAttribute('transform',`translate(${px},${py}) rotate(${handAngle})`);
-    const lh=document.createElementNS('http://www.w3.org/2000/svg','g');lh.setAttribute('transform','translate(-18,0) scale(-1,1)');lh.innerHTML=handPath(col);
-    const rh=document.createElementNS('http://www.w3.org/2000/svg','g');rh.setAttribute('transform','translate(18,0)');rh.innerHTML=handPath(col);
-    g.appendChild(lh);g.appendChild(rh);svg.appendChild(g);
-  }
-}
-function handPath(col){return `<path d="M0,0 L0,-15 Q1,-17 2,-15 L2,-2 M2,-13 L3,-19 Q4,-21 5,-19 L5,-2 M5,-17 L6,-21 Q7,-23 8,-21 L8,-2 M8,-17 L9,-19 Q10,-21 11,-19 L11,-1 M0,0 Q5,3 11,0 L11,4 Q5,7 0,4 Z" stroke="${col}" stroke-width="0.7" fill="none" stroke-linecap="round"/>`;}
-buildArch();
-
 // ══ NAVIGATION ══
 let currentScreen='threshold';
 function showScreen(id){
-  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
-  document.getElementById(id).classList.add('active');
+  const prev=document.querySelector('.screen.active');
+  const next=document.getElementById(id);
+  if(prev&&prev!==next){
+    prev.style.opacity='0';
+    setTimeout(()=>{
+      prev.classList.remove('active','visible');
+      next.classList.add('active');
+      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+        next.classList.add('visible');
+        // stagger foyer on arrival
+        if(id==='foyer'){
+          const fi=next.querySelector('.foyer-inner');
+          if(fi){fi.classList.remove('arrived');requestAnimationFrame(()=>setTimeout(()=>fi.classList.add('arrived'),50));}
+        }
+      }));
+    },350);
+  } else {
+    next.classList.add('active');
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      next.classList.add('visible');
+      if(id==='foyer'){
+        const fi=next.querySelector('.foyer-inner');
+        if(fi){fi.classList.remove('arrived');requestAnimationFrame(()=>setTimeout(()=>fi.classList.add('arrived'),50));}
+      }
+    }));
+  }
   currentScreen=id;
   inCave=(id==='ganymedeScreen');
   caveC.style.display=inCave?'block':'none';
@@ -981,7 +920,6 @@ async function sendVenus(){
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,system:VSYS,messages:vHistory})});
     const data=await res.json();
-    console.log('Venus API response:',JSON.stringify(data).slice(0,300));
     if(data.error){throw new Error(data.error.message);}
     const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
     th.textContent='';resetVBtn();
