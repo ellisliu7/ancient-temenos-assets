@@ -55,7 +55,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
   /* crop bottom-right to hide watermark */
   object-position:center 20%;
   transform:scale(1.08);
-  filter:brightness(.55) saturate(.8);
+  filter:brightness(.65) saturate(.9);
 }
 
 /* vignette — darkens edges, fully hides watermark corner */
@@ -121,12 +121,12 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
   animation:fadeUp 1.5s ease .5s both;
 }
 .t-title{
-  font-family:'Almendra',serif;font-style:italic;
-  font-size:clamp(38px,7vw,58px);font-weight:400;
-  color:rgba(238,220,168,0.97);
-  letter-spacing:.06em;line-height:1.05;
+  font-family:'Noto Sans Old Italic','Segoe UI Historic',serif;
+  font-size:clamp(28px,5vw,48px);font-weight:400;
+  color:rgba(238,220,168,0.92);
+  letter-spacing:.18em;line-height:1.2;
   margin-bottom:.3rem;text-align:center;
-  text-shadow:0 0 60px rgba(196,158,72,0.5),0 0 20px rgba(196,158,72,0.3),0 2px 4px rgba(0,0,0,0.9);
+  text-shadow:0 0 40px rgba(196,158,72,0.5),0 0 15px rgba(196,158,72,0.3),0 2px 4px rgba(0,0,0,0.9);
   animation:fadeUp 1.5s ease .7s both;
 }
 .t-sub{
@@ -489,8 +489,6 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
   <!-- content -->
   <div class="t-content">
     <!-- old italic inscription top -->
-    <p class="t-inscription">𐌀𐌍𐌂𐌉𐌄𐌍𐌕 · 𐌕𐌄𐌌𐌄𐌍𐌏𐌔</p>
-
     <div class="geo-wrap">
       <svg width="88" height="88" viewBox="0 0 110 110" fill="none">
         <circle cx="55" cy="55" r="50" stroke="rgba(196,158,72,0.22)" stroke-width=".5"/>
@@ -511,12 +509,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
       </svg>
     </div>
 
-    <p class="t-eye">Ellis Liu</p>
-    <h1 class="t-title">Ancient Temenos</h1>
-    <p class="t-sub">Lemurian frequency · sacred ground</p>
-
-    <!-- old italic divider -->
-    <p class="t-old-italic-div">𐌀 · 𐌕 · 𐌄 · 𐌌 · 𐌄 · 𐌍 · 𐌏 · 𐌔</p>
+    <h1 class="t-title">𐌀𐌍𐌂𐌉𐌄𐌍𐌕 · 𐌕𐌄𐌌𐌄𐌍𐌏𐌔</h1>
 
     <div class="riddle-wrap">
       <p class="riddle-lbl">Speak the word to step into remembrance</p>
@@ -571,6 +564,25 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
         </div>
       </div>
     </div>
+
+    <!-- sealed portals -->
+    <div style="display:flex;gap:1px;background:rgba(196,158,72,0.04);max-width:700px;width:100%;margin-top:1px;">
+      <div style="flex:1;min-height:180px;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;padding:1.8rem;background:rgba(4,3,2,0.9);cursor:default;">
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(196,158,72,0.02) 0px,rgba(196,158,72,0.02) 1px,transparent 1px,transparent 8px);"></div>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" style="opacity:.2;"><circle cx="16" cy="16" r="14" stroke="rgba(196,158,72,0.8)" stroke-width=".6"/><circle cx="16" cy="16" r="8" stroke="rgba(196,158,72,0.6)" stroke-width=".5"/><line x1="16" y1="2" x2="16" y2="30" stroke="rgba(196,158,72,0.3)" stroke-width=".4"/><line x1="2" y1="16" x2="30" y2="16" stroke="rgba(196,158,72,0.3)" stroke-width=".4"/></svg>
+        <p style="font-family:'Almendra',serif;font-style:italic;font-size:20px;color:rgba(238,220,168,0.25);letter-spacing:.04em;position:relative;z-index:1;">Altar of Persephone</p>
+        <p style="font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.45em;color:rgba(196,158,72,0.2);text-transform:uppercase;position:relative;z-index:1;">She descends · Patterns revealed</p>
+        <p style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.35em;color:rgba(196,158,72,0.18);text-transform:uppercase;margin-top:.3rem;position:relative;z-index:1;">Sealed</p>
+      </div>
+      <div style="width:1px;background:rgba(196,158,72,0.04);"></div>
+      <div style="flex:1;min-height:180px;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;padding:1.8rem;background:rgba(4,3,2,0.9);cursor:default;">
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(196,158,72,0.02) 0px,rgba(196,158,72,0.02) 1px,transparent 1px,transparent 8px);"></div>
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" style="opacity:.2;"><path d="M16 2 L28 10 L28 22 L16 30 L4 22 L4 10 Z" stroke="rgba(196,158,72,0.8)" stroke-width=".6" fill="none"/><circle cx="16" cy="16" r="5" stroke="rgba(196,158,72,0.5)" stroke-width=".5" fill="none"/></svg>
+        <p style="font-family:'Almendra',serif;font-style:italic;font-size:20px;color:rgba(238,220,168,0.25);letter-spacing:.04em;position:relative;z-index:1;">Altar of Psyche</p>
+        <p style="font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.45em;color:rgba(196,158,72,0.2);text-transform:uppercase;position:relative;z-index:1;">The inner child · Remember to play</p>
+        <p style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.35em;color:rgba(196,158,72,0.18);text-transform:uppercase;margin-top:.3rem;position:relative;z-index:1;">Sealed</p>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -579,7 +591,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
   <div class="va-arrival">
     <!-- Venus video background -->
     <div style="position:absolute;inset:0;z-index:0;overflow:hidden;">
-      <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.35) saturate(.7);transform:scale(1.05);">
+      <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.65) saturate(.9);transform:scale(1.05);">
         <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus.mp4" type="video/mp4">
       </video>
       <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 80% at 50% 50%,transparent 30%,rgba(4,3,2,0.75) 100%);"></div>
@@ -611,14 +623,14 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 <div class="screen" id="venusOracle" style="justify-content:flex-start;">
   <!-- Venus video background -->
   <div style="position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;">
-    <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.18) saturate(.6);">
+    <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.45) saturate(.75);">
       <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus.mp4" type="video/mp4">
     </video>
     <div style="position:absolute;inset:0;background:rgba(6,4,2,0.7);"></div>
   </div>
   <div class="oracle-top" style="position:relative;overflow:hidden;padding-bottom:2rem;">
     <div style="position:absolute;inset:0;z-index:0;">
-      <img src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center top;filter:brightness(.25) saturate(.6);"/>
+      <img src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center top;filter:brightness(.45) saturate(.75);"/>
       <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(6,4,2,0.3),rgba(6,4,2,0.98));"></div>
     </div>
     <div style="position:relative;z-index:1;padding-top:3.5rem;">
@@ -631,7 +643,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
   <div class="v-closing" id="vClosing">
     <p class="vc-closing-label">She has seen you</p>
     <p class="vc-closing-text" id="vClosingText">The channel is open. What was received here is yours to carry forward — into your body, your work, your life.</p>
-    <button class="vc-bridge-btn" onclick="bridgeToGanymede()"><span>I am ready to create my reality</span></button>
+    <button class="vc-bridge-btn" onclick="bridgeToGanymede()"><span>Take me to the Ganymede cave</span></button>
     <button class="vc-grimoire-btn" onclick="openGrimoire()">✦ Seal this into my Grimoire ✦</button>
   </div>
   <div class="well-prompt">
@@ -651,41 +663,14 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
 <!-- ══ GANYMEDE ══ -->
 <div class="screen" id="ganymedeScreen" style="justify-content:flex-start;">
-  <div class="cave-top" style="position:relative;overflow:hidden;padding-bottom:2rem;">
-    <div style="position:absolute;inset:0;z-index:0;">
-      <img src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/IMG_5355.jpg" style="width:100%;height:100%;object-fit:cover;object-position:center top;filter:brightness(.2) saturate(.5);"/>
-      <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(8,5,2,0.3),rgba(8,5,2,0.98));"></div>
-    </div>
-    <div style="position:relative;z-index:1;padding-top:3.5rem;">
-      <p class="cave-entered">Altar of Ganymede · Earth School</p>
-      <h2 class="cave-title">The Cave of Remembrance</h2>
-      <p class="cave-sub">Ground the vision · Build</p>
-    </div>
+  <div class="cave-top">
+    <p class="cave-entered">Altar of Ganymede · Earth School</p>
+    <h2 class="cave-title">The Cave of Remembrance</h2>
+    <p class="cave-sub">Ground the vision · Build</p>
   </div>
-  <div id="antechamber">
-    <p class="antechamber-label">How do you arrive today?</p>
-    <div class="paths-row">
-      <div class="archway-door" onclick="enterArchway()">
-        <svg width="52" height="60" viewBox="0 0 52 60" fill="none"><path d="M6 60 L6 26 Q6 6 26 6 Q46 6 46 26 L46 60" stroke="rgba(180,120,50,0.45)" stroke-width=".8" fill="none"/><path d="M12 60 L12 27 Q12 12 26 12 Q40 12 40 27 L40 60" stroke="rgba(180,120,50,0.22)" stroke-width=".5" fill="none"/><circle cx="26" cy="28" r="3" stroke="rgba(180,120,50,0.35)" stroke-width=".5" fill="none"/></svg>
-        <p class="path-label">The Archway</p>
-        <p class="path-name">I am ready to go deep</p>
-        <p class="path-intent">Ganymede asks. You answer. Your soul curriculum reveals itself.</p>
-        <p class="path-enter">Enter the passage →</p>
-      </div>
-
-    </div>
-    <div style="width:100%;">
-      <p class="antechamber-label" style="margin-bottom:.6rem;opacity:.5;">Further passages · when you are ready</p>
-      <div class="bg-chambers">
-        <div class="bg-chamber"><p class="bg-chamber-name">The Dream</p></div>
-        <div class="bg-chamber"><p class="bg-chamber-name">The Curriculum</p></div>
-        <div class="bg-chamber"><p class="bg-chamber-name">The Resistance</p></div>
-        <div class="bg-chamber"><p class="bg-chamber-name">The Review</p></div>
-        <div class="bg-chamber"><p class="bg-chamber-name">The Remembrance</p></div>
-      </div>
-    </div>
+  <div id="antechamber" style="display:none;">
   </div>
-  <div id="archConv">
+  <div id="archConv" style="display:flex;">
     <div class="gany-thread" id="gthread"></div>
     <div class="gany-inp-area">
       <div class="gany-inp-row">
@@ -720,7 +705,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 <div id="wellOverlay">
   <!-- Wishing Well video background -->
   <div style="position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;">
-    <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.2) saturate(.7);">
+    <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.45) saturate(.8);">
       <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus%20Wishing%20Well_1.mp4" type="video/mp4">
     </video>
     <div style="position:absolute;inset:0;background:rgba(4,3,2,0.75);"></div>
@@ -734,11 +719,11 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
     <p class="ws-hint">Write your intention as a statement of truth</p>
     <button class="ws-btn" onclick="castCoin()">Cast the coin ✦</button>
   </div>
-  <div class="well-stage" id="ws2"><canvas id="coinCanvas" width="300" height="340"></canvas></div>
+  <div class="well-stage" id="ws2"><canvas id="rippleCanvas" width="340" height="340" style="border-radius:50%;"></canvas></div>
   <div class="well-stage" id="ws3">
     <!-- Sigil video background -->
     <div style="position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;">
-      <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.18) saturate(.6);">
+      <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.45) saturate(.75);">
         <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Sigil.mp4" type="video/mp4">
       </video>
       <div style="position:absolute;inset:0;background:rgba(4,3,2,0.78);"></div>
@@ -758,7 +743,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
         <p class="of-address">0x70F0082E7f47e3DC8cf62B2C7FA26100657297E9</p>
         <p class="of-copy" id="copyHint">Tap to copy address</p>
       </div>
-      <p class="of-note">No amount is too small.<br>Give only what feels true.</p>
+
       <button class="of-save" onclick="saveSigil()">Save your sigil</button>
     </div>
     </div>
@@ -926,37 +911,48 @@ function tryKey(){
   else{m.textContent='that is not the word — look within';m.classList.add('err');document.getElementById('ki').value='';setTimeout(()=>{m.classList.remove('err');m.textContent='what is the answer?';},2400);}
 }
 function runEntry(){
+  // gentle shockwave
   const sw=document.getElementById('shockwave');sw.style.opacity='1';
-  ['sw1','sw2','sw3'].forEach((id,i)=>{const el=document.getElementById(id);el.style.animation='none';el.offsetWidth;el.style.animation=`sw-expand 1.2s cubic-bezier(.2,.8,.2,1) ${i*.15}s forwards`;});
-  setTimeout(()=>{const g=document.getElementById('glitch');g.style.animation='glitch-flash .6s ease forwards';g.style.opacity='1';setTimeout(()=>{g.style.opacity='0';g.style.animation='';},700);},600);
-  setTimeout(()=>{const vEl=document.getElementById('vortex');vEl.style.opacity='1';vfr=0;vrun=true;vcX.clearRect(0,0,vcC.width,vcC.height);drawVortex();},900);
-  setTimeout(()=>{document.getElementById('threshold').style.opacity='0';},1200);
-  // show congratulation screen
+  ['sw1','sw2','sw3'].forEach((id,i)=>{const el=document.getElementById(id);el.style.animation='none';el.offsetWidth;el.style.animation=`sw-expand 1.4s cubic-bezier(.2,.8,.2,1) ${i*.2}s forwards`;});
+  // fade threshold out
+  setTimeout(()=>{
+    document.getElementById('threshold').style.transition='opacity 1s ease';
+    document.getElementById('threshold').style.opacity='0';
+  },800);
+  // show congratulation
   setTimeout(()=>{
     sw.style.opacity='0';
     document.getElementById('threshold').style.opacity='1';
+    document.getElementById('threshold').style.transition='';
     const ec=document.getElementById('entryCongrat');
-    ec.style.display='flex';
-    // animate lines in
+    ec.style.display='flex';ec.style.opacity='0';
+    ec.style.transition='opacity .8s ease';
+    setTimeout(()=>{ec.style.opacity='1';},50);
     const l1=document.getElementById('ecLine1');
     const l2=document.getElementById('ecLine2');
     const l3=document.getElementById('ecLine3');
-    l1.style.transition='opacity .8s ease, transform .8s ease';
-    l1.style.opacity='0';l1.style.transform='translateY(8px)';
-    setTimeout(()=>{l1.style.opacity='1';l1.style.color='rgba(196,158,72,0.5)';l1.style.transform='translateY(0)';},100);
-    setTimeout(()=>{l2.style.transition='opacity 1s ease, transform 1s ease';l2.style.opacity='0';l2.style.transform='translateY(8px)';l2.style.color='rgba(238,220,168,0.95)';setTimeout(()=>{l2.style.opacity='1';l2.style.transform='translateY(0)';},50);},700);
-    setTimeout(()=>{l3.style.transition='opacity .8s ease';l3.style.opacity='0';l3.style.color='rgba(196,158,72,0.5)';setTimeout(()=>{l3.style.opacity='1';},50);},1600);
-    // fade out and go to foyer
+    setTimeout(()=>{l1.style.transition='opacity .8s ease, transform .8s ease';l1.style.color='rgba(196,158,72,0.5)';l1.style.opacity='1';l1.style.transform='translateY(0)';},200);
+    setTimeout(()=>{l2.style.transition='opacity 1s ease, transform 1s ease';l2.style.color='rgba(238,220,168,0.95)';l2.style.opacity='1';l2.style.transform='translateY(0)';},800);
+    setTimeout(()=>{l3.style.transition='opacity .8s ease';l3.style.color='rgba(196,158,72,0.5)';l3.style.opacity='1';},1600);
+    // fade out to foyer
     setTimeout(()=>{
-      ec.style.transition='opacity .8s ease';ec.style.opacity='0';
-      setTimeout(()=>{ec.style.display='none';ec.style.opacity='1';showScreen('foyer');},900);
-    },3200);
-  },2400);
+      ec.style.transition='opacity 1s ease';
+      ec.style.opacity='0';
+      setTimeout(()=>{ec.style.display='none';showScreen('foyer');},1000);
+    },3400);
+  },1800);
 }
 
 // ══ VENUS ══
 function enterVenusAltar(){enterVenusOracle();}
-function enterGanymede(){showScreen('ganymedeScreen');backToAntechamber();}
+function enterGanymede(){
+  showScreen('ganymedeScreen');
+  if(!gOpened){
+    gOpened=true;
+    setTimeout(()=>{renderGCard({stage:'Grounding the Vision',reflection:'The cave is the root. What is received in the crown must be pulled into the earth to become real. Vision without structure dissolves. You are here to build.\n\nSay what you received. Say it plainly.',question:'What did you come here knowing — the thing that is ready to be made real?'});},600);
+  }
+  document.getElementById('gi').focus();
+}
 
 const vHistory=[];
 let venusOracleOpened=false;
@@ -983,7 +979,7 @@ async function sendVenus(){
   btn.classList.add('loading');btn.innerHTML=spinSvg('rgba(196,158,72,0.5)');
   th.textContent=vTh[Math.floor(Math.random()*vTh.length)];
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,system:VSYS,messages:vHistory})});
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,system:VSYS,messages:vHistory})});
     const data=await res.json();
     console.log('Venus API response:',JSON.stringify(data).slice(0,300));
     if(data.error){throw new Error(data.error.message);}
@@ -1028,18 +1024,15 @@ function maybeShowVClosing(){
 
 function bridgeToGanymede(){
   showScreen('ganymedeScreen');
-  backToAntechamber();
-  // Ganymede acknowledges the Venus session
-  if(!gOpened){
-    gOpened=true;
-    setTimeout(()=>{
-      renderGCard({
-        stage:'You opened the channel. Now we build.',
-        reflection:'You received something in the altar of Venus. That is the raw material. The vision, the knowing, the feeling that arrived — it is real.\n\nNow we pull it into the earth. Into structure. Into form.',
-        question:'What is the one thing you received that is ready to become real?'
-      });
-    },600);
-  }
+  // always show bridge message even if Ganymede was already opened
+  gOpened=true;
+  setTimeout(()=>{
+    renderGCard({
+      stage:'You opened the channel. Now we build.',
+      reflection:'You received something in the altar of Venus. That is the raw material. The vision, the knowing, the feeling that arrived — it is real.\n\nNow we pull it into the earth. Into structure. Into form.',
+      question:'What is the one thing you received that is ready to become real?'
+    });
+  },600);
   document.getElementById('gi').focus();
 }
 
@@ -1074,13 +1067,16 @@ async function generateInvocation(venusText,ganyText){
   document.getElementById('grActions').style.display='none';
   const context=`Venus session: ${venusText||'The channel was opened.'}\nGanymede session: ${ganyText||'The vision was grounded.'}`;
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:300,system:`You are the voice of Ancient Temenos. Write a single closing invocation for a seeker who has just completed a sacred session. Draw from what was revealed and built. Write in second person, poetic, 3-5 sentences. No JSON — just the invocation text itself. Make it feel like a blessing to carry forward.`,messages:[{role:'user',content:context}]})});
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,system:`You are the voice of Ancient Temenos. From the seeker's session, generate a sacred soul record as JSON with these exact keys: pattern (1-2 sentences naming the core pattern or wound that showed up), tikkun (2-3 sentences on what this pattern is asking to be healed - the soul correction), lesson (1-2 sentences on the core lesson from this session), next_time (2-3 sentences on what to do next time this pattern shows up - a specific ritual, question or reframe), invocation (3-4 poetic sentences as a closing blessing in second person). Return only valid JSON nothing else.`,messages:[{role:'user',content:context}]})});
     const data=await res.json();
-    const text=data.content?.find(b=>b.type==='text')?.text||'You have remembered. Carry this forward.';
-    document.getElementById('grInvocation').textContent=text;
-    document.getElementById('grInvocationSection').style.display='block';
+    const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
+    let p;try{p=JSON.parse(raw.replace(/\`\`\`json|\`\`\`/g,'').trim());}catch(e){p={pattern:'A pattern of holding back what is ready to be seen.',tikkun:'The soul asks to be witnessed fully — not managed, not edited, not made smaller.',lesson:'What is received in the crown must be honoured in the body.',next_time:'Pause. Place your hand on your heart. Ask: what am I not allowing myself to feel right now? Breathe into the answer.',invocation:'You arrived. You opened. You received. What was given here belongs to you now — carry it forward in your body, your breath, your work.'};}
+    const inv=document.getElementById('grInvocationSection');
+    inv.innerHTML=`<p class="gr-section-label">The Pattern</p><p class="gr-section-body" style="margin-bottom:1.8rem;">${p.pattern||''}</p><p class="gr-section-label">The Tikkun</p><p class="gr-section-body" style="margin-bottom:1.8rem;">${p.tikkun||''}</p><p class="gr-section-label">The Lesson</p><p class="gr-section-body" style="margin-bottom:1.8rem;">${p.lesson||''}</p><p class="gr-section-label">Next Time It Shows Up</p><p class="gr-section-body" style="margin-bottom:1.8rem;">${p.next_time||''}</p><p class="gr-section-label">Your Closing Invocation</p><p class="gr-invocation">${p.invocation||''}</p>`;
+    document.getElementById('grInvocation').textContent=p.invocation||'';
+    inv.style.display='block';
   }catch(e){
-    document.getElementById('grInvocation').textContent='You arrived. You opened. You received. What was given to you here belongs to you now — in your body, your breath, your work. Carry it forward.';
+    document.getElementById('grInvocationSection').innerHTML='<p class="gr-invocation">You arrived. You opened. You received. Carry this forward.</p>';
     document.getElementById('grInvocationSection').style.display='block';
   }
   document.getElementById('grLoading').style.display='none';
@@ -1135,7 +1131,7 @@ async function sendGany(){
   btn.classList.add('loading');btn.innerHTML=spinSvg('rgba(180,120,50,0.6)');
   th.textContent=gTh[Math.floor(Math.random()*gTh.length)];
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:350,system:GSYS,messages:gHistory})});
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:350,system:GSYS,messages:gHistory})});
     const data=await res.json();const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
     th.textContent='';resetGBtn();
     let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p={stage:'The Descent',reflection:'The cave receives what you bring.',question:'What did you sense you always knew, before this world made you forget?'};}
@@ -1173,7 +1169,7 @@ async function askPool(){
   btn.classList.add('loading');btn.innerHTML=spinSvg('rgba(120,90,180,0.6)');th.textContent='The pool stirs…';
   document.getElementById('timelinesWrap').innerHTML='';document.getElementById('poolGanyQ').textContent='';
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:PSYS,messages:[{role:'user',content:q}]})});
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:PSYS,messages:[{role:'user',content:q}]})});
     const data=await res.json();const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
     th.textContent='';btn.classList.remove('loading');btn.innerHTML=arrowSvg('rgba(120,90,180,0.8)');
     let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p={timelines:[{tone:'Expansion',vision:'The path opens.',lesson:'Trusting the unknown.',principle:'The Principle of Vibration'},{tone:'Depth',vision:'You go inward before outward.',lesson:'Mastering the inner before the outer.',principle:'The Principle of Correspondence'},{tone:'Surrender',vision:'You release what you thought was required.',lesson:'That letting go is also power.',principle:'The Principle of Rhythm'}],closing_question:'Which one does your body already know?'};}
@@ -1188,22 +1184,90 @@ async function askPool(){
 function openWell(){document.getElementById('wellOverlay').style.display='flex';showWS(1);}
 function closeWell(){document.getElementById('wellOverlay').style.display='none';}
 function showWS(n){document.querySelectorAll('.well-stage').forEach(s=>s.classList.remove('active'));document.getElementById('ws'+n).classList.add('active');}
-function castCoin(){const i=document.getElementById('intentionInp').value.trim();if(!i)return;showWS(2);runCoin(i);}
-function runCoin(intention){
-  const cc=document.getElementById('coinCanvas'),cx2=cc.getContext('2d');
-  const CW=300,CH=340,MCX=150;let cf=0,tot=110;const sig=buildSigil(intention);
+function castCoin(){const i=document.getElementById('intentionInp').value.trim();if(!i)return;showWS(2);runRipple(i);}
+function runRipple(intention){
+  const rc=document.getElementById('rippleCanvas'),rx=rc.getContext('2d');
+  const W=340,H=340,CX=170,CY=170;
+  let rf=0,tot=140;
+  const sig=buildSigil(intention);
+  const ripples=[];
+  function addRipple(){ripples.push({r:0,op:0.7,born:rf});}
+  addRipple();
   function frm(){
-    cf++;cx2.fillStyle='rgba(4,3,2,0.3)';cx2.fillRect(0,0,CW,CH);const wy=250;
-    for(let i=0;i<6;i++){const r=Math.min(110,(cf*.6+i*12)%80);const op=Math.max(0,.5-r/110);cx2.beginPath();cx2.ellipse(MCX,wy,r,r*.28,0,0,Math.PI*2);cx2.strokeStyle=`rgba(196,158,72,${op})`;cx2.lineWidth=.6;cx2.stroke();}
-    const wg=cx2.createRadialGradient(MCX,wy,0,MCX,wy,70);wg.addColorStop(0,`rgba(196,158,72,${Math.min(.14,cf*.003)})`);wg.addColorStop(1,'transparent');cx2.fillStyle=wg;cx2.fillRect(0,0,CW,CH);
-    const cY=Math.min(wy-8,40+cf*cf*.016);const cOp=cf<tot*.7?1:Math.max(0,1-(cf-tot*.7)/(tot*.3));
-    cx2.save();cx2.globalAlpha=cOp;cx2.beginPath();cx2.ellipse(MCX,cY,16,16,0,0,Math.PI*2);
-    const cg=cx2.createRadialGradient(MCX-3,cY-3,0,MCX,cY,16);cg.addColorStop(0,'rgba(240,210,100,0.95)');cg.addColorStop(.5,'rgba(196,158,72,0.9)');cg.addColorStop(1,'rgba(140,100,30,0.8)');
-    cx2.fillStyle=cg;cx2.fill();cx2.strokeStyle='rgba(240,200,80,0.5)';cx2.lineWidth=.5;cx2.stroke();
-    if(cf>25&&cOp>.1){cx2.globalAlpha=cOp*Math.min(1,(cf-25)/20);sigilMini(cx2,MCX,cY,10);}
-    cx2.restore();
-    if(cf<tot)requestAnimationFrame(frm);else setTimeout(()=>{showWS(3);revealSigil(intention,sig);},400);
-  }frm();
+    rf++;
+    // add ripples periodically
+    if(rf%18===0&&rf<tot*.8)addRipple();
+    rx.clearRect(0,0,W,H);
+    // deep water background
+    const bg=rx.createRadialGradient(CX,CY,0,CX,CY,170);
+    bg.addColorStop(0,'rgba(8,6,18,0.95)');
+    bg.addColorStop(1,'rgba(2,2,6,1)');
+    rx.fillStyle=bg;rx.fillRect(0,0,W,H);
+    // ripples
+    ripples.forEach((rp,i)=>{
+      rp.r+=1.8;
+      rp.op=Math.max(0,0.6-(rp.r/170)*0.6);
+      if(rp.op<=0)return;
+      rx.beginPath();
+      rx.ellipse(CX,CY,rp.r,rp.r*.35,0,0,Math.PI*2);
+      rx.strokeStyle=`rgba(196,158,72,${rp.op})`;
+      rx.lineWidth=rp.r<30?1.5:0.8;
+      rx.stroke();
+    });
+    // glow at centre
+    const pulse=0.4+Math.sin(rf*.08)*0.3;
+    const glow=rx.createRadialGradient(CX,CY,0,CX,CY,60);
+    glow.addColorStop(0,`rgba(196,158,72,${pulse*0.4})`);
+    glow.addColorStop(1,'transparent');
+    rx.fillStyle=glow;rx.fillRect(0,0,W,H);
+    // intention text rising then dissolving
+    if(rf<60){
+      const textOp=Math.min(1,rf/20)*Math.max(0,1-(rf-40)/20);
+      rx.save();rx.globalAlpha=textOp*0.5;
+      rx.font="italic 15px 'Cormorant Garamond',serif";
+      rx.fillStyle='rgba(238,220,168,0.8)';
+      rx.textAlign='center';
+      const maxW=200;
+      const words=intention.split(' ');
+      let line='',lines=[];
+      words.forEach(w=>{const t=line+w+' ';if(rx.measureText(t).width>maxW&&line){lines.push(line.trim());line=w+' ';}else line=t;});
+      lines.push(line.trim());
+      lines.forEach((l,i)=>rx.fillText(l,CX,CY-((lines.length-1)*10)+i*22));
+      rx.restore();
+    }
+    // sigil rising from deep
+    if(rf>80){
+      const sigilOp=Math.min(0.85,(rf-80)/40);
+      rx.save();rx.globalAlpha=sigilOp;
+      drawSigilCanvas(rx,CX,CY,55,sig);
+      rx.restore();
+    }
+    if(rf<tot)requestAnimationFrame(frm);
+    else setTimeout(()=>{showWS(3);revealSigil(intention,sig);},500);
+  }
+  frm();
+}
+function drawSigilCanvas(c,cx,cy,r,sigil){
+  c.strokeStyle='rgba(196,158,72,0.9)';c.lineWidth=1.2;c.lineCap='round';
+  // border
+  if(sigil.border==='circle'){c.beginPath();c.arc(cx,cy,r,0,Math.PI*2);c.globalAlpha*=0.5;c.stroke();c.globalAlpha/=0.5;}
+  else if(sigil.border==='hexagon'){c.beginPath();for(let i=0;i<6;i++){const a=i*Math.PI/3-Math.PI/6;i===0?c.moveTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r):c.lineTo(cx+Math.cos(a)*r,cy+Math.sin(a)*r);}c.closePath();c.globalAlpha*=0.5;c.stroke();c.globalAlpha/=0.5;}
+  else if(sigil.border==='triangle'){c.beginPath();[[cx,cy-r],[cx+r*.866,cy+r*.5],[cx-r*.866,cy+r*.5]].forEach((p,i)=>i===0?c.moveTo(p[0],p[1]):c.lineTo(p[0],p[1]));c.closePath();c.globalAlpha*=0.5;c.stroke();c.globalAlpha/=0.5;}
+  // strokes
+  sigil.strokes.forEach(s=>{
+    const sr=r*.5*s.sc;const ox=cx+s.ox*r*.45,oy=cy+s.oy*r*.45;
+    c.save();c.translate(ox,oy);c.rotate(s.angle);
+    c.beginPath();
+    if(s.t==='v'){c.moveTo(0,-sr);c.lineTo(0,sr);}
+    else if(s.t==='h'){c.moveTo(-sr,0);c.lineTo(sr,0);}
+    else if(s.t==='d'){c.moveTo(-sr,-sr);c.lineTo(sr,sr);}
+    else if(s.t==='o'){c.arc(0,0,sr,0,Math.PI*2);}
+    else if(s.t==='c'){c.moveTo(-sr,0);c.quadraticCurveTo(0,-sr,sr,0);}
+    else if(s.t==='dot'){c.arc(0,0,2.5,0,Math.PI*2);c.fillStyle='rgba(196,158,72,0.8)';c.fill();c.restore();return;}
+    c.stroke();c.restore();
+  });
+  // centre dot
+  c.beginPath();c.arc(cx,cy,2.5,0,Math.PI*2);c.fillStyle='rgba(196,158,72,0.9)';c.fill();
 }
 let sigilSeed=0;
 function buildSigil(intent){
