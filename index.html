@@ -132,13 +132,14 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 }
 .t-title{
   font-family:'Noto Sans Old Italic','Segoe UI Historic',serif;
-  font-size:clamp(28px,5vw,48px);font-weight:400;
-  color:rgba(238,220,168,0.92);
+  font-size:clamp(22px,4vw,38px);font-weight:400;
+  color:rgba(238,220,168,0.35);
   letter-spacing:.18em;line-height:1.2;
   margin-bottom:.3rem;text-align:center;
-  text-shadow:0 0 40px rgba(196,158,72,0.5),0 0 15px rgba(196,158,72,0.3),0 2px 4px rgba(0,0,0,0.9);
-  animation:fadeUp 1.5s ease .7s both;
+  text-shadow:0 0 30px rgba(196,158,72,0.25);
+  animation:fadeUp 1.5s ease .7s both, titlePulse 4s ease-in-out 2s infinite;
 }
+@keyframes titlePulse{0%,100%{opacity:.35;}50%{opacity:.65;}}
 .t-sub{
   font-family:'Cinzel',serif;font-size:9px;font-weight:300;
   letter-spacing:.5em;color:rgba(196,158,72,0.35);
@@ -164,9 +165,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 .riddle-lbl{font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:.42em;color:rgba(196,158,72,0.35);text-transform:uppercase;text-align:center;margin-bottom:.9rem;}
 .riddle-text{font-family:'Cormorant',serif;font-style:italic;font-size:17px;color:rgba(238,220,168,0.55);line-height:1.9;text-align:center;}
 
-.key-wrap{
-  animation:fadeUp 1.5s ease 1.4s both;
-}
+.key-wrap{animation:fadeUp 1.5s ease 1.4s both;}
 .key-row{display:flex;align-items:center;border-bottom:.5px solid rgba(196,158,72,0.3);padding-bottom:8px;gap:8px;margin:0 auto;width:fit-content;position:relative;}
 .key-row::after{content:'';position:absolute;bottom:-1px;left:0;width:0;height:1px;background:rgba(196,158,72,0.7);transition:width .4s;}
 .key-row:focus-within::after{width:100%;}
@@ -176,6 +175,13 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 .key-btn:hover{color:rgba(196,158,72,1);}
 .key-msg{margin-top:1rem;font-family:'Cormorant Garamond',serif;font-size:15px;color:rgba(196,158,72,0.25);letter-spacing:.1em;min-height:1.5em;text-align:center;transition:color .4s;}
 .key-msg.err{color:rgba(220,80,50,0.6);}
+
+/* ── RUNE WORDS ── */
+.rune-field{position:relative;width:min(360px,92vw);height:210px;margin:1.6rem auto 0;animation:fadeUp 1.5s ease 1.4s both;}
+.rune-word{position:absolute;background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.45em;color:rgba(196,158,72,0.45);text-transform:uppercase;transition:color .5s ease,text-shadow .5s ease;padding:.4rem .6rem;white-space:nowrap;animation:runeFloat var(--dur,5s) ease-in-out var(--delay,0s) infinite;}
+.rune-word:hover{color:rgba(238,220,168,0.9);text-shadow:0 0 18px rgba(196,158,72,0.5);}
+@keyframes runeFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
+@keyframes runeWrong{0%,100%{opacity:1;}30%{opacity:0.08;}60%{opacity:0.04;}100%{opacity:0;}}
 
 /* bottom old italic footer */
 .t-footer-inscription{
@@ -194,19 +200,25 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 /* ── FOYER ── */
 #foyer{overflow-y:auto;}
 #foyer::-webkit-scrollbar{width:0;}
-.foyer-inner{display:flex;flex-direction:column;align-items:center;padding:3rem 2rem;width:100%;}
+.foyer-inner{display:flex;flex-direction:column;align-items:center;padding:1.2rem 2rem 2rem;width:100%;}
 .foyer-entered{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.52em;color:rgba(196,158,72,0.38);text-transform:uppercase;margin-bottom:.8rem;text-align:center;}
 .foyer-title{font-family:'Almendra',serif;font-style:italic;font-size:42px;color:rgba(238,220,168,0.9);text-shadow:0 0 30px rgba(196,158,72,0.2);text-align:center;}
 .foyer-sub{font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(196,158,72,0.38);letter-spacing:.06em;margin:.4rem 0 2rem;text-align:center;}
 .altars-row{display:flex;align-items:stretch;gap:1px;background:rgba(196,158,72,0.08);max-width:700px;width:100%;}
-.altar-door{flex:1;padding:2rem 2rem 2.2rem;cursor:pointer;position:relative;overflow:hidden;transition:all .5s;display:flex;flex-direction:column;align-items:center;text-align:center;justify-content:flex-end;}
+.altar-door{flex:1;padding:2rem 2rem 2.2rem;cursor:pointer;position:relative;overflow:hidden;transition:all .6s ease;display:flex;flex-direction:column;align-items:center;text-align:center;justify-content:flex-end;}
+.altar-door::after{content:'';position:absolute;inset:0;background:rgba(4,3,2,0.55);transition:opacity .6s ease;pointer-events:none;z-index:0;}
+.altar-door:hover::after{opacity:0;}
+.altar-door:hover{transform:scale(1.02);box-shadow:0 0 40px rgba(196,158,72,0.15);}
 .altar-door:hover .altar-enter{color:rgba(196,158,72,0.8)!important;}
-.altar-door:hover{transform:scale(1.01);}
-.altar-name{font-family:'Almendra',serif;font-style:italic;font-size:26px;color:rgba(238,220,168,0.82);letter-spacing:.04em;}
-.altar-intent{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.38em;color:rgba(196,158,72,0.4);text-transform:uppercase;margin-top:.2rem;}
-.altar-desc{font-family:'Cormorant Garamond',serif;font-size:15px;color:rgba(238,220,168,0.4);line-height:1.65;max-width:220px;}
-.altar-enter{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.35em;color:rgba(196,158,72,0.28);text-transform:uppercase;margin-top:.5rem;transition:color .4s;}
-.altar-door:hover .altar-enter{color:rgba(196,158,72,0.7);}
+.altar-door>*{position:relative;z-index:1;}
+.altar-name{font-family:'Almendra',serif;font-style:italic;font-size:26px;color:rgba(238,220,168,0.4);letter-spacing:.04em;transition:color .6s ease;}
+.altar-intent{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.38em;color:rgba(196,158,72,0.2);text-transform:uppercase;margin-top:.2rem;transition:color .6s ease;}
+.altar-desc{font-family:'Cormorant Garamond',serif;font-size:15px;color:rgba(238,220,168,0.2);line-height:1.65;max-width:220px;transition:color .6s ease;}
+.altar-enter{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.35em;color:rgba(196,158,72,0.15);text-transform:uppercase;margin-top:.5rem;transition:color .6s ease;}
+.altar-door:hover .altar-name{color:rgba(238,220,168,0.92);}
+.altar-door:hover .altar-intent{color:rgba(196,158,72,0.6);}
+.altar-door:hover .altar-desc{color:rgba(238,220,168,0.55);}
+.altar-door:hover .altar-enter{color:rgba(196,158,72,0.7)!important;}
 .foyer-divider{width:1px;background:rgba(196,158,72,0.08);}
 
 /* ── VENUS ORACLE ── */
@@ -235,12 +247,12 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 .cur{display:inline-block;width:2px;height:1em;background:rgba(196,158,72,0.65);margin-left:2px;animation:blink .9s step-end infinite;vertical-align:text-bottom;}
 @keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
 .well-prompt{text-align:center;padding:.5rem 0;flex-shrink:0;position:relative;z-index:1;}
-.well-prompt-txt{font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:.4em;color:rgba(196,158,72,0.28);text-transform:uppercase;cursor:pointer;transition:color .4s;border:none;background:transparent;}
-.well-prompt-txt:hover{color:rgba(196,158,72,0.7);}
+.well-prompt-txt{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.4em;color:rgba(196,158,72,0.55);text-transform:uppercase;cursor:pointer;transition:color .4s;border:none;background:transparent;}
+.well-prompt-txt:hover{color:rgba(196,158,72,0.9);}
 .inp-area{width:100%;max-width:600px;margin:0 auto;padding:1rem 1.5rem 2.5rem;flex-shrink:0;border-top:.5px solid rgba(196,158,72,0.07);position:relative;z-index:1;}
 .inp-row{display:flex;align-items:center;border:.5px solid rgba(196,158,72,0.2);background:rgba(0,0,0,0.6);}
-.q-i{flex:1;background:transparent;border:none;outline:none;font-family:'Cormorant Garamond',serif;font-size:17px;color:rgba(238,220,168,0.7);padding:.9rem 1.2rem;caret-color:rgba(196,158,72,0.8);}
-.q-i::placeholder{color:rgba(196,158,72,0.18);}
+.q-i{flex:1;background:transparent;border:none;outline:none;font-family:'Cormorant Garamond',serif;font-size:19px;font-weight:400;color:rgba(238,220,168,0.9);padding:.9rem 1.2rem;caret-color:rgba(196,158,72,0.8);}
+.q-i::placeholder{color:rgba(196,158,72,0.38);font-style:italic;}
 .q-b{width:46px;height:46px;background:rgba(196,158,72,0.07);border:none;border-left:.5px solid rgba(196,158,72,0.13);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .3s;flex-shrink:0;}
 .q-b:hover{background:rgba(196,158,72,0.2);}
 .q-b svg{width:13px;height:13px;}
@@ -363,9 +375,10 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
 /* ══ ENTRY CONGRATULATION ══ */
 #entryCongrat{position:fixed;inset:0;z-index:65;background:#080604;display:none;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;}
-.ec-line1{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.55em;color:rgba(196,158,72,0);text-transform:uppercase;margin-bottom:1.2rem;}
-.ec-line2{font-family:'Almendra',serif;font-style:italic;font-size:clamp(32px,6vw,52px);color:rgba(238,220,168,0);text-shadow:0 0 60px rgba(196,158,72,0.4);letter-spacing:.06em;text-align:center;line-height:1.3;}
-.ec-line3{font-family:'Cormorant Garamond',serif;font-size:22px;color:rgba(196,158,72,0);margin-top:1.2rem;}
+.ec-line1{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.55em;color:rgba(196,158,72,0);text-transform:uppercase;margin-bottom:.8rem;}
+.ec-line2{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(18px,3vw,26px);color:rgba(238,220,168,0);letter-spacing:.08em;text-align:center;line-height:1.6;}
+.ec-line3{font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(196,158,72,0);margin-top:.8rem;}
+@keyframes ecPulse{0%,100%{opacity:.4;}50%{opacity:1;}}
 
 /* ══ VENUS CLOSING ══ */
 .v-closing{width:100%;max-width:600px;margin:0 auto;padding:2rem 1.5rem 3rem;display:none;flex-direction:column;align-items:center;gap:1.2rem;border-top:.5px solid rgba(196,158,72,0.08);animation:fadeUp .9s ease forwards;}
@@ -488,22 +501,17 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
       <p class="riddle-text">it is the most valuable currency<br>yet we can't buy it<br>it is infinite · unlimited<br>it exists in everything<br>the more you give<br>the more you receive</p>
     </div>
 
-    <div class="key-wrap" style="margin-top:1.2rem;">
-      <div class="key-row">
-        <input class="key-inp" id="ki" type="text" placeholder="···" maxlength="20" autocomplete="off" spellcheck="false"/>
-        <button class="key-btn" id="kb">→</button>
-      </div>
-      <p class="key-msg" id="km">what is the answer?</p>
+    <div class="rune-field" id="runeField">
     </div>
   </div>
 
   <!-- old italic footer -->
-  <p class="t-footer-inscription">𐌀𐌍𐌂𐌉𐌄𐌍𐌕 · 𐌔𐌀𐌂𐌓𐌄𐌃 · 𐌇𐌄𐌓𐌌𐌄𐌕𐌉𐌂</p>
+
 </div>
 
 <!-- ══ ENTRY CONGRATULATION ══ -->
 <div id="entryCongrat">
-  <p class="ec-line1" id="ecLine1">The word was remembered</p>
+  <p class="ec-line1" id="ecLine1">You remembered.</p>
   <p class="ec-line2" id="ecLine2">Love. Of course it was love.<br>Welcome home.</p>
   <p class="ec-line3" id="ecLine3">✦</p>
 </div>
@@ -514,9 +522,9 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
     <p class="foyer-entered">Choose your altar</p>
     <div class="orn" style="margin-bottom:2rem;"><div class="orn-l"></div><div class="orn-d"></div><div class="orn-l"></div></div>
     <div class="altars-row">
-      <div class="altar-door altar-venus" onclick="enterVenusAltar()" style="background-image:url('https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus.jpg');background-size:cover;background-position:center top;min-height:420px;">
+      <div class="altar-door altar-venus" onclick="enterVenusAltar()" style="background-image:url('https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus.jpg');background-size:cover;background-position:center center;min-height:320px;">
         <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,3,2,0.3) 0%,rgba(4,3,2,0.15) 40%,rgba(4,3,2,0.7) 100%);transition:background .5s;"></div>
-        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:.6rem;margin-top:auto;padding-top:12rem;">
+        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:.6rem;margin-top:auto;padding-top:8rem;">
           <p class="altar-name">Altar of Venus</p>
           <p class="altar-intent">I want to receive</p>
           <p class="altar-desc">She awakens the intuition. Open the vessel.</p>
@@ -524,9 +532,9 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
         </div>
       </div>
       <div class="foyer-divider"></div>
-      <div class="altar-door altar-ganymede" onclick="enterGanymede()" style="background-image:url('https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/IMG_5355.jpg');background-size:cover;background-position:center top;min-height:420px;">
+      <div class="altar-door altar-ganymede" onclick="enterGanymede()" style="background-image:url('https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/IMG_5355.jpg');background-size:cover;background-position:center center;min-height:320px;">
         <div style="position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,3,2,0.3) 0%,rgba(4,3,2,0.15) 40%,rgba(4,3,2,0.7) 100%);transition:background .5s;"></div>
-        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:.6rem;margin-top:auto;padding-top:12rem;">
+        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:.6rem;margin-top:auto;padding-top:8rem;">
           <p class="altar-name" style="color:rgba(220,185,130,0.9);">Altar of Ganymede</p>
           <p class="altar-intent" style="color:rgba(180,120,50,0.5);">I want to build</p>
           <p class="altar-desc" style="color:rgba(220,185,130,0.5);">He builds your structure, action and form. Ground the vision into reality.</p>
@@ -562,14 +570,13 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 <div class="screen" id="venusOracle" style="justify-content:flex-start;">
   <!-- Venus video background -->
   <div style="position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;">
-    <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.45) saturate(.75);">
+    <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.72) saturate(.9);">
       <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus.mp4" type="video/mp4">
     </video>
-    <div style="position:absolute;inset:0;background:rgba(6,4,2,0.7);"></div>
+    <div style="position:absolute;inset:0;background:rgba(6,4,2,0.45);"></div>
   </div>
   <div class="oracle-top" style="position:relative;z-index:1;padding:3.5rem 2rem 1.2rem;">
-    <p class="o-entered">Altar of Venus · Ancient Temenos</p>
-    <h2 class="o-title">She is listening</h2>
+    <h2 class="o-title">Speak to Venus</h2>
     <p class="o-sub">Speak what you carry. She will show you what you already know.</p>
   </div>
   <div class="thread" id="vthread"></div>
@@ -585,7 +592,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
   </div>
   <div class="inp-area">
     <div class="inp-row">
-      <input class="q-i" id="qi" type="text" placeholder="Speak what you are carrying…" autocomplete="off" spellcheck="false"/>
+      <input class="q-i" id="qi" type="text" placeholder="Ask your question…" autocomplete="off" spellcheck="false"/>
       <button class="q-b" id="qb" onclick="sendVenus()">
         <svg viewBox="0 0 14 14" fill="none" stroke="rgba(196,158,72,0.8)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>
       </button>
@@ -638,10 +645,10 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 <div id="wellOverlay">
   <!-- Wishing Well video background -->
   <div style="position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;">
-    <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.45) saturate(.8);">
+    <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.72) saturate(.9);">
       <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus%20Wishing%20Well_1.mp4" type="video/mp4">
     </video>
-    <div style="position:absolute;inset:0;background:rgba(4,3,2,0.75);"></div>
+    <div style="position:absolute;inset:0;background:rgba(4,3,2,0.45);"></div>
   </div>
   <button class="ws-close" onclick="closeWell()">✕ Return</button>
   <div class="well-stage active" id="ws1">
@@ -656,10 +663,10 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
   <div class="well-stage" id="ws3">
     <!-- Sigil video background -->
     <div style="position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;">
-      <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.45) saturate(.75);">
+      <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.72) saturate(.9);">
         <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Sigil.mp4" type="video/mp4">
       </video>
-      <div style="position:absolute;inset:0;background:rgba(4,3,2,0.78);"></div>
+      <div style="position:absolute;inset:0;background:rgba(4,3,2,0.45);"></div>
     </div>
     <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;text-align:center;width:100%;max-width:520px;padding:2rem;">
     <p class="sr-label">Your sigil has been sealed</p>
@@ -842,27 +849,54 @@ function goReturn(){
 }
 
 // ══ ENTRY ══
-document.getElementById('kb').addEventListener('click',tryKey);
-document.getElementById('ki').addEventListener('keydown',e=>{if(e.key==='Enter')tryKey();});
-function tryKey(){
-  const v=document.getElementById('ki').value.trim().toLowerCase(),m=document.getElementById('km');
-  if(v==='love'){runEntry();}
-  else{m.textContent='that is not the word — look within';m.classList.add('err');document.getElementById('ki').value='';setTimeout(()=>{m.classList.remove('err');m.textContent='what is the answer?';},2400);}
+// ══ RUNE WORDS ══
+const runeWords=[
+  {word:'death',  left:'8%',  top:'12%', dur:'6.2s', delay:'0s'},
+  {word:'beauty', left:'58%', top:'5%',  dur:'5.4s', delay:'1.1s'},
+  {word:'wisdom', left:'2%',  top:'55%', dur:'7.1s', delay:'0.4s'},
+  {word:'love',   left:'52%', top:'52%', dur:'5.8s', delay:'1.8s'},
+  {word:'power',  left:'28%', top:'78%', dur:'6.5s', delay:'0.7s'},
+];
+function buildRunes(){
+  const field=document.getElementById('runeField');
+  runeWords.forEach(r=>{
+    const btn=document.createElement('button');
+    btn.className='rune-word';
+    btn.textContent=r.word;
+    btn.style.left=r.left;btn.style.top=r.top;
+    btn.style.setProperty('--dur',r.dur);
+    btn.style.setProperty('--delay',r.delay);
+    btn.addEventListener('click',()=>chooseRune(r.word,btn));
+    field.appendChild(btn);
+  });
+}
+buildRunes();
+
+function chooseRune(word,btn){
+  if(word==='love'){
+    // right answer — glow then enter
+    btn.style.color='rgba(238,220,168,0.95)';
+    btn.style.textShadow='0 0 30px rgba(196,158,72,0.8)';
+    setTimeout(()=>runEntry(),400);
+  } else {
+    // wrong — silent fade and reset
+    btn.style.transition='opacity .4s ease';
+    btn.style.opacity='0';
+    setTimeout(()=>{
+      btn.style.transition='opacity 1.2s ease';
+      btn.style.opacity='1';
+    },800);
+  }
 }
 function runEntry(){
-  // gentle shockwave
-  const sw=document.getElementById('shockwave');sw.style.opacity='1';
-  ['sw1','sw2','sw3'].forEach((id,i)=>{const el=document.getElementById(id);el.style.animation='none';el.offsetWidth;el.style.animation=`sw-expand 1.4s cubic-bezier(.2,.8,.2,1) ${i*.2}s forwards`;});
   // fade threshold out
   setTimeout(()=>{
-    document.getElementById('threshold').style.transition='opacity 1s ease';
-    document.getElementById('threshold').style.opacity='0';
-  },800);
-  // show congratulation
+    const th=document.getElementById('threshold');
+    th.style.transition='opacity 1s ease';
+    th.style.opacity='0';
+  },100);
   setTimeout(()=>{
-    sw.style.opacity='0';
-    document.getElementById('threshold').style.opacity='1';
-    document.getElementById('threshold').style.transition='';
+    // show congrat over the hidden threshold
     const ec=document.getElementById('entryCongrat');
     ec.style.display='flex';ec.style.opacity='0';
     ec.style.transition='opacity .8s ease';
@@ -870,16 +904,21 @@ function runEntry(){
     const l1=document.getElementById('ecLine1');
     const l2=document.getElementById('ecLine2');
     const l3=document.getElementById('ecLine3');
-    setTimeout(()=>{l1.style.transition='opacity .8s ease, transform .8s ease';l1.style.color='rgba(196,158,72,0.5)';l1.style.opacity='1';l1.style.transform='translateY(0)';},200);
-    setTimeout(()=>{l2.style.transition='opacity 1s ease, transform 1s ease';l2.style.color='rgba(238,220,168,0.95)';l2.style.opacity='1';l2.style.transform='translateY(0)';},800);
-    setTimeout(()=>{l3.style.transition='opacity .8s ease';l3.style.color='rgba(196,158,72,0.5)';l3.style.opacity='1';},1600);
+    setTimeout(()=>{l1.style.transition='opacity .6s ease';l1.style.color='rgba(196,158,72,0.35)';l1.style.opacity='1';},200);
+    setTimeout(()=>{l2.style.transition='opacity .8s ease';l2.style.color='rgba(238,220,168,0.55)';l2.style.opacity='1';setTimeout(()=>{l2.style.animation='ecPulse 2.5s ease-in-out infinite';},800);},700);
+    setTimeout(()=>{l3.style.transition='opacity .6s ease';l3.style.color='rgba(196,158,72,0.3)';l3.style.opacity='1';l3.style.animation='ecPulse 2.5s ease-in-out 0.5s infinite';},1400);
     // fade out to foyer
     setTimeout(()=>{
       ec.style.transition='opacity 1s ease';
       ec.style.opacity='0';
-      setTimeout(()=>{ec.style.display='none';showScreen('foyer');},1000);
+      setTimeout(()=>{
+        ec.style.display='none';
+        const th=document.getElementById('threshold');
+        th.style.transition='';th.style.opacity='1';
+        showScreen('foyer');
+      },1000);
     },3400);
-  },1800);
+  },1100);
 }
 
 // ══ VENUS ══
@@ -1122,7 +1161,7 @@ async function askPool(){
 function openWell(){document.getElementById('wellOverlay').style.display='flex';showWS(1);}
 function closeWell(){document.getElementById('wellOverlay').style.display='none';}
 function showWS(n){document.querySelectorAll('.well-stage').forEach(s=>s.classList.remove('active'));document.getElementById('ws'+n).classList.add('active');}
-function castCoin(){const i=document.getElementById('intentionInp').value.trim();if(!i)return;showWS(2);runRipple(i);}
+function castCoin(){const i=document.getElementById('intentionInp').value.trim();if(!i)return;const sig=buildSigil(i);showWS(3);revealSigil(i,sig);}
 function runRipple(intention){
   const rc=document.getElementById('rippleCanvas'),rx=rc.getContext('2d');
   const W=340,H=340,CX=170,CY=170;
