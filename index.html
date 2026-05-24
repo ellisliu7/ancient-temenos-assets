@@ -219,6 +219,83 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
   animation:fadeUp 2s ease 1.8s both;
 }
 
+/* ══ FLOATING PORTAL ALTARS ══ */
+.portals-row{
+  display:flex;
+  gap:3rem;
+  align-items:flex-end;
+  justify-content:center;
+  max-width:700px;
+  width:100%;
+  margin-bottom:2rem;
+}
+.portal-wrap{
+  flex:1;
+  max-width:240px;
+  cursor:pointer;
+  animation:portalFloat 5s ease-in-out infinite;
+  transition:transform .4s ease;
+  filter:drop-shadow(0 20px 40px rgba(0,0,0,0.5));
+}
+.portal-wrap:hover{
+  filter:drop-shadow(0 0 30px rgba(196,158,72,0.25)) drop-shadow(0 20px 40px rgba(0,0,0,0.6));
+}
+@keyframes portalFloat{
+  0%,100%{transform:translateY(0);}
+  50%{transform:translateY(-12px);}
+}
+.portal-arch{
+  position:relative;
+  width:100%;
+}
+.portal-arch-svg{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  z-index:3;
+  pointer-events:none;
+}
+.portal-img{
+  width:100%;
+  padding-top:155%; /* arch aspect ratio */
+  background-size:cover;
+  background-position:center top;
+  clip-path:path('M10,340 L10,120 Q10,10 110,10 Q210,10 210,120 L210,340 Z');
+  opacity:.7;
+  transition:opacity .5s ease;
+}
+.portal-wrap:hover .portal-img{opacity:1;}
+.portal-fade{
+  position:absolute;
+  inset:0;
+  background:linear-gradient(to top,rgba(4,3,2,0.88) 0%,transparent 55%);
+  z-index:2;
+  clip-path:path('M10,340 L10,120 Q10,10 110,10 Q210,10 210,120 L210,340 Z');
+  transition:opacity .5s ease;
+}
+.portal-wrap:hover .portal-fade{opacity:.6;}
+.portal-text{
+  position:absolute;
+  bottom:1.4rem;left:0;right:0;
+  z-index:4;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:.3rem;
+  padding:0 1rem;
+  text-align:center;
+}
+.portal-text .altar-name{font-size:20px;}
+.portal-text .altar-desc{font-size:13px;max-width:180px;}
+
+/* sealed */
+.sealed-row{display:flex;gap:1px;background:rgba(196,158,72,0.04);max-width:500px;width:100%;}
+.sealed-portal{flex:1;min-height:120px;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;padding:1.2rem;background:rgba(4,3,2,0.7);backdrop-filter:blur(4px);cursor:default;}
+.sealed-name{font-family:'Almendra',serif;font-style:italic;font-size:16px;color:rgba(238,220,168,0.2);letter-spacing:.04em;position:relative;z-index:1;}
+.sealed-sub{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.4em;color:rgba(196,158,72,0.15);text-transform:uppercase;position:relative;z-index:1;}
+.sealed-label{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.35em;color:rgba(196,158,72,0.15);text-transform:uppercase;margin-top:.2rem;position:relative;z-index:1;}
+
 /* ── FOYER ── */
 #foyer{overflow-y:auto;}
 #foyer::-webkit-scrollbar{width:0;}
@@ -244,50 +321,58 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 .foyer-divider{width:1px;background:rgba(196,158,72,0.08);}
 
 /* ── VENUS ORACLE ── */
-#venusOracle{overflow-y:auto;justify-content:flex-start;background:rgba(6,4,2,0.98);}
+#venusOracle{overflow-y:auto;justify-content:flex-start;background:transparent;}
 #venusOracle::-webkit-scrollbar{width:0;}
 .oracle-top{text-align:center;padding:3.5rem 2rem 1.2rem;flex-shrink:0;position:relative;z-index:1;}
 .o-entered{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.52em;color:rgba(196,158,72,0.38);text-transform:uppercase;margin-bottom:.8rem;}
 .o-title{font-family:'Almendra',serif;font-style:italic;font-size:38px;color:rgba(238,220,168,0.9);letter-spacing:.04em;margin-bottom:.4rem;text-shadow:0 0 30px rgba(196,158,72,0.2);}
 .o-sub{font-family:'Cormorant Garamond',serif;font-size:15px;color:rgba(196,158,72,0.38);letter-spacing:.06em;font-style:italic;}
-.thread{width:100%;max-width:600px;margin:0 auto;padding:1.2rem 1.5rem 1rem;flex:1;position:relative;z-index:1;}
+.thread{width:100%;max-width:600px;margin:0 auto;padding:1.2rem 1.5rem 1rem;flex:1;position:relative;z-index:1;perspective:1000px;}
 .msg{margin-bottom:2.2rem;animation:fadeUp .8s ease forwards;}
 .msg-user{display:flex;flex-direction:column;align-items:flex-end;}
-.msg-user .bub{background:rgba(196,158,72,0.04);border:.5px solid rgba(196,158,72,0.14);padding:.85rem 1.2rem;max-width:82%;font-family:'Cormorant Garamond',serif;font-size:17px;color:rgba(238,220,168,0.65);line-height:1.65;}
+.msg-user .bub{background:rgba(196,158,72,0.06);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border:.5px solid rgba(196,158,72,0.14);border-radius:12px 12px 2px 12px;padding:.85rem 1.2rem;max-width:82%;font-family:'Cormorant Garamond',serif;font-size:17px;color:rgba(238,220,168,0.75);line-height:1.65;box-shadow:0 4px 16px rgba(0,0,0,0.15);}
 .msg-user .who{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.35em;color:rgba(196,158,72,0.3);text-transform:uppercase;margin-top:.4rem;}
 .msg-v{display:flex;flex-direction:column;align-items:flex-start;max-width:92%;}
 .msg-v .who{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.35em;color:rgba(196,158,72,0.6);text-transform:uppercase;margin-bottom:.6rem;}
 .vcard{
-  background:linear-gradient(160deg, rgba(55,40,18,0.55) 0%, rgba(28,20,8,0.72) 50%, rgba(18,12,4,0.82) 100%);
-  border:1px solid rgba(196,158,72,0.2);
-  border-radius:8px;
+  background:rgba(8,5,3,0.25);
+  backdrop-filter:blur(12px) saturate(1.2);
+  -webkit-backdrop-filter:blur(12px) saturate(1.2);
+  border:1px solid rgba(196,158,72,0.12);
+  border-radius:12px;
   padding:1.6rem 1.6rem 1.3rem;
   width:100%;
   position:relative;
   overflow:hidden;
   box-shadow:
-    0 0 0 1px rgba(196,158,72,0.05),
+    inset 0 1px 0 rgba(196,158,72,0.12),
+    inset 0 -1px 0 rgba(196,158,72,0.04),
+    0 8px 32px rgba(0,0,0,0.2),
+    0 2px 8px rgba(0,0,0,0.15);
+  transform:translateZ(0);
+  transition:transform .3s ease, box-shadow .3s ease;
+}
+.vcard:hover{
+  transform:translateZ(4px) translateY(-1px);
+  box-shadow:
     inset 0 1px 0 rgba(196,158,72,0.18),
     inset 0 -1px 0 rgba(196,158,72,0.06),
-    inset 1px 0 0 rgba(196,158,72,0.05),
-    inset -1px 0 0 rgba(196,158,72,0.05),
-    0 0 24px rgba(196,158,72,0.06),
-    0 4px 16px rgba(0,0,0,0.5);
+    0 12px 40px rgba(0,0,0,0.25),
+    0 4px 12px rgba(0,0,0,0.2);
 }
-/* stone texture */
+/* frosted glass shimmer */
 .vcard::before{
   content:'';position:absolute;inset:0;pointer-events:none;
-  background-image:
-    repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(196,158,72,0.01) 2px,rgba(196,158,72,0.01) 3px),
-    repeating-linear-gradient(90deg,transparent,transparent 4px,rgba(196,158,72,0.007) 4px,rgba(196,158,72,0.007) 5px);
+  background:linear-gradient(135deg,rgba(196,158,72,0.04) 0%,transparent 50%,rgba(196,158,72,0.02) 100%);
+  border-radius:inherit;
 }
-/* bevel highlight top edge */
+/* top edge light */
 .vcard::after{
-  content:'';position:absolute;top:0;left:8%;right:8%;height:1px;pointer-events:none;
-  background:linear-gradient(90deg,transparent,rgba(196,158,72,0.25) 30%,rgba(255,230,140,0.4) 50%,rgba(196,158,72,0.25) 70%,transparent);
+  content:'';position:absolute;top:0;left:10%;right:10%;height:1px;pointer-events:none;
+  background:linear-gradient(90deg,transparent,rgba(196,158,72,0.2) 40%,rgba(255,230,140,0.3) 50%,rgba(196,158,72,0.2) 60%,transparent);
 }
 /* worn corner marks */
-.vcard .vc-corner{position:absolute;width:8px;height:8px;border-color:rgba(196,158,72,0.2);border-style:solid;pointer-events:none;}
+.vcard .vc-corner{position:absolute;width:8px;height:8px;border-color:rgba(196,158,72,0.15);border-style:solid;pointer-events:none;}
 .vcard .vc-tl{top:5px;left:5px;border-width:1px 0 0 1px;}
 .vcard .vc-tr{top:5px;right:5px;border-width:1px 1px 0 0;}
 .vcard .vc-bl{bottom:5px;left:5px;border-width:0 0 1px 1px;}
@@ -603,60 +688,124 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
 <!-- ══ ENTRY CONGRATULATION ══ -->
 <div id="entryCongrat">
+  <!-- foyer video background -->
+  <div style="position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;">
+    <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.55) saturate(.85);">
+      <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/MainFoyer_main.mp4" type="video/mp4">
+    </video>
+    <div style="position:absolute;inset:0;background:rgba(4,3,2,0.45);"></div>
+  </div>
+  <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;">
   <p class="ec-line1" id="ecLine1">You remembered.</p>
   <p class="ec-line2" id="ecLine2">Love. Of course it was love.<br>Welcome home.</p>
   <p class="ec-line3" id="ecLine3">✦</p>
+  </div>
 </div>
 
 <!-- ══ FOYER ══ -->
-<div class="screen" id="foyer">
-  <div class="foyer-inner">
-    <p class="foyer-entered">Choose your altar</p>
-    <div class="orn" style="margin-bottom:2rem;"><div class="orn-l"></div><div class="orn-d"></div><div class="orn-l"></div></div>
-    <div class="altars-row">
-      <div class="altar-door altar-venus" onclick="enterVenusAltar()" style="background-image:url('https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus.jpg');background-size:contain;background-position:center top;background-repeat:no-repeat;background-color:#080604;min-height:480px;">
-        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,transparent 50%,rgba(4,3,2,0.75) 100%);transition:background .5s;"></div>
-        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:.6rem;margin-top:auto;padding-top:14rem;">
-          <p class="altar-name">Altar of Venus</p>
-          <p class="altar-intent">I want to receive</p>
-          <p class="altar-desc">She awakens the intuition. Open the vessel.</p>
-          <p class="altar-enter">Enter ↓</p>
+<div class="screen" id="foyer" style="overflow-y:auto;">
+  <!-- foyer video background -->
+  <div style="position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;">
+    <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.5) saturate(.8);">
+      <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/MainFoyer_main.mp4" type="video/mp4">
+    </video>
+    <div style="position:absolute;inset:0;background:rgba(4,3,2,0.35);"></div>
+  </div>
+
+  <div class="foyer-inner" style="position:relative;z-index:1;padding:2rem 2rem 3rem;">
+    <p class="foyer-entered" style="color:rgba(238,220,168,0.5);">Choose your altar</p>
+    <div class="orn" style="margin-bottom:2.5rem;"><div class="orn-l"></div><div class="orn-d"></div><div class="orn-l"></div></div>
+
+    <!-- floating portal altars -->
+    <div class="portals-row">
+
+      <!-- Venus portal -->
+      <div class="portal-wrap" onclick="enterVenusAltar()" style="animation-delay:0s;">
+        <div class="portal-arch">
+          <svg class="portal-arch-svg" viewBox="0 0 220 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Roman arch frame -->
+            <path d="M10 340 L10 120 Q10 10 110 10 Q210 10 210 120 L210 340" stroke="rgba(196,158,72,0.5)" stroke-width="1.2" fill="none"/>
+            <path d="M22 340 L22 122 Q22 24 110 24 Q198 24 198 122 L198 340" stroke="rgba(196,158,72,0.25)" stroke-width=".6" fill="none"/>
+            <!-- keystone at top -->
+            <path d="M95 10 L110 2 L125 10" stroke="rgba(196,158,72,0.6)" stroke-width="1" fill="none"/>
+            <circle cx="110" cy="10" r="3" fill="rgba(196,158,72,0.7)"/>
+            <!-- column capitals -->
+            <line x1="2" y1="118" x2="22" y2="118" stroke="rgba(196,158,72,0.4)" stroke-width=".8"/>
+            <line x1="198" y1="118" x2="218" y2="118" stroke="rgba(196,158,72,0.4)" stroke-width=".8"/>
+            <!-- base -->
+            <line x1="2" y1="338" x2="218" y2="338" stroke="rgba(196,158,72,0.3)" stroke-width=".8"/>
+            <!-- candle glow inner -->
+            <path d="M30 340 L30 124 Q30 38 110 38 Q190 38 190 124 L190 340" stroke="rgba(196,158,72,0.08)" stroke-width="8" fill="rgba(196,158,72,0.015)"/>
+          </svg>
+          <!-- artwork inside arch -->
+          <div class="portal-img" style="background-image:url('https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus.jpg');"></div>
+          <!-- gradient fade at bottom -->
+          <div class="portal-fade"></div>
+          <!-- text -->
+          <div class="portal-text">
+            <p class="altar-name">Altar of Venus</p>
+            <p class="altar-intent">I want to receive</p>
+            <p class="altar-desc">She awakens the intuition. Open the vessel.</p>
+            <p class="altar-enter">Enter ↓</p>
+          </div>
         </div>
       </div>
-      <div class="foyer-divider"></div>
-      <div class="altar-door altar-ganymede" onclick="enterGanymede()" style="background-image:url('https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/IMG_5355.jpg');background-size:contain;background-position:center top;background-repeat:no-repeat;background-color:#080604;min-height:480px;">
-        <div style="position:absolute;inset:0;background:linear-gradient(to bottom,transparent 0%,transparent 50%,rgba(4,3,2,0.75) 100%);transition:background .5s;"></div>
-        <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;gap:.6rem;margin-top:auto;padding-top:14rem;">
-          <p class="altar-name" style="color:rgba(220,185,130,0.9);">Altar of Ganymede</p>
-          <p class="altar-intent" style="color:rgba(180,120,50,0.5);">I want to build</p>
-          <p class="altar-desc" style="color:rgba(220,185,130,0.5);">He builds your structure, action and form. Ground the vision into reality.</p>
-          <p class="altar-enter" style="color:rgba(180,120,50,0.35);">Descend ↓</p>
+
+      <!-- Ganymede portal -->
+      <div class="portal-wrap" onclick="enterGanymede()" style="animation-delay:.3s;">
+        <div class="portal-arch">
+          <svg class="portal-arch-svg" viewBox="0 0 220 340" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 340 L10 120 Q10 10 110 10 Q210 10 210 120 L210 340" stroke="rgba(180,120,50,0.45)" stroke-width="1.2" fill="none"/>
+            <path d="M22 340 L22 122 Q22 24 110 24 Q198 24 198 122 L198 340" stroke="rgba(180,120,50,0.2)" stroke-width=".6" fill="none"/>
+            <path d="M95 10 L110 2 L125 10" stroke="rgba(180,120,50,0.55)" stroke-width="1" fill="none"/>
+            <circle cx="110" cy="10" r="3" fill="rgba(180,120,50,0.65)"/>
+            <line x1="2" y1="118" x2="22" y2="118" stroke="rgba(180,120,50,0.35)" stroke-width=".8"/>
+            <line x1="198" y1="118" x2="218" y2="118" stroke="rgba(180,120,50,0.35)" stroke-width=".8"/>
+            <line x1="2" y1="338" x2="218" y2="338" stroke="rgba(180,120,50,0.25)" stroke-width=".8"/>
+            <path d="M30 340 L30 124 Q30 38 110 38 Q190 38 190 124 L190 340" stroke="rgba(180,120,50,0.06)" stroke-width="8" fill="rgba(180,120,50,0.012)"/>
+          </svg>
+          <div class="portal-img" style="background-image:url('https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/IMG_5355.jpg');"></div>
+          <div class="portal-fade" style="background:linear-gradient(to top,rgba(4,3,2,0.85) 0%,transparent 60%);"></div>
+          <div class="portal-text">
+            <p class="altar-name" style="color:rgba(220,185,130,0.85);">Altar of Ganymede</p>
+            <p class="altar-intent" style="color:rgba(180,120,50,0.5);">I want to build</p>
+            <p class="altar-desc" style="color:rgba(220,185,130,0.45);">He builds your structure, action and form. Ground the vision into reality.</p>
+            <p class="altar-enter" style="color:rgba(180,120,50,0.35);">Descend ↓</p>
+          </div>
         </div>
       </div>
     </div>
 
     <!-- sealed portals -->
-    <div style="display:flex;gap:1px;background:rgba(196,158,72,0.04);max-width:700px;width:100%;margin-top:1px;">
-      <div style="flex:1;min-height:180px;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;padding:1.8rem;background:rgba(4,3,2,0.9);cursor:default;">
-        <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(196,158,72,0.02) 0px,rgba(196,158,72,0.02) 1px,transparent 1px,transparent 8px);"></div>
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" style="opacity:.2;"><circle cx="16" cy="16" r="14" stroke="rgba(196,158,72,0.8)" stroke-width=".6"/><circle cx="16" cy="16" r="8" stroke="rgba(196,158,72,0.6)" stroke-width=".5"/><line x1="16" y1="2" x2="16" y2="30" stroke="rgba(196,158,72,0.3)" stroke-width=".4"/><line x1="2" y1="16" x2="30" y2="16" stroke="rgba(196,158,72,0.3)" stroke-width=".4"/></svg>
-        <p style="font-family:'Almendra',serif;font-style:italic;font-size:20px;color:rgba(238,220,168,0.25);letter-spacing:.04em;position:relative;z-index:1;">Altar of Persephone</p>
-        <p style="font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.45em;color:rgba(196,158,72,0.2);text-transform:uppercase;position:relative;z-index:1;">She descends · Patterns revealed</p>
-        <p style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.35em;color:rgba(196,158,72,0.18);text-transform:uppercase;margin-top:.3rem;position:relative;z-index:1;">Sealed</p>
+    <div class="sealed-row">
+      <div class="sealed-portal">
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(196,158,72,0.015) 0px,rgba(196,158,72,0.015) 1px,transparent 1px,transparent 8px);"></div>
+        <p class="sealed-name">Altar of Persephone</p>
+        <p class="sealed-sub">She descends · Patterns revealed</p>
+        <p class="sealed-label">Sealed</p>
       </div>
       <div style="width:1px;background:rgba(196,158,72,0.04);"></div>
-      <div style="flex:1;min-height:180px;position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6rem;padding:1.8rem;background:rgba(4,3,2,0.9);cursor:default;">
-        <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(196,158,72,0.02) 0px,rgba(196,158,72,0.02) 1px,transparent 1px,transparent 8px);"></div>
-        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" style="opacity:.2;"><path d="M16 2 L28 10 L28 22 L16 30 L4 22 L4 10 Z" stroke="rgba(196,158,72,0.8)" stroke-width=".6" fill="none"/><circle cx="16" cy="16" r="5" stroke="rgba(196,158,72,0.5)" stroke-width=".5" fill="none"/></svg>
-        <p style="font-family:'Almendra',serif;font-style:italic;font-size:20px;color:rgba(238,220,168,0.25);letter-spacing:.04em;position:relative;z-index:1;">Altar of Psyche</p>
-        <p style="font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.45em;color:rgba(196,158,72,0.2);text-transform:uppercase;position:relative;z-index:1;">The inner child · Remember to play</p>
-        <p style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.35em;color:rgba(196,158,72,0.18);text-transform:uppercase;margin-top:.3rem;position:relative;z-index:1;">Sealed</p>
+      <div class="sealed-portal">
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(196,158,72,0.015) 0px,rgba(196,158,72,0.015) 1px,transparent 1px,transparent 8px);"></div>
+        <p class="sealed-name">Altar of Psyche</p>
+        <p class="sealed-sub">The inner child · Remember to play</p>
+        <p class="sealed-label">Sealed</p>
       </div>
     </div>
   </div>
 </div>
 
 
+
+<!-- ══ VENUS BREATH ══ -->
+<div class="screen" id="venusBreath" style="background:#080604;">
+  <div style="text-align:center;padding:2rem;animation:fadeUp 1.5s ease forwards;">
+    <p style="font-family:'Cormorant',serif;font-style:italic;font-size:clamp(14px,2vw,20px);color:rgba(238,220,168,0.35);line-height:2.2;letter-spacing:.08em;">
+      take a moment to set an intention<br>and just breathe
+    </p>
+    <p style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.5em;color:rgba(196,158,72,0.15);text-transform:uppercase;margin-top:2rem;animation:fadeUp 1s ease 1.5s both;">she is waiting</p>
+  </div>
+</div>
 
 <!-- ══ VENUS ORACLE ══ -->
 <div class="screen" id="venusOracle" style="justify-content:flex-start;">
@@ -977,13 +1126,13 @@ function showScreen(id){
   currentScreen=id;
   inCave=(id==='ganymedeScreen');
   caveC.style.display=inCave?'block':'none';
-  const showReturn=['foyer','venusOracle','ganymedeScreen'].includes(id);
+  const showReturn=['foyer','venusBreath','venusOracle','ganymedeScreen'].includes(id);
   const showTeachings=['venusOracle','ganymedeScreen','foyer'].includes(id);
   document.getElementById('returnBtn').style.display=showReturn?'flex':'none';
   document.getElementById('teachingsBtn').style.display=showTeachings?'flex':'none';
 }
 function goReturn(){
-  const prev={foyer:'threshold',venusOracle:'foyer',ganymedeScreen:'foyer'};
+  const prev={foyer:'threshold',venusBreath:'foyer',venusOracle:'foyer',ganymedeScreen:'foyer'};
   const target=prev[currentScreen]||'foyer';
   if(currentScreen==='venusOracle')hideCupid();
   showScreen(target);
@@ -1112,8 +1261,21 @@ function hideCupid(){
   if(freqActive){freqActive=false;stopFrequency();document.getElementById('cupidWrap').classList.remove('active');}
 }
 
+// ══ PARALLAX SCROLL ══
+document.getElementById('venusOracle').addEventListener('scroll', function(){
+  const scrollY = this.scrollTop;
+  const video = this.querySelector('video');
+  if(video){
+    // video moves at 30% of scroll speed — creates depth
+    video.style.transform = `scale(1.05) translateY(${scrollY * 0.3}px)`;
+  }
+});
+
 // ══ VENUS ══
-function enterVenusAltar(){enterVenusOracle();}
+function enterVenusAltar(){
+  showScreen('venusBreath');
+  setTimeout(()=>enterVenusOracle(), 4000);
+}
 function enterGanymede(){
   showScreen('ganymedeScreen');
   if(!gOpened){
