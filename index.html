@@ -526,22 +526,22 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 .ws-hint{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.3em;color:rgba(196,158,72,0.2);text-transform:uppercase;margin-bottom:1.8rem;}
 .ws-btn{background:transparent;border:.5px solid rgba(196,158,72,0.25);color:rgba(196,158,72,0.55);font-family:'Cinzel',serif;font-size:9px;letter-spacing:.35em;text-transform:uppercase;padding:.65rem 2rem;cursor:pointer;transition:all .4s;}
 .ws-btn:hover{border-color:rgba(196,158,72,0.6);color:rgba(238,220,168,0.8);}
-.sr-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.45em;color:rgba(196,158,72,0.38);text-transform:uppercase;margin-bottom:.5rem;}
-.sr-intention{font-family:'Cormorant',serif;font-style:italic;font-size:16px;color:rgba(238,220,168,0.5);margin-bottom:.8rem;}
+.sr-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.45em;color:rgba(196,158,72,0.7);text-transform:uppercase;margin-bottom:.5rem;}
+.sr-intention{font-family:'Cormorant',serif;font-style:italic;font-size:18px;color:rgba(238,220,168,0.88);margin-bottom:.8rem;}
 #sigilWrap{filter:drop-shadow(0 0 20px rgba(196,158,72,0.4));margin-bottom:.8rem;}
-.sr-principle{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.35em;color:rgba(196,158,72,0.4);text-transform:uppercase;margin-bottom:.3rem;}
-.sr-summary{font-family:'Cormorant Garamond',serif;font-size:15px;color:rgba(238,220,168,0.55);line-height:1.7;max-width:400px;text-align:center;}
+.sr-principle{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.35em;color:rgba(196,158,72,0.7);text-transform:uppercase;margin-bottom:.3rem;}
+.sr-summary{font-family:'Cormorant Garamond',serif;font-size:17px;color:rgba(238,220,168,0.82);line-height:1.75;max-width:400px;text-align:center;}
 .offering{margin-top:1.2rem;padding-top:1.2rem;border-top:.5px solid rgba(196,158,72,0.1);width:100%;text-align:center;}
-.of-title{font-family:'Almendra',serif;font-style:italic;font-size:20px;color:rgba(238,220,168,0.7);margin-bottom:.3rem;}
-.of-sub{font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(196,158,72,0.35);letter-spacing:.05em;margin-bottom:1rem;font-style:italic;}
+.of-title{font-family:'Almendra',serif;font-style:italic;font-size:22px;color:rgba(238,220,168,0.9);margin-bottom:.3rem;}
+.of-sub{font-family:'Cormorant Garamond',serif;font-size:15px;color:rgba(196,158,72,0.65);letter-spacing:.05em;margin-bottom:1rem;font-style:italic;}
 .of-addr{background:rgba(196,158,72,0.04);border:.5px solid rgba(196,158,72,0.12);padding:.7rem 1rem;margin-bottom:.7rem;cursor:pointer;transition:background .3s;}
 .of-addr:hover{background:rgba(196,158,72,0.08);}
-.of-chain{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.4em;color:rgba(196,158,72,0.4);text-transform:uppercase;margin-bottom:.3rem;}
-.of-address{font-family:'Cormorant Garamond',serif;font-size:11px;color:rgba(238,220,168,0.4);word-break:break-all;line-height:1.5;}
+.of-chain{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.4em;color:rgba(196,158,72,0.7);text-transform:uppercase;margin-bottom:.3rem;}
+.of-address{font-family:'Cormorant Garamond',serif;font-size:12px;color:rgba(238,220,168,0.75);word-break:break-all;line-height:1.5;}
 .of-copy{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.3em;color:rgba(196,158,72,0.25);text-transform:uppercase;margin-top:.3rem;}
 .of-copied{color:rgba(100,180,100,0.6)!important;}
 .of-note{font-family:'Cormorant',serif;font-style:italic;font-size:13px;color:rgba(196,158,72,0.22);margin-top:.6rem;line-height:1.6;}
-.of-save{background:transparent;border:.5px solid rgba(196,158,72,0.2);color:rgba(196,158,72,0.4);font-family:'Cinzel',serif;font-size:8px;letter-spacing:.3em;text-transform:uppercase;padding:.55rem 1.6rem;cursor:pointer;transition:all .4s;margin-top:.8rem;}
+.of-save{background:transparent;border:.5px solid rgba(196,158,72,0.4);color:rgba(196,158,72,0.7);font-family:'Cinzel',serif;font-size:8px;letter-spacing:.3em;text-transform:uppercase;padding:.55rem 1.6rem;cursor:pointer;transition:all .4s;margin-top:.8rem;}
 .of-save:hover{border-color:rgba(196,158,72,0.5);color:rgba(238,220,168,0.7);}
 
 /* ══ ENTRY CONGRATULATION ══ */
@@ -864,25 +864,39 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 </div>
 
 <!-- ══ GANYMEDE ══ -->
-<div class="screen" id="ganymedeScreen" style="justify-content:flex-start;">
+<div class="screen" id="ganymedeScreen" style="justify-content:flex-start;background:#000;">
 
-  <!-- Ganymede video background -->
+  <!-- Cave video background — fixed, full screen -->
   <div style="position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;">
-    <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.5) saturate(.7);">
-      <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Ganymede.mp4" type="video/mp4">
+    <video id="caveVideo" autoplay muted loop playsinline preload="auto" 
+      style="width:100%;height:100%;object-fit:cover;filter:brightness(.6) saturate(.75);opacity:0;transition:opacity 3s ease;">
+      <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Ganymede%20Cave.mp4" type="video/mp4">
     </video>
-    <div style="position:absolute;inset:0;background:rgba(4,3,2,0.4);"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 30%,transparent 40%,rgba(2,1,1,0.7) 100%);pointer-events:none;"></div>
   </div>
 
-  <!-- Three.js Ganymede sculpture -->
-  <div id="sculptureWrap" style="position:fixed;right:3vw;top:50%;transform:translateY(-50%);z-index:1;width:min(220px,28vw);height:min(340px,45vw);pointer-events:none;opacity:0.85;">
-    <canvas id="sculptureCanvas" style="width:100%;height:100%;"></canvas>
+  <!-- Three.js canvas — full screen, above video, below UI -->
+  <div id="sculptureWrap">
+    <canvas id="sculptureCanvas"></canvas>
   </div>
 
-  <div class="cave-top" style="position:relative;z-index:2;">
-    <p class="cave-entered">Altar of Ganymede · Earth School</p>
+  <!-- UI overlay — above everything -->
+  <div class="cave-top" style="position:fixed;top:2.5rem;left:0;right:0;z-index:20;text-align:center;pointer-events:none;opacity:0;transition:opacity 2s ease 1s;" id="caveHeader">
+    <p class="cave-entered">Altar of Ganymede · Ancient Temenos</p>
     <h2 class="cave-title">The Cave of Remembrance</h2>
     <p class="cave-sub">Ground the vision · Build</p>
+  </div>
+
+  <!-- texture toggle -->
+  <div id="textureToggle" style="position:fixed;bottom:7rem;left:50%;transform:translateX(-50%);z-index:20;opacity:0;transition:opacity 2s ease 2s;display:flex;gap:1rem;">
+    <button onclick="setSculptureTexture('bronze')" id="btnBronze"
+      style="background:rgba(196,158,72,0.08);border:.5px solid rgba(196,158,72,0.4);color:rgba(196,158,72,0.8);font-family:'Cinzel',serif;font-size:8px;letter-spacing:.35em;text-transform:uppercase;padding:.5rem 1.2rem;cursor:pointer;transition:all .4s;">
+      Bronze
+    </button>
+    <button onclick="setSculptureTexture('holo')" id="btnHolo"
+      style="background:transparent;border:.5px solid rgba(100,220,255,0.3);color:rgba(100,220,255,0.5);font-family:'Cinzel',serif;font-size:8px;letter-spacing:.35em;text-transform:uppercase;padding:.5rem 1.2rem;cursor:pointer;transition:all .4s;">
+      Holographic
+    </button>
   </div>
   <div id="antechamber" style="display:none;">
   </div>
@@ -948,7 +962,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
     <p class="sr-intention" id="srInt"></p>
     <div id="sigilWrap"></div>
     <p class="sr-principle" id="srPrin"></p>
-    <p style="font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.4em;color:rgba(196,158,72,0.3);text-transform:uppercase;margin-top:.3rem;margin-bottom:.4rem;">Your reading</p>
+    <p style="font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.4em;color:rgba(196,158,72,0.65);text-transform:uppercase;margin-top:.3rem;margin-bottom:.4rem;">Your true intention</p>
     <p class="sr-summary" id="srSum"></p>
     <div class="offering">
       <p class="of-title">An offering</p>
@@ -960,6 +974,10 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
       </div>
 
       <button class="of-save" onclick="saveSigil()">Save your sigil</button>
+      <div style="margin-top:1.8rem;padding-top:1.5rem;border-top:.5px solid rgba(196,158,72,0.1);width:100%;text-align:center;">
+        <p style="font-family:'Cormorant',serif;font-style:italic;font-size:17px;color:rgba(238,220,168,0.55);line-height:1.7;margin-bottom:1rem;">The intention has been set.<br>Now it is time to build it into form.</p>
+        <button onclick="closeWell();enterGanymede();" style="background:transparent;border:.5px solid rgba(180,120,50,0.4);color:rgba(196,158,72,0.7);font-family:'Cinzel',serif;font-size:9px;letter-spacing:.4em;text-transform:uppercase;padding:.75rem 2rem;cursor:pointer;transition:all .4s;" onmouseover="this.style.borderColor='rgba(180,120,50,0.7)';this.style.color='rgba(238,220,168,0.9)'" onmouseout="this.style.borderColor='rgba(180,120,50,0.4)';this.style.color='rgba(196,158,72,0.7)'">Descend to Ganymede →</button>
+      </div>
     </div>
     </div>
   </div>
@@ -989,7 +1007,10 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
     </div>
     <p class="gr-loading" id="grLoading">The Grimoire is being sealed…</p>
     <div class="gr-actions" id="grActions" style="display:none;">
-      <button class="gr-dl-btn" onclick="downloadGrimoire()">Download as PDF ↓</button>
+      <button class="gr-dl-btn" onclick="copyGrimoire()">✦ Copy my grimoire</button>
+      <p id="grCopyHint" style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.3em;color:rgba(196,158,72,0);text-transform:uppercase;transition:color .4s;margin-top:-.4rem;">Copied to clipboard</p>
+      <button class="gr-dl-btn" onclick="sharePortal()" style="border-color:rgba(196,158,72,0.18);color:rgba(196,158,72,0.38);">Share this portal</button>
+      <p id="grShareHint" style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.3em;color:rgba(196,158,72,0);text-transform:uppercase;transition:color .4s;margin-top:-.4rem;">Link copied</p>
     </div>
   </div>
 </div>
@@ -1422,79 +1443,27 @@ async function generateInvocation(venusText,ganyText){
 
 function closeGrimoire(){document.getElementById('grimoireScreen').style.display='none';}
 
-function downloadGrimoire(){
+function copyGrimoire(){
   const date=document.getElementById('grDate').textContent;
   const venusBody=document.getElementById('grVenusBody').textContent;
   const ganyBody=document.getElementById('grGanyBody').textContent;
   const invocation=document.getElementById('grInvocation').textContent;
-  const content=`ANCIENT TEMENOS · GRIMOIRE\n${date}\n\n${'─'.repeat(40)}\n\nWHAT VENUS REVEALED\n\n${venusBody||'—'}\n\n${'─'.repeat(40)}\n\nWHAT GANYMEDE BUILT\n\n${ganyBody||'—'}\n\n${'─'.repeat(40)}\n\nYOUR CLOSING INVOCATION\n\n${invocation}\n\n${'─'.repeat(40)}\n\nancienttemenos.com`;
-  // open print dialog styled as PDF
-  const win=window.open('','_blank');
-  win.document.write(`<!DOCTYPE html><html><head><title>Ancient Temenos Grimoire</title><style>
-    @import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400&family=Cinzel:wght@300;400&family=Almendra:ital,wght@0,400;1,400&display=swap');
-    *{margin:0;padding:0;box-sizing:border-box;}
-    body{font-family:'Cormorant Garamond',serif;background:#faf8f3;color:#2a2118;padding:4rem 3rem;max-width:700px;margin:0 auto;}
-    h1{font-family:'Almendra',serif;font-style:italic;font-size:36px;color:#2a2118;margin-bottom:.3rem;}
-    .eyebrow{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.5em;color:#8a7040;text-transform:uppercase;margin-bottom:.5rem;}
-    .date{font-family:'Cormorant Garamond',serif;font-size:14px;color:#a08050;margin-bottom:2.5rem;}
-    .divider{height:.5px;background:rgba(100,70,20,0.2);margin:2rem 0;}
-    .label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.45em;color:#8a7040;text-transform:uppercase;margin-bottom:.8rem;}
-    .body{font-size:17px;line-height:1.85;color:#3a2a18;white-space:pre-line;}
-    .invocation{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:#6a5030;line-height:1.9;padding:1.5rem;border:.5px solid rgba(100,70,20,0.2);background:rgba(100,70,20,0.02);}
-    .footer{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.4em;color:#c0a060;text-transform:uppercase;text-align:center;margin-top:3rem;}
-    @media print{body{padding:2rem;}}
-  </style></head><body>
-    <p class="eyebrow">Ancient Temenos · Sacred Record</p>
-    <h1>My Grimoire</h1>
-    <p class="date">${date}</p>
-    ${venusBody?`<div class="divider"></div><p class="label">What Venus Revealed</p><p class="body">${venusBody}</p>`:''}
-    ${ganyBody?`<div class="divider"></div><p class="label">What Ganymede Built</p><p class="body">${ganyBody}</p>`:''}
-    <div class="divider"></div>
-    <p class="label">Your Closing Invocation</p>
-    <p class="invocation">${invocation}</p>
-    <p class="footer">✦ Ancient Temenos ✦</p>
-  </body></html>`);
-  win.document.close();
-  setTimeout(()=>win.print(),800);
+  const text=`ANCIENT TEMENOS · GRIMOIRE\n${date}\n\nWHAT VENUS REVEALED\n\n${venusBody||'—'}\n\nWHAT GANYMEDE BUILT\n\n${ganyBody||'—'}\n\nYOUR INVOCATION\n\n${invocation}\n\nancienttemenos.com`;
+  navigator.clipboard.writeText(text).then(()=>{
+    const h=document.getElementById('grCopyHint');
+    h.style.color='rgba(196,158,72,0.65)';
+    setTimeout(()=>{h.style.color='rgba(196,158,72,0)';},2500);
+  });
 }
-let gHistory=[],gOpened=false;
-const GSYS=`You are Ganymede — the Root Chakra portal of the Ancient Temenos, a sacred artwork and portal by fine artist Ellis Liu. You are the divine masculine. You awaken the seeker's divine masculine energy — structure, discipline, action, and the courage to build what they know must be built. Your purpose is GROUNDING. You take the download, the vision, the knowing — and you build the structure around it. You do not let the seeker stay in the vision. You pull it into the ground. Your method: 1. Ask what they received. 2. Make it physical — who, what, when, where. 3. Name what is being avoided. 4. One clear commitment with a specific date. Voice: direct. Grounded. Ancient but practical. Not unkind. Hermetic Principle: CAUSE AND EFFECT. IMPORTANT: This is a text-only sacred portal. Never ask for images, screenshots, files or uploads. Never reference any tools or capabilities beyond conversation. RETURN VALID JSON ONLY — nothing else, no preamble, no explanation outside the JSON: {"stage":"brief stage name","reflection":"2-3 sentences","question":"one direct practical question"}`;
-const gTh=['The cave listens…','Ganymede sees the soul pattern…','The stones remember…','Reading the timeline…'];
-async function sendGany(){
-  const inp=document.getElementById('gi'),q=inp.value.trim();
-  if(!q||document.getElementById('gb').classList.contains('loading'))return;
-  inp.value='';gHistory.push({role:'user',content:q});addUserMsgG(q);
-  const btn=document.getElementById('gb'),th=document.getElementById('gthinking');
-  btn.classList.add('loading');btn.innerHTML=spinSvg('rgba(180,120,50,0.6)');
-  th.textContent=gTh[Math.floor(Math.random()*gTh.length)];
-  try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:350,system:GSYS,messages:gHistory})});
-    const data=await res.json();const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
-    th.textContent='';resetGBtn();
-    let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p={stage:'The Descent',reflection:'The cave receives what you bring.',question:'What did you sense you always knew, before this world made you forget?'};}
-    gHistory.push({role:'assistant',content:raw});renderGCard(p);
-  }catch(e){th.textContent='';resetGBtn();renderGCard({stage:'The Cave',reflection:'The stone walls absorb what you carry.',question:'What did you sense you always knew?'});}
+
+function sharePortal(){
+  const url='https://ellisliu7.github.io/ancient-temenos-assets/';
+  navigator.clipboard.writeText(url).then(()=>{
+    const h=document.getElementById('grShareHint');
+    h.style.color='rgba(196,158,72,0.65)';
+    setTimeout(()=>{h.style.color='rgba(196,158,72,0)';},2500);
+  });
 }
-function resetGBtn(){const b=document.getElementById('gb');b.classList.remove('loading');b.innerHTML=arrowSvg('rgba(180,120,50,0.8)');}
-function addUserMsgG(text){const t=document.getElementById('gthread');const d=document.createElement('div');d.className='msg-gany';d.style.cssText='align-self:flex-end;align-items:flex-end;display:flex;flex-direction:column;';d.innerHTML=`<div style="background:rgba(30,18,8,0.7);border:.5px solid rgba(180,120,50,0.12);padding:.8rem 1.1rem;font-family:'Cormorant Garamond',serif;font-size:17px;color:rgba(220,185,130,0.6);line-height:1.65;">${text}</div><span class="who" style="color:rgba(180,120,50,0.3);margin-top:.4rem;">You</span>`;t.appendChild(d);scrollG();}
-function renderGCard(data){
-  const t=document.getElementById('gthread');const d=document.createElement('div');d.className='msg-gany';
-  const who=document.createElement('span');who.className='who';who.textContent='Ganymede';
-  const card=document.createElement('div');card.className='gany-card';
-  card.innerHTML=`<div class="gc-stage">${data.stage||''}</div><div class="gc-body"></div><div class="gc-q"></div>`;
-  d.appendChild(who);d.appendChild(card);t.appendChild(d);
-  streamText(card.querySelector('.gc-body'),data.reflection||'',()=>{streamText(card.querySelector('.gc-q'),data.question||'',null,'gc-cur');},`gc-cur`);
-  scrollG();
-}
-function scrollG(){const t=document.getElementById('gthread');t.scrollTop=t.scrollHeight;const gs=document.getElementById('ganymedeScreen');gs.scrollTop=gs.scrollHeight;}
-document.getElementById('gi').addEventListener('keydown',e=>{if(e.key==='Enter')sendGany();});
-function enterArchway(){
-  document.getElementById('antechamber').style.display='none';document.getElementById('archConv').style.display='flex';document.getElementById('poolScreen').style.display='none';
-  if(!gOpened){gOpened=true;setTimeout(()=>{renderGCard({stage:'Grounding the Vision',reflection:'The cave is the root. What is received in the crown must be pulled into the earth to become real. Vision without structure dissolves. You are here to build.\n\nSay what you received. Say it plainly.',question:'What did you come here knowing — the thing that is ready to be made real?'});},600);}
-  document.getElementById('gi').focus();
-}
-function enterPool(){document.getElementById('antechamber').style.display='none';document.getElementById('archConv').style.display='none';document.getElementById('poolScreen').style.display='flex';document.getElementById('timelinesWrap').innerHTML='';document.getElementById('poolGanyQ').textContent='';}
-function backToAntechamber(){document.getElementById('antechamber').style.display='flex';document.getElementById('archConv').style.display='none';document.getElementById('poolScreen').style.display='none';}
 
 // ══ POOL ══
 const PSYS=`You are Ganymede, guide of souls. Generate three possible timelines from the seeker's threshold moment. JSON only: {"timelines":[{"tone":"word","vision":"2-3 sentences","lesson":"one sentence","principle":"The Principle of X"},{"tone":"...","vision":"...","lesson":"...","principle":"..."},{"tone":"...","vision":"...","lesson":"...","principle":"..."}],"closing_question":"one line"}`;
@@ -1647,24 +1616,58 @@ function drawSigilFull(svgEl,sigil,size){
   svgEl.appendChild(g);
 }
 function revealSigil(intention,sigil){
-  document.getElementById('srInt').textContent='"'+intention+'"';document.getElementById('srPrin').textContent=lastPrinciple;
-  let sum='Your reading has been sealed.';
-  if(vHistory.length>1){try{const last=JSON.parse(vHistory[vHistory.length-1].content.replace(/```json|```/g,'').trim());sum=last.mirror?last.mirror.split('\n')[0]:sum;}catch(e){}}
-  document.getElementById('srSum').textContent=sum;
+  document.getElementById('srInt').textContent='"'+intention+'"';
+  document.getElementById('srPrin').textContent=lastPrinciple;
+  document.getElementById('srSum').textContent='✦';
+  // draw sigil
   const wrap=document.getElementById('sigilWrap');wrap.innerHTML='';
   const ns='http://www.w3.org/2000/svg';const svg=document.createElementNS(ns,'svg');
   drawSigilFull(svg,sigil,200);
   svg.querySelectorAll('path,circle,polygon').forEach((el,i)=>{if(el.tagName==='circle'&&el.getAttribute('r')==='2.5')return;try{const len=el.getTotalLength?el.getTotalLength():100;el.style.strokeDasharray=len;el.style.strokeDashoffset=len;el.style.transition=`stroke-dashoffset ${.6+i*.08}s ease ${i*.06}s`;setTimeout(()=>{el.style.strokeDashoffset='0';},50);}catch(e){}});
   wrap.appendChild(svg);
+  // generate distilled intention
+  generateDistilledIntention(intention);
 }
+
+async function generateDistilledIntention(intention){
+  const sumEl=document.getElementById('srSum');
+  let context=`Raw intention: "${intention}"`;
+  if(vHistory.length>2){
+    const exchanges=vHistory.slice(-4).map(m=>{
+      if(m.role==='user')return `Seeker: ${m.content}`;
+      try{const p=JSON.parse(m.content.replace(/```json|```/g,'').trim());return `Venus: ${p.mirror||''}`;}catch(e){return '';}
+    }).filter(Boolean).join('\n');
+    context=`Raw intention: "${intention}"\n\nConversation:\n${exchanges}`;
+  }
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':'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','anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:80,system:'You distill a seeker intention into one perfect sentence. Present tense, first person, poetic but grounded. No preamble, no explanation — just the single sentence. 10-20 words maximum. Make it feel like a vow they are making to themselves.',messages:[{role:'user',content:context}]})
+    });
+    const data=await res.json();
+    const text=data.content?.find(b=>b.type==='text')?.text||intention;
+    sumEl.style.transition='opacity 1.2s ease';sumEl.style.opacity='0';
+    setTimeout(()=>{sumEl.textContent=text.replace(/^["']|["']$/g,'');sumEl.style.opacity='1';},400);
+  }catch(e){sumEl.textContent=intention;}
+}
+
 function copyAddr(){navigator.clipboard.writeText('0x70F0082E7f47e3DC8cf62B2C7FA26100657297E9').then(()=>{const h=document.getElementById('copyHint');h.textContent='Copied ✦';h.classList.add('of-copied');setTimeout(()=>{h.textContent='Tap to copy address';h.classList.remove('of-copied');},2500);});}
 function saveSigil(){const wrap=document.getElementById('sigilWrap');const svg=wrap.querySelector('svg');if(!svg)return;const d=new XMLSerializer().serializeToString(svg);const b=new Blob([d],{type:'image/svg+xml'});const url=URL.createObjectURL(b);const a=document.createElement('a');a.href=url;a.download='ancient-temenos-sigil.svg';a.click();URL.revokeObjectURL(url);}
 
 // ══ THREE.JS GANYMEDE SCULPTURE ══
+const GANYMEDE_GLB_URL = 'https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/ganymedestatue-v1.glb';
+
 function initSculpture(){
   const script=document.createElement('script');
   script.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-  script.onload=buildSculpture;
+  script.onload=()=>{
+    if(GANYMEDE_GLB_URL){
+      loadGLBSculpture();
+    } else {
+      buildSculpture();
+    }
+  };
   document.head.appendChild(script);
 }
 
@@ -1800,6 +1803,172 @@ function buildSculpture(){
   }
   animate();
   }catch(e){console.warn('Sculpture requires live browser environment');}}
+
+function loadGLBSculpture(){
+  try{
+    const canvas=document.getElementById('sculptureCanvas');
+    const wrap=document.getElementById('sculptureWrap');
+    const W=window.innerWidth, H=window.innerHeight;
+    canvas.width=W; canvas.height=H;
+
+    const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
+    renderer.setSize(W,H);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio,2));
+    renderer.setClearColor(0x000000,0);
+    renderer.shadowMap.enabled=true;
+    renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+    renderer.toneMapping=THREE.ACESFilmicToneMapping;
+    renderer.toneMappingExposure=1.2;
+
+    const scene=new THREE.Scene();
+    const camera=new THREE.PerspectiveCamera(40,W/H,0.1,100);
+    camera.position.set(0,1.2,5.5);
+
+    // orbit controls via mouse/touch
+    let isDragging=false,prevMouse={x:0,y:0};
+    let spherical={theta:0,phi:Math.PI/2.2,radius:5.5};
+    let targetTheta=0,autoRotate=true;
+
+    canvas.addEventListener('mousedown',e=>{isDragging=true;autoRotate=false;prevMouse={x:e.clientX,y:e.clientY};});
+    canvas.addEventListener('mousemove',e=>{
+      if(!isDragging)return;
+      const dx=(e.clientX-prevMouse.x)*0.008;
+      const dy=(e.clientY-prevMouse.y)*0.005;
+      targetTheta-=dx;
+      spherical.phi=Math.max(0.3,Math.min(Math.PI-0.3,spherical.phi+dy));
+      prevMouse={x:e.clientX,y:e.clientY};
+    });
+    canvas.addEventListener('mouseup',()=>{isDragging=false;setTimeout(()=>{autoRotate=true;},3000);});
+    canvas.addEventListener('touchstart',e=>{isDragging=true;autoRotate=false;prevMouse={x:e.touches[0].clientX,y:e.touches[0].clientY};},{passive:true});
+    canvas.addEventListener('touchmove',e=>{
+      if(!isDragging)return;
+      const dx=(e.touches[0].clientX-prevMouse.x)*0.008;
+      targetTheta-=dx;
+      prevMouse={x:e.touches[0].clientX,y:e.touches[0].clientY};
+    },{passive:true});
+    canvas.addEventListener('touchend',()=>{isDragging=false;setTimeout(()=>{autoRotate=true;},3000);});
+
+    // lighting — sacred cave candlelight
+    scene.add(new THREE.AmbientLight(0xffeedd,0.25));
+    const shaftLight=new THREE.SpotLight(0xfff5e0,3,20,Math.PI/8,0.5,1.5);
+    shaftLight.position.set(0,8,0);shaftLight.target.position.set(0,0,0);
+    shaftLight.castShadow=true;scene.add(shaftLight);scene.add(shaftLight.target);
+    const keyLight=new THREE.PointLight(0xffd080,2.5,15);keyLight.position.set(2,4,3);scene.add(keyLight);
+    const fillLight=new THREE.PointLight(0xc47820,1.2,10);fillLight.position.set(-3,1,1);scene.add(fillLight);
+    const candleL=new THREE.PointLight(0xff8820,1.5,6);candleL.position.set(-1,-0.5,2);scene.add(candleL);
+    const candleR=new THREE.PointLight(0xff9030,1.5,6);candleR.position.set(1,-0.5,2);scene.add(candleR);
+
+    // subtle ground reflection plane
+    const poolGeo=new THREE.CircleGeometry(3,64);
+    const poolMat=new THREE.MeshStandardMaterial({color:0x0a0805,metalness:0.9,roughness:0.1,transparent:true,opacity:0.6});
+    const pool=new THREE.Mesh(poolGeo,poolMat);
+    pool.rotation.x=-Math.PI/2;pool.position.y=-1.6;pool.receiveShadow=true;
+    scene.add(pool);
+
+    // holoMaterial for toggle
+    const holoMat=new THREE.MeshBasicMaterial({color:0x00eeff,wireframe:true,transparent:true,opacity:0.55});
+
+    let model=null;
+    let currentMode='bronze';
+    let originalMaterials=[];
+
+    window.setSculptureTexture=function(mode){
+      if(!model)return;
+      currentMode=mode;
+      const btnB=document.getElementById('btnBronze');
+      const btnH=document.getElementById('btnHolo');
+      if(mode==='holo'){
+        model.traverse(child=>{
+          if(child.isMesh){
+            if(!child.userData.origMat)child.userData.origMat=child.material;
+            child.material=holoMat;
+          }
+        });
+        btnB.style.borderColor='rgba(196,158,72,0.2)';btnB.style.color='rgba(196,158,72,0.35)';
+        btnH.style.borderColor='rgba(100,220,255,0.7)';btnH.style.color='rgba(100,220,255,0.9)';
+      } else {
+        model.traverse(child=>{
+          if(child.isMesh&&child.userData.origMat)child.material=child.userData.origMat;
+        });
+        btnB.style.borderColor='rgba(196,158,72,0.7)';btnB.style.color='rgba(196,158,72,0.95)';
+        btnH.style.borderColor='rgba(100,220,255,0.2)';btnH.style.color='rgba(100,220,255,0.35)';
+      }
+    };
+
+    // load GLB
+    const loaderScript=document.createElement('script');
+    loaderScript.src='https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
+    loaderScript.onload=()=>{
+      // Draco decoder
+      const dracoScript=document.createElement('script');
+      dracoScript.src='https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js';
+      dracoScript.onload=()=>{
+        const dracoLoader=new THREE.DRACOLoader();
+        dracoLoader.setDecoderPath('https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/libs/draco/');
+        const loader=new THREE.GLTFLoader();
+        loader.setDRACOLoader(dracoLoader);
+
+        loader.load(GANYMEDE_GLB_URL,(gltf)=>{
+          model=gltf.scene;
+          model.traverse(child=>{if(child.isMesh){child.castShadow=true;child.receiveShadow=true;}});
+
+          // centre and scale
+          const box=new THREE.Box3().setFromObject(model);
+          const centre=box.getCenter(new THREE.Vector3());
+          const size=box.getSize(new THREE.Vector3());
+          const maxDim=Math.max(size.x,size.y,size.z);
+          const scale=3.2/maxDim;
+          model.scale.setScalar(scale);
+          model.position.copy(centre.multiplyScalar(-scale));
+          model.position.y-=0.3;
+          scene.add(model);
+
+          // fade in sculpture and UI
+          setTimeout(()=>{
+            wrap.classList.add('visible');
+            const header=document.getElementById('caveHeader');
+            const toggle=document.getElementById('textureToggle');
+            const caveVid=document.getElementById('caveVideo');
+            if(header)header.style.opacity='1';
+            if(toggle)toggle.style.opacity='1';
+            if(caveVid)caveVid.style.opacity='1';
+          },400);
+
+          // animate
+          let t=0;
+          function animate(){
+            requestAnimationFrame(animate);
+            t+=0.006;
+            if(autoRotate)targetTheta+=0.003;
+            spherical.theta+=(targetTheta-spherical.theta)*0.05;
+            const x=spherical.radius*Math.sin(spherical.phi)*Math.sin(spherical.theta);
+            const y=spherical.radius*Math.cos(spherical.phi)+1;
+            const z=spherical.radius*Math.sin(spherical.phi)*Math.cos(spherical.theta);
+            camera.position.set(x,y,z);camera.lookAt(0,0.5,0);
+            // candle flicker
+            candleL.intensity=1.3+Math.sin(t*3.7)*0.4;
+            candleR.intensity=1.3+Math.sin(t*2.9+1)*0.4;
+            keyLight.intensity=2.3+Math.sin(t*1.3)*0.3;
+            // subtle float
+            if(model)model.position.y=-0.3+Math.sin(t*0.7)*0.04;
+            renderer.render(scene,camera);
+          }
+          animate();
+
+          // resize
+          window.addEventListener('resize',()=>{
+            const W=window.innerWidth,H=window.innerHeight;
+            camera.aspect=W/H;camera.updateProjectionMatrix();
+            renderer.setSize(W,H);
+          });
+
+        },undefined,(err)=>{console.warn('GLB failed, using placeholder');buildSculpture();});
+      };
+      document.head.appendChild(dracoScript);
+    };
+    document.head.appendChild(loaderScript);
+  }catch(e){console.warn('Sculpture error:',e);buildSculpture();}
+}
 
 // init sculpture when Ganymede screen becomes active
 const _origEnterGany=enterGanymede;
