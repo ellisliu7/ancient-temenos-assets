@@ -13,7 +13,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
 /* ── SCREENS ── */
-.screen{position:fixed;inset:0;z-index:10;display:none;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity .6s ease;}
+.screen{position:fixed;inset:0;z-index:10;display:none;flex-direction:column;align-items:center;justify-content:center;opacity:0;transition:opacity .5s ease;}
 .screen.active{display:flex;}
 .screen.visible{opacity:1;}
 
@@ -306,6 +306,24 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 .well-prompt-txt{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.4em;color:rgba(196,158,72,0.55);text-transform:uppercase;cursor:pointer;transition:color .4s;border:none;background:transparent;}
 .well-prompt-txt:hover{color:rgba(196,158,72,0.9);}
 .inp-area{width:100%;max-width:500px;margin:0 auto;padding:.5rem 1.5rem 2.5rem;flex-shrink:0;position:relative;z-index:1;}
+/* ── CUPID FREQUENCY TOGGLE ── */
+#cupidWrap{position:fixed;bottom:2rem;right:1.5rem;z-index:20;cursor:pointer;display:none;flex-direction:column;align-items:center;gap:.2rem;animation:cupidFloat 4s ease-in-out infinite;transition:opacity .4s;opacity:.45;}
+#cupidWrap:hover{opacity:.85;}
+#cupidWrap.active{opacity:.9;}
+#cupidSvg{width:56px;height:76px;}
+#cupidLabel{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.3em;color:rgba(196,158,72,0.4);text-transform:uppercase;transition:color .4s;}
+#cupidWrap.active #cupidLabel{color:rgba(196,158,72,0.8);}
+@keyframes cupidFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-8px);}}
+@keyframes wingBeat{0%,100%{transform:scaleY(1);}50%{transform:scaleY(0.7);}}
+@keyframes harpString{0%,100%{opacity:.3;}50%{opacity:.9;}}
+#cupidWrap.active #wingL,#cupidWrap.active #wingR{animation:wingBeat 1.2s ease-in-out infinite;}
+#cupidWrap.active #harpG line{animation:harpString 0.8s ease-in-out infinite;}
+#cupidWrap.active #harpG line:nth-child(2){animation-delay:.1s;}
+#cupidWrap.active #harpG line:nth-child(3){animation-delay:.2s;}
+#cupidWrap.active #harpG line:nth-child(4){animation-delay:.3s;}
+#cupidWrap.active #cupidGlow{stroke:rgba(196,158,72,0.3);animation:cupidAura 2s ease-in-out infinite;}
+@keyframes cupidAura{0%,100%{stroke-opacity:.2;}50%{stroke-opacity:.5;}}
+
 .oracle-tablet{position:relative;width:100%;}
 .tablet-arch{position:relative;background:linear-gradient(160deg,rgba(55,40,18,0.6) 0%,rgba(28,20,8,0.75) 50%,rgba(18,12,4,0.85) 100%);border:1px solid rgba(196,158,72,0.22);border-radius:110px 110px 14px 14px;padding:1.5rem 1.4rem 1rem;box-shadow:0 0 0 1px rgba(196,158,72,0.06),inset 0 1px 0 rgba(196,158,72,0.2),inset 0 -1px 0 rgba(196,158,72,0.08),inset 2px 0 0 rgba(196,158,72,0.06),inset -2px 0 0 rgba(196,158,72,0.06),0 0 30px rgba(196,158,72,0.09),0 6px 24px rgba(0,0,0,0.7);overflow:hidden;transition:box-shadow .5s ease;}
 .oracle-tablet:focus-within .tablet-arch{box-shadow:0 0 0 1px rgba(196,158,72,0.12),inset 0 1px 0 rgba(196,158,72,0.32),inset 0 -1px 0 rgba(196,158,72,0.14),inset 2px 0 0 rgba(196,158,72,0.1),inset -2px 0 0 rgba(196,158,72,0.1),0 0 50px rgba(196,158,72,0.16),0 6px 30px rgba(0,0,0,0.8);}
@@ -649,6 +667,43 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
     </video>
     <div style="position:absolute;inset:0;background:rgba(6,4,2,0.15);"></div>
   </div>
+
+  <!-- Cupid frequency toggle -->
+  <div id="cupidWrap" onclick="toggleFrequency()" title="Touch to awaken the frequency">
+    <svg id="cupidSvg" viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- wings -->
+      <g id="wingL">
+        <path d="M30 32 Q14 22 10 12 Q18 18 28 28" stroke="rgba(196,158,72,0.5)" stroke-width=".8" fill="rgba(196,158,72,0.04)"/>
+        <path d="M30 32 Q10 28 8 20 Q18 24 28 30" stroke="rgba(196,158,72,0.35)" stroke-width=".6" fill="none"/>
+      </g>
+      <g id="wingR">
+        <path d="M30 32 Q46 22 50 12 Q42 18 32 28" stroke="rgba(196,158,72,0.5)" stroke-width=".8" fill="rgba(196,158,72,0.04)"/>
+        <path d="M30 32 Q50 28 52 20 Q42 24 32 30" stroke="rgba(196,158,72,0.35)" stroke-width=".6" fill="none"/>
+      </g>
+      <!-- body -->
+      <ellipse cx="30" cy="44" rx="7" ry="9" stroke="rgba(196,158,72,0.55)" stroke-width=".8" fill="rgba(196,158,72,0.05)"/>
+      <!-- head -->
+      <circle cx="30" cy="30" r="7" stroke="rgba(196,158,72,0.6)" stroke-width=".8" fill="rgba(196,158,72,0.06)"/>
+      <!-- curly hair suggestion -->
+      <path d="M24 27 Q26 23 30 24 Q34 23 36 27" stroke="rgba(196,158,72,0.4)" stroke-width=".6" fill="none"/>
+      <!-- harp -->
+      <g id="harpG">
+        <path d="M38 38 Q50 32 52 50 L40 54 Z" stroke="rgba(196,158,72,0.45)" stroke-width=".7" fill="rgba(196,158,72,0.03)"/>
+        <line x1="42" y1="38" x2="40" y2="53" stroke="rgba(196,158,72,0.3)" stroke-width=".5"/>
+        <line x1="45" y1="36" x2="43" y2="52" stroke="rgba(196,158,72,0.3)" stroke-width=".5"/>
+        <line x1="48" y1="35" x2="46" y2="51" stroke="rgba(196,158,72,0.3)" stroke-width=".5"/>
+        <line x1="51" y1="36" x2="49" y2="51" stroke="rgba(196,158,72,0.3)" stroke-width=".5"/>
+      </g>
+      <!-- arm holding harp -->
+      <path d="M35 42 Q40 38 42 36" stroke="rgba(196,158,72,0.45)" stroke-width=".8" fill="none" stroke-linecap="round"/>
+      <!-- legs -->
+      <path d="M26 52 Q24 60 26 66" stroke="rgba(196,158,72,0.4)" stroke-width=".8" fill="none" stroke-linecap="round"/>
+      <path d="M34 52 Q36 60 34 66" stroke="rgba(196,158,72,0.4)" stroke-width=".8" fill="none" stroke-linecap="round"/>
+      <!-- glow ring when active -->
+      <circle id="cupidGlow" cx="30" cy="40" r="28" stroke="rgba(196,158,72,0)" stroke-width=".5" fill="none"/>
+    </svg>
+    <p id="cupidLabel">♪</p>
+  </div>
   <div class="oracle-top" style="position:relative;z-index:1;padding:3.5rem 2rem 1.2rem;">
     <h2 class="o-title">Speak to Venus</h2>
     <p class="o-sub">Speak what you carry. She will show you what you already know.</p>
@@ -888,32 +943,37 @@ mainLoop();
 // ══ NAVIGATION ══
 let currentScreen='threshold';
 function showScreen(id){
-  const prev=document.querySelector('.screen.active');
+  const allScreens=document.querySelectorAll('.screen');
   const next=document.getElementById(id);
-  if(prev&&prev!==next){
-    prev.style.opacity='0';
-    setTimeout(()=>{
-      prev.classList.remove('active','visible');
-      next.classList.add('active');
-      requestAnimationFrame(()=>requestAnimationFrame(()=>{
+  // fade out all active screens
+  allScreens.forEach(s=>{
+    if(s.classList.contains('active')&&s!==next){
+      s.style.opacity='0';
+      setTimeout(()=>{
+        s.classList.remove('active','visible');
+        s.style.opacity='';
+      },350);
+    }
+  });
+  // show next after short delay
+  setTimeout(()=>{
+    next.style.opacity='0';
+    next.classList.add('active');
+    next.classList.remove('visible');
+    requestAnimationFrame(()=>{
+      requestAnimationFrame(()=>{
+        next.style.opacity='';
         next.classList.add('visible');
-        // stagger foyer on arrival
         if(id==='foyer'){
           const fi=next.querySelector('.foyer-inner');
-          if(fi){fi.classList.remove('arrived');requestAnimationFrame(()=>setTimeout(()=>fi.classList.add('arrived'),50));}
+          if(fi){
+            fi.classList.remove('arrived');
+            setTimeout(()=>fi.classList.add('arrived'),100);
+          }
         }
-      }));
-    },350);
-  } else {
-    next.classList.add('active');
-    requestAnimationFrame(()=>requestAnimationFrame(()=>{
-      next.classList.add('visible');
-      if(id==='foyer'){
-        const fi=next.querySelector('.foyer-inner');
-        if(fi){fi.classList.remove('arrived');requestAnimationFrame(()=>setTimeout(()=>fi.classList.add('arrived'),50));}
-      }
-    }));
-  }
+      });
+    });
+  },200);
   currentScreen=id;
   inCave=(id==='ganymedeScreen');
   caveC.style.display=inCave?'block':'none';
@@ -925,6 +985,7 @@ function showScreen(id){
 function goReturn(){
   const prev={foyer:'threshold',venusOracle:'foyer',ganymedeScreen:'foyer'};
   const target=prev[currentScreen]||'foyer';
+  if(currentScreen==='venusOracle')hideCupid();
   showScreen(target);
   if(target==='threshold'){document.getElementById('returnBtn').style.display='none';document.getElementById('teachingsBtn').style.display='none';}
 }
@@ -1002,6 +1063,55 @@ function runEntry(){
   },1100);
 }
 
+// ══ HEALING FREQUENCIES ══
+let audioCtx=null,freqNodes={osc:null,gain:null};
+let freqActive=false;
+
+function getAudioCtx(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx;}
+
+function startFrequency(hz){
+  const ctx=getAudioCtx();
+  if(freqNodes.osc){freqNodes.osc.stop();freqNodes.osc=null;}
+  const osc=ctx.createOscillator();
+  const gain=ctx.createGain();
+  osc.type='sine';
+  osc.frequency.setValueAtTime(hz,ctx.currentTime);
+  gain.gain.setValueAtTime(0,ctx.currentTime);
+  gain.gain.linearRampToValueAtTime(0.06,ctx.currentTime+1.5);
+  osc.connect(gain);gain.connect(ctx.destination);
+  osc.start();
+  freqNodes={osc,gain};
+}
+
+function stopFrequency(){
+  if(freqNodes.gain){
+    freqNodes.gain.gain.linearRampToValueAtTime(0,getAudioCtx().currentTime+1.5);
+    setTimeout(()=>{if(freqNodes.osc){freqNodes.osc.stop();freqNodes.osc=null;}},1600);
+  }
+}
+
+function toggleFrequency(){
+  freqActive=!freqActive;
+  const wrap=document.getElementById('cupidWrap');
+  const label=document.getElementById('cupidLabel');
+  if(freqActive){
+    startFrequency(528);
+    wrap.classList.add('active');
+    label.textContent='528 hz';
+  } else {
+    stopFrequency();
+    wrap.classList.remove('active');
+    label.textContent='♪';
+  }
+}
+
+// show Cupid when Venus oracle is active
+function showCupid(){document.getElementById('cupidWrap').style.display='flex';}
+function hideCupid(){
+  document.getElementById('cupidWrap').style.display='none';
+  if(freqActive){freqActive=false;stopFrequency();document.getElementById('cupidWrap').classList.remove('active');}
+}
+
 // ══ VENUS ══
 function enterVenusAltar(){enterVenusOracle();}
 function enterGanymede(){
@@ -1021,6 +1131,7 @@ const vTh=['She is seeing…','The mirror stirs…','She is reading what is bene
 
 function enterVenusOracle(){
   showScreen('venusOracle');
+  showCupid();
   if(!venusOracleOpened){
     venusOracleOpened=true;
     setTimeout(()=>{
