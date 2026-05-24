@@ -220,30 +220,75 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 }
 
 /* ══ FLOATING PORTAL ALTARS ══ */
-.portals-row{display:flex;gap:4rem;align-items:flex-end;justify-content:center;max-width:860px;width:100%;margin-bottom:1rem;}
-.portals-row{perspective:1200px;}
-.portal-wrap{flex:1;max-width:300px;cursor:pointer;animation:portalFloat 5s ease-in-out infinite;transition:transform .5s ease,filter .5s ease;filter:drop-shadow(0 30px 60px rgba(0,0,0,0.5));transform-style:preserve-3d;}
-.portal-wrap:first-child{transform:rotateY(4deg) translateZ(-20px) scale(0.96);}
-.portal-wrap:last-child{transform:rotateY(-4deg) translateZ(-20px) scale(0.96);}
-.portal-wrap:hover{filter:drop-shadow(0 0 40px rgba(196,158,72,0.22)) drop-shadow(0 30px 60px rgba(0,0,0,0.6));}
-.portal-wrap:first-child:hover{transform:rotateY(2deg) translateZ(0px) scale(1);}
-.portal-wrap:last-child:hover{transform:rotateY(-2deg) translateZ(0px) scale(1);}
-@keyframes portalFloat{0%,100%{transform:rotateY(4deg) translateZ(-20px) scale(0.96) translateY(0);}50%{transform:rotateY(4deg) translateZ(-20px) scale(0.96) translateY(-14px);}}
-.portal-wrap:last-child{animation-name:portalFloatR;animation-delay:.4s;}
-@keyframes portalFloatR{0%,100%{transform:rotateY(-4deg) translateZ(-20px) scale(0.96) translateY(0);}50%{transform:rotateY(-4deg) translateZ(-20px) scale(0.96) translateY(-14px);}}
+.portals-row{display:flex;gap:4vw;align-items:center;justify-content:center;width:100%;max-width:1100px;margin:0 auto;}
+.portals-row{perspective:1400px;}
+.portal-wrap{
+  flex:1;max-width:min(45vw,460px);
+  cursor:pointer;
+  animation:portalFloat 5s ease-in-out infinite;
+  transition:transform .5s ease,filter .6s ease;
+  filter:drop-shadow(0 20px 60px rgba(0,0,0,0.6)) drop-shadow(0 0 0px rgba(196,158,72,0));
+}
+.portal-wrap:nth-child(3){animation-delay:.5s;}
+.portal-wrap:hover{
+  transform:translateY(-8px) scale(1.02);
+  filter:drop-shadow(0 30px 70px rgba(0,0,0,0.7)) drop-shadow(0 0 40px rgba(196,158,72,0.25));
+}
+@keyframes portalFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+@keyframes portalFloatR{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+.portal-wrap:last-child{animation-name:portalFloatR;}
+
 .portal-arch{position:relative;width:100%;}
 .portal-arch-svg{display:none;}
+
+/* the artwork — full image, arch clipped */
 .portal-img{
-  width:100%;padding-top:165%;background-size:cover;background-position:center top;
+  width:100%;
+  padding-top:160%;
+  background-size:cover;
+  background-position:center 20%;
+  background-repeat:no-repeat;
   clip-path:path('M10,340 L10,120 Q10,10 110,10 Q210,10 210,120 L210,340 Z');
-  opacity:.65;transition:opacity .5s ease;
-  mix-blend-mode:luminosity;
-  filter:saturate(0.7) brightness(0.85);
+  opacity:0.88;
+  transition:opacity .5s ease;
 }
-.portal-wrap:hover .portal-img{opacity:.85;mix-blend-mode:normal;filter:saturate(0.9) brightness(0.95);}
-.portal-fade{position:absolute;inset:0;background:linear-gradient(to top,rgba(4,3,2,0.88) 0%,rgba(4,3,2,0.15) 50%,transparent 68%);z-index:2;clip-path:path('M10,340 L10,120 Q10,10 110,10 Q210,10 210,120 L210,340 Z');transition:opacity .5s ease;}
-.portal-wrap:hover .portal-fade{opacity:.6;}
-.portal-text{position:absolute;bottom:1.8rem;left:0;right:0;z-index:4;display:flex;flex-direction:column;align-items:center;gap:.35rem;padding:0 1.2rem;text-align:center;}
+.portal-wrap:hover .portal-img{opacity:1;}
+
+/* edge glow — gold ambient light around the arch */
+.portal-arch::before{
+  content:'';position:absolute;inset:0;z-index:3;pointer-events:none;
+  clip-path:path('M10,340 L10,120 Q10,10 110,10 Q210,10 210,120 L210,340 Z');
+  box-shadow:inset 0 0 30px 6px rgba(196,158,72,0.08);
+  transition:box-shadow .5s ease;
+}
+.portal-wrap:hover .portal-arch::before{
+  box-shadow:inset 0 0 50px 10px rgba(196,158,72,0.18);
+}
+
+/* outer glow ring */
+.portal-arch::after{
+  content:'';position:absolute;inset:-6px;z-index:2;pointer-events:none;
+  clip-path:path('M4,346 L4,118 Q4,4 110,4 Q216,4 216,118 L216,346 Z');
+  box-shadow:0 0 20px 4px rgba(196,158,72,0.06),0 0 60px 12px rgba(196,158,72,0.03);
+  transition:box-shadow .5s ease;
+  border-radius:inherit;
+}
+.portal-wrap:hover .portal-arch::after{
+  box-shadow:0 0 35px 8px rgba(196,158,72,0.2),0 0 80px 20px rgba(196,158,72,0.08);
+}
+
+/* bottom gradient — text readability */
+.portal-fade{
+  position:absolute;inset:0;z-index:2;pointer-events:none;
+  background:linear-gradient(to top,rgba(4,3,2,0.9) 0%,rgba(4,3,2,0.3) 35%,transparent 55%);
+  clip-path:path('M10,340 L10,120 Q10,10 110,10 Q210,10 210,120 L210,340 Z');
+  transition:opacity .5s ease;
+}
+.portal-wrap:hover .portal-fade{opacity:0.7;}
+
+.portal-text{position:absolute;bottom:1.6rem;left:0;right:0;z-index:4;display:flex;flex-direction:column;align-items:center;gap:.3rem;padding:0 1rem;text-align:center;}
+.portal-text .altar-name{font-size:21px;}
+.portal-text .altar-desc{font-size:12px;max-width:200px;}
 .portal-text .altar-name{font-size:22px;}
 .portal-text .altar-desc{font-size:13px;max-width:210px;}
 
@@ -476,7 +521,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 .well-stage.active{display:flex;}
 .ws-title{font-family:'Almendra',serif;font-style:italic;font-size:30px;color:rgba(238,220,168,0.88);margin-bottom:.4rem;}
 .ws-sub{font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(196,158,72,0.4);letter-spacing:.05em;margin-bottom:1.8rem;font-style:italic;}
-.ws-inp{width:100%;background:transparent;border:none;border-bottom:.5px solid rgba(196,158,72,0.25);outline:none;font-family:'Cormorant Garamond',serif;font-size:18px;color:rgba(238,220,168,0.7);padding:.6rem 0;text-align:center;letter-spacing:.04em;caret-color:rgba(196,158,72,0.7);margin-bottom:.5rem;}
+.ws-inp{width:100%;background:rgba(196,158,72,0.04);backdrop-filter:blur(8px);border:none;border:.5px solid rgba(196,158,72,0.3);border-radius:40px;outline:none;font-family:'Cormorant Garamond',serif;font-size:19px;color:rgba(238,220,168,0.9);padding:.8rem 1.4rem;text-align:center;letter-spacing:.04em;caret-color:rgba(196,158,72,0.8);margin-bottom:.5rem;}
 .ws-inp::placeholder{color:rgba(196,158,72,0.18);}
 .ws-hint{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.3em;color:rgba(196,158,72,0.2);text-transform:uppercase;margin-bottom:1.8rem;}
 .ws-btn{background:transparent;border:.5px solid rgba(196,158,72,0.25);color:rgba(196,158,72,0.55);font-family:'Cinzel',serif;font-size:9px;letter-spacing:.35em;text-transform:uppercase;padding:.65rem 2rem;cursor:pointer;transition:all .4s;}
@@ -500,7 +545,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 .of-save:hover{border-color:rgba(196,158,72,0.5);color:rgba(238,220,168,0.7);}
 
 /* ══ ENTRY CONGRATULATION ══ */
-#entryCongrat{position:fixed;inset:0;z-index:65;background:#080604;display:none;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;}
+#entryCongrat{position:fixed;inset:0;z-index:65;background:transparent;display:none;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;}
 .ec-line1{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.55em;color:rgba(196,158,72,0);text-transform:uppercase;margin-bottom:.8rem;}
 .ec-line2{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(18px,3vw,26px);color:rgba(238,220,168,0);letter-spacing:.08em;text-align:center;line-height:1.6;}
 .ec-line3{font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(196,158,72,0);margin-top:.8rem;}
@@ -639,13 +684,6 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
 <!-- ══ ENTRY CONGRATULATION ══ -->
 <div id="entryCongrat">
-  <!-- foyer video background -->
-  <div style="position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;">
-    <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.55) saturate(.85);">
-      <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/MainFoyer_main.mp4" type="video/mp4">
-    </video>
-    <div style="position:absolute;inset:0;background:rgba(4,3,2,0.45);"></div>
-  </div>
   <div style="position:relative;z-index:1;display:flex;flex-direction:column;align-items:center;">
   <p class="ec-line1" id="ecLine1">You remembered.</p>
   <p class="ec-line2" id="ecLine2">Love. Of course it was love.<br>Welcome home.</p>
@@ -653,17 +691,17 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
   </div>
 </div>
 
+<!-- ══ PERSISTENT FOYER VIDEO — lives outside screens ══ -->
+<div id="foyerVideo" style="display:none;position:fixed;inset:0;z-index:5;overflow:hidden;pointer-events:none;">
+  <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.5) saturate(.8);">
+    <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/MainFoyer_main.mp4" type="video/mp4">
+  </video>
+  <div style="position:absolute;inset:0;background:rgba(4,3,2,0.3);"></div>
+</div>
+
 <!-- ══ FOYER ══ -->
 <div class="screen" id="foyer" style="overflow-y:auto;">
-  <!-- foyer video background -->
-  <div style="position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;">
-    <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.5) saturate(.8);">
-      <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/MainFoyer_main.mp4" type="video/mp4">
-    </video>
-    <div style="position:absolute;inset:0;background:rgba(4,3,2,0.35);"></div>
-  </div>
-
-  <div class="foyer-inner" style="position:relative;z-index:1;padding:2rem 2rem 3rem;">
+  <div class="foyer-inner" style="position:relative;z-index:1;padding:1rem 2rem 2rem;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;">
     <p class="foyer-entered" style="color:rgba(238,220,168,0.5);">Choose your altar</p>
     <div class="orn" style="margin-bottom:2.5rem;"><div class="orn-l"></div><div class="orn-d"></div><div class="orn-l"></div></div>
 
@@ -689,7 +727,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
             <path d="M30 340 L30 124 Q30 38 110 38 Q190 38 190 124 L190 340" stroke="rgba(196,158,72,0.08)" stroke-width="8" fill="rgba(196,158,72,0.015)"/>
           </svg>
           <!-- artwork inside arch -->
-          <div class="portal-img" style="background-image:url('https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus.jpg');"></div>
+          <div class="portal-img" style="background-image:url('https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus.jpg');background-position:center 5%;"></div>
           <!-- gradient fade at bottom -->
           <div class="portal-fade"></div>
           <!-- text -->
@@ -715,7 +753,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
             <line x1="2" y1="338" x2="218" y2="338" stroke="rgba(180,120,50,0.25)" stroke-width=".8"/>
             <path d="M30 340 L30 124 Q30 38 110 38 Q190 38 190 124 L190 340" stroke="rgba(180,120,50,0.06)" stroke-width="8" fill="rgba(180,120,50,0.012)"/>
           </svg>
-          <div class="portal-img" style="background-image:url('https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/IMG_5355.jpg');"></div>
+          <div class="portal-img" style="background-image:url('https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/IMG_5355.jpg');background-position:center 15%;"></div>
           <div class="portal-fade" style="background:linear-gradient(to top,rgba(4,3,2,0.85) 0%,transparent 60%);"></div>
           <div class="portal-text">
             <p class="altar-name" style="color:rgba(220,185,130,0.85);">Altar of Ganymede</p>
@@ -733,7 +771,7 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
 
 <!-- ══ VENUS BREATH ══ -->
-<div class="screen" id="venusBreath" style="background:#080604;">
+<div class="screen" id="venusBreath" style="background:transparent;">
   <div style="text-align:center;padding:2rem;animation:fadeUp 1.5s ease forwards;">
     <p style="font-family:'Cormorant',serif;font-style:italic;font-size:clamp(14px,2vw,20px);color:rgba(238,220,168,0.35);line-height:2.2;letter-spacing:.08em;">
       take a moment to set an intention<br>and just breathe
@@ -892,7 +930,6 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
   <div class="well-stage active" id="ws1">
     <p class="ws-title">The Wishing Well</p>
     <p class="ws-sub">Set your intention. The well remembers.</p>
-    <canvas id="wellCanvas" width="240" height="120" style="margin-bottom:1.5rem;"></canvas>
     <input class="ws-inp" id="intentionInp" type="text" placeholder="I intend to…" autocomplete="off" spellcheck="false" maxlength="100"/>
     <p class="ws-hint">Write your intention as a statement of truth</p>
     <button class="ws-btn" onclick="castCoin()">Cast the coin ✦</button>
@@ -1018,9 +1055,7 @@ function drawCave(){
 const ppC=document.getElementById('poolPreview'),ppX=ppC?ppC.getContext('2d'):null;
 let ppf=0;
 function drawPool(){if(!ppX)return;ppf++;ppX.fillStyle='rgba(8,5,18,0.3)';ppX.fillRect(0,0,120,70);const cx=60,cy=52;for(let i=0;i<4;i++){const r=8+i*14+((ppf*.5+i*10)%50);const op=Math.max(0,.5-r/80);ppX.beginPath();ppX.ellipse(cx,cy,r,r*.3,0,0,Math.PI*2);ppX.strokeStyle=`rgba(120,90,180,${op})`;ppX.lineWidth=.5;ppX.stroke();}[{x:40,c:'rgba(196,158,72,'},{x:60,c:'rgba(140,100,220,'},{x:80,c:'rgba(200,200,230,'}].forEach((l,i)=>{const f=.4+Math.sin(ppf*.05+i*2)*.3;ppX.beginPath();ppX.arc(l.x,cy-8,2,0,Math.PI*2);ppX.fillStyle=l.c+f+')';ppX.fill();});}
-const wC=document.getElementById('wellCanvas'),wX=wC.getContext('2d');
-let wf=0;
-function drawWell(){wf++;wX.fillStyle='rgba(4,3,2,0.35)';wX.fillRect(0,0,240,120);const cx=120,cy=90;for(let i=0;i<5;i++){const r=12+i*18+((wf*.7+i*12)%80);const op=Math.max(0,.45-r/140);wX.beginPath();wX.ellipse(cx,cy,r,r*.28,0,0,Math.PI*2);wX.strokeStyle=`rgba(196,158,72,${op})`;wX.lineWidth=.5;wX.stroke();}const wg=wX.createRadialGradient(cx,cy,0,cx,cy,50);wg.addColorStop(0,'rgba(196,158,72,0.09)');wg.addColorStop(1,'transparent');wX.fillStyle=wg;wX.fillRect(0,0,240,120);}
+function drawWell(){}
 const vcC=document.getElementById('vc'),vcX=vcC.getContext('2d');
 let vfr=0,vrun=false;
 function resizeVc(){vcC.width=window.innerWidth;vcC.height=window.innerHeight;}
@@ -1034,7 +1069,7 @@ function drawVortex(){
   if(vfr<120)requestAnimationFrame(drawVortex);else{document.getElementById('vortex').style.opacity='0';vrun=false;}
 }
 let inCave=false;
-function mainLoop(){drawBg();if(inCave)drawCave();drawPool();drawWell();requestAnimationFrame(mainLoop);}
+function mainLoop(){drawBg();if(inCave)drawCave();drawPool();requestAnimationFrame(mainLoop);}
 mainLoop();
 
 // ══ ARCH ══
@@ -1075,6 +1110,9 @@ function showScreen(id){
   currentScreen=id;
   inCave=(id==='ganymedeScreen');
   caveC.style.display=inCave?'block':'none';
+  // show foyer video on relevant screens
+  const fv=document.getElementById('foyerVideo');
+  if(fv){fv.style.display=['foyer','venusBreath','entryCongrat'].includes(id)?'block':'none';}
   const showReturn=['foyer','venusBreath','venusOracle','ganymedeScreen'].includes(id);
   const showTeachings=['venusOracle','ganymedeScreen','foyer'].includes(id);
   document.getElementById('returnBtn').style.display=showReturn?'flex':'none';
@@ -1129,36 +1167,35 @@ function chooseRune(word,btn){
   }
 }
 function runEntry(){
-  // fade threshold out
+  const th=document.getElementById('threshold');
+  // slowly fade threshold out
+  th.style.transition='opacity 2.5s ease';
+  th.style.opacity='0';
+  // fade foyer video in gently
+  const fv=document.getElementById('foyerVideo');
+  if(fv){fv.style.opacity='0';fv.style.transition='opacity 3s ease';fv.style.display='block';setTimeout(()=>{fv.style.opacity='1';},100);}
+  // show congrat text after threshold fades
   setTimeout(()=>{
-    const th=document.getElementById('threshold');
-    th.style.transition='opacity 1s ease';
-    th.style.opacity='0';
-  },100);
-  setTimeout(()=>{
-    // show congrat over the hidden threshold
     const ec=document.getElementById('entryCongrat');
-    ec.style.display='flex';ec.style.opacity='0';
-    ec.style.transition='opacity .8s ease';
-    setTimeout(()=>{ec.style.opacity='1';},50);
+    ec.style.transition='none';
+    ec.style.opacity='0';
+    ec.style.display='flex';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      ec.style.transition='opacity 3s ease';
+      ec.style.opacity='1';
+    }));
     const l1=document.getElementById('ecLine1');
     const l2=document.getElementById('ecLine2');
     const l3=document.getElementById('ecLine3');
-    setTimeout(()=>{l1.style.transition='opacity .6s ease';l1.style.color='rgba(196,158,72,0.35)';l1.style.opacity='1';},200);
-    setTimeout(()=>{l2.style.transition='opacity .8s ease';l2.style.color='rgba(238,220,168,0.55)';l2.style.opacity='1';setTimeout(()=>{l2.style.animation='ecPulse 2.5s ease-in-out infinite';},800);},700);
-    setTimeout(()=>{l3.style.transition='opacity .6s ease';l3.style.color='rgba(196,158,72,0.3)';l3.style.opacity='1';l3.style.animation='ecPulse 2.5s ease-in-out 0.5s infinite';},1400);
-    // fade out to foyer
+    setTimeout(()=>{l1.style.transition='opacity 1.2s ease';l1.style.color='rgba(196,158,72,0.35)';l1.style.opacity='1';},500);
+    setTimeout(()=>{l2.style.transition='opacity 1.5s ease';l2.style.color='rgba(238,220,168,0.55)';l2.style.opacity='1';setTimeout(()=>{l2.style.animation='ecPulse 2.5s ease-in-out infinite';},1500);},1200);
+    setTimeout(()=>{l3.style.transition='opacity 1.2s ease';l3.style.color='rgba(196,158,72,0.3)';l3.style.opacity='1';l3.style.animation='ecPulse 2.5s ease-in-out 0.5s infinite';},2000);
+    // slow fade out to foyer
     setTimeout(()=>{
-      ec.style.transition='opacity 1s ease';
-      ec.style.opacity='0';
-      setTimeout(()=>{
-        ec.style.display='none';
-        const th=document.getElementById('threshold');
-        th.style.transition='';th.style.opacity='1';
-        showScreen('foyer');
-      },1000);
-    },3400);
-  },1100);
+      ec.style.transition='opacity 2.5s ease';ec.style.opacity='0';
+      setTimeout(()=>{ec.style.display='none';th.style.transition='';th.style.opacity='1';showScreen('foyer');},2600);
+    },5000);
+  },2000);
 }
 
 // ══ HEALING FREQUENCIES ══
@@ -1223,7 +1260,13 @@ document.getElementById('venusOracle').addEventListener('scroll', function(){
 // ══ VENUS ══
 function enterVenusAltar(){
   showScreen('venusBreath');
-  setTimeout(()=>enterVenusOracle(), 4000);
+  // foyer video stays visible during breath screen (transparent background)
+  const fv=document.getElementById('foyerVideo');
+  // after breath, fade foyer video out as Venus oracle fades in
+  setTimeout(()=>{
+    if(fv){fv.style.transition='opacity 2s ease';fv.style.opacity='0';setTimeout(()=>{fv.style.display='none';},2100);}
+    enterVenusOracle();
+  },4000);
 }
 function enterGanymede(){
   showScreen('ganymedeScreen');
@@ -1766,6 +1809,7 @@ enterGanymede=function(){
   if(!sculptureInited){sculptureInited=true;setTimeout(initSculpture,400);}
 };
 // ══ TEACHINGS ══
+const principles=[
   {num:'I',name:'Mentalism',axiom:'"THE ALL is Mind; the Universe is Mental." — The Kybalion',body:'Everything begins as thought. Your beliefs are not descriptions of reality — they are creating it.',temenos:'The kintsugi fractures are golden because Ellis chose to see them as beauty rather than damage. The mental transmutation happened first.'},
   {num:'II',name:'Correspondence',axiom:'"As above, so below; as below, so above." — The Kybalion',body:'The outer world mirrors the inner. What you charge reflects what you believe you are worth.',temenos:'Ellis paints goddesses whose fractures become gold. Do you treat your own fractures with the same reverence?'},
   {num:'III',name:'Vibration',axiom:'"Nothing rests; everything moves; everything vibrates." — The Kybalion',body:'You are always broadcasting a frequency. Collectors respond to the field around your work — which is the field around you.',temenos:'The gold leaf raises the vibration of the broken place. This is what you are being asked to do internally.'},
