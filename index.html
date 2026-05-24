@@ -220,78 +220,58 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 }
 
 /* ══ FLOATING PORTAL ALTARS ══ */
-.portals-row{display:flex;gap:4vw;align-items:center;justify-content:center;width:100%;max-width:1100px;margin:0 auto;}
-.portals-row{perspective:1400px;}
+.portals-row{
+  display:flex;gap:min(4vw,2.5rem);
+  align-items:flex-end;justify-content:center;
+  width:100%;padding:0 4vw;
+  flex:1;max-height:88vh;
+}
 .portal-wrap{
-  flex:1;max-width:min(45vw,460px);
+  flex:1;max-width:min(44vw,460px);
+  height:min(84vh,660px);
   cursor:pointer;
-  animation:portalFloat 5s ease-in-out infinite;
-  transition:transform .5s ease,filter .6s ease;
-  filter:drop-shadow(0 20px 60px rgba(0,0,0,0.6)) drop-shadow(0 0 0px rgba(196,158,72,0));
+  animation:portalFloat 6s ease-in-out infinite;
+  transition:filter .5s ease,transform .5s ease;
+  filter:drop-shadow(0 20px 60px rgba(0,0,0,0.8));
+  position:relative;
 }
-.portal-wrap:nth-child(3){animation-delay:.5s;}
 .portal-wrap:hover{
-  transform:translateY(-8px) scale(1.02);
-  filter:drop-shadow(0 30px 70px rgba(0,0,0,0.7)) drop-shadow(0 0 40px rgba(196,158,72,0.25));
+  filter:drop-shadow(0 0 40px rgba(196,158,72,0.28)) drop-shadow(0 0 100px rgba(196,158,72,0.08)) drop-shadow(0 20px 60px rgba(0,0,0,0.9));
+  transform:translateY(-8px) scale(1.01);
 }
-@keyframes portalFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
-@keyframes portalFloatR{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
-.portal-wrap:last-child{animation-name:portalFloatR;}
-
-.portal-arch{position:relative;width:100%;}
-.portal-arch-svg{display:none;}
-
-/* the artwork — full image, arch clipped */
+@keyframes portalFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-10px);}}
+@keyframes portalFloatR{0%,100%{transform:translateY(0);}50%{transform:translateY(-13px);}}
+.portal-wrap:last-child{animation-name:portalFloatR;animation-delay:.6s;}
+.portal-arch{position:relative;width:100%;height:100%;}
+.portal-svg-frame{position:absolute;inset:0;width:100%;height:100%;z-index:4;pointer-events:none;}
 .portal-img{
-  width:100%;
-  padding-top:160%;
-  background-size:cover;
-  background-position:center 20%;
-  background-repeat:no-repeat;
-  clip-path:path('M10,340 L10,120 Q10,10 110,10 Q210,10 210,120 L210,340 Z');
-  opacity:0.88;
-  transition:opacity .5s ease;
+  position:absolute;inset:0;
+  background-size:cover;background-repeat:no-repeat;
+  clip-path:path('M6,358 L6,118 Q6,6 110,6 Q214,6 214,118 L214,358 Z');
+  opacity:0.85;transition:opacity .6s ease;
 }
 .portal-wrap:hover .portal-img{opacity:1;}
-
-/* edge glow — gold ambient light around the arch */
-.portal-arch::before{
-  content:'';position:absolute;inset:0;z-index:3;pointer-events:none;
-  clip-path:path('M10,340 L10,120 Q10,10 110,10 Q210,10 210,120 L210,340 Z');
-  box-shadow:inset 0 0 30px 6px rgba(196,158,72,0.08);
-  transition:box-shadow .5s ease;
-}
-.portal-wrap:hover .portal-arch::before{
-  box-shadow:inset 0 0 50px 10px rgba(196,158,72,0.18);
-}
-
-/* outer glow ring */
-.portal-arch::after{
-  content:'';position:absolute;inset:-6px;z-index:2;pointer-events:none;
-  clip-path:path('M4,346 L4,118 Q4,4 110,4 Q216,4 216,118 L216,346 Z');
-  box-shadow:0 0 20px 4px rgba(196,158,72,0.06),0 0 60px 12px rgba(196,158,72,0.03);
-  transition:box-shadow .5s ease;
-  border-radius:inherit;
-}
-.portal-wrap:hover .portal-arch::after{
-  box-shadow:0 0 35px 8px rgba(196,158,72,0.2),0 0 80px 20px rgba(196,158,72,0.08);
-}
-
-/* bottom gradient — text readability */
-.portal-fade{
+.portal-glow-inner{
   position:absolute;inset:0;z-index:2;pointer-events:none;
-  background:linear-gradient(to top,rgba(4,3,2,0.9) 0%,rgba(4,3,2,0.3) 35%,transparent 55%);
-  clip-path:path('M10,340 L10,120 Q10,10 110,10 Q210,10 210,120 L210,340 Z');
+  clip-path:path('M6,358 L6,118 Q6,6 110,6 Q214,6 214,118 L214,358 Z');
+  background:radial-gradient(ellipse 80% 55% at 50% 88%,rgba(196,158,72,0.16) 0%,transparent 70%);
   transition:opacity .5s ease;
 }
-.portal-wrap:hover .portal-fade{opacity:0.7;}
-
-.portal-text{position:absolute;bottom:1.6rem;left:0;right:0;z-index:4;display:flex;flex-direction:column;align-items:center;gap:.3rem;padding:0 1rem;text-align:center;}
-.portal-text .altar-name{font-size:21px;}
-.portal-text .altar-desc{font-size:12px;max-width:200px;}
-.portal-text .altar-name{font-size:22px;}
-.portal-text .altar-desc{font-size:13px;max-width:210px;}
-
+.portal-wrap:hover .portal-glow-inner{opacity:1.8;}
+.portal-fade{
+  position:absolute;inset:0;z-index:3;pointer-events:none;
+  clip-path:path('M6,358 L6,118 Q6,6 110,6 Q214,6 214,118 L214,358 Z');
+  background:linear-gradient(to top,rgba(4,3,2,0.96) 0%,rgba(4,3,2,0.35) 36%,transparent 58%);
+  transition:opacity .5s ease;
+}
+.portal-wrap:hover .portal-fade{opacity:0.72;}
+.portal-text{
+  position:absolute;bottom:2rem;left:0;right:0;z-index:5;
+  display:flex;flex-direction:column;align-items:center;gap:.4rem;
+  padding:0 1.2rem;text-align:center;
+}
+.portal-text .altar-name{font-size:clamp(18px,2.5vw,26px);}
+.portal-text .altar-desc{font-size:13px;max-width:200px;}
 /* ── FOYER ── */
 #foyer{overflow-y:auto;}
 #foyer::-webkit-scrollbar{width:0;}
@@ -700,37 +680,28 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 </div>
 
 <!-- ══ FOYER ══ -->
-<div class="screen" id="foyer" style="overflow-y:auto;">
-  <div class="foyer-inner" style="position:relative;z-index:1;padding:1rem 2rem 2rem;min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1.5rem;">
-    <p class="foyer-entered" style="color:rgba(238,220,168,0.5);">Choose your altar</p>
-    <div class="orn" style="margin-bottom:2.5rem;"><div class="orn-l"></div><div class="orn-d"></div><div class="orn-l"></div></div>
+<div class="screen" id="foyer">
+  <div class="foyer-inner" style="position:relative;z-index:1;width:100%;height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:1rem 0;">
+    <p class="foyer-entered">Choose your altar</p>
+    <div class="orn" style="margin-bottom:1.2rem;"><div class="orn-l"></div><div class="orn-d"></div><div class="orn-l"></div></div>
 
-    <!-- floating portal altars -->
     <div class="portals-row">
 
-      <!-- Venus portal -->
-      <div class="portal-wrap" onclick="enterVenusAltar()" style="animation-delay:0s;">
+      <!-- VENUS -->
+      <div class="portal-wrap" onclick="enterVenusAltar()">
         <div class="portal-arch">
-          <svg class="portal-arch-svg" viewBox="0 0 220 340" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <!-- Roman arch frame -->
-            <path d="M10 340 L10 120 Q10 10 110 10 Q210 10 210 120 L210 340" stroke="rgba(196,158,72,0.5)" stroke-width="1.2" fill="none"/>
-            <path d="M22 340 L22 122 Q22 24 110 24 Q198 24 198 122 L198 340" stroke="rgba(196,158,72,0.25)" stroke-width=".6" fill="none"/>
-            <!-- keystone at top -->
-            <path d="M95 10 L110 2 L125 10" stroke="rgba(196,158,72,0.6)" stroke-width="1" fill="none"/>
-            <circle cx="110" cy="10" r="3" fill="rgba(196,158,72,0.7)"/>
-            <!-- column capitals -->
-            <line x1="2" y1="118" x2="22" y2="118" stroke="rgba(196,158,72,0.4)" stroke-width=".8"/>
-            <line x1="198" y1="118" x2="218" y2="118" stroke="rgba(196,158,72,0.4)" stroke-width=".8"/>
-            <!-- base -->
-            <line x1="2" y1="338" x2="218" y2="338" stroke="rgba(196,158,72,0.3)" stroke-width=".8"/>
-            <!-- candle glow inner -->
-            <path d="M30 340 L30 124 Q30 38 110 38 Q190 38 190 124 L190 340" stroke="rgba(196,158,72,0.08)" stroke-width="8" fill="rgba(196,158,72,0.015)"/>
+          <svg class="portal-svg-frame" viewBox="0 0 220 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6,358 L6,118 Q6,6 110,6 Q214,6 214,118 L214,358" stroke="rgba(196,158,72,0.55)" stroke-width="1.2" fill="none"/>
+            <path d="M18,358 L18,120 Q18,20 110,20 Q202,20 202,120 L202,358" stroke="rgba(196,158,72,0.18)" stroke-width="0.5" fill="none"/>
+            <path d="M94,6 L110,0 L126,6" stroke="rgba(196,158,72,0.85)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+            <circle cx="110" cy="6" r="3.5" fill="rgba(196,158,72,0.9)"/>
+            <line x1="1" y1="116" x2="18" y2="116" stroke="rgba(196,158,72,0.5)" stroke-width="0.8"/>
+            <line x1="202" y1="116" x2="219" y2="116" stroke="rgba(196,158,72,0.5)" stroke-width="0.8"/>
+            <line x1="1" y1="357" x2="219" y2="357" stroke="rgba(196,158,72,0.3)" stroke-width="0.8"/>
           </svg>
-          <!-- artwork inside arch -->
-          <div class="portal-img" style="background-image:url('https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus.jpg');background-position:center 5%;"></div>
-          <!-- gradient fade at bottom -->
+          <div class="portal-img" style="background-image:url('https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus.jpg');background-position:center 8%;"></div>
+          <div class="portal-glow-inner"></div>
           <div class="portal-fade"></div>
-          <!-- text -->
           <div class="portal-text">
             <p class="altar-name">Altar of Venus</p>
             <p class="altar-intent">I want to receive</p>
@@ -740,36 +711,33 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
         </div>
       </div>
 
-      <!-- Ganymede portal -->
-      <div class="portal-wrap" onclick="enterGanymede()" style="animation-delay:.3s;">
+      <!-- GANYMEDE -->
+      <div class="portal-wrap" onclick="enterGanymede()" style="animation-name:portalFloatR;animation-delay:.6s;">
         <div class="portal-arch">
-          <svg class="portal-arch-svg" viewBox="0 0 220 340" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M10 340 L10 120 Q10 10 110 10 Q210 10 210 120 L210 340" stroke="rgba(180,120,50,0.45)" stroke-width="1.2" fill="none"/>
-            <path d="M22 340 L22 122 Q22 24 110 24 Q198 24 198 122 L198 340" stroke="rgba(180,120,50,0.2)" stroke-width=".6" fill="none"/>
-            <path d="M95 10 L110 2 L125 10" stroke="rgba(180,120,50,0.55)" stroke-width="1" fill="none"/>
-            <circle cx="110" cy="10" r="3" fill="rgba(180,120,50,0.65)"/>
-            <line x1="2" y1="118" x2="22" y2="118" stroke="rgba(180,120,50,0.35)" stroke-width=".8"/>
-            <line x1="198" y1="118" x2="218" y2="118" stroke="rgba(180,120,50,0.35)" stroke-width=".8"/>
-            <line x1="2" y1="338" x2="218" y2="338" stroke="rgba(180,120,50,0.25)" stroke-width=".8"/>
-            <path d="M30 340 L30 124 Q30 38 110 38 Q190 38 190 124 L190 340" stroke="rgba(180,120,50,0.06)" stroke-width="8" fill="rgba(180,120,50,0.012)"/>
+          <svg class="portal-svg-frame" viewBox="0 0 220 360" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <path d="M6,358 L6,118 Q6,6 110,6 Q214,6 214,118 L214,358" stroke="rgba(180,130,60,0.5)" stroke-width="1.2" fill="none"/>
+            <path d="M18,358 L18,120 Q18,20 110,20 Q202,20 202,120 L202,358" stroke="rgba(180,130,60,0.16)" stroke-width="0.5" fill="none"/>
+            <path d="M94,6 L110,0 L126,6" stroke="rgba(180,130,60,0.78)" stroke-width="1.2" fill="none" stroke-linecap="round"/>
+            <circle cx="110" cy="6" r="3.5" fill="rgba(180,130,60,0.85)"/>
+            <line x1="1" y1="116" x2="18" y2="116" stroke="rgba(180,130,60,0.45)" stroke-width="0.8"/>
+            <line x1="202" y1="116" x2="219" y2="116" stroke="rgba(180,130,60,0.45)" stroke-width="0.8"/>
+            <line x1="1" y1="357" x2="219" y2="357" stroke="rgba(180,130,60,0.28)" stroke-width="0.8"/>
           </svg>
-          <div class="portal-img" style="background-image:url('https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/IMG_5355.jpg');background-position:center 15%;"></div>
-          <div class="portal-fade" style="background:linear-gradient(to top,rgba(4,3,2,0.85) 0%,transparent 60%);"></div>
+          <div class="portal-img" style="background-image:url('https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/IMG_5355.jpg');background-position:center 12%;"></div>
+          <div class="portal-glow-inner" style="background:radial-gradient(ellipse 80% 55% at 50% 88%,rgba(180,130,60,0.18) 0%,transparent 70%);"></div>
+          <div class="portal-fade" style="background:linear-gradient(to top,rgba(4,3,2,0.96) 0%,rgba(4,3,2,0.35) 36%,transparent 58%);"></div>
           <div class="portal-text">
-            <p class="altar-name" style="color:rgba(220,185,130,0.85);">Altar of Ganymede</p>
-            <p class="altar-intent" style="color:rgba(180,120,50,0.5);">I want to build</p>
-            <p class="altar-desc" style="color:rgba(220,185,130,0.45);">He builds your structure, action and form. Ground the vision into reality.</p>
-            <p class="altar-enter" style="color:rgba(180,120,50,0.35);">Descend ↓</p>
+            <p class="altar-name" style="color:rgba(220,185,120,0.35);">Altar of Ganymede</p>
+            <p class="altar-intent" style="color:rgba(180,130,60,0.2);">I want to build</p>
+            <p class="altar-desc" style="color:rgba(220,185,120,0.2);">He builds your structure, action and form. Ground the vision into reality.</p>
+            <p class="altar-enter" style="color:rgba(180,130,60,0.15);">Descend ↓</p>
           </div>
         </div>
       </div>
+
     </div>
   </div>
 </div>
-</div>
-
-
-
 <!-- ══ VENUS BREATH ══ -->
 <div class="screen" id="venusBreath" style="background:transparent;">
   <div style="text-align:center;padding:2rem;animation:fadeUp 1.5s ease forwards;">
@@ -1131,6 +1099,7 @@ function showScreen(id){
   currentScreen=id;
   inCave=(id==='ganymedeScreen');
   caveC.style.display=inCave?'block':'none';
+  bgC.style.display=inCave?'none':'block';
   // show foyer video on relevant screens
   const fv=document.getElementById('foyerVideo');
   if(fv){fv.style.display=['foyer','venusBreath','entryCongrat'].includes(id)?'block':'none';}
