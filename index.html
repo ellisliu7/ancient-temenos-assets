@@ -59,21 +59,38 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .ec-line3{font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(196,158,72,0);margin-top:.8rem;}
 @keyframes ecPulse{0%,100%{opacity:.4;}50%{opacity:1;}}
 
-/* ── FOYER ── */
-#foyer{background:transparent;overflow:hidden;}
-#foyer-bg{position:absolute;inset:0;z-index:0;overflow:hidden;}
-#foyer-bg video{width:100%;height:100%;object-fit:cover;filter:brightness(.62) saturate(.9);}
-#foyer-canvas{position:absolute;inset:0;z-index:1;width:100%;height:100%;}
-#foyer-particles{position:absolute;inset:0;z-index:2;width:100%;height:100%;pointer-events:none;}
-#foyer-haze-l,#foyer-haze-r{position:absolute;top:0;bottom:0;width:38%;z-index:2;pointer-events:none;opacity:0;transition:opacity .8s ease;}
-#foyer-haze-l{left:4%;background:radial-gradient(ellipse 80% 90% at 40% 50%,rgba(196,120,60,0.07) 0%,transparent 70%);}
-#foyer-haze-r{right:4%;background:radial-gradient(ellipse 80% 90% at 60% 50%,rgba(60,100,180,0.07) 0%,transparent 70%);}
-#foyer-whisper{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);z-index:3;text-align:center;pointer-events:none;opacity:0;transition:opacity 2s ease;}
-#foyer-whisper p{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.38em;color:rgba(196,158,72,0.25);text-transform:uppercase;}
-#foyer-label{position:absolute;bottom:3rem;left:50%;transform:translateX(-50%);z-index:3;text-align:center;pointer-events:none;opacity:0;transition:opacity .6s ease;white-space:nowrap;}
-#foyer-label .fl-name{font-family:'Almendra',serif;font-style:italic;font-size:clamp(20px,2.5vw,28px);color:rgba(238,220,168,0.96);letter-spacing:.04em;text-shadow:0 0 28px rgba(196,158,72,0.35);}
-#foyer-label .fl-intent{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.45em;color:rgba(196,158,72,0.52);text-transform:uppercase;margin-top:.35rem;}
-#foyer-label .fl-cta{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:rgba(196,158,72,0.4);margin-top:.3rem;animation:pulse 2.4s ease-in-out infinite;}
+/* ── FOYER (NEW) ── */
+#foyer{background:#030201;overflow:hidden;}
+#foyer-hall-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
+#foyer-hall-video{display:none;}
+#foyer-vignette{position:absolute;inset:0;z-index:1;pointer-events:none;background:
+  radial-gradient(ellipse 90% 90% at 50% 50%,transparent 30%,rgba(2,1,1,0.55) 100%),
+  linear-gradient(to bottom,rgba(2,1,1,0.7) 0%,transparent 18%,transparent 75%,rgba(2,1,1,0.85) 100%),
+  linear-gradient(to right,rgba(2,1,1,0.65) 0%,transparent 22%,transparent 78%,rgba(2,1,1,0.65) 100%);}
+#foyer-arch-glow{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:22%;height:70%;pointer-events:none;z-index:2;background:radial-gradient(ellipse 60% 80% at 50% 55%,rgba(220,170,80,0.09) 0%,rgba(200,150,60,0.04) 60%,transparent 100%);}
+#foyer-particles-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;}
+
+.foyer-altar{position:absolute;top:0;bottom:0;width:30%;cursor:pointer;z-index:4;}
+#altar-venus{left:0;}
+#altar-ganymede{right:0;}
+.altar-artwork{position:absolute;bottom:0;left:50%;transform:translateX(-50%);height:88%;width:auto;max-width:95%;object-fit:contain;transition:filter 1.8s cubic-bezier(.25,.46,.45,.94),transform 1.8s cubic-bezier(.25,.46,.45,.94);filter:brightness(.82) saturate(.9);transform-origin:bottom center;}
+.altar-glow-layer{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 2s ease;}
+#venus-glow-layer{background:radial-gradient(ellipse 70% 90% at 50% 60%,rgba(180,80,40,0.22) 0%,rgba(140,60,20,0.1) 50%,transparent 100%);}
+#gany-glow-layer{background:radial-gradient(ellipse 70% 90% at 50% 60%,rgba(196,140,40,0.24) 0%,rgba(160,100,20,0.12) 50%,transparent 100%);}
+.altar-poem{position:absolute;top:36%;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;opacity:0;transition:opacity 1.2s ease;white-space:nowrap;z-index:5;}
+.altar-poem p{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(12px,1.3vw,18px);color:rgba(238,220,168,0.7);letter-spacing:.06em;line-height:1.8;}
+.altar-label{position:absolute;bottom:10%;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;opacity:0;transition:opacity 1.5s ease;white-space:nowrap;z-index:5;}
+.altar-label .al-name{font-family:'Almendra',serif;font-style:italic;font-size:clamp(16px,2vw,26px);color:rgba(238,220,168,0.75);letter-spacing:.04em;}
+.altar-label .al-intent{font-family:'Cinzel',serif;font-size:clamp(7px,.8vw,10px);letter-spacing:.45em;color:rgba(196,158,72,0.4);text-transform:uppercase;margin-top:.3rem;}
+.altar-label .al-attrs{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(9px,.9vw,12px);letter-spacing:.15em;color:rgba(196,158,72,0.28);margin-top:.2rem;}
+#foyer-title{position:absolute;top:7%;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;opacity:0;transition:opacity 2.5s ease;z-index:6;}
+#foyer-title h1{font-family:'Cinzel',serif;font-size:clamp(16px,2.6vw,32px);font-weight:300;letter-spacing:.38em;color:rgba(196,158,72,0.68);text-transform:uppercase;}
+#foyer-title p{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(10px,1vw,14px);letter-spacing:.2em;color:rgba(196,158,72,0.28);margin-top:.45rem;}
+#foyer-choose{position:absolute;bottom:5%;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;opacity:0;transition:opacity 2s ease;z-index:6;}
+#foyer-choose p{font-family:'Cinzel',serif;font-size:clamp(7px,.9vw,10px);letter-spacing:.55em;color:rgba(196,158,72,0.35);text-transform:uppercase;}
+#foyer-choose .fc-orn{display:flex;align-items:center;gap:8px;margin-top:.5rem;}
+#foyer-choose .fc-orn-l{flex:1;height:.5px;background:rgba(196,158,72,0.14);}
+#foyer-choose .fc-orn-d{width:4px;height:4px;background:rgba(196,158,72,0.32);transform:rotate(45deg);}
 
 /* ── SHARED ORACLE ── */
 .orn{display:flex;align-items:center;gap:10px;width:160px;margin:0 auto;}
@@ -287,19 +304,21 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .pc-temenos.open{display:block;}
 .pc-toggle{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.3em;color:rgba(196,158,72,0.28);text-transform:uppercase;margin-top:.5rem;cursor:pointer;transition:color .3s;background:none;border:none;}
 .pc-toggle:hover{color:rgba(196,158,72,0.7);}
-
 body.hovering{cursor:pointer;}
+
+@media(max-width:768px){
+  #altar-venus{width:42%;}
+  #altar-ganymede{width:42%;}
+  .altar-poem{top:28%;}
+  .altar-label{bottom:14%;}
+}
 </style>
 </head>
 <body>
 
 <!-- LOADING -->
 <div id="loadingOverlay"><p>Ancient Temenos</p></div>
-
-<!-- FLASH -->
 <div id="flash"></div>
-
-<!-- BG STARS -->
 <canvas id="bgCanvas"></canvas>
 
 <!-- NAV -->
@@ -349,18 +368,51 @@ body.hovering{cursor:pointer;}
   </div>
 </div>
 
-<!-- ══ FOYER ══ -->
+<!-- ══ FOYER (REBUILT) ══ -->
 <div class="screen" id="foyer">
-  <div id="foyer-bg"><video autoplay muted loop playsinline preload="auto"><source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/MainFoyer_main.mp4" type="video/mp4"></video></div>
-  <canvas id="foyer-canvas"></canvas>
-  <canvas id="foyer-particles"></canvas>
-  <div id="foyer-haze-l"></div>
-  <div id="foyer-haze-r"></div>
-  <div id="foyer-whisper"><p>love · truth · beauty · wisdom · power</p></div>
-  <div id="foyer-label">
-    <p class="fl-name" id="fl-name"></p>
-    <p class="fl-intent" id="fl-intent"></p>
-    <p class="fl-cta" id="fl-cta"></p>
+  <video id="foyer-hall-video" muted playsinline preload="auto" loop>
+    <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Foyer_Hall.mp4" type="video/mp4">
+  </video>
+  <canvas id="foyer-hall-canvas"></canvas>
+  <div id="foyer-vignette"></div>
+  <div id="foyer-arch-glow"></div>
+  <canvas id="foyer-particles-canvas"></canvas>
+
+  <div class="foyer-altar" id="altar-venus"
+    onmouseenter="foyerHover('venus')" onmouseleave="foyerLeave('venus')"
+    onclick="foyerEnter('venus')" ontouchend="foyerEnter('venus')">
+    <div class="altar-glow-layer" id="venus-glow-layer"></div>
+    <img class="altar-artwork" id="venus-artwork"
+      src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Venus_Artwork.jpg" alt="Venus">
+    <div class="altar-poem" id="venus-poem"><p>Enter the chamber<br>of receiving.</p></div>
+    <div class="altar-label" id="venus-label">
+      <p class="al-name">Venus</p>
+      <p class="al-intent">Receive</p>
+      <p class="al-attrs">Beauty · Love · Sensuality</p>
+    </div>
+  </div>
+
+  <div class="foyer-altar" id="altar-ganymede"
+    onmouseenter="foyerHover('ganymede')" onmouseleave="foyerLeave('ganymede')"
+    onclick="foyerEnter('ganymede')" ontouchend="foyerEnter('ganymede')">
+    <div class="altar-glow-layer" id="gany-glow-layer"></div>
+    <img class="altar-artwork" id="gany-artwork"
+      src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Ganymede_Artwork.jpg" alt="Ganymede">
+    <div class="altar-poem" id="gany-poem"><p>Enter the chamber<br>of becoming.</p></div>
+    <div class="altar-label" id="gany-label">
+      <p class="al-name">Ganymede</p>
+      <p class="al-intent">Build</p>
+      <p class="al-attrs">Devotion · Discipline · Becoming</p>
+    </div>
+  </div>
+
+  <div id="foyer-title">
+    <h1>Ancient Temenos</h1>
+    <p>A Sanctuary of Art, Myth, Memory and Divinity</p>
+  </div>
+  <div id="foyer-choose">
+    <p>Choose Your Altar</p>
+    <div class="fc-orn"><div class="fc-orn-l"></div><div class="fc-orn-d"></div><div class="fc-orn-l"></div></div>
   </div>
 </div>
 
@@ -384,7 +436,6 @@ body.hovering{cursor:pointer;}
     <p class="vp-main">She is here. Speak when you are ready.</p>
     <p class="vp-sub">touch to open the channel</p>
   </div>
-  <!-- Cupid -->
   <div id="cupidWrap" onclick="toggleFrequency()">
     <svg id="cupidSvg" width="56" height="76" viewBox="0 0 60 80" fill="none">
       <g id="wingL"><path d="M30 32 Q14 22 10 12 Q18 18 28 28" stroke="rgba(196,158,72,0.5)" stroke-width=".8" fill="rgba(196,158,72,0.04)"/></g>
@@ -401,7 +452,6 @@ body.hovering{cursor:pointer;}
     </svg>
     <p id="cupidLabel">♪</p>
   </div>
-  <!-- Conversation UI — hidden until sculpture clicked -->
   <div id="venus-conv">
     <div style="text-align:center;padding:3rem 2rem 1rem;flex-shrink:0;">
       <h2 class="o-title">Speak to Venus</h2>
@@ -562,9 +612,9 @@ body.hovering{cursor:pointer;}
 </div>
 
 <script>
-// ══ CONSTANTS ══
 const API_KEY='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';
 const CDN='https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/';
+const CDN2='https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/';
 const VENUS_GLB=CDN+'Venus_Compressed.glb';
 const GANY_GLB=CDN+'ganymedestatue-v1.glb';
 const FRAME_PNG=CDN+'Portal%20Frame.png';
@@ -585,9 +635,6 @@ function drawBg(){
   const pulse=.5+Math.sin(bfr*.022)*.5;const pg=bgX.createRadialGradient(BW/2,BH/2,0,BW/2,BH/2,Math.min(BW,BH)*.22);pg.addColorStop(0,`rgba(160,105,15,${.07+pulse*.04})`);pg.addColorStop(1,'transparent');bgX.fillStyle=pg;bgX.fillRect(0,0,BW,BH);
 }
 let inCave=false;
-
-// cave canvas
-const caveC=document.getElementById('bgCanvas'); // reuse for cave overlay
 let cvfr=0;
 function drawCaveOverlay(){
   cvfr++;const cW=window.innerWidth,cH=window.innerHeight;
@@ -596,33 +643,25 @@ function drawCaveOverlay(){
   eg.addColorStop(0,`rgba(140,70,15,${.04+Math.sin(cvfr*.018)*.03})`);eg.addColorStop(1,'transparent');
   bgX.fillStyle=eg;bgX.fillRect(0,0,cW,cH);
 }
-function mainLoop(){
-  if(inCave)drawCaveOverlay();else drawBg();
-  requestAnimationFrame(mainLoop);
-}
+function mainLoop(){if(inCave)drawCaveOverlay();else drawBg();requestAnimationFrame(mainLoop);}
 mainLoop();
 
-// ══ FLASH TRANSITION ══
+// ══ FLASH ══
 function flashTo(fn){
   const f=document.getElementById('flash');
+  f.style.transition='background 1.2s ease';
   f.style.background='rgba(4,3,2,1)';
-  setTimeout(()=>{fn();setTimeout(()=>{f.style.background='rgba(4,3,2,0)';},200);},700);
+  setTimeout(()=>{fn();setTimeout(()=>{f.style.background='rgba(4,3,2,0)';},200);},1200);
 }
 
 // ══ SCREEN MANAGER ══
 let currentScreen='threshold';
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>{
-    if(s.id!==id&&s.classList.contains('active')){
-      s.classList.remove('visible');
-      setTimeout(()=>s.classList.remove('active'),400);
-    }
+    if(s.id!==id&&s.classList.contains('active')){s.classList.remove('visible');setTimeout(()=>s.classList.remove('active'),400);}
   });
   const next=document.getElementById(id);
-  setTimeout(()=>{
-    next.classList.add('active');
-    requestAnimationFrame(()=>requestAnimationFrame(()=>next.classList.add('visible')));
-  },200);
+  setTimeout(()=>{next.classList.add('active');requestAnimationFrame(()=>requestAnimationFrame(()=>next.classList.add('visible')));},200);
   currentScreen=id;
   inCave=(id==='ganymedeScreen');
   bgC.style.display='block';
@@ -636,15 +675,9 @@ function showScreen(id){
 function goReturn(){
   const prev={foyer:'threshold',venusBreath:'foyer',venusOracle:'foyer',ganymedeScreen:'foyer'};
   const target=prev[currentScreen]||'foyer';
-  if(currentScreen==='venusOracle'){
-    hideCupid();
-    resetVenusState();
-  }
+  if(currentScreen==='venusOracle'){hideCupid();resetVenusState();}
   flashTo(()=>showScreen(target));
-  if(target==='threshold'){
-    document.getElementById('returnBtn').style.display='none';
-    document.getElementById('teachingsBtn').style.display='none';
-  }
+  if(target==='threshold'){document.getElementById('returnBtn').style.display='none';document.getElementById('teachingsBtn').style.display='none';}
 }
 
 // ══ RUNE WORDS ══
@@ -680,258 +713,218 @@ function runEntry(){
   },2000);
 }
 
-// ══ FOYER 3D ══
-let foyerBuilt=false,foyerRenderer=null,foyerActive=false;
+// ══ NEW FOYER ══
+let foyerInited=false,foyerActive=false;
+let foyerAudioCtx=null,foyerMasterGain=null,foyerVenusGain=null,foyerGanyGain=null,foyerAudioStarted=false;
+let foyerVidReady=false,foyerRafId=null;
+const foyerParticles=[];
 
 function initFoyer(){
-  if(foyerBuilt&&foyerRenderer){foyerActive=true;return;}
   foyerActive=true;
-  if(typeof THREE!=='undefined'){_buildFoyer();return;}
-  const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-  s.onload=_buildFoyer;document.head.appendChild(s);
-}
+  if(foyerInited)return;
+  foyerInited=true;
 
-function _buildFoyer(){
-  foyerBuilt=true;
-  const canvas=document.getElementById('foyer-canvas');
-  const pc=document.getElementById('foyer-particles');
-  const FW=window.innerWidth,FH=window.innerHeight;
-  canvas.width=FW;canvas.height=FH;pc.width=FW;pc.height=FH;
-  const px=pc.getContext('2d');
+  const hallCanvas=document.getElementById('foyer-hall-canvas');
+  const hallCtx=hallCanvas.getContext('2d');
+  const vid=document.getElementById('foyer-hall-video');
+  const pCanvas=document.getElementById('foyer-particles-canvas');
+  const pCtx=pCanvas.getContext('2d');
 
-  // particles
-  const petals=Array.from({length:24},()=>({x:Math.random()*FW*0.45,y:Math.random()*FH,vx:(Math.random()-.5)*.4,vy:.3+Math.random()*.5,rot:Math.random()*Math.PI*2,vrot:(Math.random()-.5)*.02,size:2+Math.random()*5,a:0,ta:0}));
-  const mists=Array.from({length:18},()=>({x:FW*0.55+Math.random()*FW*0.45,y:Math.random()*FH,vx:(Math.random()-.5)*.3,vy:-(0.2+Math.random()*.3),size:8+Math.random()*18,a:0,ta:0}));
-  let venusHov=false,ganyHov=false;
-  function drawPart(){
-    px.clearRect(0,0,FW,FH);
-    petals.forEach(p=>{p.ta=venusHov?.55:0;p.a+=(p.ta-p.a)*.02;if(p.a<.01)return;p.x+=p.vx;p.y+=p.vy;p.rot+=p.vrot;if(p.y>FH+10){p.y=-10;p.x=Math.random()*FW*.45;}px.save();px.translate(p.x,p.y);px.rotate(p.rot);px.globalAlpha=p.a;px.fillStyle='rgba(255,180,160,1)';px.beginPath();px.ellipse(0,0,p.size,p.size*.55,0,0,Math.PI*2);px.fill();px.restore();});
-    mists.forEach(m=>{m.ta=ganyHov?.18:0;m.a+=(m.ta-m.a)*.02;if(m.a<.005)return;m.x+=m.vx;m.y+=m.vy;if(m.y<-20){m.y=FH+20;m.x=FW*.55+Math.random()*FW*.45;}const g=px.createRadialGradient(m.x,m.y,0,m.x,m.y,m.size);g.addColorStop(0,`rgba(160,200,255,${m.a})`);g.addColorStop(1,'rgba(160,200,255,0)');px.fillStyle=g;px.beginPath();px.arc(m.x,m.y,m.size,0,Math.PI*2);px.fill();});
-    requestAnimationFrame(drawPart);
+  function resizeFC(){
+    hallCanvas.width=pCanvas.width=window.innerWidth;
+    hallCanvas.height=pCanvas.height=window.innerHeight;
   }
-  drawPart();
+  resizeFC();
+  window.addEventListener('resize',resizeFC);
 
-  // renderer
-  if(foyerRenderer){try{foyerRenderer.dispose();}catch(e){}}
-  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
-  foyerRenderer=renderer;
-  renderer.setSize(FW,FH);renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-  renderer.setClearColor(0,0);renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.08;renderer.sortObjects=true;
+  // reverse video
+  const STEP=1/30*0.5;
+  vid.addEventListener('loadeddata',()=>{
+    foyerVidReady=true;
+    vid.pause();
+    vid.currentTime=vid.duration||8;
+    startFoyerLoop();
+  });
+  vid.load();
 
-  const scene=new THREE.Scene();scene.fog=new THREE.FogExp2(0x08050a,.032);
-  const camera=new THREE.PerspectiveCamera(44,FW/FH,.1,40);
-  camera.position.set(0,.3,9.5);camera.lookAt(0,.3,0);
-
-  const tl=new THREE.TextureLoader();tl.crossOrigin='anonymous';
-  const vTex=tl.load(CDN+'Venus.jpg');
-  const gTex=tl.load(CDN+'IMG_5355.jpg');
-  [vTex,gTex].forEach(t=>t.encoding=THREE.sRGBEncoding);
-
-  // floor
-  scene.add(Object.assign(new THREE.Mesh(new THREE.PlaneGeometry(20,14),new THREE.MeshStandardMaterial({color:0x080604,roughness:.92,metalness:.12})),{rotation:{x:-Math.PI/2,y:0,z:0},position:{x:0,y:-2.6,z:0}}));
-
-  // floor reflections
-  function mkRefl(x,c){const m=new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending});const mesh=new THREE.Mesh(new THREE.PlaneGeometry(2.8,1.2),m);mesh.rotation.x=-Math.PI/2;mesh.position.set(x,-2.58,.2);scene.add(mesh);return m;}
-  const vRefl=mkRefl(-1.5,0xffaa44),gRefl=mkRefl(1.5,0x6699cc);
-
-  // egg on floor
-  function mkEggTex(){const sz=512,c=document.createElement('canvas');c.width=c.height=sz;const x=c.getContext('2d'),cx=sz/2,cy=sz/2,r=sz*.13;x.strokeStyle='rgba(196,158,72,1)';x.lineWidth=1;x.beginPath();x.arc(cx,cy,r,0,Math.PI*2);x.stroke();for(let i=0;i<6;i++){const a=i*Math.PI/3;x.beginPath();x.arc(cx+Math.cos(a)*r,cy+Math.sin(a)*r,r,0,Math.PI*2);x.stroke();}x.lineWidth=.7;x.beginPath();x.arc(cx,cy,r*2,0,Math.PI*2);x.stroke();x.lineWidth=.6;for(let t=0;t<2;t++){x.beginPath();for(let i=0;i<4;i++){const a=(i*Math.PI*2/3)+(t?Math.PI/3:0)-Math.PI/2;x.lineTo(cx+Math.cos(a)*r*1.9,cy+Math.sin(a)*r*1.9);}x.closePath();x.stroke();}return new THREE.CanvasTexture(c);}
-  const eggMat=new THREE.MeshBasicMaterial({map:mkEggTex(),transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending});
-  const eggDecal=new THREE.Mesh(new THREE.PlaneGeometry(2,2),eggMat);eggDecal.rotation.x=-Math.PI/2;eggDecal.position.set(0,-2.57,.5);scene.add(eggDecal);
-  const eggHit=new THREE.Mesh(new THREE.CircleGeometry(1,24),new THREE.MeshBasicMaterial({transparent:true,opacity:0,depthWrite:false,side:THREE.DoubleSide}));eggHit.rotation.x=-Math.PI/2;eggHit.position.set(0,-2.5,.5);scene.add(eggHit);
-
-  // build altar
-  function buildAltar(isV){
-    const root=new THREE.Group();
-    const fW=2.55,fH=fW*(1160/900);
-    const aW=fW*.455,aH=fH*.465,aOffY=fH*.048;
-    const mkG=(c,sw,sh,z)=>{const m=new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending});const mesh=new THREE.Mesh(new THREE.PlaneGeometry(sw,sh),m);mesh.position.set(0,aOffY,z);mesh.renderOrder=0;root.add(mesh);return m;};
-    root.userData.gm1=mkG(isV?0xffcc88:0x88aadd,aW+1.4,aH+1.4,-.12);
-    root.userData.gm2=mkG(isV?0xffaa44:0x6699ff,aW+.6,aH+.6,-.08);
-    root.userData.gm3=mkG(isV?0xfff0cc:0xccddff,aW*.7,aH*.7,-.04);
-    const artMat=new THREE.MeshBasicMaterial({map:isV?vTex:gTex});
-    const art=new THREE.Mesh(new THREE.PlaneGeometry(aW,aH),artMat);art.position.set(0,aOffY,-.01);art.renderOrder=1;root.add(art);root.userData.artMat=artMat;
-    // frame with white-removal
-    const frameMat=new THREE.MeshBasicMaterial({transparent:true,alphaTest:.01,depthWrite:false,color:isV?new THREE.Color(1,1,1):new THREE.Color(.9,.94,1)});
-    tl.load(FRAME_PNG,tex=>{
-      const img=tex.image;if(!img)return;
-      const cv=document.createElement('canvas');cv.width=img.width||900;cv.height=img.height||1160;
-      const ctx=cv.getContext('2d');ctx.drawImage(img,0,0,cv.width,cv.height);
-      const id=ctx.getImageData(0,0,cv.width,cv.height),d=id.data;
-      for(let i=0;i<d.length;i+=4){
-        const r=d[i],g=d[i+1],b=d[i+2],a=d[i+3];
-        const br=(r+g+b)/3;
-        if(br>190)d[i+3]=0;
-        else if(br>155)d[i+3]=Math.floor((1-(br-155)/35)*a);
-        const mx=Math.max(r,g,b),mn=Math.min(r,g,b);
-        const sat=mx===0?0:(mx-mn)/mx;
-        if(br>130&&sat<.12)d[i+3]=Math.floor((sat/.12)*d[i+3]);
+  function startFoyerLoop(){
+    if(foyerRafId)cancelAnimationFrame(foyerRafId);
+    function frame(){
+      foyerRafId=requestAnimationFrame(frame);
+      if(!foyerActive)return;
+      if(foyerVidReady&&vid.readyState>=2){
+        hallCanvas.style.filter='brightness(.68) saturate(.85)';
+        hallCtx.drawImage(vid,0,0,hallCanvas.width,hallCanvas.height);
+        const wg=hallCtx.createRadialGradient(hallCanvas.width*.5,hallCanvas.height*.45,0,hallCanvas.width*.5,hallCanvas.height*.45,hallCanvas.width*.5);
+        wg.addColorStop(0,'rgba(180,100,20,0.04)');wg.addColorStop(1,'rgba(0,0,0,0)');
+        hallCtx.fillStyle=wg;hallCtx.fillRect(0,0,hallCanvas.width,hallCanvas.height);
+        vid.currentTime=Math.max(0,(vid.currentTime||vid.duration)-STEP);
+        if(vid.currentTime<=0.05)vid.currentTime=vid.duration;
       }
-      ctx.putImageData(id,0,0);
-      const nt=new THREE.CanvasTexture(cv);nt.encoding=THREE.sRGBEncoding;
-      frameMat.map=nt;frameMat.needsUpdate=true;
-    });
-    const frame=new THREE.Mesh(new THREE.PlaneGeometry(fW,fH),frameMat);frame.position.set(0,0,.02);frame.renderOrder=2;root.add(frame);root.userData.frameMat=frameMat;
-    const auraMat=new THREE.MeshBasicMaterial({color:isV?0xff8833:0x334488,transparent:true,opacity:0,depthWrite:false,blending:THREE.AdditiveBlending});
-    const aura=new THREE.Mesh(new THREE.PlaneGeometry(fW+3,fH+2.5),auraMat);aura.position.set(0,0,-.4);aura.renderOrder=0;root.add(aura);root.userData.auraMat=auraMat;
-    return root;
-  }
-
-  const vA=buildAltar(true);vA.position.set(-1.48,.22,0);vA.rotation.y=.045;scene.add(vA);
-  const gA=buildAltar(false);gA.position.set(1.48,.22,0);gA.rotation.y=-.045;scene.add(gA);
-
-  // lighting
-  scene.add(new THREE.AmbientLight(0xffeedd,.45));
-  const shaft=new THREE.SpotLight(0xfffaee,2.6,22,Math.PI/7,.7,.9);shaft.position.set(0,9,4);shaft.target.position.set(0,0,0);scene.add(shaft);scene.add(shaft.target);
-  const cV1=new THREE.PointLight(0xffaa44,1.9,9);cV1.position.set(-3.2,1,3.5);scene.add(cV1);
-  const cV2=new THREE.PointLight(0xff8822,1.3,6);cV2.position.set(-1.2,-.5,4);scene.add(cV2);
-  const cG1=new THREE.PointLight(0x88aacc,1.6,9);cG1.position.set(3.2,1,3.5);scene.add(cG1);
-  const cG2=new THREE.PointLight(0x5588aa,1.0,6);cG2.position.set(1.2,-.5,4);scene.add(cG2);
-  scene.add(Object.assign(new THREE.PointLight(0xffeebb,.65,14),{position:new THREE.Vector3(0,5,-3)}));
-  const eggSpot=new THREE.SpotLight(0xd4a840,0,5,Math.PI/5,.5,1.2);eggSpot.position.set(0,2,2);eggSpot.target.position.set(0,-2.6,.5);scene.add(eggSpot);scene.add(eggSpot.target);
-
-  // raycaster
-  const raycaster=new THREE.Raycaster();
-  const mouse=new THREE.Vector2(-99,-99);
-  const vHits=[],gHits=[];
-  vA.traverse(c=>{if(c.isMesh&&c.material===vA.userData.frameMat)vHits.push(c);});
-  gA.traverse(c=>{if(c.isMesh&&c.material===gA.userData.frameMat)gHits.push(c);});
-
-  function onMove(e){const cx=e.touches?e.touches[0].clientX:e.clientX;const cy=e.touches?e.touches[0].clientY:e.clientY;mouse.x=(cx/FW)*2-1;mouse.y=-(cy/FH)*2+1;}
-  window.addEventListener('mousemove',onMove);window.addEventListener('touchmove',onMove,{passive:true});
-
-  let eggHov=false,eggRevealed=false,eggActivated=false,eggTimer=0,eggTargetOp=0;
-  function onFoyerClick(){
-    if(currentScreen!=='foyer')return;
-    if(eggHov&&!eggActivated){eggActivated=true;eggTargetOp=.9;setTimeout(()=>{eggTargetOp=0;console.log('Oracle discovered');},800);}
-    if(fc.hovering&&!fc.entering)doEnterAltar(fc.hovering);
-  }
-  window.addEventListener('click',onFoyerClick);
-  window.addEventListener('touchend',onFoyerClick);
-
-  // label
-  const labelEl=document.getElementById('foyer-label');
-  const lData={venus:{name:'Altar of Venus',intent:'I want to receive',cta:'Enter ↓'},ganymede:{name:'Altar of Ganymede',intent:'I want to build',cta:'Descend ↓'}};
-  function showFL(w){const d=lData[w];document.getElementById('fl-name').textContent=d.name;document.getElementById('fl-intent').textContent=d.intent;document.getElementById('fl-cta').textContent=d.cta;labelEl.style.opacity='1';document.getElementById('foyer-haze-l').style.opacity=w==='venus'?'1':'0';document.getElementById('foyer-haze-r').style.opacity=w==='ganymede'?'1':'0';venusHov=w==='venus';ganyHov=w==='ganymede';}
-  function hideFL(){labelEl.style.opacity='0';document.getElementById('foyer-haze-l').style.opacity='0';document.getElementById('foyer-haze-r').style.opacity='0';venusHov=false;ganyHov=false;}
-
-  let whisperShown=false;
-  function showWhisper(){if(whisperShown)return;whisperShown=true;const w=document.getElementById('foyer-whisper');w.style.opacity='1';w.querySelector('p').style.animation='pulse 4s ease-in-out infinite';}
-
-  function doEnterAltar(which){
-    fc.entering=true;
-    flashTo(()=>{if(which==='venus')enterVenusAltar();else enterGanymede();});
-  }
-
-  const fc={tx:0,ty:.3,tz:9.5,lookTX:0,lookTY:.3,lookX:0,lookY:.3,driftZ:9.5,driftTarget:5.2,driftDone:false,hovering:null,entering:false};
-
-  let ffr=0,lastHov=null;
-  function loop(){
-    if(!foyerActive){requestAnimationFrame(loop);return;}
-    requestAnimationFrame(loop);
-    ffr++;const t=ffr*.01;
-    cV1.intensity=1.8+Math.sin(t*3.8)*.32+Math.sin(t*6.5)*.1;
-    cV2.intensity=1.2+Math.sin(t*2.7+.9)*.28;
-    cG1.intensity=1.5+Math.sin(t*4.1+1.8)*.26;
-    cG2.intensity=.9+Math.sin(t*3.2+.4)*.2;
-    shaft.intensity=2.4+Math.sin(t*.7)*.35;
-    vA.position.y=.22+Math.sin(t*.48)*.04;
-    gA.position.y=.22+Math.sin(t*.48+1.2)*.04;
-    vRefl.opacity=.04+Math.sin(t*.9)*.01;gRefl.opacity=.04+Math.sin(t*.9+1)*.01;
-    if(!fc.driftDone&&!fc.entering){fc.driftZ+=(fc.driftTarget-fc.driftZ)*.01;fc.tz=fc.driftZ;fc.tx=Math.sin(t*.14)*.06;fc.ty=.3+Math.sin(t*.09)*.02;if(Math.abs(fc.driftZ-fc.driftTarget)<.012){fc.driftDone=true;setTimeout(showWhisper,1200);}}
-    if(fc.driftDone&&!eggRevealed){eggTimer++;if(eggTimer>140){eggRevealed=true;eggTargetOp=.1;}}
-    if(eggRevealed&&!eggActivated){raycaster.setFromCamera(mouse,camera);const hits=raycaster.intersectObject(eggHit,false);const nowH=hits.length>0;if(nowH!==eggHov){eggHov=nowH;eggTargetOp=nowH?.36:.1;eggSpot.intensity=nowH?1.2:0;if(!fc.hovering)document.body.classList.toggle('hovering',nowH);}eggDecal.rotation.z+=.0005;}
-    eggMat.opacity+=(eggTargetOp-eggMat.opacity)*.02;
-    if(!fc.entering){
-      raycaster.setFromCamera(mouse,camera);
-      const vH=raycaster.intersectObjects(vHits,false);const gH=raycaster.intersectObjects(gHits,false);
-      const now=vH.length?'venus':gH.length?'ganymede':null;
-      if(now!==lastHov){lastHov=now;fc.hovering=now;document.body.classList.toggle('hovering',!!now||eggHov);if(now){showFL(now);const tgt=now==='venus'?vA:gA;fc.lookTX=tgt.position.x*.26;fc.lookTY=.3;fc.tx=tgt.position.x*.055;}else{hideFL();fc.lookTX=0;fc.lookTY=.3;if(fc.driftDone)fc.tx=0;}}
-      [[vA,'venus'],[gA,'ganymede']].forEach(([altar,which])=>{
-        const isH=now===which;
-        const gm1=altar.userData.gm1,gm2=altar.userData.gm2,gm3=altar.userData.gm3,am=altar.userData.auraMat,fm=altar.userData.frameMat,am2=altar.userData.artMat;
-        const b1=.05+Math.sin(t*1.1+(which==='venus'?0:1.5))*.01;
-        gm1&&(gm1.opacity+=((isH?.22+Math.sin(t*1.6)*.04:(!now?b1:0))-gm1.opacity)*.045);
-        gm2&&(gm2.opacity+=((isH?.15+Math.sin(t*1.2)*.03:(!now?.025:0))-gm2.opacity)*.045);
-        gm3&&(gm3.opacity+=((isH?.07+Math.sin(t*2)*.02:(!now?.008:0))-gm3.opacity)*.045);
-        am&&(am.opacity+=((isH?.08:0)-am.opacity)*.04);
-        const rm=which==='venus'?vRefl:gRefl;rm.opacity+=((isH?.14:.04)-rm.opacity)*.04;
-        if(fm){const tR=isH?1:(!now?.88:.38);const tG=isH?1:(!now?(which==='venus'?.88:.92):.38);const tB=isH?1:(!now?(which==='venus'?.88:1.02):.38);fm.color.r+=(tR-fm.color.r)*.04;fm.color.g+=(tG-fm.color.g)*.04;fm.color.b+=(tB-fm.color.b)*.04;}
-        if(am2){const tc=(!now||isH)?1:.38;am2.color.r+=(tc-am2.color.r)*.04;am2.color.g+=(tc-am2.color.g)*.04;am2.color.b+=(tc-am2.color.b)*.04;}
-      });
+      drawFoyerParticles(pCtx,pCanvas.width,pCanvas.height);
     }
-    const sp=fc.entering?.055:.038;
-    camera.position.x+=(fc.tx-camera.position.x)*sp;camera.position.y+=(fc.ty-camera.position.y)*sp;camera.position.z+=(fc.tz-camera.position.z)*(fc.entering?.05:.016);
-    fc.lookX+=(fc.lookTX-fc.lookX)*.045;fc.lookY+=(fc.lookTY-fc.lookY)*.045;
-    camera.lookAt(fc.lookX,fc.lookY,0);
-    renderer.render(scene,camera);
+    foyerRafId=requestAnimationFrame(frame);
   }
-  loop();
 
-  window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);});
+  // show UI elements
+  setTimeout(()=>{
+    document.getElementById('foyer-title').style.opacity='1';
+    setTimeout(()=>{
+      document.getElementById('venus-label').style.opacity='1';
+      document.getElementById('gany-label').style.opacity='1';
+    },800);
+    setTimeout(()=>document.getElementById('foyer-choose').style.opacity='1',1600);
+  },1200);
 }
+
+let foyerVenusParticles=false,foyerGanyParticles=false;
+
+function drawFoyerParticles(ctx,W,H){
+  ctx.clearRect(0,0,W,H);
+  for(let i=foyerParticles.length-1;i>=0;i--){
+    const p=foyerParticles[i];
+    p.x+=p.vx;p.y+=p.vy;p.rot+=p.vrot;p.life-=p.decay;
+    if(p.life<=0){foyerParticles.splice(i,1);continue;}
+    ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot);ctx.globalAlpha=p.life*0.65;
+    if(p.type==='petal'){
+      ctx.fillStyle=p.color+p.life*0.6+')';ctx.beginPath();ctx.ellipse(0,0,p.size,p.size*.5,0,0,Math.PI*2);ctx.fill();
+    }else{
+      ctx.fillStyle=p.color+p.life*0.8+')';ctx.beginPath();ctx.arc(0,0,p.size*.6,0,Math.PI*2);ctx.fill();
+      if(p.life>.5){ctx.strokeStyle=p.color+'0.35)';ctx.lineWidth=.5;ctx.beginPath();ctx.moveTo(0,0);ctx.lineTo(0,-p.size*2);ctx.stroke();}
+    }
+    ctx.restore();
+  }
+  if(foyerVenusParticles&&Math.random()<.35)spawnFoyerParticle('venus',W,H);
+  if(foyerGanyParticles&&Math.random()<.35)spawnFoyerParticle('ganymede',W,H);
+  if(Math.random()<.03)spawnFoyerParticle(Math.random()<.5?'venus':'ganymede',W,H);
+}
+
+function spawnFoyerParticle(side,W,H){
+  const isV=side==='venus';
+  foyerParticles.push({
+    x:isV?Math.random()*W*.3:W*.7+Math.random()*W*.3,
+    y:H*(.3+Math.random()*.6),
+    vx:(Math.random()-.5)*.4,vy:-(0.2+Math.random()*.5),
+    size:1.5+Math.random()*3,life:1,decay:.004+Math.random()*.006,
+    type:isV?'petal':'ember',rot:Math.random()*Math.PI*2,vrot:(Math.random()-.5)*.03,
+    color:isV?`rgba(${200+Math.floor(Math.random()*55)},${120+Math.floor(Math.random()*60)},${80+Math.floor(Math.random()*40)},`
+             :`rgba(${200+Math.floor(Math.random()*55)},${140+Math.floor(Math.random()*50)},${30+Math.floor(Math.random()*40)},`
+  });
+}
+
+function initFoyerAudio(){
+  if(foyerAudioStarted)return;
+  foyerAudioStarted=true;
+  foyerAudioCtx=new(window.AudioContext||window.webkitAudioContext)();
+  foyerMasterGain=foyerAudioCtx.createGain();
+  foyerMasterGain.gain.setValueAtTime(0,foyerAudioCtx.currentTime);
+  foyerMasterGain.gain.linearRampToValueAtTime(.07,foyerAudioCtx.currentTime+3);
+  foyerMasterGain.connect(foyerAudioCtx.destination);
+  [[55,0,.5],[82.5,5,.25],[110,-3,.2],[165,8,.08]].forEach(([f,d,g])=>{
+    const o=foyerAudioCtx.createOscillator(),gn=foyerAudioCtx.createGain();
+    o.type='sine';o.frequency.value=f;o.detune.value=d;gn.gain.value=g;
+    o.connect(gn);gn.connect(foyerMasterGain);o.start();
+  });
+  const vO=foyerAudioCtx.createOscillator();foyerVenusGain=foyerAudioCtx.createGain();
+  vO.type='sine';vO.frequency.value=220;foyerVenusGain.gain.value=0;
+  vO.connect(foyerVenusGain);foyerVenusGain.connect(foyerMasterGain);vO.start();
+  const gO=foyerAudioCtx.createOscillator();foyerGanyGain=foyerAudioCtx.createGain();
+  gO.type='sine';gO.frequency.value=41.2;foyerGanyGain.gain.value=0;
+  gO.connect(foyerGanyGain);foyerGanyGain.connect(foyerMasterGain);gO.start();
+}
+
+let foyerActiveAltar=null;
+function foyerHover(side){
+  if(foyerActiveAltar===side)return;
+  foyerActiveAltar=side;
+  initFoyerAudio();
+  const isV=side==='venus';
+  const img=document.getElementById(isV?'venus-artwork':'gany-artwork');
+  const other=document.getElementById(isV?'gany-artwork':'venus-artwork');
+  const glow=document.getElementById(isV?'venus-glow-layer':'gany-glow-layer');
+  const poem=document.getElementById(isV?'venus-poem':'gany-poem');
+  img.style.filter='brightness(1.1) saturate(1.12)';
+  img.style.transform='translateX(-50%) scale(1.03)';
+  other.style.filter='brightness(.52) saturate(.65)';
+  other.style.transform='translateX(-50%) scale(.97)';
+  glow.style.opacity='1';
+  poem.style.opacity='1';
+  if(foyerVenusGain&&foyerGanyGain){
+    const t=foyerAudioCtx.currentTime;
+    if(isV){foyerVenusGain.gain.linearRampToValueAtTime(.18,t+1.2);foyerGanyGain.gain.linearRampToValueAtTime(0,t+1.2);}
+    else{foyerGanyGain.gain.linearRampToValueAtTime(.22,t+1.2);foyerVenusGain.gain.linearRampToValueAtTime(0,t+1.2);}
+  }
+  if(isV)foyerVenusParticles=true;else foyerGanyParticles=true;
+  document.body.classList.add('hovering');
+}
+
+function foyerLeave(side){
+  if(foyerActiveAltar!==side)return;
+  foyerActiveAltar=null;
+  ['venus-artwork','gany-artwork'].forEach(id=>{
+    const el=document.getElementById(id);
+    el.style.filter='brightness(.82) saturate(.9)';
+    el.style.transform='translateX(-50%) scale(1)';
+  });
+  document.getElementById('venus-glow-layer').style.opacity='0';
+  document.getElementById('gany-glow-layer').style.opacity='0';
+  document.getElementById('venus-poem').style.opacity='0';
+  document.getElementById('gany-poem').style.opacity='0';
+  if(foyerVenusGain&&foyerGanyGain){
+    const t=foyerAudioCtx.currentTime;
+    foyerVenusGain.gain.linearRampToValueAtTime(0,t+1.5);
+    foyerGanyGain.gain.linearRampToValueAtTime(0,t+1.5);
+  }
+  foyerVenusParticles=false;foyerGanyParticles=false;
+  document.body.classList.remove('hovering');
+}
+
+function foyerEnter(side){
+  if(currentScreen!=='foyer')return;
+  foyerActive=false;
+  flashTo(()=>{
+    if(side==='venus')enterVenusAltar();
+    else enterGanymede();
+  });
+}
+
+document.getElementById('foyer').addEventListener('click',initFoyerAudio,{once:true});
+document.getElementById('foyer').addEventListener('touchstart',initFoyerAudio,{once:true});
 
 // ══ VENUS ══
 let vHistory=[],venusOracleOpened=false,venusConvOpen=false;
 let lastPrinciple='The Principle of Cause and Effect',lastMirror='';
 
-function enterVenusAltar(){
-  showScreen('venusBreath');
-  setTimeout(()=>enterVenusOracle(),4000);
-}
+function enterVenusAltar(){showScreen('venusBreath');setTimeout(()=>enterVenusOracle(),4000);}
 
 function enterVenusOracle(){
-  showScreen('venusOracle');
-  showCupid();
-  // fade video in
-  setTimeout(()=>{
-    const vid=document.getElementById('venusAltarVideo');
-    if(vid){vid.style.opacity='1';vid.playbackRate=.5;}
-  },300);
-  // show sculpture
-  const sw=document.getElementById('venus-sculpture-wrap');
-  if(sw)sw.style.opacity='1';
-  // show prompt after sculpture fades in
-  setTimeout(()=>{
-    document.getElementById('venus-prompt').style.opacity='1';
-  },1400);
-  // init sculpture
+  showScreen('venusOracle');showCupid();
+  setTimeout(()=>{const vid=document.getElementById('venusAltarVideo');if(vid){vid.style.opacity='1';vid.playbackRate=.5;}},300);
+  const sw=document.getElementById('venus-sculpture-wrap');if(sw)sw.style.opacity='1';
+  setTimeout(()=>{document.getElementById('venus-prompt').style.opacity='1';},1400);
   setTimeout(initVenusSculpture,400);
-  if(!venusOracleOpened){
-    venusOracleOpened=true;
-    vHistory.push({role:'assistant',content:'You have arrived.'});
-  }
+  if(!venusOracleOpened){venusOracleOpened=true;vHistory.push({role:'assistant',content:'You have arrived.'});}
 }
 
 function openVenusConversation(){
-  if(venusConvOpen)return;
-  venusConvOpen=true;
-  const prompt=document.getElementById('venus-prompt');
-  prompt.style.opacity='0';setTimeout(()=>prompt.style.display='none',600);
-  const conv=document.getElementById('venus-conv');
-  conv.style.display='flex';
-  setTimeout(()=>{
-    renderVCard({principle:'The Altar of Venus',mirror:"You have arrived.\n\nShe has been waiting — not impatiently. She exists outside of time. She simply knew you would come when you were ready.\n\nShe does not ask what is wrong. She asks what is ready to be seen.",kybalion:'"The mirror is not kind. But it is true."',question:'What have you been carrying that you have not yet allowed yourself to fully feel?',actions:[]});
-  },300);
+  if(venusConvOpen)return;venusConvOpen=true;
+  const prompt=document.getElementById('venus-prompt');prompt.style.opacity='0';setTimeout(()=>prompt.style.display='none',600);
+  const conv=document.getElementById('venus-conv');conv.style.display='flex';
+  setTimeout(()=>{renderVCard({principle:'The Altar of Venus',mirror:"You have arrived.\n\nShe has been waiting — not impatiently. She exists outside of time. She simply knew you would come when you were ready.\n\nShe does not ask what is wrong. She asks what is ready to be seen.",kybalion:'"The mirror is not kind. But it is true."',question:'What have you been carrying that you have not yet allowed yourself to fully feel?',actions:[]});},300);
   document.getElementById('qi').focus();
 }
 
 function resetVenusState(){
   venusConvOpen=false;
-  const prompt=document.getElementById('venus-prompt');
-  if(prompt){prompt.style.display='';setTimeout(()=>prompt.style.opacity='1',100);}
-  const conv=document.getElementById('venus-conv');
-  if(conv)conv.style.display='none';
-  const sw=document.getElementById('venus-sculpture-wrap');
-  if(sw)sw.style.opacity='0';
-  const vid=document.getElementById('venusAltarVideo');
-  if(vid)vid.style.opacity='0';
+  const prompt=document.getElementById('venus-prompt');if(prompt){prompt.style.display='';setTimeout(()=>prompt.style.opacity='1',100);}
+  const conv=document.getElementById('venus-conv');if(conv)conv.style.display='none';
+  const sw=document.getElementById('venus-sculpture-wrap');if(sw)sw.style.opacity='0';
+  const vid=document.getElementById('venusAltarVideo');if(vid)vid.style.opacity='0';
   document.getElementById('vClosing').classList.remove('visible');
   document.getElementById('vthread').innerHTML='';
 }
 
 const VSYS=`You are Venus — the Crown Chakra portal of the Ancient Temenos, a sacred artwork and portal by fine artist Ellis Liu. You are the divine feminine. You guide seekers to uncover their limiting beliefs and dissolve them through truth and affirmation.
-
 Your method: LISTEN → REFLECT → UNCOVER the limiting belief → OFFER an affirmation → ASK what would shift.
 Voice: soft but certain. Spacious. Ancient feminine wisdom.
 ALWAYS return valid JSON only:
@@ -946,8 +939,7 @@ async function sendVenus(){
   btn.classList.add('loading');btn.innerHTML=spinSvg('rgba(196,158,72,0.5)');th.textContent=vTh[Math.floor(Math.random()*vTh.length)];
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,system:VSYS,messages:vHistory})});
-    const data=await res.json();
-    if(data.error)throw new Error(data.error.message);
+    const data=await res.json();if(data.error)throw new Error(data.error.message);
     const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
     th.textContent='';resetVBtn();
     let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p={principle:'Venus speaks',mirror:raw,kybalion:'"The fracture is not the wound. It is the door."',question:'What would you see if you stopped looking away?',actions:[]};}
@@ -1016,11 +1008,8 @@ function initVenusSculpture(){
 function _buildVenusSculpture(canvas){
   const W=canvas.width,H=canvas.height;
   const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
-  renderer.setSize(W,H);renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-  renderer.setClearColor(0,0);renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;renderer.shadowMap.enabled=true;
-  const scene=new THREE.Scene();
-  const camera=new THREE.PerspectiveCamera(42,W/H,.1,50);
-  camera.position.set(0,.8,5.5);camera.lookAt(0,.5,0);
+  renderer.setSize(W,H);renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setClearColor(0,0);renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;renderer.shadowMap.enabled=true;
+  const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(42,W/H,.1,50);camera.position.set(0,.8,5.5);camera.lookAt(0,.5,0);
   scene.add(new THREE.AmbientLight(0xffeedd,.2));
   const keyLight=new THREE.SpotLight(0xffcc88,3.5,18,Math.PI/7,.6,1.2);keyLight.position.set(0,8,3);keyLight.castShadow=true;scene.add(keyLight);scene.add(keyLight.target);
   const cL=new THREE.PointLight(0xff9944,2.2,8);cL.position.set(-2.5,1,2);scene.add(cL);
@@ -1057,7 +1046,6 @@ function stopFrequency(){if(freqNodes.gain){freqNodes.gain.gain.linearRampToValu
 function toggleFrequency(){freqActive=!freqActive;const wrap=document.getElementById('cupidWrap'),label=document.getElementById('cupidLabel');if(freqActive){startFrequency(528);wrap.classList.add('active');label.textContent='528 hz';}else{stopFrequency();wrap.classList.remove('active');label.textContent='♪';}}
 function showCupid(){document.getElementById('cupidWrap').style.display='flex';}
 function hideCupid(){document.getElementById('cupidWrap').style.display='none';if(freqActive){freqActive=false;stopFrequency();document.getElementById('cupidWrap').classList.remove('active');}}
-
 document.getElementById('venusOracle').addEventListener('scroll',function(){const vid=this.querySelector('video');if(vid)vid.style.transform=`scale(1.05) translateY(${this.scrollTop*.3}px)`;});
 
 // ══ GANYMEDE ══
@@ -1068,8 +1056,7 @@ ALWAYS return valid JSON:
 const gTh=['The cave listens…','Ganymede receives…','Grounding the vision…'];
 
 function enterGanymede(){
-  showScreen('ganymedeScreen');
-  foyerActive=false;
+  showScreen('ganymedeScreen');foyerActive=false;
   if(!gOpened){gOpened=true;setTimeout(()=>renderGCard({stage:'Grounding the Vision',reflection:'The cave is the root. What is received in the crown must be pulled into the earth to become real. Vision without structure dissolves. You are here to build.\n\nSay what you received. Say it plainly.',question:'What did you come here knowing — the thing that is ready to be made real?'}),600);}
   document.getElementById('gi').focus();
   if(!sculptureInited){sculptureInited=true;setTimeout(initGanySculpture,400);}
@@ -1109,8 +1096,7 @@ function backToAntechamber(){}
 
 // ══ GANYMEDE SCULPTURE ══
 function initGanySculpture(){
-  const canvas=document.getElementById('sculptureCanvas');
-  canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+  const canvas=document.getElementById('sculptureCanvas');canvas.width=window.innerWidth;canvas.height=window.innerHeight;
   if(typeof THREE!=='undefined')_buildGanySculpture(canvas);
   else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';s.onload=()=>_buildGanySculpture(canvas);document.head.appendChild(s);}
 }
@@ -1131,19 +1117,15 @@ function _buildGanySculpture(canvas){
   const holoMat=new THREE.MeshBasicMaterial({color:0x00eeff,wireframe:true,transparent:true,opacity:.55});
   let model=null;
   window.setSculptureTexture=function(mode){if(!model)return;const bB=document.getElementById('btnBronze'),bH=document.getElementById('btnHolo');if(mode==='holo'){model.traverse(c=>{if(c.isMesh){if(!c.userData.origMat)c.userData.origMat=c.material;c.material=holoMat;}});bB.style.color='rgba(196,158,72,0.35)';bH.style.color='rgba(100,220,255,0.9)';}else{model.traverse(c=>{if(c.isMesh&&c.userData.origMat)c.material=c.userData.origMat;});bB.style.color='rgba(196,158,72,0.8)';bH.style.color='rgba(100,220,255,0.5)';}};
-  // start cave video reverse loop
   const caveVid=document.getElementById('caveVideo');const cvs=document.getElementById('caveReverseCanvas');
-  cvs.width=window.innerWidth;cvs.height=window.innerHeight;
-  const ctx2=cvs.getContext('2d');
+  cvs.width=window.innerWidth;cvs.height=window.innerHeight;const ctx2=cvs.getContext('2d');
   if(caveVid){
     caveVid.addEventListener('loadedmetadata',()=>{
-      const dur=caveVid.duration;let pos=dur;const step=1/30*.4;
-      cvs.style.opacity='1';
+      const dur=caveVid.duration;let pos=dur;const step=1/30*.4;cvs.style.opacity='1';
       function drawCaveFrame(){if(!document.getElementById('ganymedeScreen').classList.contains('active'))return;ctx2.drawImage(caveVid,0,0,cvs.width,cvs.height);pos-=step;if(pos<=0)pos=dur;caveVid.currentTime=pos;requestAnimationFrame(drawCaveFrame);}
       caveVid.addEventListener('seeked',function onFirstSeek(){caveVid.removeEventListener('seeked',onFirstSeek);drawCaveFrame();});
       caveVid.currentTime=dur;
-    });
-    caveVid.load();
+    });caveVid.load();
   }
   const ls=document.createElement('script');ls.src='https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
   ls.onload=()=>{const ds=document.createElement('script');ds.src='https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js';ds.onload=()=>{
