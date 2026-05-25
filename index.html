@@ -55,6 +55,13 @@ canvas{position:fixed;inset:0;z-index:0;pointer-events:none;}
 
 /* ══ 3D FOYER ══ */
 #foyer{overflow:hidden;background:transparent;}
+#foyer-bg-video{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
+#foyer-bg-video video{width:100%;height:100%;object-fit:cover;filter:brightness(.62) saturate(.9);}
+#foyer-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1;}
+/* venus sculpture prompt */
+#venusPrompt{position:fixed;bottom:4rem;left:50%;transform:translateX(-50%);z-index:15;text-align:center;pointer-events:none;opacity:0;transition:opacity 1.5s ease;}
+#venusPrompt p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:rgba(238,220,168,0.7);letter-spacing:.08em;animation:softPulse 2.8s ease-in-out infinite;}
+#venusPrompt .vp-sub{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.45em;color:rgba(196,158,72,0.4);text-transform:uppercase;margin-top:.4rem;}
 #foyer-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:1;}
 #foyer-particles{position:absolute;inset:0;width:100%;height:100%;z-index:2;pointer-events:none;}
 #foyer-haze-left{position:absolute;top:0;bottom:0;left:4%;width:38%;z-index:2;pointer-events:none;opacity:0;transition:opacity .8s ease;background:radial-gradient(ellipse 80% 90% at 40% 50%,rgba(196,120,60,0.07) 0%,transparent 70%);}
@@ -330,16 +337,16 @@ body.hovering{cursor:pointer;}
   </div>
 </div>
 
-<!-- FOYER VIDEO -->
-<div id="foyerVideo" style="display:none;position:fixed;inset:0;z-index:5;overflow:hidden;pointer-events:none;">
-  <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.62) saturate(.9);">
-    <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/MainFoyer_main.mp4" type="video/mp4">
-  </video>
-  <div style="position:absolute;inset:0;background:rgba(4,3,2,0.2);"></div>
-</div>
+
 
 <!-- ══ FOYER — 3D ══ -->
 <div class="screen" id="foyer">
+  <!-- background video always visible in foyer -->
+  <div id="foyer-bg-video">
+    <video autoplay muted loop playsinline preload="auto">
+      <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/MainFoyer_main.mp4" type="video/mp4">
+    </video>
+  </div>
   <canvas id="foyer-canvas"></canvas>
   <canvas id="foyer-particles"></canvas>
   <div id="foyer-haze-left"></div>
@@ -363,9 +370,10 @@ body.hovering{cursor:pointer;}
 
 <!-- VENUS ORACLE -->
 <div class="screen" id="venusOracle" style="justify-content:flex-start;">
-  <!-- Temple video background -->
+  <!-- Temple video background — fades in slowly -->
   <div style="position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;">
-    <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.75) saturate(.95);">
+    <video id="venusAltarVideo" autoplay muted loop playsinline preload="auto"
+      style="width:100%;height:100%;object-fit:cover;filter:brightness(.75) saturate(.95);opacity:0;transition:opacity 2.5s ease;">
       <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/Venus_Altar_Video.mp4" type="video/mp4">
     </video>
     <div style="position:absolute;inset:0;background:rgba(4,2,1,0.25);"></div>
@@ -373,6 +381,11 @@ body.hovering{cursor:pointer;}
   <!-- Venus 3D sculpture -->
   <div id="venusSculptureWrap" style="position:fixed;inset:0;z-index:1;pointer-events:none;">
     <canvas id="venusSculptureCanvas" style="width:100%;height:100%;"></canvas>
+  </div>
+  <!-- Venus prompt — shown first, click to begin conversation -->
+  <div id="venusPrompt">
+    <p>She is here. Speak when you are ready.</p>
+    <p class="vp-sub">touch to open the channel</p>
   </div>
   <div id="cupidWrap" onclick="toggleFrequency()" title="Touch to awaken the frequency">
     <svg id="cupidSvg" viewBox="0 0 60 80" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -399,7 +412,7 @@ body.hovering{cursor:pointer;}
     <h2 class="o-title">Speak to Venus</h2>
     <p class="o-sub">Speak what you carry. She will show you what you already know.</p>
   </div>
-  <div class="thread" id="vthread"></div>
+  <div class="thread" id="vthread" style="opacity:0;transition:opacity 1s ease;"></div>
   <div class="v-closing" id="vClosing">
     <p class="vc-closing-label">She has seen you</p>
     <p class="vc-closing-text" id="vClosingText">The channel is open. What was received here is yours to carry forward.</p>
@@ -601,6 +614,7 @@ function showScreen(id){
   inCave=(id==='ganymedeScreen');
   caveC.style.display=inCave?'block':'none';
   bgC.style.display=inCave?'none':'block';
+  // foyer video handled inside foyer screen itself now
   const fv=document.getElementById('foyerVideo');
   if(fv)fv.style.display=['venusBreath','entryCongrat'].includes(id)?'block':'none';
   const showReturn=['foyer','venusBreath','venusOracle','ganymedeScreen'].includes(id);
@@ -625,8 +639,6 @@ function chooseRune(word,btn){if(word==='love'){btn.style.color='rgba(238,220,16
 function runEntry(){
   const th=document.getElementById('threshold');
   th.style.transition='opacity 2.5s ease';th.style.opacity='0';
-  const fv=document.getElementById('foyerVideo');
-  if(fv){fv.style.opacity='0';fv.style.transition='opacity 3s ease';fv.style.display='block';setTimeout(()=>{fv.style.opacity='1';},100);}
   setTimeout(()=>{
     const ec=document.getElementById('entryCongrat');ec.style.transition='none';ec.style.opacity='0';ec.style.display='flex';
     requestAnimationFrame(()=>requestAnimationFrame(()=>{ec.style.transition='opacity 3s ease';ec.style.opacity='1';}));
@@ -667,7 +679,42 @@ ALWAYS return valid JSON, nothing else:
 {"principle":"the limiting belief uncovered","mirror":"2-3 sentences of compassionate reflection","kybalion":"short Kybalion quote relevant to this belief","affirmation":"a specific powerful affirmation that rewrites the limiting belief","question":"one question: what would shift if they truly received the affirmation as true?","actions":["one embodied action to anchor the affirmation","one practice to notice when the old belief resurfaces"]}`;
 const vTh=['She is seeing…','The mirror stirs…','She is reading what is beneath the words…','Venus speaks…'];
 
-function enterVenusOracle(){showScreen('venusOracle');showCupid();if(!venusOracleOpened){venusOracleOpened=true;setTimeout(()=>{renderVCard({principle:'The Altar of Venus',mirror:"You have arrived.\n\nShe has been waiting — not impatiently. She exists outside of time. She simply knew you would come when you were ready.\n\nShe does not ask what is wrong. She asks what is ready to be seen.",kybalion:'"The mirror is not kind. But it is true."',question:'What have you been carrying that you have not yet allowed yourself to fully feel?',actions:[]});vHistory.push({role:'assistant',content:'You have arrived.'});},600);}document.getElementById('qi').focus();}
+let venusConversationOpen=false;
+function enterVenusOracle(){
+  showScreen('venusOracle');
+  showCupid();
+  // fade video in slowly and slow it down
+  setTimeout(()=>{
+    const vid=document.getElementById('venusAltarVideo');
+    if(vid){vid.style.opacity='1';vid.playbackRate=0.5;}
+  },300);
+  // show sculpture prompt first — not conversation
+  setTimeout(()=>{
+    const prompt=document.getElementById('venusPrompt');
+    if(prompt)prompt.style.opacity='1';
+  },1200);
+  if(!venusOracleOpened){
+    venusOracleOpened=true;
+    vHistory.push({role:'assistant',content:'You have arrived.'});
+  }
+}
+
+function openVenusConversation(){
+  if(venusConversationOpen)return;
+  venusConversationOpen=true;
+  // hide prompt
+  const prompt=document.getElementById('venusPrompt');
+  if(prompt){prompt.style.opacity='0';setTimeout(()=>prompt.style.display='none',600);}
+  // show conversation UI
+  document.getElementById('vthread').style.opacity='1';
+  document.querySelector('.inp-area').style.opacity='1';
+  document.querySelector('.well-prompt').style.opacity='1';
+  // render opening card
+  setTimeout(()=>{
+    renderVCard({principle:'The Altar of Venus',mirror:"You have arrived.\n\nShe has been waiting — not impatiently. She exists outside of time. She simply knew you would come when you were ready.\n\nShe does not ask what is wrong. She asks what is ready to be seen.",kybalion:'"The mirror is not kind. But it is true."',question:'What have you been carrying that you have not yet allowed yourself to fully feel?',actions:[]});
+  },300);
+  document.getElementById('qi').focus();
+}
 
 async function sendVenus(){
   const inp=document.getElementById('qi'),q=inp.value.trim();
@@ -919,12 +966,17 @@ function buildVenusSculpture(canvas,W,H){
   document.head.appendChild(loaderScript);
 }
 
-// init when Venus oracle screen shown
-const _origEnterVenusOracle=enterVenusOracle;
-enterVenusOracle=function(){
-  _origEnterVenusOracle();
-  setTimeout(initVenusSculpture,300);
-};
+  // init when Venus oracle screen shown
+  const _origEnterVenusOracle=enterVenusOracle;
+  enterVenusOracle=function(){
+    _origEnterVenusOracle();
+    setTimeout(initVenusSculpture,300);
+  };
+  // click on sculpture canvas opens conversation
+  canvas.style.pointerEvents='auto';
+  canvas.addEventListener('click',()=>{
+    if(!venusConversationOpen)openVenusConversation();
+  });
 const GANYMEDE_GLB_URL='https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets/ganymedestatue-v1.glb';
 function initSculpture(){const script=document.createElement('script');script.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';script.onload=()=>{loadGLBSculpture();};document.head.appendChild(script);}
 function loadGLBSculpture(){
