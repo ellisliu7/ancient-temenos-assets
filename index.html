@@ -449,10 +449,10 @@ body.hovering{cursor:pointer;}
     </video>
     <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 30%,transparent 40%,rgba(2,1,1,0.7) 100%);pointer-events:none;"></div>
   </div>
-  <div id="sculptureWrap"><canvas id="sculptureCanvas"></canvas></div>
-  <div style="position:fixed;top:2.5rem;left:0;right:0;z-index:20;text-align:center;pointer-events:none;opacity:0;transition:opacity 2s ease 1s;" id="caveHeader">
-    <p style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:.52em;color:rgba(180,120,50,0.5);text-transform:uppercase;margin-bottom:.8rem;">Altar of Ganymede · Ancient Temenos</p>
-    <h2 class="cave-title">The Cave of Remembrance</h2>
+  <div id="sculptureWrap" style="position:fixed;inset:0;z-index:1;pointer-events:none;"><canvas id="sculptureCanvas"></canvas></div>
+  <div style="position:fixed;top:1.5rem;left:0;right:0;z-index:20;text-align:center;pointer-events:none;opacity:0;transition:opacity 2s ease 1s;" id="caveHeader">
+    <p style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:.52em;color:rgba(180,120,50,0.5);text-transform:uppercase;margin-bottom:.4rem;">Altar of Ganymede · Ancient Temenos</p>
+    <h2 class="cave-title" style="font-size:28px;">The Cave of Remembrance</h2>
     <p class="cave-sub">Ground the vision · Build</p>
   </div>
   <div id="textureToggle" style="position:fixed;bottom:7rem;left:50%;transform:translateX(-50%);z-index:20;opacity:0;transition:opacity 2s ease 2s;display:flex;gap:1rem;">
@@ -626,9 +626,22 @@ function showScreen(id){
 function goReturn(){
   const prev={foyer:'threshold',venusBreath:'foyer',venusOracle:'foyer',ganymedeScreen:'foyer'};
   const target=prev[currentScreen]||'foyer';
-  if(currentScreen==='venusOracle')hideCupid();
+  if(currentScreen==='venusOracle'){
+    hideCupid();
+    // reset venus conversation state so it works again
+    venusConversationOpen=false;
+    const prompt=document.getElementById('venusPrompt');
+    if(prompt){prompt.style.display='';prompt.style.opacity='0';}
+    const thread=document.getElementById('vthread');
+    if(thread)thread.style.opacity='0';
+    const inpArea=document.querySelector('.inp-area');
+    if(inpArea)inpArea.style.opacity='0';
+  }
   showScreen(target);
-  if(target==='threshold'){document.getElementById('returnBtn').style.display='none';document.getElementById('teachingsBtn').style.display='none';}
+  if(target==='threshold'){
+    document.getElementById('returnBtn').style.display='none';
+    document.getElementById('teachingsBtn').style.display='none';
+  }
 }
 
 // ── RUNE WORDS ──
@@ -1072,19 +1085,19 @@ function arrowSvg(col){return`<svg viewBox="0 0 14 14" fill="none" stroke="${col
 // ══ 3D FOYER ══
 let foyer3DInited=false;
 function initFoyer3D(){
-  if(foyer3DInited)return;
-  foyer3DInited=true;
+  // always rebuild on each foyer visit
   const canvas=document.getElementById('foyer-canvas');
   const pc=document.getElementById('foyer-particles');
   const FW=window.innerWidth,FH=window.innerHeight;
   canvas.width=FW;canvas.height=FH;pc.width=FW;pc.height=FH;
   const px=pc.getContext('2d');
+  // reset foyer state
+  foyer3DInited=true;
+  if(typeof THREE!=='undefined'){buildFoyer3D(canvas,pc,px,FW,FH);return;}
   const script=document.createElement('script');
   script.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
   script.onload=()=>buildFoyer3D(canvas,pc,px,FW,FH);
-  // if THREE already loaded from ganymede
-  if(typeof THREE!=='undefined'){buildFoyer3D(canvas,pc,px,FW,FH);}
-  else{document.head.appendChild(script);}
+  document.head.appendChild(script);
 }
 
 function buildFoyer3D(canvas,pc,px,FW,FH){
