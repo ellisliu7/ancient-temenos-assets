@@ -56,7 +56,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 @keyframes runeFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-4px);}}
 
 /* ── ENTRY CONGRAT ── */
-#entryCongrat{position:fixed;inset:0;z-index:80;background:transparent;display:none;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;}
+#entryCongrat{position:fixed;inset:0;z-index:80;background:rgba(4,2,1,0.97);display:none;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;}
 .ec-line1{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.55em;color:rgba(196,158,72,0);text-transform:uppercase;margin-bottom:.8rem;}
 .ec-line2{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(18px,3vw,26px);color:rgba(238,220,168,0);letter-spacing:.08em;text-align:center;line-height:1.6;}
 .ec-line3{font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(196,158,72,0);margin-top:.8rem;}
@@ -389,7 +389,8 @@ body.hovering{cursor:pointer;}
     onclick="foyerEnter('venus')" ontouchend="foyerEnter('venus')">
     <img class="altar-artwork" id="venus-artwork"
       src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Venus_Artwork.jpg" alt="Venus">
-    <div class="altar-glow-layer" id="venus-glow-layer"></div><p>Enter the chamber<br>of receiving.</p></div>
+    <div class="altar-glow-layer" id="venus-glow-layer"></div>
+    <div class="altar-poem" id="venus-poem"><p>Enter the chamber<br>of receiving.</p></div>
     <div class="altar-label" id="venus-label">
       <p class="al-name">Venus</p>
       <p class="al-intent">Receive</p>
@@ -402,7 +403,8 @@ body.hovering{cursor:pointer;}
     onclick="foyerEnter('ganymede')" ontouchend="foyerEnter('ganymede')">
     <img class="altar-artwork" id="gany-artwork"
       src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Ganymede_Artwork.jpg" alt="Ganymede">
-    <div class="altar-glow-layer" id="gany-glow-layer"></div><p>Enter the chamber<br>of becoming.</p></div>
+    <div class="altar-glow-layer" id="gany-glow-layer"></div>
+    <div class="altar-poem" id="gany-poem"><p>Enter the chamber<br>of becoming.</p></div>
     <div class="altar-label" id="gany-label">
       <p class="al-name">Ganymede</p>
       <p class="al-intent">Build</p>
