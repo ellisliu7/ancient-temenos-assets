@@ -1033,7 +1033,7 @@ function _buildVenusSculpture(canvas){
   canvas.addEventListener('click',()=>{if(!venusConvOpen)openVenusConversation();});
   const ls=document.createElement('script');ls.src='https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/js/loaders/GLTFLoader.js';
   ls.onload=()=>{const ds=document.createElement('script');ds.src='https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/js/loaders/DRACOLoader.js';ds.onload=()=>{
-    const dl=new THREE.DRACOLoader();dl.setDecoderPath('https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/js/libs/draco/');
+    const dl=new THREE.DRACOLoader();dl.setDecoderPath('./');
     const loader=new THREE.GLTFLoader();loader.setDRACOLoader(dl);
     loader.load(VENUS_GLB,(gltf)=>{
       const model=gltf.scene;model.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}});
@@ -1138,7 +1138,7 @@ function _buildGanySculpture(canvas){
   }
   const ls=document.createElement('script');ls.src='https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/js/loaders/GLTFLoader.js';
   ls.onload=()=>{const ds=document.createElement('script');ds.src='https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/js/loaders/DRACOLoader.js';ds.onload=()=>{
-    const dl=new THREE.DRACOLoader();dl.setDecoderPath('https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/js/libs/draco/');
+    const dl=new THREE.DRACOLoader();dl.setDecoderPath('./');
     const loader=new THREE.GLTFLoader();loader.setDRACOLoader(dl);
     loader.load(GANY_GLB,(gltf)=>{
       model=gltf.scene;model.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}});
