@@ -335,7 +335,7 @@ body.hovering{cursor:pointer;}
 
 <!-- ══ THRESHOLD ══ -->
 <div class="screen active visible" id="threshold">
-  <div class="t-video-wrap"><video autoplay muted loop playsinline preload="auto">    <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/ascii-art.mp4" type="video/mp4">
+  <div class="t-video-wrap"><video autoplay muted loop playsinline preload="auto">    <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/ascii-art.mp4" type="video/mp4">
 </video></div>
   <div class="t-vignette"></div>
   <div class="t-content">
@@ -377,7 +377,7 @@ body.hovering{cursor:pointer;}
 <!-- ══ FOYER (REBUILT) ══ -->
 <div class="screen" id="foyer">
   <video id="foyer-hall-video" muted playsinline preload="auto" loop>
-    <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Foyer_hall.mp4" type="video/mp4">
+    <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Foyer_hall.mp4" type="video/mp4">
   </video>
   <canvas id="foyer-hall-canvas"></canvas>
   <div id="foyer-vignette"></div>
@@ -388,7 +388,7 @@ body.hovering{cursor:pointer;}
     onmouseenter="foyerHover('venus')" onmouseleave="foyerLeave('venus')"
     onclick="foyerEnter('venus')" ontouchend="foyerEnter('venus')">
     <img class="altar-artwork" id="venus-artwork"
-      src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Venus_Artwork.jpg" alt="Venus">
+      src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Artwork.jpg" alt="Venus">
     <div class="altar-glow-layer" id="venus-glow-layer"></div>
     <div class="altar-poem" id="venus-poem"><p>Enter the chamber<br>of receiving.</p></div>
     <div class="altar-label" id="venus-label">
@@ -402,7 +402,7 @@ body.hovering{cursor:pointer;}
     onmouseenter="foyerHover('ganymede')" onmouseleave="foyerLeave('ganymede')"
     onclick="foyerEnter('ganymede')" ontouchend="foyerEnter('ganymede')">
     <img class="altar-artwork" id="gany-artwork"
-      src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Ganymede_Artwork.jpg" alt="Ganymede">
+      src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_Artwork.jpg" alt="Ganymede">
     <div class="altar-glow-layer" id="gany-glow-layer"></div>
     <div class="altar-poem" id="gany-poem"><p>Enter the chamber<br>of becoming.</p></div>
     <div class="altar-label" id="gany-label">
@@ -434,7 +434,7 @@ body.hovering{cursor:pointer;}
 <div class="screen" id="venusOracle" style="justify-content:flex-start;">
   <div id="venus-video-bg">
     <video id="venusAltarVideo" autoplay muted loop playsinline preload="auto">
-      <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Venus_Altar_Video.mp4" type="video/mp4">
+      <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Altar_Video.mp4" type="video/mp4">
     </video>
   </div>
   <div id="venus-sculpture-wrap"><canvas id="venus-sculpture-canvas"></canvas></div>
@@ -495,7 +495,7 @@ body.hovering{cursor:pointer;}
 <div class="screen" id="ganymedeScreen" style="justify-content:flex-start;">
   <div id="cave-video-wrap">
     <video id="caveVideo" muted playsinline preload="auto" style="display:none;">
-      <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Ganymede_Cave_1.mp4" type="video/mp4">
+      <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede%20Cave_1.mp4" type="video/mp4">
     </video>
     <canvas id="caveReverseCanvas"></canvas>
   </div>
@@ -541,7 +541,7 @@ body.hovering{cursor:pointer;}
 <div id="wellOverlay">
   <div style="position:fixed;inset:0;z-index:90;overflow:hidden;pointer-events:none;">
     <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.9);">
-      <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Venus%20Wishing%20Well_1.mp4" type="video/mp4">
+      <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus%20Wishing%20Well_1.mp4" type="video/mp4">
     </video>
   </div>
   <button class="ws-close" onclick="closeWell()">✕ Return</button>
@@ -556,7 +556,7 @@ body.hovering{cursor:pointer;}
   <div class="well-stage" id="ws3">
     <div style="position:fixed;inset:0;z-index:90;overflow:hidden;pointer-events:none;">
       <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;filter:brightness(.88);">
-        <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Sigil.mp4" type="video/mp4">
+        <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Sigil.mp4" type="video/mp4">
       </video>
     </div>
     <div style="position:relative;z-index:93;display:flex;flex-direction:column;align-items:center;text-align:center;width:100%;max-width:520px;padding:2rem;">
@@ -619,8 +619,8 @@ body.hovering{cursor:pointer;}
 
 <script>
 const API_KEY='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';
-const CDN='https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/';
-const CDN2='https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/';
+const CDN='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/';
+const CDN2='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/';
 const VENUS_GLB='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Compressed.glb';
 const GANY_GLB='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/ganymedestatue-v1.glb';
 const FRAME_PNG=CDN+'Portal%20Frame.png';
