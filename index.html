@@ -74,9 +74,11 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #foyer-particles-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;}
 
 .foyer-altar{position:absolute;top:8%;bottom:8%;cursor:pointer;z-index:4;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;}
-#altar-venus{left:1%;width:27%;}
-#altar-ganymede{right:1%;width:27%;}
-.altar-artwork{width:100%;height:100%;object-fit:cover;object-position:top center;transition:filter 1.8s cubic-bezier(.25,.46,.45,.94),transform 1.8s cubic-bezier(.25,.46,.45,.94);filter:brightness(.78) saturate(.88);transform-origin:center center;border-radius:2px;}
+#altar-venus{left:3%;width:26%;}
+#altar-ganymede{right:3%;width:26%;}
+.altar-artwork{width:100%;height:100%;object-fit:cover;object-position:top center;transition:filter 1.8s cubic-bezier(.25,.46,.45,.94),transform 1.8s cubic-bezier(.25,.46,.45,.94);filter:brightness(.78) saturate(.88);transform-origin:center center;border-radius:2px;-webkit-mask-image:linear-gradient(to right,transparent 0%,black 10%,black 90%,transparent 100%),linear-gradient(to bottom,transparent 0%,black 5%,black 82%,transparent 100%);mask-image:linear-gradient(to right,transparent 0%,black 10%,black 90%,transparent 100%),linear-gradient(to bottom,transparent 0%,black 5%,black 82%,transparent 100%);-webkit-mask-composite:intersect;mask-composite:intersect;opacity:0;animation:altarFadeIn 2.8s ease 1.6s forwards;}
+@keyframes altarFadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes altarGlowBreathe{0%,100%{opacity:0.7;}50%{opacity:1;}}
 .altar-glow-layer{position:absolute;inset:0;pointer-events:none;opacity:0;transition:opacity 2s ease;border-radius:2px;}
 #venus-glow-layer{background:radial-gradient(ellipse 80% 100% at 50% 50%,rgba(180,80,40,0.28) 0%,rgba(140,60,20,0.12) 60%,transparent 100%);}
 #gany-glow-layer{background:radial-gradient(ellipse 80% 100% at 50% 50%,rgba(196,140,40,0.3) 0%,rgba(160,100,20,0.14) 60%,transparent 100%);}
@@ -385,9 +387,9 @@ body.hovering{cursor:pointer;}
   <div class="foyer-altar" id="altar-venus"
     onmouseenter="foyerHover('venus')" onmouseleave="foyerLeave('venus')"
     onclick="foyerEnter('venus')" ontouchend="foyerEnter('venus')">
-    <div class="altar-glow-layer" id="venus-glow-layer"></div>
     <img class="altar-artwork" id="venus-artwork"
-      src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Venus_Artwork.jpg" alt="Venus">    <div class="altar-poem" id="venus-poem"><p>Enter the chamber<br>of receiving.</p></div>
+      src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Venus_Artwork.jpg" alt="Venus">
+    <div class="altar-glow-layer" id="venus-glow-layer"></div><p>Enter the chamber<br>of receiving.</p></div>
     <div class="altar-label" id="venus-label">
       <p class="al-name">Venus</p>
       <p class="al-intent">Receive</p>
@@ -398,9 +400,9 @@ body.hovering{cursor:pointer;}
   <div class="foyer-altar" id="altar-ganymede"
     onmouseenter="foyerHover('ganymede')" onmouseleave="foyerLeave('ganymede')"
     onclick="foyerEnter('ganymede')" ontouchend="foyerEnter('ganymede')">
-    <div class="altar-glow-layer" id="gany-glow-layer"></div>
     <img class="altar-artwork" id="gany-artwork"
-      src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Ganymede_Artwork.jpg" alt="Ganymede">    <div class="altar-poem" id="gany-poem"><p>Enter the chamber<br>of becoming.</p></div>
+      src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Ganymede_Artwork.jpg" alt="Ganymede">
+    <div class="altar-glow-layer" id="gany-glow-layer"></div><p>Enter the chamber<br>of becoming.</p></div>
     <div class="altar-label" id="gany-label">
       <p class="al-name">Ganymede</p>
       <p class="al-intent">Build</p>
@@ -617,8 +619,8 @@ body.hovering{cursor:pointer;}
 const API_KEY='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';
 const CDN='https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/';
 const CDN2='https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/';
-const VENUS_GLB=CDN+'Venus_Compressed.glb';
-const GANY_GLB=CDN+'ganymedestatue-v1.glb';
+const VENUS_GLB='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Compressed.glb';
+const GANY_GLB='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/ganymedestatue-v1.glb';
 const FRAME_PNG=CDN+'Portal%20Frame.png';
 
 // ══ STARS BG ══
@@ -739,12 +741,16 @@ function initFoyer(){
   resizeFC();
   window.addEventListener('resize',resizeFC);
 
-  // reverse video
-  const STEP=1/30*0.5;
+  // slow forward cinematic zoom in
   vid.addEventListener('loadeddata',()=>{
     foyerVidReady=true;
-    vid.pause();
-    vid.currentTime=vid.duration||8;
+    vid.currentTime=0;
+    vid.playbackRate=0.35;
+    vid.play();
+    hallCanvas.style.transition='transform 40s ease-in-out';
+    hallCanvas.style.transformOrigin='50% 52%';
+    hallCanvas.style.transform='scale(1)';
+    setTimeout(()=>{ hallCanvas.style.transform='scale(1.12)'; },100);
     startFoyerLoop();
   });
   vid.load();
@@ -760,8 +766,7 @@ function initFoyer(){
         const wg=hallCtx.createRadialGradient(hallCanvas.width*.5,hallCanvas.height*.45,0,hallCanvas.width*.5,hallCanvas.height*.45,hallCanvas.width*.5);
         wg.addColorStop(0,'rgba(180,100,20,0.04)');wg.addColorStop(1,'rgba(0,0,0,0)');
         hallCtx.fillStyle=wg;hallCtx.fillRect(0,0,hallCanvas.width,hallCanvas.height);
-        vid.currentTime=Math.max(0,(vid.currentTime||vid.duration)-STEP);
-        if(vid.currentTime<=0.05)vid.currentTime=vid.duration;
+
       }
       drawFoyerParticles(pCtx,pCanvas.width,pCanvas.height);
     }
