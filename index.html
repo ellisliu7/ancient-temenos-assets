@@ -495,7 +495,7 @@ body.hovering{cursor:pointer;}
 <div class="screen" id="ganymedeScreen" style="justify-content:flex-start;">
   <div id="cave-video-wrap">
     <video id="caveVideo" muted playsinline preload="auto" style="display:none;">
-      <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Ganymede_Cave_5S.mp4" type="video/mp4">
+      <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Ganymede_Cave_1.mp4" type="video/mp4">
     </video>
     <canvas id="caveReverseCanvas"></canvas>
   </div>
@@ -1130,7 +1130,7 @@ function _buildGanySculpture(canvas){
   cvs.width=window.innerWidth;cvs.height=window.innerHeight;const ctx2=cvs.getContext('2d');
   if(caveVid){
     caveVid.addEventListener('loadedmetadata',()=>{
-      const dur=caveVid.duration;let pos=dur;const step=1/30*.4;cvs.style.opacity='1';
+      const dur=caveVid.duration;let pos=dur;const step=1/30*.2;cvs.style.opacity='1';
       function drawCaveFrame(){if(!document.getElementById('ganymedeScreen').classList.contains('active'))return;ctx2.drawImage(caveVid,0,0,cvs.width,cvs.height);pos-=step;if(pos<=0)pos=dur;caveVid.currentTime=pos;requestAnimationFrame(drawCaveFrame);}
       caveVid.addEventListener('seeked',function onFirstSeek(){caveVid.removeEventListener('seeked',onFirstSeek);drawCaveFrame();});
       caveVid.currentTime=dur;
