@@ -182,10 +182,10 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #ganymedeScreen{overflow-y:auto;justify-content:flex-start;background:#000;}
 #ganymedeScreen::-webkit-scrollbar{width:0;}
 #cave-video-wrap{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
-#caveReverseCanvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.6) saturate(.75);opacity:0;transition:opacity 3s ease;}
+#caveReverseCanvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.85) saturate(.85);opacity:0;transition:opacity 3s ease;}
 #cave-video-wrap::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 30%,transparent 40%,rgba(2,1,1,0.7) 100%);}
-#sculptureWrap{position:fixed;inset:0;z-index:1;pointer-events:none;}
-#sculptureCanvas{width:100%;height:100%;}
+#sculptureWrap{position:fixed;inset:0;z-index:1;pointer-events:auto;cursor:pointer;}
+#sculptureCanvas{width:100%;height:100%;animation:sculptureGlow 4s ease-in-out infinite;}
 #caveHeader{position:fixed;top:1.8rem;left:0;right:0;z-index:20;text-align:center;pointer-events:none;opacity:0;transition:opacity 2s ease 1s;}
 .cave-title{font-family:'Almendra',serif;font-style:italic;font-size:30px;color:rgba(230,200,150,0.88);letter-spacing:.04em;text-shadow:0 0 30px rgba(160,100,30,0.3);}
 .cave-sub{font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(180,130,60,0.45);}
@@ -314,7 +314,8 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .pc-temenos.open{display:block;}
 .pc-toggle{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.3em;color:rgba(196,158,72,0.28);text-transform:uppercase;margin-top:.5rem;cursor:pointer;transition:color .3s;background:none;border:none;}
 .pc-toggle:hover{color:rgba(196,158,72,0.7);}
-body.hovering{cursor:pointer;}
+@keyframes sculptureGlow{0%,100%{filter:drop-shadow(0 0 20px rgba(180,120,50,0.0));}50%{filter:drop-shadow(0 0 40px rgba(180,120,50,0.35));}}
+#gany-click-prompt{transition:opacity 0.5s ease;}
 
 @media(max-width:768px){
   #altar-venus{width:42%;}
@@ -486,15 +487,13 @@ body.hovering{cursor:pointer;}
   </div>
   <div id="sculptureWrap"><canvas id="sculptureCanvas"></canvas></div>
   <div id="caveHeader">
-    <p style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:.5em;color:rgba(180,120,50,0.5);text-transform:uppercase;margin-bottom:.4rem;">Altar of Ganymede · Ancient Temenos</p>
-    <h2 class="cave-title">The Cave of Remembrance</h2>
-    <p class="cave-sub">Ground the vision · Build</p>
+    <p style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:.55em;color:rgba(180,120,50,0.45);text-transform:uppercase;margin-bottom:.6rem;">Altar of Ganymede</p>
   </div>
-  <div id="textureToggle">
-    <button onclick="setSculptureTexture('bronze')" id="btnBronze" style="background:rgba(196,158,72,0.08);border:.5px solid rgba(196,158,72,0.4);color:rgba(196,158,72,0.8);font-family:'Cinzel',serif;font-size:8px;letter-spacing:.35em;text-transform:uppercase;padding:.5rem 1.2rem;cursor:pointer;">Bronze</button>
-    <button onclick="setSculptureTexture('holo')" id="btnHolo" style="background:transparent;border:.5px solid rgba(100,220,255,0.3);color:rgba(100,220,255,0.5);font-family:'Cinzel',serif;font-size:8px;letter-spacing:.35em;text-transform:uppercase;padding:.5rem 1.2rem;cursor:pointer;">Holographic</button>
+
+  <div id="gany-click-prompt" style="position:fixed;bottom:8vh;left:50%;transform:translateX(-50%);z-index:20;text-align:center;cursor:pointer;animation:pulse 3s ease-in-out infinite;" onclick="revealGanyConv()">
+    <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;letter-spacing:0.2em;color:rgba(180,130,60,0.65);">Touch to speak with him</p>
   </div>
-  <div id="archConv" style="display:flex;">
+  <div id="archConv" style="display:none;">
     <div class="gany-thread" id="gthread"></div>
     <div class="gany-inp-area">
       <div class="gany-inp-row">
@@ -978,7 +977,7 @@ function maybeShowVClosing(){
     }
   }
 }
-function bridgeToGanymede(){flashTo(()=>{showScreen('ganymedeScreen');gOpened=true;setTimeout(()=>renderGCard({stage:'You opened the channel. Now we build.',reflection:'You received something in the altar of Venus. That is the raw material.\n\nNow we pull it into the earth. Into structure. Into form.',question:'What is the one thing you received that is ready to become real?'}),600);document.getElementById('gi').focus();});}
+function bridgeToGanymede(){flashTo(()=>{showScreen('ganymedeScreen');if(!sculptureInited){sculptureInited=true;setTimeout(initGanySculpture,400);}setTimeout(revealGanyConv,600);});}
 function openGrimoire(){
   document.getElementById('grimoireScreen').style.display='flex';
   document.getElementById('grDate').textContent=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
@@ -1065,9 +1064,11 @@ const gTh=['The cave listens…','Ganymede receives…','Grounding the vision…
 
 function enterGanymede(){
   showScreen('ganymedeScreen');foyerActive=false;
-  if(!gOpened){gOpened=true;setTimeout(()=>renderGCard({stage:'Altar of Ganymede',reflection:'What are you creating?',question:''}),600);}
-  document.getElementById('gi').focus();
   if(!sculptureInited){sculptureInited=true;setTimeout(initGanySculpture,400);}
+  setTimeout(()=>{
+    const sw=document.getElementById('sculptureWrap');
+    if(sw)sw.onclick=revealGanyConv;
+  },500);
 }
 
 function renderGCard(data){
@@ -1100,6 +1101,18 @@ async function sendGany(){
   }catch(e){th.textContent='';btn.classList.remove('loading');btn.innerHTML=arrowSvg('rgba(180,120,50,0.8)');renderGCard({stage:'The cave',reflection:'The echo does not return tonight. Speak again.',question:'What are you here to build?'});}
 }
 document.getElementById('gi').addEventListener('keydown',e=>{if(e.key==='Enter')sendGany();});
+function revealGanyConv(){
+  const prompt=document.getElementById('gany-click-prompt');
+  if(prompt){prompt.style.opacity='0';setTimeout(()=>prompt.style.display='none',500);}
+  const conv=document.getElementById('archConv');
+  if(conv){conv.style.display='flex';}
+  if(!gOpened){
+    gOpened=true;
+    setTimeout(()=>renderGCard({stage:'Altar of Ganymede',reflection:'What are you creating?',question:''}),300);
+  }
+  setTimeout(()=>document.getElementById('gi').focus(),400);
+}
+
 function backToAntechamber(){}
 
 function maybeShowGanyClosing(){
@@ -1129,7 +1142,7 @@ function _buildGanySculpture(canvas){
   canvas.addEventListener('mousedown',e=>{isDragging=true;autoRotate=false;prevMouse={x:e.clientX,y:e.clientY};});
   canvas.addEventListener('mousemove',e=>{if(!isDragging)return;targetTheta-=(e.clientX-prevMouse.x)*.008;spherical.phi=Math.max(.3,Math.min(Math.PI-.3,spherical.phi+(e.clientY-prevMouse.y)*.005));prevMouse={x:e.clientX,y:e.clientY};});
   canvas.addEventListener('mouseup',()=>{isDragging=false;setTimeout(()=>autoRotate=true,3000);});
-  scene.add(new THREE.AmbientLight(0xffeedd,.25));
+  scene.add(new THREE.AmbientLight(0xffeedd,.55));
   const shaft=new THREE.SpotLight(0xfff5e0,3,20,Math.PI/8,.5,1.5);shaft.position.set(0,8,0);shaft.castShadow=true;scene.add(shaft);scene.add(shaft.target);
   const keyLight=new THREE.PointLight(0xffd080,2.5,15);keyLight.position.set(2,4,3);scene.add(keyLight);
   const cL=new THREE.PointLight(0xff8820,1.5,6);cL.position.set(-1,-.5,2);scene.add(cL);
