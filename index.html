@@ -1050,8 +1050,8 @@ function _buildVenusSculpture(canvas){
   canvas.addEventListener('mousemove',e=>{if(!isDragging)return;targetTheta-=(e.clientX-prevMouse.x)*.008;spherical.phi=Math.max(.4,Math.min(Math.PI-.4,spherical.phi+(e.clientY-prevMouse.y)*.005));prevMouse={x:e.clientX,y:e.clientY};});
   canvas.addEventListener('mouseup',()=>{isDragging=false;setTimeout(()=>autoRotate=true,3000);});
   canvas.addEventListener('click',()=>{if(!venusConvOpen)openVenusConversation();});
-  const ls=document.createElement('script');ls.src='https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/js/loaders/GLTFLoader.js';
-  ls.onload=()=>{const ds=document.createElement('script');ds.src='https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/js/loaders/DRACOLoader.js';ds.onload=()=>{
+  const ls=document.createElement('script');ls.src='https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
+  ls.onload=()=>{const ds=document.createElement('script');ds.src='https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js';ds.onload=()=>{
     const dl=new THREE.DRACOLoader();dl.setDecoderPath('./');
     const loader=new THREE.GLTFLoader();loader.setDRACOLoader(dl);
     loader.load(VENUS_GLB,(gltf)=>{
@@ -1167,8 +1167,8 @@ function _buildGanySculpture(canvas){
       caveVid.currentTime=dur;
     });caveVid.load();
   }
-  const ls=document.createElement('script');ls.src='https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/js/loaders/GLTFLoader.js';
-  ls.onload=()=>{const ds=document.createElement('script');ds.src='https://raw.githubusercontent.com/mrdoob/three.js/r128/examples/js/loaders/DRACOLoader.js';ds.onload=()=>{
+  const ls=document.createElement('script');ls.src='https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
+  ls.onload=()=>{const ds=document.createElement('script');ds.src='https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js';ds.onload=()=>{
     const dl=new THREE.DRACOLoader();dl.setDecoderPath('./');
     const loader=new THREE.GLTFLoader();loader.setDRACOLoader(dl);
     loader.load(GANY_GLB,(gltf)=>{
