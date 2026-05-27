@@ -186,7 +186,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #cave-video-wrap::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 30%,transparent 40%,rgba(2,1,1,0.7) 100%);}
 #sculptureWrap{position:fixed;inset:0;z-index:1;pointer-events:auto;cursor:pointer;}
 #sculptureCanvas{width:100%;height:100%;animation:sculptureGlow 4s ease-in-out infinite;}
-#caveHeader{position:fixed;top:1.8rem;left:0;right:0;z-index:20;text-align:center;pointer-events:none;opacity:0;transition:opacity 2s ease 1s;}
+#caveHeader{position:fixed;top:1.8rem;left:0;right:0;z-index:20;text-align:center;pointer-events:none;opacity:1;}
 .cave-title{font-family:'Almendra',serif;font-style:italic;font-size:30px;color:rgba(230,200,150,0.88);letter-spacing:.04em;text-shadow:0 0 30px rgba(160,100,30,0.3);}
 .cave-sub{font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(180,130,60,0.45);}
 #textureToggle{position:fixed;bottom:7rem;left:50%;transform:translateX(-50%);z-index:20;opacity:0;transition:opacity 2s ease 2s;display:flex;gap:1rem;}
@@ -487,7 +487,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   </div>
   <div id="sculptureWrap"><canvas id="sculptureCanvas"></canvas></div>
   <div id="caveHeader">
-    <p style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:.55em;color:rgba(180,120,50,0.45);text-transform:uppercase;margin-bottom:.6rem;">Altar of Ganymede</p>
+    <p style="font-family:'Cinzel',serif;font-size:clamp(10px,1.1vw,14px);letter-spacing:.55em;color:rgba(180,130,60,0.7);text-transform:uppercase;text-shadow:0 0 20px rgba(180,120,50,0.3);">Altar of Ganymede</p>
   </div>
 
   <div id="gany-click-prompt" style="position:fixed;bottom:8vh;left:50%;transform:translateX(-50%);z-index:20;text-align:center;cursor:pointer;animation:pulse 3s ease-in-out infinite;" onclick="revealGanyConv()">
@@ -1064,6 +1064,10 @@ const gTh=['The cave listens…','Ganymede receives…','Grounding the vision…
 
 function enterGanymede(){
   showScreen('ganymedeScreen');foyerActive=false;
+  setTimeout(()=>document.getElementById('caveHeader').style.opacity='1', 800);
+  // hide text prompt — sculpture pulse is enough
+  const prompt=document.getElementById('gany-click-prompt');
+  if(prompt)prompt.style.display='none';
   if(!sculptureInited){sculptureInited=true;setTimeout(initGanySculpture,400);}
   setTimeout(()=>{
     const sw=document.getElementById('sculptureWrap');
@@ -1142,11 +1146,19 @@ function _buildGanySculpture(canvas){
   canvas.addEventListener('mousedown',e=>{isDragging=true;autoRotate=false;prevMouse={x:e.clientX,y:e.clientY};});
   canvas.addEventListener('mousemove',e=>{if(!isDragging)return;targetTheta-=(e.clientX-prevMouse.x)*.008;spherical.phi=Math.max(.3,Math.min(Math.PI-.3,spherical.phi+(e.clientY-prevMouse.y)*.005));prevMouse={x:e.clientX,y:e.clientY};});
   canvas.addEventListener('mouseup',()=>{isDragging=false;setTimeout(()=>autoRotate=true,3000);});
-  scene.add(new THREE.AmbientLight(0xffeedd,.55));
-  const shaft=new THREE.SpotLight(0xfff5e0,3,20,Math.PI/8,.5,1.5);shaft.position.set(0,8,0);shaft.castShadow=true;scene.add(shaft);scene.add(shaft.target);
-  const keyLight=new THREE.PointLight(0xffd080,2.5,15);keyLight.position.set(2,4,3);scene.add(keyLight);
-  const cL=new THREE.PointLight(0xff8820,1.5,6);cL.position.set(-1,-.5,2);scene.add(cL);
-  const cR=new THREE.PointLight(0xff9030,1.5,6);cR.position.set(1,-.5,2);scene.add(cR);
+  scene.add(new THREE.AmbientLight(0xffeedd,.25));
+  /* Primary shaft — tight cone from directly above, warm gold */
+  const shaft=new THREE.SpotLight(0xfff0cc,8,22,Math.PI/10,.3,1.2);
+  shaft.position.set(0,14,1);shaft.target.position.set(0,0,0);
+  shaft.castShadow=true;scene.add(shaft);scene.add(shaft.target);
+  /* Soft fill from front-low so face isn't pure shadow */
+  const fill=new THREE.PointLight(0xffcc88,1.2,10);fill.position.set(0,1,4);scene.add(fill);
+  /* Rim light from behind — separates figure from background */
+  const rim=new THREE.PointLight(0xffd080,1.8,8);rim.position.set(0,3,-3);scene.add(rim);
+  /* Candle warmth low left and right */
+  const cL=new THREE.PointLight(0xff8820,1.2,6);cL.position.set(-2,-.5,2);scene.add(cL);
+  const cR=new THREE.PointLight(0xff9030,1.2,6);cR.position.set(2,-.5,2);scene.add(cR);
+  const keyLight=fill;
   const holoMat=new THREE.MeshBasicMaterial({color:0x00eeff,wireframe:true,transparent:true,opacity:.55});
   let model=null;
   window.setSculptureTexture=function(mode){if(!model)return;const bB=document.getElementById('btnBronze'),bH=document.getElementById('btnHolo');if(mode==='holo'){model.traverse(c=>{if(c.isMesh){if(!c.userData.origMat)c.userData.origMat=c.material;c.material=holoMat;}});bB.style.color='rgba(196,158,72,0.35)';bH.style.color='rgba(100,220,255,0.9)';}else{model.traverse(c=>{if(c.isMesh&&c.userData.origMat)c.material=c.userData.origMat;});bB.style.color='rgba(196,158,72,0.8)';bH.style.color='rgba(100,220,255,0.5)';}};
@@ -1154,7 +1166,7 @@ function _buildGanySculpture(canvas){
   cvs.width=window.innerWidth;cvs.height=window.innerHeight;const ctx2=cvs.getContext('2d');
   if(caveVid){
     caveVid.addEventListener('loadedmetadata',()=>{
-      const dur=caveVid.duration;let pos=dur;const step=1/30*.2;cvs.style.opacity='1';
+      const dur=caveVid.duration;let pos=dur;const step=1/30*.15;cvs.style.opacity='1';
       function drawCaveFrame(){if(!document.getElementById('ganymedeScreen').classList.contains('active'))return;ctx2.drawImage(caveVid,0,0,cvs.width,cvs.height);pos-=step;if(pos<=0)pos=dur;caveVid.currentTime=pos;requestAnimationFrame(drawCaveFrame);}
       caveVid.addEventListener('seeked',function onFirstSeek(){caveVid.removeEventListener('seeked',onFirstSeek);drawCaveFrame();});
       caveVid.currentTime=dur;
@@ -1166,10 +1178,10 @@ function _buildGanySculpture(canvas){
     const loader=new THREE.GLTFLoader();loader.setDRACOLoader(dl);
     loader.load(GANY_GLB,(gltf)=>{
       model=gltf.scene;model.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}});
-      const box=new THREE.Box3().setFromObject(model);const centre=box.getCenter(new THREE.Vector3());const size=box.getSize(new THREE.Vector3());const scale=3.2/Math.max(size.x,size.y,size.z);model.scale.setScalar(scale);model.position.copy(centre.multiplyScalar(-scale));model.position.y-=.3;scene.add(model);
-      setTimeout(()=>{document.getElementById('caveHeader').style.opacity='1';document.getElementById('textureToggle').style.opacity='1';},400);
+      const box=new THREE.Box3().setFromObject(model);const centre=box.getCenter(new THREE.Vector3());const size=box.getSize(new THREE.Vector3());const scale=3.2/Math.max(size.x,size.y,size.z);model.scale.setScalar(scale);model.position.copy(centre.multiplyScalar(-scale));model.position.y+=.8;scene.add(model);
+      setTimeout(()=>{document.getElementById('caveHeader').style.opacity='1';},400);
       let t=0;
-      function animate(){requestAnimationFrame(animate);t+=.006;if(autoRotate)targetTheta+=.0006;spherical.theta+=(targetTheta-spherical.theta)*.05;const x=spherical.radius*Math.sin(spherical.phi)*Math.sin(spherical.theta);const y=spherical.radius*Math.cos(spherical.phi)+1;const z=spherical.radius*Math.sin(spherical.phi)*Math.cos(spherical.theta);camera.position.set(x,y,z);camera.lookAt(0,.5,0);cL.intensity=1.3+Math.sin(t*3.7)*.4;cR.intensity=1.3+Math.sin(t*2.9+1)*.4;keyLight.intensity=2.3+Math.sin(t*1.3)*.3;if(model)model.position.y=-.3+Math.sin(t*.7)*.04;renderer.render(scene,camera);}
+      function animate(){requestAnimationFrame(animate);t+=.006;if(autoRotate)targetTheta+=.0003;spherical.theta+=(targetTheta-spherical.theta)*.05;const x=spherical.radius*Math.sin(spherical.phi)*Math.sin(spherical.theta);const y=spherical.radius*Math.cos(spherical.phi)+1;const z=spherical.radius*Math.sin(spherical.phi)*Math.cos(spherical.theta);camera.position.set(x,y,z);camera.lookAt(0,.5,0);cL.intensity=1.3+Math.sin(t*3.7)*.4;cR.intensity=1.3+Math.sin(t*2.9+1)*.4;keyLight.intensity=2.3+Math.sin(t*1.3)*.3;if(model)model.position.y=.8+Math.sin(t*.7)*.04;renderer.render(scene,camera);}
       animate();
       window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);});
     },undefined,(err)=>console.warn('Gany GLB:',err));
