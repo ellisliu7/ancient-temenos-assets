@@ -1300,6 +1300,8 @@ function initGanySculpture(){
 }
 function _buildGanySculpture(canvas){
   const W=canvas.width,H=canvas.height;
+  // Mouse parallax state — declared here so drawCaveFrame can access
+  let smoothX=0,smoothY=0;
   const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
   renderer.setSize(W,H);renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setClearColor(0,0);renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.2;renderer.shadowMap.enabled=true;
   const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(36,W/H,.1,100);camera.position.set(0,-0.5,7.5);
@@ -1348,7 +1350,7 @@ function _buildGanySculpture(canvas){
       const box=new THREE.Box3().setFromObject(model);const centre=box.getCenter(new THREE.Vector3());const size=box.getSize(new THREE.Vector3());const scale=3.2/Math.max(size.x,size.y,size.z);model.scale.setScalar(scale);model.position.copy(centre.multiplyScalar(-scale));model.position.y+=0;scene.add(model);
       setTimeout(()=>{document.getElementById('caveHeader').style.opacity='1';},400);
       let t=0;
-      let mouseX=0,mouseY=0,smoothX=0,smoothY=0;
+      let mouseX=0,mouseY=0;
       const ganyScreen=document.getElementById('ganymedeScreen');
       if(ganyScreen){
         ganyScreen.addEventListener('mousemove',e=>{
