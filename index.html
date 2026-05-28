@@ -629,7 +629,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 const API_KEY='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';
 const CDN='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/';
 const CDN2='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/';
-const VENUS_GLB='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Compressed.glb';
+const VENUS_GLB='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_sculpture.glb';
 const GANY_GLB='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/ganymedestatue-v1.glb';
 const FRAME_PNG=CDN+'Portal%20Frame.png';
 
@@ -1104,7 +1104,12 @@ function _buildVenusSculpture(canvas){
       console.log('Venus: GLB loaded successfully');
       const model=gltf.scene;model.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}});
       const box=new THREE.Box3().setFromObject(model);const centre=box.getCenter(new THREE.Vector3());const size=box.getSize(new THREE.Vector3());const scale=3.0/Math.max(size.x,size.y,size.z);
-      model.scale.setScalar(scale);model.position.copy(centre.multiplyScalar(-scale));model.position.y-=.5;model.position.x=.5;scene.add(model);
+      model.scale.setScalar(scale);
+      model.position.x=-centre.x*scale;
+      model.position.y=-centre.y*scale-0.5;
+      model.position.z=-centre.z*scale;
+      model.position.x+=0.5;
+      scene.add(model);
       let t=0;
       function animate(){requestAnimationFrame(animate);t+=.006;if(autoRotate)targetTheta+=.0025;spherical.theta+=(targetTheta-spherical.theta)*.04;const x=spherical.radius*Math.sin(spherical.phi)*Math.sin(spherical.theta);const y=spherical.radius*Math.cos(spherical.phi)+.8;const z=spherical.radius*Math.sin(spherical.phi)*Math.cos(spherical.theta);camera.position.set(x,y,z);camera.lookAt(.5,.3,0);cL.intensity=2+Math.sin(t*3.7)*.4+Math.sin(t*7.1)*.15;cR.intensity=1.8+Math.sin(t*2.9+1)*.38;keyLight.intensity=3.2+Math.sin(t*1.1)*.35;up.intensity=1+Math.sin(t*2.2)*.25;if(model)model.position.y=-.5+Math.sin(t*.6)*.03;renderer.render(scene,camera);}
       animate();
