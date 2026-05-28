@@ -1093,10 +1093,15 @@ function _buildVenusSculpture(canvas){
   canvas.addEventListener('mouseup',()=>{isDragging=false;setTimeout(()=>autoRotate=true,3000);});
   canvas.addEventListener('click',()=>{if(!venusConvOpen)openVenusConversation();});
   const ls=document.createElement('script');ls.src='https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
-  ls.onload=()=>{const ds=document.createElement('script');ds.src='https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js';ds.onload=()=>{
+  ls.onerror=()=>console.error('Venus: GLTFLoader failed to load');
+  ls.onload=()=>{const ds=document.createElement('script');ds.src='https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js';
+  ds.onerror=()=>console.error('Venus: DRACOLoader failed to load');
+  ds.onload=()=>{
     const dl=new THREE.DRACOLoader();dl.setDecoderPath('./');
     const loader=new THREE.GLTFLoader();loader.setDRACOLoader(dl);
+    console.log('Venus: loading GLB from', VENUS_GLB);
     loader.load(VENUS_GLB,(gltf)=>{
+      console.log('Venus: GLB loaded successfully');
       const model=gltf.scene;model.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}});
       const box=new THREE.Box3().setFromObject(model);const centre=box.getCenter(new THREE.Vector3());const size=box.getSize(new THREE.Vector3());const scale=3.0/Math.max(size.x,size.y,size.z);
       model.scale.setScalar(scale);model.position.copy(centre.multiplyScalar(-scale));model.position.y-=.5;model.position.x=.5;scene.add(model);
@@ -1104,7 +1109,7 @@ function _buildVenusSculpture(canvas){
       function animate(){requestAnimationFrame(animate);t+=.006;if(autoRotate)targetTheta+=.0025;spherical.theta+=(targetTheta-spherical.theta)*.04;const x=spherical.radius*Math.sin(spherical.phi)*Math.sin(spherical.theta);const y=spherical.radius*Math.cos(spherical.phi)+.8;const z=spherical.radius*Math.sin(spherical.phi)*Math.cos(spherical.theta);camera.position.set(x,y,z);camera.lookAt(.5,.3,0);cL.intensity=2+Math.sin(t*3.7)*.4+Math.sin(t*7.1)*.15;cR.intensity=1.8+Math.sin(t*2.9+1)*.38;keyLight.intensity=3.2+Math.sin(t*1.1)*.35;up.intensity=1+Math.sin(t*2.2)*.25;if(model)model.position.y=-.5+Math.sin(t*.6)*.03;renderer.render(scene,camera);}
       animate();
       window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);});
-    },undefined,(err)=>console.warn('Venus GLB:',err));
+    },xhr=>{console.log('Venus GLB progress:', Math.round(xhr.loaded/xhr.total*100)+'%');},(err)=>console.error('Venus GLB error:',err));
   };document.head.appendChild(ds);};document.head.appendChild(ls);
 }
 
@@ -1332,10 +1337,8 @@ function _buildGanySculpture(canvas){
     caveVid.addEventListener('loadedmetadata',()=>{
       const dur=caveVid.duration;let pos=dur;const step=1/30*.15;cvs.style.opacity='1';
       function drawCaveFrame(){if(!document.getElementById('ganymedeScreen').classList.contains('active'))return;
-        // Parallax shift — video moves opposite to mouse, creating depth
-        const sx=smoothX*22, sy=smoothY*12;
         ctx2.clearRect(0,0,cvs.width,cvs.height);
-        ctx2.drawImage(caveVid,-Math.abs(sx)-sx,-Math.abs(sy)-sy,cvs.width+Math.abs(sx)*2,cvs.height+Math.abs(sy)*2);
+        ctx2.drawImage(caveVid,0,0,cvs.width,cvs.height);
         pos-=step;if(pos<=0)pos=dur;caveVid.currentTime=pos;requestAnimationFrame(drawCaveFrame);}
       caveVid.addEventListener('seeked',function onFirstSeek(){caveVid.removeEventListener('seeked',onFirstSeek);drawCaveFrame();});
       caveVid.currentTime=dur;
