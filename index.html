@@ -358,6 +358,12 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     <p class="t-main-sub">A sanctuary of art, myth, memory and divinity</p>
   </div>
   <button class="t-enter-btn" onclick="enterSanctuary()">Enter the Sanctuary</button>
+  <div id="scroll-hint" style="position:absolute;bottom:3vh;left:50%;transform:translateX(-50%);z-index:4;display:flex;flex-direction:column;align-items:center;gap:.4rem;opacity:0;animation:fadeUp 3s ease 2.5s forwards;pointer-events:none;">
+    <p style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.5em;color:rgba(201,168,76,0.28);text-transform:uppercase;">or scroll</p>
+    <svg width="14" height="18" viewBox="0 0 14 18" fill="none" style="animation:promptBob 2.5s ease-in-out infinite;">
+      <path d="M7 2 L7 16 M2 11 L7 16 L12 11" stroke="rgba(201,168,76,0.28)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+    </svg>
+  </div>
 </div>
 
 <!-- ENTRY CONGRAT -->
@@ -1323,7 +1329,12 @@ function _buildGanySculpture(canvas){
   if(caveVid){
     caveVid.addEventListener('loadedmetadata',()=>{
       const dur=caveVid.duration;let pos=dur;const step=1/30*.15;cvs.style.opacity='1';
-      function drawCaveFrame(){if(!document.getElementById('ganymedeScreen').classList.contains('active'))return;ctx2.drawImage(caveVid,0,0,cvs.width,cvs.height);pos-=step;if(pos<=0)pos=dur;caveVid.currentTime=pos;requestAnimationFrame(drawCaveFrame);}
+      function drawCaveFrame(){if(!document.getElementById('ganymedeScreen').classList.contains('active'))return;
+        // Parallax shift — video moves opposite to mouse, creating depth
+        const sx=smoothX*22, sy=smoothY*12;
+        ctx2.clearRect(0,0,cvs.width,cvs.height);
+        ctx2.drawImage(caveVid,-Math.abs(sx)-sx,-Math.abs(sy)-sy,cvs.width+Math.abs(sx)*2,cvs.height+Math.abs(sy)*2);
+        pos-=step;if(pos<=0)pos=dur;caveVid.currentTime=pos;requestAnimationFrame(drawCaveFrame);}
       caveVid.addEventListener('seeked',function onFirstSeek(){caveVid.removeEventListener('seeked',onFirstSeek);drawCaveFrame();});
       caveVid.currentTime=dur;
     });caveVid.load();
@@ -1337,7 +1348,31 @@ function _buildGanySculpture(canvas){
       const box=new THREE.Box3().setFromObject(model);const centre=box.getCenter(new THREE.Vector3());const size=box.getSize(new THREE.Vector3());const scale=3.2/Math.max(size.x,size.y,size.z);model.scale.setScalar(scale);model.position.copy(centre.multiplyScalar(-scale));model.position.y+=0;scene.add(model);
       setTimeout(()=>{document.getElementById('caveHeader').style.opacity='1';},400);
       let t=0;
-      function animate(){requestAnimationFrame(animate);t+=.006;if(autoRotate)targetTheta+=.00015;spherical.theta+=(targetTheta-spherical.theta)*.05;const x=spherical.radius*Math.sin(spherical.phi)*Math.sin(spherical.theta);const y=spherical.radius*Math.cos(spherical.phi)+1;const z=spherical.radius*Math.sin(spherical.phi)*Math.cos(spherical.theta);camera.position.set(x,y,z);camera.lookAt(0,1.2,0);cL.intensity=1.3+Math.sin(t*3.7)*.4;cR.intensity=1.3+Math.sin(t*2.9+1)*.4;keyLight.intensity=2.3+Math.sin(t*1.3)*.3;if(model)model.position.y=.8+Math.sin(t*.7)*.04;renderer.render(scene,camera);}
+      let mouseX=0,mouseY=0,smoothX=0,smoothY=0;
+      const ganyScreen=document.getElementById('ganymedeScreen');
+      if(ganyScreen){
+        ganyScreen.addEventListener('mousemove',e=>{
+          mouseX=(e.clientX/window.innerWidth-0.5)*2;
+          mouseY=(e.clientY/window.innerHeight-0.5)*2;
+        });
+        ganyScreen.addEventListener('mouseleave',()=>{mouseX=0;mouseY=0;});
+      }
+      function animate(){requestAnimationFrame(animate);t+=.006;
+        smoothX+=(mouseX-smoothX)*0.04;
+        smoothY+=(mouseY-smoothY)*0.04;
+        if(autoRotate)targetTheta+=.00015;
+        const mTheta=targetTheta+smoothX*0.18;
+        const mPhi=Math.PI/1.85+smoothY*0.08;
+        spherical.theta+=(mTheta-spherical.theta)*.05;
+        spherical.phi+=(mPhi-spherical.phi)*.04;
+        const x=spherical.radius*Math.sin(spherical.phi)*Math.sin(spherical.theta);
+        const y=spherical.radius*Math.cos(spherical.phi)+1;
+        const z=spherical.radius*Math.sin(spherical.phi)*Math.cos(spherical.theta);
+        camera.position.set(x,y,z);camera.lookAt(0,1.2,0);
+        cL.intensity=1.3+Math.sin(t*3.7)*.4;cR.intensity=1.3+Math.sin(t*2.9+1)*.4;keyLight.intensity=2.3+Math.sin(t*1.3)*.3;
+        if(model)model.position.y=.8+Math.sin(t*.7)*.04;
+        renderer.render(scene,camera);
+      }
       animate();
       window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);});
     },undefined,(err)=>console.warn('Gany GLB:',err));
@@ -1471,6 +1506,98 @@ window.addEventListener('load',()=>{
 
   // Start when veil is gone
   setTimeout(()=>{ animate(); }, 1200);
+})();
+
+
+// ══ SCROLL TO ENTER ══
+(function(){
+  const threshold = document.getElementById('threshold');
+  if(!threshold) return;
+
+  let scrollY = 0;
+  let entering = false;
+
+  // Intercept wheel events on the threshold screen
+  threshold.addEventListener('wheel', e => {
+    if(entering) return;
+    if(!threshold.classList.contains('active')) return;
+
+    e.preventDefault();
+    scrollY += e.deltaY * 0.4;
+    scrollY = Math.max(0, Math.min(scrollY, 100));
+
+    applyScrollZoom(scrollY);
+
+    if(scrollY >= 100){
+      entering = true;
+      enterFromScroll();
+    }
+  }, { passive: false });
+
+  // Touch support
+  let touchStartY = 0;
+  threshold.addEventListener('touchstart', e => { touchStartY = e.touches[0].clientY; }, { passive: true });
+  threshold.addEventListener('touchmove', e => {
+    if(entering) return;
+    if(!threshold.classList.contains('active')) return;
+    const dy = touchStartY - e.touches[0].clientY;
+    scrollY += dy * 0.6;
+    scrollY = Math.max(0, Math.min(scrollY, 100));
+    touchStartY = e.touches[0].clientY;
+    applyScrollZoom(scrollY);
+    if(scrollY >= 100){ entering = true; enterFromScroll(); }
+  }, { passive: true });
+
+  function applyScrollZoom(progress){
+    const p = progress / 100; // 0 to 1
+    const vid = threshold.querySelector('.t-video-wrap video');
+    const title = threshold.querySelector('.t-main-title');
+    const sub = threshold.querySelector('.t-main-sub');
+    const btn = threshold.querySelector('.t-enter-btn');
+
+    // Video zooms in toward the light
+    const scale = 1.08 + p * 0.35;
+    const brightness = 0.62 + p * 0.45;
+    if(vid){
+      vid.style.transform = `scale(${scale})`;
+      vid.style.filter = `brightness(${brightness}) saturate(${0.88 + p * 0.3})`;
+    }
+
+    // Title and subtitle fade out as we zoom in
+    const textOpacity = Math.max(0, 1 - p * 2.5);
+    if(title) title.style.opacity = textOpacity;
+    if(sub) sub.style.opacity = textOpacity;
+    if(btn) btn.style.opacity = textOpacity;
+  }
+
+  function enterFromScroll(){
+    // Flash white/gold then transition to foyer
+    const vid = threshold.querySelector('.t-video-wrap video');
+    if(vid){
+      vid.style.transition = 'transform 0.8s ease-in, filter 0.8s ease-in';
+      vid.style.transform = 'scale(1.6)';
+      vid.style.filter = 'brightness(2.5) saturate(0.5)';
+    }
+    setTimeout(()=>{
+      flashTo(()=>{
+        showScreen('foyer');
+        // Reset for next time
+        scrollY = 0;
+        entering = false;
+        if(vid){
+          vid.style.transition = '';
+          vid.style.transform = 'scale(1.08)';
+          vid.style.filter = 'brightness(.62) saturate(.88)';
+        }
+        const title = threshold.querySelector('.t-main-title');
+        const sub = threshold.querySelector('.t-main-sub');
+        const btn = threshold.querySelector('.t-enter-btn');
+        if(title) title.style.opacity = 1;
+        if(sub) sub.style.opacity = 1;
+        if(btn) btn.style.opacity = 1;
+      });
+    }, 600);
+  }
 })();
 
 </script>
