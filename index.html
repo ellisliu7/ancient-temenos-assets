@@ -79,17 +79,17 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .altar-poem{position:absolute;top:34%;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;opacity:0;transition:opacity 1.2s ease;white-space:nowrap;z-index:5;}
 .altar-poem p{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(11px,1.1vw,16px);color:rgba(238,220,168,0.72);letter-spacing:.06em;line-height:1.8;}
 .altar-label{position:absolute;bottom:6%;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;opacity:0;transition:opacity 1.5s ease;white-space:nowrap;z-index:5;}
-.altar-label{position:absolute;bottom:3%;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;opacity:0;transition:opacity 1.5s ease;white-space:nowrap;z-index:5;}
+.altar-label{position:absolute;bottom:3%;left:50%;transform:translateX(calc(-50% + var(--px,0px))) translateY(var(--py,0px));text-align:center;pointer-events:none;opacity:0;transition:opacity 1.5s ease,transform .1s linear;white-space:nowrap;z-index:5;}
 .altar-label .al-name{font-family:'Almendra',serif;font-style:italic;font-size:clamp(18px,2.2vw,32px);color:rgba(238,220,168,0.88);letter-spacing:.04em;display:block;}
 .altar-label .al-intent{font-family:'Cinzel',serif;font-size:clamp(7px,.72vw,9px);letter-spacing:.5em;color:rgba(196,158,72,0.5);text-transform:uppercase;margin-top:.25rem;display:block;}
 .altar-label .al-attrs{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(9px,.9vw,12px);letter-spacing:.12em;color:rgba(196,158,72,0.35);margin-top:.15rem;display:block;}
 .altar-label .al-tagline{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(11px,1.1vw,15px);color:rgba(238,220,168,0.55);margin-top:.4rem;line-height:1.5;display:block;}
 .altar-label .al-symbol{font-size:clamp(14px,1.4vw,20px);color:rgba(196,158,72,0.4);margin-top:.5rem;display:block;transition:color .5s;}
 .foyer-altar:hover .al-symbol{color:rgba(196,158,72,0.85);}
-#foyer-title{position:absolute;top:5%;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;opacity:0;transition:opacity 2.5s ease;z-index:6;}
+#foyer-title{position:absolute;top:5%;left:50%;transform:translateX(calc(-50% + var(--px,0px))) translateY(var(--py,0px));text-align:center;pointer-events:none;opacity:0;transition:opacity 2.5s ease,transform .1s linear;z-index:6;}
 #foyer-title h1{font-family:'Cinzel',serif;font-size:clamp(18px,2.8vw,36px);font-weight:300;letter-spacing:.42em;color:rgba(196,158,72,0.72);text-transform:uppercase;}
 #foyer-title p{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(9px,.95vw,13px);letter-spacing:.22em;color:rgba(196,158,72,0.28);margin-top:.4rem;}
-#foyer-choose{position:absolute;bottom:3.5%;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;opacity:0;transition:opacity 2s ease;z-index:6;white-space:nowrap;}
+#foyer-choose{position:absolute;bottom:3.5%;left:50%;transform:translateX(calc(-50% + var(--px,0px))) translateY(var(--py,0px));text-align:center;pointer-events:none;opacity:0;transition:opacity 2s ease,transform .1s linear;z-index:6;white-space:nowrap;}
 #foyer-choose .fc-council-line{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(11px,1.1vw,15px);color:rgba(238,220,168,0.35);letter-spacing:.06em;margin-bottom:.4rem;display:block;}
 #foyer-choose .fc-lfc{font-family:'Cinzel',serif;font-size:clamp(8px,.85vw,11px);letter-spacing:.6em;color:rgba(196,158,72,0.45);text-transform:uppercase;display:block;}
 #foyer-choose .fc-chevron{margin-top:.6rem;display:block;color:rgba(196,158,72,0.3);font-size:14px;}
@@ -356,7 +356,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 @keyframes oracleRotateRev{to{transform:rotate(-360deg);}}
 
 /* council input */
-#foyer-council{position:absolute;top:28%;left:50%;transform:translateX(-50%);z-index:6;width:min(560px,72vw);opacity:0;transition:opacity 2.5s ease;pointer-events:none;text-align:center;}
+#foyer-council{position:absolute;top:28%;left:50%;transform:translateX(calc(-50% + var(--px,0px))) translateY(var(--py,0px));z-index:6;width:min(560px,72vw);opacity:0;transition:opacity 2.5s ease,transform .1s linear;pointer-events:none;text-align:center;}
 #foyer-council.visible{opacity:1;pointer-events:all;}
 .fc-welcome{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(22px,2.8vw,38px);color:rgba(238,220,168,0.75);letter-spacing:.02em;margin-bottom:.2rem;display:block;}
 .fc-welcome-sub{font-family:'Cormorant Garamond',serif;font-size:clamp(13px,1.2vw,17px);color:rgba(196,158,72,0.4);letter-spacing:.08em;margin-bottom:1.2rem;display:block;}
@@ -454,8 +454,6 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   <div class="foyer-altar" id="altar-venus"
     onmouseenter="foyerHover('venus')" onmouseleave="foyerLeave('venus')"
     onclick="foyerEnter('venus')" ontouchend="foyerEnter('venus')">
-    <img class="altar-artwork" id="venus-artwork"
-      src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Venus_Artwork.jpg" alt="Venus">
     <div class="altar-glow-layer" id="venus-glow-layer"></div>
     <div class="altar-poem" id="venus-poem"><p>Enter the chamber<br>of receiving.</p></div>
     <div class="altar-label" id="venus-label">
@@ -469,8 +467,6 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   <div class="foyer-altar" id="altar-ganymede"
     onmouseenter="foyerHover('ganymede')" onmouseleave="foyerLeave('ganymede')"
     onclick="foyerEnter('ganymede')" ontouchend="foyerEnter('ganymede')">
-    <img class="altar-artwork" id="gany-artwork"
-      src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Ganymede_Artwork.jpg" alt="Ganymede">
     <div class="altar-glow-layer" id="gany-glow-layer"></div>
     <div class="altar-poem" id="gany-poem"><p>Enter the chamber<br>of becoming.</p></div>
     <div class="altar-label" id="gany-label">
@@ -485,9 +481,6 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   <div class="foyer-altar" id="altar-persephone"
     onmouseenter="councilHover('persephone')" onmouseleave="councilLeave('persephone')"
     onclick="foyerComingSoon('Persephone')">
-    <img class="altar-artwork altar-artwork-center" id="persephone-artwork"
-      src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Venus_Artwork.jpg" alt="Persephone"
-      style="filter:brightness(.42) saturate(.55) hue-rotate(200deg);">
     <div class="altar-glow-layer" id="persephone-glow-layer"></div>
     <div class="altar-poem" id="persephone-poem"><p>Enter the chamber<br>of descent.</p></div>
     <div class="altar-label" id="persephone-label" style="opacity:0;transition:opacity 1.5s ease;">
@@ -502,9 +495,6 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   <div class="foyer-altar" id="altar-psyche"
     onmouseenter="councilHover('psyche')" onmouseleave="councilLeave('psyche')"
     onclick="foyerComingSoon('Psyche')">
-    <img class="altar-artwork altar-artwork-center" id="psyche-artwork"
-      src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Ganymede_Artwork.jpg" alt="Psyche"
-      style="filter:brightness(.42) saturate(.5) hue-rotate(160deg);">
     <div class="altar-glow-layer" id="psyche-glow-layer"></div>
     <div class="altar-poem" id="psyche-poem"><p>Enter the chamber<br>of play.</p></div>
     <div class="altar-label" id="psyche-label" style="opacity:0;transition:opacity 1.5s ease;">
@@ -514,29 +504,6 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
       <span class="al-symbol">✦</span>
       <span class="al-soon">Opening soon</span>
     </div>
-  </div>
-
-  <!-- Oracle wheel at center -->
-  <div id="foyer-oracle-wheel">
-    <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <g id="wheel-outer" style="transform-origin:100px 100px;animation:oracleRotate 90s linear infinite;">
-        <circle cx="100" cy="100" r="95" stroke="rgba(196,158,72,0.12)" stroke-width=".6" stroke-dasharray="4 8"/>
-      </g>
-      <g id="wheel-mid" style="transform-origin:100px 100px;animation:oracleRotateRev 60s linear infinite;">
-        <circle cx="100" cy="100" r="72" stroke="rgba(196,158,72,0.18)" stroke-width=".5" stroke-dasharray="2 6"/>
-        <line x1="100" y1="28" x2="100" y2="172" stroke="rgba(196,158,72,0.09)" stroke-width=".4"/>
-        <line x1="28" y1="100" x2="172" y2="100" stroke="rgba(196,158,72,0.09)" stroke-width=".4"/>
-        <line x1="49" y1="49" x2="151" y2="151" stroke="rgba(196,158,72,0.07)" stroke-width=".4"/>
-        <line x1="151" y1="49" x2="49" y2="151" stroke="rgba(196,158,72,0.07)" stroke-width=".4"/>
-      </g>
-      <g id="wheel-inner" style="transform-origin:100px 100px;animation:oracleRotate 40s linear infinite;">
-        <circle cx="100" cy="100" r="48" stroke="rgba(196,158,72,0.22)" stroke-width=".6"/>
-        <polygon points="100,58 134,120 66,120" stroke="rgba(196,158,72,0.28)" stroke-width=".5" fill="none"/>
-        <polygon points="100,142 134,80 66,80" stroke="rgba(196,158,72,0.28)" stroke-width=".5" fill="none"/>
-      </g>
-      <circle cx="100" cy="100" r="5" fill="rgba(196,158,72,0.6)"/>
-      <circle cx="100" cy="100" r="10" stroke="rgba(196,158,72,0.25)" stroke-width=".5" fill="none"/>
-    </svg>
   </div>
 
   <div id="foyer-title">
@@ -925,18 +892,48 @@ function initFoyer(){
     startFoyerLoop();
   });
 
-  // track mouse over the foyer
+  // track mouse over the foyer — drives video scrub + text parallax
+  let mouseX=0.5, mouseY=0.5, tMouseX=0.5, tMouseY=0.5;
   document.getElementById('foyer').addEventListener('mousemove',e=>{
-    rawMouseX=e.clientX/window.innerWidth; // 0..1
+    rawMouseX=e.clientX/window.innerWidth;
+    tMouseX=e.clientX/window.innerWidth;
+    tMouseY=e.clientY/window.innerHeight;
     mouseInfluence=Math.min(1,mouseInfluence+0.04);
   });
   document.getElementById('foyer').addEventListener('mouseleave',()=>{
-    // fade back to pendulum over ~2s
+    tMouseX=0.5; tMouseY=0.5;
     const fadeOut=setInterval(()=>{
       mouseInfluence=Math.max(0,mouseInfluence-0.012);
       if(mouseInfluence===0)clearInterval(fadeOut);
     },16);
   });
+
+  // text parallax — runs in the RAF loop via closure
+  const parallaxEls=[
+    {id:'foyer-title',      depth:0.012},
+    {id:'foyer-council',    depth:0.018},
+    {id:'foyer-choose',     depth:0.010},
+    {id:'venus-label',      depth:0.032},
+    {id:'gany-label',       depth:0.032},
+    {id:'persephone-label', depth:0.022},
+    {id:'psyche-label',     depth:0.022},
+  ];
+  // smooth mouse
+  function tickParallax(){
+    mouseX+=(tMouseX-mouseX)*0.06;
+    mouseY+=(tMouseY-mouseY)*0.06;
+    const dx=(mouseX-0.5), dy=(mouseY-0.5);
+    parallaxEls.forEach(({id,depth})=>{
+      const el=document.getElementById(id);
+      if(!el)return;
+      const tx=(dx*depth*window.innerWidth*-1).toFixed(2);
+      const ty=(dy*depth*window.innerHeight*-0.6).toFixed(2);
+      el.style.setProperty('--px',tx+'px');
+      el.style.setProperty('--py',ty+'px');
+    });
+    requestAnimationFrame(tickParallax);
+  }
+  tickParallax();
 
   vid.load();
 
@@ -966,9 +963,12 @@ function initFoyer(){
           vid.currentTime = scrubPos;
         }
 
-        hallCanvas.style.filter='brightness(.68) saturate(.85)';
+        hallCanvas.style.filter='brightness(.48) saturate(.72)';
         if(vid.readyState>=2){
           hallCtx.drawImage(vid,0,0,hallCanvas.width,hallCanvas.height);
+          // dark overlay to kill the amber flash on bright video frames
+          hallCtx.fillStyle='rgba(4,2,1,0.32)';
+          hallCtx.fillRect(0,0,hallCanvas.width,hallCanvas.height);
         }
         const wg=hallCtx.createRadialGradient(hallCanvas.width*.5,hallCanvas.height*.45,0,hallCanvas.width*.5,hallCanvas.height*.45,hallCanvas.width*.5);
         wg.addColorStop(0,'rgba(180,100,20,0.04)');wg.addColorStop(1,'rgba(0,0,0,0)');
