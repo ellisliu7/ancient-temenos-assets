@@ -1,4 +1,4 @@
-# CURRENT BUILD STATE
+# ✦ Ancient Temenos — Current State
 
 ## Live Site
 https://ellisliu7.github.io/ancient-temenos-assets
@@ -8,143 +8,96 @@ https://github.com/ellisliu7/ancient-temenos-assets
 
 ---
 
-## DONE
+## CRITICAL: Start Every Session With This
 
-### Main Page
-- Video: `Main_Page.mp4` (jsDelivr)
-- Title: "Ancient Temenos" in Cinzel, top of screen
-- Subtitle: "A sanctuary of art, myth, memory and divinity"
-- Button: "Enter the Sanctuary" fixed to bottom
-- Scroll-to-enter: scrolling zooms into sculpture and transitions to foyer
-- Mouse parallax: video moves opposite (-18px), title moves with mouse (+8px)
-- "or scroll ↓" hint fades in at 2.5s
-
-### Foyer
-- Temple hall video: `Foyer_hall.mp4` at 0.35 playback rate
-- Venus artwork left, Ganymede artwork right
-- Hover: artwork brightens, poem appears, particles spawn
-- Click: flash transition into chamber
-- Title: "Ancient Temenos" + subtitle
-
-### Ganymede Chamber ✓ COMPLETE
-- Video: `Ganymede Cave_1.mp4` reverse playback loop
-- 3D sculpture: `ganymedestatue-v1.glb` — working
-- Mouse parallax: sculpture turns toward cursor, cave video static
-- Click sculpture to reveal conversation
-- "SPEAK WITH GANYMEDE" prompt with bobbing arrow
-- Conversation: David Ghiyam voice — practical, expansive, grounded
-- Check-in after 3rd message or when Ganymede senses completion
-- "Does this help clarify your thoughts? Or would you like to go deeper?"
-- "Let's go deeper" → Ganymede generates deepening question automatically
-- Closing: "That's the one. Don't lose it."
-- 90 Day Sprint grimoire: My Goal / Belief to Release / Physical Commitment / Inner Practice / My Prayer
-
-### Venus Chamber — PARTIAL
-- Video: `Venus_Altar_Video.mp4` — working
-- Conversation: working — Bashar + Abraham Hicks + Dolores Cannon voice
-- Opening: "You're here. What are you feeling right now?"
-- Affirmation fades in after mirror streams
-- Font 16px, textarea input
-- Closing: "She is with you" + "Continue to Ganymede"
-- **SCULPTURE NOT WORKING** — see below
+1. Read this file
+2. Read BIBLE.md, CHARACTERS.md, DECISIONS.md
+3. Fetch latest code: `https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/index.html`
+4. Save to /tmp/index.html
+5. Work from /tmp/index.html only
+6. Never push until verified
 
 ---
 
-## CURRENT ISSUES
+## Current Build (as of last session)
 
-### Venus Sculpture — Critical
-- File: `Venus_sculpture.glb` (8.5MB, NO Draco, Extensions: [])
-- Error: `Cannot assign to read only property 'position'` at _buildVenusSculpture
-- Root cause: Three.js r128 read-only geometry bug with certain GLB structures
-- Latest attempt: rewrote loader with no Draco, no Object.assign, manual position setting
-- Still failing — possibly Three.js r128 incompatibility with this specific mesh
-- **Next attempt**: Try upgrading to Three.js r134+ which fixes read-only geometry issues, or use a mesh wrapper
+### Threshold ✓
+- Rune word field, "love" unlocks entry
+- Entry congratulation sequence
+- Working
 
----
+### Foyer ✓ (mostly)
+- Video: Foyer.mp4 (updated)
+- Hybrid video scrubber: auto pendulum + mouse scrub
+- Four altar figures: Venus (left), Persephone (center-left), Psyche (center-right), Ganymede (right)
+- Persephone + Psyche: coming soon (no artwork, filtered placeholders)
+- Oracle wheel SVG centered
+- Council input bar at bottom
+- Council fires 4 parallel AI responses (placeholder — needs real debate system)
+- Navigation to Venus + Ganymede: working
 
-## NEXT PRIORITIES
+### Venus Oracle ✓
+- Video background
+- 3D sculpture (Venus_Compressed.glb)
+- Conversation thread with Kybalion-based responses
+- Wishing Well
+- Grimoire
+- Cupid / 528hz frequency toggle
+- Closing bridge to Ganymede
 
-### 1. Fix Venus Sculpture
-Try Three.js r134 instead of r128 for Venus only
-OR wrap the model in a new Object3D group to avoid read-only properties
+### Ganymede ✓
+- Cave video (reverse playback)
+- 3D sculpture (ganymedestatue-v1.glb)
+- Conversation thread
+- Timeline Pool (Persephone antechamber placeholder)
+- Bronze / Holographic texture toggle
 
-### 2. New Foyer — Council Concept
-- Background: `CONCEPT_withouttext.jpg` (uploaded, high quality, in repo)
-- Four figures: Venus (far left), Ganymede (far right), Persephone + Psyche (middle alcoves)
-- Central oracle: animated spinning SVG armillary sphere
-- Input: "Welcome home. What's on your mind today?" / placeholder "Share what you seek guidance on..."
-- All four respond simultaneously with 0.4s stagger (Venus → Ganymede → Persephone → Psyche)
-- Each figure glows in their color on hover
-- Click figure → zoom transition into their chamber
-- Parallax: 3 layers — architecture (8px), figures (15px), oracle+title (20px)
-- Static image first, video later
-
-### 3. Persephone Chamber
-- Purpose: pattern recognition, alternate timelines, shadow work
-- No artwork or system prompt built yet
-
-### 4. Psyche Chamber  
-- Purpose: inner child, practical playful exercises (left-hand writing etc)
-- No artwork or system prompt built yet
-
----
-
-## ASSET LOCATIONS
-
-### CDN Strategy
-- Videos + images → jsDelivr: `cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@latest/`
-- GLB sculptures → raw GitHub: `raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/`
-- Three.js + loaders → jsDelivr npm: `cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/`
-- Draco decoder → repo root `./` (draco_decoder.wasm etc)
-
-### Key Files
-- `Main_Page.mp4` — main page background
-- `Foyer_hall.mp4` — current foyer background
-- `Venus_Altar_Video.mp4` — Venus chamber background
-- `Ganymede Cave_1.mp4` — Ganymede chamber background
-- `Venus_Artwork.jpg` / `Ganymede_Artwork.jpg` — foyer altar panels
-- `Venus_sculpture.glb` — Venus 3D (8.5MB, no Draco) ← BROKEN
-- `ganymedestatue-v1.glb` — Ganymede 3D (3MB, Draco) ← WORKING
-- `CONCEPT_withouttext.jpg` — new foyer background concept
+### Persephone chamber — NOT BUILT
+### Psyche chamber — NOT BUILT
 
 ---
 
-## FOUR GUIDES — VOICE DEFINITIONS
+## Known Bugs / TODO
 
-### Venus
-Identity before surrender. Bashar + Abraham Hicks + Dolores Cannon.
-Reminds you what you are before addressing what you want.
-Calms nervous system through recognition not technique.
-Short, spacious, warm, certain. Never third-person narration.
-Sequence: Identity → Presence → Receive → One question
+### High Priority
+- [ ] Foyer council: replace 4 parallel responses with real-time debate system
+- [ ] Foyer layout: doesn't match CONCEPT1.jpg yet (figures too equal-width, no depth)
+- [ ] Venus sculpture: position bug (Three.js r128 read-only property — wrap in THREE.Group)
 
-### Ganymede  
-Structure and action. David Ghiyam voice.
-Practical but expansive, grounded but inspiring.
-Simplifies overwhelm, asks clarifying questions.
-Grounds inspiration into action. Never vague, never preachy.
-No files/images requests.
+### Medium Priority
+- [ ] Free vs membership tier split (foyer free, chamber oracle gated)
+- [ ] Foyer figure labels: update to CONCEPT1 style (name, tagline, symbol below)
+- [ ] Council debate: ends with suggestion + "which is calling you?"
 
-### Persephone (not built)
-Shows alternate timelines and situations.
-Identifies patterns and ways of seeing.
-Shadow work, cycles, what's hidden beneath the surface.
-
-### Psyche (not built)
-Inner child. Practical playful exercises.
-Left-hand writing, imagination as real tool.
-Innocence, wonder, play.
+### Low Priority
+- [ ] Persephone chamber (needs artwork first)
+- [ ] Psyche chamber (needs artwork first)
+- [ ] Mobile polish
 
 ---
 
-## KEY DECISIONS
+## Assets in Repo
 
-- Foyer replaces current with council concept, chambers remain
-- Four respond simultaneously with 0.4s stagger
-- Option A: all four respond, user feels drawn to one and enters
-- Static image foyer first, video later
-- Grimoire = 90 Day Sprint
-- Share portal button removed
-- No files/images requests from any guide
-- Ganymede closing: "That's the one. Don't lose it."
-- Venus closing trigger: after 2 user exchanges
+| File | Used for |
+|------|----------|
+| Foyer.mp4 | Foyer background video |
+| Venus_Artwork.jpg | Venus altar figure |
+| Ganymede_Artwork.jpg | Ganymede altar figure |
+| Venus_Altar_Video.mp4 | Venus chamber background |
+| Ganymede Cave_1.mp4 | Ganymede chamber background |
+| Venus_Compressed.glb | Venus 3D sculpture |
+| ganymedestatue-v1.glb | Ganymede 3D sculpture |
+| Venus Wishing Well_1.mp4 | Wishing well background |
+| Sigil.mp4 | Sigil reveal background |
+| ascii-art.mp4 | Threshold background |
+| Portal Frame.png | (unused currently) |
+
+---
+
+## Next Priorities (in order)
+
+1. Real-time council debate system (foyer)
+2. Foyer layout polish toward CONCEPT1
+3. Venus sculpture fix
+4. Membership/free tier gate
+5. Persephone + Psyche chambers (after artwork)
