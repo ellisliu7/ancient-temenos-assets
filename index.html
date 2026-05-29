@@ -1072,50 +1072,102 @@ function initVenusSculpture(){
   if(venusSculptureInited)return;venusSculptureInited=true;
   const canvas=document.getElementById('venus-sculpture-canvas');
   canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+  // Always use the same Three.js instance as Ganymede
   if(typeof THREE!=='undefined')_buildVenusSculpture(canvas);
-  else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';s.onload=()=>_buildVenusSculpture(canvas);document.head.appendChild(s);}
+  else{
+    const s=document.createElement('script');
+    s.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
+    s.onload=()=>_buildVenusSculpture(canvas);
+    document.head.appendChild(s);
+  }
 }
 function _buildVenusSculpture(canvas){
   const W=canvas.width,H=canvas.height;
+  let smoothX=0,smoothY=0,mouseX=0,mouseY=0;
+
   const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
-  renderer.setSize(W,H);renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setClearColor(0,0);renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.1;renderer.shadowMap.enabled=true;
-  const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(42,W/H,.1,50);camera.position.set(0,.8,5.5);camera.lookAt(0,.5,0);
-  scene.add(new THREE.AmbientLight(0xffeedd,.2));
-  const keyLight=new THREE.SpotLight(0xffcc88,3.5,18,Math.PI/7,.6,1.2);keyLight.position.set(0,8,3);keyLight.castShadow=true;scene.add(keyLight);scene.add(keyLight.target);
-  const cL=new THREE.PointLight(0xff9944,2.2,8);cL.position.set(-2.5,1,2);scene.add(cL);
-  const cR=new THREE.PointLight(0xffaa55,2.0,8);cR.position.set(2.5,1,2);scene.add(cR);
-  const up=new THREE.PointLight(0xffdd88,1.2,5);up.position.set(0,-1,1.5);scene.add(up);
-  scene.add(Object.assign(new THREE.PointLight(0xaabbdd,.6,8),{position:new THREE.Vector3(0,2,-3)}));
-  let isDragging=false,prevMouse={x:0,y:0},spherical={theta:0,phi:Math.PI/2.2,radius:5.5},targetTheta=0,autoRotate=true;
-  canvas.style.pointerEvents='auto';
-  canvas.addEventListener('mousedown',e=>{isDragging=true;autoRotate=false;prevMouse={x:e.clientX,y:e.clientY};});
-  canvas.addEventListener('mousemove',e=>{if(!isDragging)return;targetTheta-=(e.clientX-prevMouse.x)*.008;spherical.phi=Math.max(.4,Math.min(Math.PI-.4,spherical.phi+(e.clientY-prevMouse.y)*.005));prevMouse={x:e.clientX,y:e.clientY};});
-  canvas.addEventListener('mouseup',()=>{isDragging=false;setTimeout(()=>autoRotate=true,3000);});
+  renderer.setSize(W,H);
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setClearColor(0x000000,0);
+  renderer.shadowMap.enabled=true;
+
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(42,W/H,0.1,100);
+  camera.position.set(0,0.8,5.5);
+  camera.lookAt(0,0.5,0);
+
+  // Lighting
+  scene.add(new THREE.AmbientLight(0xffeedd,0.3));
+  const key=new THREE.SpotLight(0xffd090,5,18,Math.PI/6,0.4,1.2);
+  key.position.set(0,6,5);key.castShadow=true;scene.add(key);scene.add(key.target);
+  const fill=new THREE.PointLight(0xff9944,2,8);fill.position.set(-2,1,3);scene.add(fill);
+  const rim=new THREE.PointLight(0xffaa55,2,8);rim.position.set(2,2,-2);scene.add(rim);
+
+  // Mouse parallax
+  const venusScreen=document.getElementById('venusOracle');
+  if(venusScreen){
+    venusScreen.addEventListener('mousemove',e=>{
+      mouseX=(e.clientX/window.innerWidth-0.5)*2;
+      mouseY=(e.clientY/window.innerHeight-0.5)*2;
+    });
+    venusScreen.addEventListener('mouseleave',()=>{mouseX=0;mouseY=0;});
+  }
   canvas.addEventListener('click',()=>{if(!venusConvOpen)openVenusConversation();});
-  const ls=document.createElement('script');ls.src='https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
-  ls.onerror=()=>console.error('Venus: GLTFLoader failed to load');
-  ls.onload=()=>{const ds=document.createElement('script');ds.src='https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js';
-  ds.onerror=()=>console.error('Venus: DRACOLoader failed to load');
-  ds.onload=()=>{
-    const dl=new THREE.DRACOLoader();dl.setDecoderPath('./');
-    const loader=new THREE.GLTFLoader();loader.setDRACOLoader(dl);
-    console.log('Venus: loading GLB from', VENUS_GLB);
-    loader.load(VENUS_GLB,(gltf)=>{
-      console.log('Venus: GLB loaded successfully');
-      const model=gltf.scene;model.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}});
-      const box=new THREE.Box3().setFromObject(model);const centre=box.getCenter(new THREE.Vector3());const size=box.getSize(new THREE.Vector3());const scale=3.0/Math.max(size.x,size.y,size.z);
+
+  let spherical={theta:Math.PI,phi:Math.PI/2.2,radius:5.5};
+  let targetTheta=Math.PI;
+  let autoRotate=true;
+
+  // Load GLB
+  const ls=document.createElement('script');
+  ls.src='https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
+  ls.onload=()=>{
+    const loader=new THREE.GLTFLoader();
+    loader.load(VENUS_GLB,gltf=>{
+      const model=gltf.scene;
+      // Scale and center
+      const box=new THREE.Box3().setFromObject(model);
+      const size=box.getSize(new THREE.Vector3());
+      const center=box.getCenter(new THREE.Vector3());
+      const scale=3.0/Math.max(size.x,size.y,size.z);
       model.scale.setScalar(scale);
-      model.position.x=-centre.x*scale;
-      model.position.y=-centre.y*scale-0.5;
-      model.position.z=-centre.z*scale;
-      model.position.x+=0.5;
+      model.position.set(-center.x*scale, -center.y*scale-0.5, -center.z*scale);
+      model.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}});
       scene.add(model);
+
       let t=0;
-      function animate(){requestAnimationFrame(animate);t+=.006;if(autoRotate)targetTheta+=.0025;spherical.theta+=(targetTheta-spherical.theta)*.04;const x=spherical.radius*Math.sin(spherical.phi)*Math.sin(spherical.theta);const y=spherical.radius*Math.cos(spherical.phi)+.8;const z=spherical.radius*Math.sin(spherical.phi)*Math.cos(spherical.theta);camera.position.set(x,y,z);camera.lookAt(.5,.3,0);cL.intensity=2+Math.sin(t*3.7)*.4+Math.sin(t*7.1)*.15;cR.intensity=1.8+Math.sin(t*2.9+1)*.38;keyLight.intensity=3.2+Math.sin(t*1.1)*.35;up.intensity=1+Math.sin(t*2.2)*.25;if(model)model.position.y=-.5+Math.sin(t*.6)*.03;renderer.render(scene,camera);}
+      function animate(){
+        requestAnimationFrame(animate);t+=0.006;
+        smoothX+=(mouseX-smoothX)*0.04;
+        smoothY+=(mouseY-smoothY)*0.04;
+        if(autoRotate)targetTheta+=0.002;
+        const mTheta=targetTheta+smoothX*0.15;
+        const mPhi=Math.PI/2.2+smoothY*0.06;
+        spherical.theta+=(mTheta-spherical.theta)*0.05;
+        spherical.phi+=(mPhi-spherical.phi)*0.04;
+        const x=spherical.radius*Math.sin(spherical.phi)*Math.sin(spherical.theta);
+        const y=spherical.radius*Math.cos(spherical.phi)+0.8;
+        const z=spherical.radius*Math.sin(spherical.phi)*Math.cos(spherical.theta);
+        camera.position.set(x,y,z);camera.lookAt(0.3,0.2,0);
+        key.intensity=4+Math.sin(t*1.1)*0.4;
+        fill.intensity=1.8+Math.sin(t*2.3)*0.3;
+        if(model)model.position.y=-center.y*scale-0.5+Math.sin(t*0.6)*0.03;
+        renderer.render(scene,camera);
+      }
       animate();
-      window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);});
-    },xhr=>{console.log('Venus GLB progress:', Math.round(xhr.loaded/xhr.total*100)+'%');},(err)=>console.error('Venus GLB error:',err));
-  };document.head.appendChild(ds);};document.head.appendChild(ls);
+      window.addEventListener('resize',()=>{
+        camera.aspect=window.innerWidth/window.innerHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(window.innerWidth,window.innerHeight);
+      });
+    },xhr=>{
+      console.log('Venus:',(xhr.loaded/xhr.total*100).toFixed(0)+'%');
+    },err=>{
+      console.error('Venus GLB failed:',err);
+    });
+  };
+  ls.onerror=e=>console.error('Venus: GLTFLoader failed',e);
+  document.head.appendChild(ls);
 }
 
 // ══ CUPID ══
