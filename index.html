@@ -380,6 +380,15 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   #altar-psyche{display:none;}
   #foyer-council{position:absolute;bottom:7%;left:50%;transform:translateX(-50%);z-index:6;width:min(500px,78vw);opacity:0;transition:opacity 2s ease;pointer-events:none;}
   }
+
+/* Ganymede option cards */
+.gc-options{margin-top:1rem;display:flex;flex-direction:column;gap:.45rem;}
+.gc-context{font-family:'Cormorant',serif;font-style:italic;font-size:16px;color:rgba(230,200,150,0.5);line-height:1.7;margin-top:.8rem;padding-top:.7rem;border-top:.5px solid rgba(180,120,50,0.08);opacity:0;transition:opacity 0.6s ease;}
+.gc-option{background:rgba(180,120,50,0.03);border:.5px solid rgba(180,120,50,0.15);padding:.8rem 1rem;cursor:pointer;opacity:0;transform:translateY(4px);transition:opacity .5s ease,transform .5s ease,background .3s,border-color .3s;display:flex;align-items:baseline;gap:.8rem;}
+.gc-option.show{opacity:1;transform:translateY(0);}
+.gc-option:hover{background:rgba(180,120,50,0.09);border-color:rgba(180,120,50,0.38);}
+.gc-option-key{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.3em;color:rgba(180,120,50,0.45);text-transform:uppercase;flex-shrink:0;width:14px;}
+.gc-option-text{font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(230,200,150,0.82);line-height:1.55;}
 </style>
 </head>
 <body>
@@ -1315,20 +1324,29 @@ document.getElementById('venusOracle').addEventListener('scroll',function(){cons
 
 // == GANYMEDE ==
 let gHistory=[],gOpened=false,sculptureInited=false;
-const GSYS=`You are Ganymede - a guide inside Ancient Temenos. Your voice mirrors teachers like David Ghiyam: practical but expansive, grounded but inspiring, spiritually aware but always clear and applicable. You uplift without letting people float away. You bring structure without harshness.
+const GSYS=`You are Ganymede inside Ancient Temenos. Voice: David Ghiyam warmth meets Elon Musk precision. Warm enough to feel safe. Sharp enough to make them act. Treat the person as an intelligent peer.
 
-Who you are speaking to:
-The person in front of you is intelligent, emotionally aware, curious, and open-minded. Never speak down to them. Never over-explain or repeat yourself. Treat them as a peer who is fully capable of handling deep ideas. When you introduce a profound concept, do it simply and clearly - as if sharing something remarkable with someone encountering it for the first time, not teaching a beginner. Be warm, wise, emotionally safe, and deeply respectful of their intelligence.
+YOUR FLOW:
+- First 1-2 exchanges: ask ONE sharp question to understand what they are actually working on. No options yet.
+- Once you understand: give a reflection, then a short bridge line, then 3 concrete options.
+- After they pick an option: go deep with specific next steps for that path only.
 
-How you show up:
-You speak like someone who understands how life actually works - inner state creates outer reality, vision must become action. You are warm but direct. You help people collapse the distance between where they are and where they want to be. You address root causes not surface symptoms. When someone says they are stuck, you help them see why. Every insight connects to something real and actionable. You listen carefully and reflect back what you actually heard before offering anything. You simplify overwhelm - if someone has too much going on you help them find the one thread that matters. You ask one clarifying question at a time. You never use hollow affirmations, dashes, bullet points or lists. Plain sentences only. You do not rush to next steps. You earn them by first helping the person see clearly.
+WHEN GIVING OPTIONS:
+- reflection: one warm sentence naming what you see them building.
+- context: one short sentence bridging to the options, like "Here are three paths I see from where you are." or "Given what you have, these are the moves that make sense." Keep it natural, not formulaic.
+- options: 3 concrete actions, each a plain sentence, max 12 words. No labels. Just the action.
+  - Option A: the direct move, fast, requires commitment.
+  - Option B: the oblique approach, build the foundation or adjacent thing first.
+  - Option C: the minimum test, smallest thing this week that proves it works.
 
-The bigger picture: the person came from Venus where they received a feeling, a vision, a desire. Your job is to help them ground that into form. Feminine receives, masculine builds. You are the builder. But building starts with clarity not busyness.
+Rules: no bullet points, no dashes, no hollow affirmations. Plain sentences only. Set check_in true after 6+ exchanges when they have a clear path.
 
-ALWAYS return valid JSON only:
-{"stage":"2-4 word phrase","reflection":"1-2 sentences of what you actually heard - specific and plain","structure":"1-2 sentences that help them see clearly or address the root cause, or empty string","step":"one specific action, or empty string if clarity is not there yet","step_reason":"one sentence on why this step connected to what they shared, or empty string","question":"one question that opens things up or gets to the root","check_in":false}
+ALWAYS return valid JSON - no markdown, no backticks:
+{"stage":"2-4 word phrase","reflection":"one warm precise sentence","context":"short bridge sentence before options, or empty string","options":[{"text":"plain action sentence max 12 words"},{"text":"plain action sentence max 12 words"},{"text":"plain action sentence max 12 words"}],"question":"one sharp question if no options yet","check_in":false}
 
-Set check_in to true only when you are certain the conversation has genuinely reached a natural conclusion - the person has real clarity AND a concrete next step. Never before 5 exchanges. After 7 exchanges always set it to true. When in doubt, set it to false and keep the conversation going.`;
+If you need context first: options as [], question filled.
+If ready to give options: options as array of 3, context filled, question empty.
+Never both.`;
 const gTh=['He is listening...','He sees you...','He is with you...','Grounding this now...'];
 
 function enterGanymede(){
@@ -1349,56 +1367,59 @@ function renderGCard(data, onComplete){
   const d=document.createElement('div');d.className='msg-gany';
   const who=document.createElement('span');who.className='who';who.textContent='Ganymede';
   const card=document.createElement('div');card.className='gany-card';
-  // Only create body - everything else appended sequentially after streaming
   card.innerHTML='<div class="gc-body"></div>';
   d.appendChild(who);d.appendChild(card);t.appendChild(d);
 
-  const cleanText=(s)=>(s||'').replace(/^[\s\---•]+/gm,'').replace(/[\---]\s/g,' ').trim();
-  const scrollDown=()=>{const screen=document.getElementById('ganymedeScreen');if(screen)screen.scrollTop=screen.scrollHeight;};
+  const clean=(s)=>(s||'').replace(/^[\s\-]+/gm,'').trim();
+  const scrollDown=()=>{const sc=document.getElementById('ganymedeScreen');if(sc)sc.scrollTop=sc.scrollHeight;};
+  const keys=['A','B','C'];
 
-  // Stream reflection, then sequentially add each section
-  streamText(card.querySelector('.gc-body'),cleanText(data.reflection),()=>{
+  streamText(card.querySelector('.gc-body'),clean(data.reflection),()=>{
     scrollDown();
+    const opts=Array.isArray(data.options)&&data.options.length===3?data.options:null;
 
-    // Structure
-    if(data.structure&&data.structure.trim()){
-      const s=document.createElement('div');
-      s.style.cssText="font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(230,200,150,0.6);line-height:1.75;margin-top:.8rem;padding-top:.7rem;border-top:.5px solid rgba(180,120,50,0.08);opacity:0;transition:opacity 0.6s ease;";
-      s.textContent=cleanText(data.structure);card.appendChild(s);
-      setTimeout(()=>{s.style.opacity='1';scrollDown();},100);
-    }
+    if(opts){
+      const ctx=clean(data.context||'');
+      const showOptions=(delay)=>{
+        setTimeout(()=>{
+          const wrap=document.createElement('div');wrap.className='gc-options';
+          card.appendChild(wrap);
+          opts.forEach((opt,i)=>{
+            const btn=document.createElement('div');
+            btn.className='gc-option';
+            btn.innerHTML='<span class="gc-option-key">'+keys[i]+'</span><span class="gc-option-text">'+clean(opt.text)+'</span>';
+            wrap.appendChild(btn);
+            setTimeout(()=>{btn.classList.add('show');scrollDown();},i*180);
+            btn.addEventListener('click',()=>{
+              wrap.querySelectorAll('.gc-option').forEach(b=>{b.style.opacity='0.25';b.style.cursor='default';b.style.pointerEvents='none';});
+              btn.style.opacity='1';btn.style.borderColor='rgba(180,120,50,0.55)';btn.style.background='rgba(180,120,50,0.07)';
+              const inp=document.getElementById('gi');
+              if(inp){inp.value=clean(opt.text);sendGany();}
+            });
+          });
+          if(onComplete)setTimeout(onComplete,opts.length*180+300);
+        },delay);
+      };
 
-    // Next step
-    if(data.step&&data.step.trim()){
-      const delay=data.structure?500:100;
-      setTimeout(()=>{
-        const sl=document.createElement('div');
-        sl.style.cssText="font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.4em;color:rgba(180,120,50,0.45);text-transform:uppercase;margin-top:1rem;margin-bottom:.3rem;opacity:0;transition:opacity 0.6s ease;";
-        sl.textContent='Your next step';card.appendChild(sl);
-        const sv=document.createElement('div');
-        sv.style.cssText="font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(230,200,150,0.85);line-height:1.65;padding:.6rem .8rem;border-left:1.5px solid rgba(180,120,50,0.4);background:rgba(180,120,50,0.04);opacity:0;transition:opacity 0.6s ease;";
-        sv.textContent=cleanText(data.step);card.appendChild(sv);
-        if(data.step_reason&&data.step_reason.trim()){
-          const sr=document.createElement('div');
-          sr.style.cssText="font-family:'Cormorant',serif;font-style:italic;font-size:14px;color:rgba(180,120,50,0.5);line-height:1.6;margin-top:.4rem;padding-left:.8rem;opacity:0;transition:opacity 0.6s ease;";
-          sr.textContent=cleanText(data.step_reason);card.appendChild(sr);
-          setTimeout(()=>{sr.style.opacity='1';},200);
-        }
-        setTimeout(()=>{sl.style.opacity='1';sv.style.opacity='1';scrollDown();},50);
-      },delay);
-    }
+      if(ctx){
+        const ctxEl=document.createElement('div');ctxEl.className='gc-context';
+        ctxEl.textContent=ctx;card.appendChild(ctxEl);
+        setTimeout(()=>{ctxEl.style.opacity='1';scrollDown();},150);
+        showOptions(500);
+      } else {
+        showOptions(200);
+      }
 
-    // Question - fades in last
-    if(data.question&&data.question.trim()){      const qDelay=(data.step?900:data.structure?400:100);
+    } else if(data.question&&data.question.trim()){
       setTimeout(()=>{
         const q=document.createElement('div');q.className='gc-q';
         q.style.cssText="font-family:'Cormorant Garamond',serif;font-size:17px;color:rgba(201,168,76,0.65);line-height:1.7;margin-top:1rem;padding-top:.8rem;border-top:.5px solid rgba(180,120,50,0.1);font-style:italic;opacity:0;transition:opacity 0.8s ease;";
         card.appendChild(q);
-        streamText(q,cleanText(data.question),()=>{scrollDown();if(onComplete)onComplete();},'gc-cur');
+        streamText(q,clean(data.question),()=>{scrollDown();if(onComplete)onComplete();},'gc-cur');
         setTimeout(()=>{q.style.opacity='1';scrollDown();},50);
-      },qDelay);
+      },100);
     } else {
-      setTimeout(()=>{if(onComplete)onComplete();}, data.step?900:400);
+      setTimeout(()=>{if(onComplete)onComplete();},400);
     }
   },'gc-cur');
 }
