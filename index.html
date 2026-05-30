@@ -721,7 +721,7 @@ const VENUS_GLB='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-ass
 const GANY_GLB='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/ganymedestatue-v1.glb';
 const FRAME_PNG=CDN+'Portal%20Frame.png';
 
-// ══ STARS BG ══
+// == STARS BG ==
 const bgC=document.getElementById('bgCanvas'),bgX=bgC.getContext('2d');
 let BW,BH,bfr=0,nOff=0;
 function resizeBg(){BW=bgC.width=window.innerWidth;BH=bgC.height=window.innerHeight;}
@@ -748,7 +748,7 @@ function drawCaveOverlay(){
 function mainLoop(){if(inCave)drawCaveOverlay();else drawBg();requestAnimationFrame(mainLoop);}
 mainLoop();
 
-// ══ FLASH ══
+// == FLASH ==
 function flashTo(fn){
   const f=document.getElementById('flash');
   f.style.transition='background 1.2s ease';
@@ -756,7 +756,7 @@ function flashTo(fn){
   setTimeout(()=>{fn();setTimeout(()=>{f.style.background='rgba(4,3,2,0)';},200);},1200);
 }
 
-// ══ SCREEN MANAGER ══
+// == SCREEN MANAGER ==
 let currentScreen='threshold';
 function showScreen(id){
   document.querySelectorAll('.screen').forEach(s=>{
@@ -782,12 +782,12 @@ function goReturn(){
   if(target==='threshold'){document.getElementById('returnBtn').style.display='none';document.getElementById('teachingsBtn').style.display='none';}
 }
 
-// ══ MAIN PAGE ENTRY ══
+// == MAIN PAGE ENTRY ==
 function enterSanctuary(){
   flashTo(()=>showScreen('foyer'));
 }
 
-// ══ RUNE WORDS (legacy — kept for reference) ══
+// == RUNE WORDS (legacy - kept for reference) ==
 const runeWords=[{word:'death',left:'8%',top:'12%',dur:'6.2s',delay:'0s'},{word:'beauty',left:'58%',top:'5%',dur:'5.4s',delay:'1.1s'},{word:'wisdom',left:'2%',top:'55%',dur:'7.1s',delay:'0.4s'},{word:'love',left:'52%',top:'52%',dur:'5.8s',delay:'1.8s'},{word:'power',left:'28%',top:'78%',dur:'6.5s',delay:'0.7s'}];
 (function buildRunes(){
   const field=document.getElementById('runeField');
@@ -824,7 +824,7 @@ function runEntry(){
   },2000);
 }
 
-// ══ NEW FOYER ══
+// == NEW FOYER ==
 let foyerInited=false,foyerActive=false;
 let foyerAudioCtx=null,foyerMasterGain=null,foyerVenusGain=null,foyerGanyGain=null,foyerAudioStarted=false;
 let foyerVidReady=false,foyerRafId=null;
@@ -848,7 +848,7 @@ function initFoyer(){
   resizeFC();
   window.addEventListener('resize',resizeFC);
 
-  // ── VIDEO: just play and loop ──
+  // -- VIDEO: just play and loop --
   vid.addEventListener('loadeddata',()=>{
     foyerVidReady=true;
     vid.playbackRate=0.75;
@@ -856,7 +856,7 @@ function initFoyer(){
     startFoyerLoop();
   });
 
-  // text parallax — subtle depth on mouse move only
+  // text parallax - subtle depth on mouse move only
   let mouseX=0.5, mouseY=0.5, tMouseX=0.5, tMouseY=0.5;
   document.getElementById('foyer').addEventListener('mousemove',e=>{
     tMouseX=e.clientX/window.innerWidth;
@@ -1050,7 +1050,7 @@ function foyerEnter(side){
 document.getElementById('foyer').addEventListener('click',initFoyerAudio,{once:true});
 document.getElementById('foyer').addEventListener('touchstart',initFoyerAudio,{once:true});
 
-// ══ VENUS ══
+// == VENUS ==
 let vHistory=[],venusOracleOpened=false,venusConvOpen=false;
 let lastPrinciple='The Principle of Cause and Effect',lastMirror='';
 
@@ -1069,7 +1069,7 @@ function openVenusConversation(){
   if(venusConvOpen)return;venusConvOpen=true;
   const prompt=document.getElementById('venus-prompt');prompt.style.opacity='0';setTimeout(()=>prompt.style.display='none',600);
   const conv=document.getElementById('venus-conv');conv.style.display='flex';
-  setTimeout(()=>{renderVCard({principle:'The Altar of Venus',mirror:"You have arrived.\n\nShe has been waiting — not impatiently. She exists outside of time. She simply knew you would come when you were ready.\n\nShe does not ask what is wrong. She asks what is ready to be seen.",kybalion:'"The mirror is not kind. But it is true."',question:'What have you been carrying that you have not yet allowed yourself to fully feel?',actions:[]});},300);
+  setTimeout(()=>{renderVCard({principle:'The Altar of Venus',mirror:"You have arrived.\n\nShe has been waiting - not impatiently. She exists outside of time. She simply knew you would come when you were ready.\n\nShe does not ask what is wrong. She asks what is ready to be seen.",kybalion:'"The mirror is not kind. But it is true."',question:'What have you been carrying that you have not yet allowed yourself to fully feel?',actions:[]});},300);
   document.getElementById('qi').focus();
 }
 
@@ -1083,12 +1083,12 @@ function resetVenusState(){
   document.getElementById('vthread').innerHTML='';
 }
 
-const VSYS=`You are Venus — the Crown Chakra portal of the Ancient Temenos, a sacred artwork and portal by fine artist Ellis Liu. You are the divine feminine. You guide seekers to uncover their limiting beliefs and dissolve them through truth and affirmation.
+const VSYS=`You are Venus - the Crown Chakra portal of the Ancient Temenos, a sacred artwork and portal by fine artist Ellis Liu. You are the divine feminine. You guide seekers to uncover their limiting beliefs and dissolve them through truth and affirmation.
 Your method: LISTEN → REFLECT → UNCOVER the limiting belief → OFFER an affirmation → ASK what would shift.
 Voice: soft but certain. Spacious. Ancient feminine wisdom.
 ALWAYS return valid JSON only:
 {"principle":"limiting belief","mirror":"2-3 sentences of compassionate reflection","kybalion":"short Kybalion quote","affirmation":"specific affirmation rewriting the belief","question":"one question","actions":["embodied action","practice to notice old belief"]}`;
-const vTh=['She is seeing…','The mirror stirs…','She is reading what is beneath the words…','Venus speaks…'];
+const vTh=['She is seeing...','The mirror stirs...','She is reading what is beneath the words...','Venus speaks...'];
 
 async function sendVenus(){
   const inp=document.getElementById('qi'),q=inp.value.trim();
@@ -1151,7 +1151,7 @@ async function generateInvocation(vt,gt){
 
   const sys=`You are generating a 90 Day Sprint for someone based on their conversation. Inspired by David Ghiyam. Personal, specific, actionable. Return ONLY valid JSON. No dashes, no bullet points, plain sentences only.
 
-{"goal":"Their 90 day goal — what they are building in the next 90 days. One clear sentence. Specific. First person.","belief_to_release":"The one limiting belief or pattern that needs to be released. One honest sentence.","physical_action":"The most important concrete action they commit to. Real and doable. One sentence.","inner_practice":"The inner work or mindset shift they commit to. Specific to what emerged. One sentence.","prayer":"A short personal prayer in their voice — what they are asking for or declaring. 2-3 sentences. Warm, first person, based on what they shared."}`;
+{"goal":"Their 90 day goal - what they are building in the next 90 days. One clear sentence. Specific. First person.","belief_to_release":"The one limiting belief or pattern that needs to be released. One honest sentence.","physical_action":"The most important concrete action they commit to. Real and doable. One sentence.","inner_practice":"The inner work or mindset shift they commit to. Specific to what emerged. One sentence.","prayer":"A short personal prayer in their voice - what they are asking for or declaring. 2-3 sentences. Warm, first person, based on what they shared."}`;
 
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{
@@ -1199,7 +1199,7 @@ function closeGrimoire(){document.getElementById('grimoireScreen').style.display
 function copyGrimoire(){const inv=document.getElementById('grInvocationSection');const text=`ANCIENT TEMENOS · 90 DAY SPRINT\n${document.getElementById('grDate').textContent}\n\n${inv?inv.innerText.replace(/\n{3,}/g,'\n\n'):''}\n\nancienttemenos.com`;navigator.clipboard.writeText(text).then(()=>{const h=document.getElementById('grCopyHint');h.style.color='rgba(196,158,72,0.65)';setTimeout(()=>h.style.color='rgba(196,158,72,0)',2500);});}
 function sharePortal(){navigator.clipboard.writeText('https://ellisliu7.github.io/ancient-temenos-assets/').then(()=>{const h=document.getElementById('grShareHint');h.style.color='rgba(196,158,72,0.65)';setTimeout(()=>h.style.color='rgba(196,158,72,0)',2500);});}
 
-// ══ VENUS SCULPTURE ══
+// == VENUS SCULPTURE ==
 let venusSculptureInited=false;
 function initVenusSculpture(){
   if(venusSculptureInited)return;venusSculptureInited=true;
@@ -1303,7 +1303,7 @@ function _buildVenusSculpture(canvas){
   document.head.appendChild(ls);
 }
 
-// ══ CUPID ══
+// == CUPID ==
 let audioCtx=null,freqNodes={osc:null,gain:null},freqActive=false;
 function getAudioCtx(){if(!audioCtx)audioCtx=new(window.AudioContext||window.webkitAudioContext)();return audioCtx;}
 function startFrequency(hz){const ctx=getAudioCtx();if(freqNodes.osc){freqNodes.osc.stop();freqNodes.osc=null;}const osc=ctx.createOscillator();const gain=ctx.createGain();osc.type='sine';osc.frequency.setValueAtTime(hz,ctx.currentTime);gain.gain.setValueAtTime(0,ctx.currentTime);gain.gain.linearRampToValueAtTime(.06,ctx.currentTime+1.5);osc.connect(gain);gain.connect(ctx.destination);osc.start();freqNodes={osc,gain};}
@@ -1313,23 +1313,23 @@ function showCupid(){document.getElementById('cupidWrap').style.display='flex';}
 function hideCupid(){document.getElementById('cupidWrap').style.display='none';if(freqActive){freqActive=false;stopFrequency();document.getElementById('cupidWrap').classList.remove('active');}}
 document.getElementById('venusOracle').addEventListener('scroll',function(){const vid=this.querySelector('video');if(vid)vid.style.transform=`scale(1.05) translateY(${this.scrollTop*.3}px)`;});
 
-// ══ GANYMEDE ══
+// == GANYMEDE ==
 let gHistory=[],gOpened=false,sculptureInited=false;
-const GSYS=`You are Ganymede — a guide inside Ancient Temenos. Your voice mirrors teachers like David Ghiyam: practical but expansive, grounded but inspiring, spiritually aware but always clear and applicable. You uplift without letting people float away. You bring structure without harshness.
+const GSYS=`You are Ganymede - a guide inside Ancient Temenos. Your voice mirrors teachers like David Ghiyam: practical but expansive, grounded but inspiring, spiritually aware but always clear and applicable. You uplift without letting people float away. You bring structure without harshness.
 
 Who you are speaking to:
-The person in front of you is intelligent, emotionally aware, curious, and open-minded. Never speak down to them. Never over-explain or repeat yourself. Treat them as a peer who is fully capable of handling deep ideas. When you introduce a profound concept, do it simply and clearly — as if sharing something remarkable with someone encountering it for the first time, not teaching a beginner. Be warm, wise, emotionally safe, and deeply respectful of their intelligence.
+The person in front of you is intelligent, emotionally aware, curious, and open-minded. Never speak down to them. Never over-explain or repeat yourself. Treat them as a peer who is fully capable of handling deep ideas. When you introduce a profound concept, do it simply and clearly - as if sharing something remarkable with someone encountering it for the first time, not teaching a beginner. Be warm, wise, emotionally safe, and deeply respectful of their intelligence.
 
 How you show up:
-You speak like someone who understands how life actually works — inner state creates outer reality, vision must become action. You are warm but direct. You help people collapse the distance between where they are and where they want to be. You address root causes not surface symptoms. When someone says they are stuck, you help them see why. Every insight connects to something real and actionable. You listen carefully and reflect back what you actually heard before offering anything. You simplify overwhelm — if someone has too much going on you help them find the one thread that matters. You ask one clarifying question at a time. You never use hollow affirmations, dashes, bullet points or lists. Plain sentences only. You do not rush to next steps. You earn them by first helping the person see clearly.
+You speak like someone who understands how life actually works - inner state creates outer reality, vision must become action. You are warm but direct. You help people collapse the distance between where they are and where they want to be. You address root causes not surface symptoms. When someone says they are stuck, you help them see why. Every insight connects to something real and actionable. You listen carefully and reflect back what you actually heard before offering anything. You simplify overwhelm - if someone has too much going on you help them find the one thread that matters. You ask one clarifying question at a time. You never use hollow affirmations, dashes, bullet points or lists. Plain sentences only. You do not rush to next steps. You earn them by first helping the person see clearly.
 
 The bigger picture: the person came from Venus where they received a feeling, a vision, a desire. Your job is to help them ground that into form. Feminine receives, masculine builds. You are the builder. But building starts with clarity not busyness.
 
 ALWAYS return valid JSON only:
-{"stage":"2-4 word phrase","reflection":"1-2 sentences of what you actually heard — specific and plain","structure":"1-2 sentences that help them see clearly or address the root cause, or empty string","step":"one specific action, or empty string if clarity is not there yet","step_reason":"one sentence on why this step connected to what they shared, or empty string","question":"one question that opens things up or gets to the root","check_in":false}
+{"stage":"2-4 word phrase","reflection":"1-2 sentences of what you actually heard - specific and plain","structure":"1-2 sentences that help them see clearly or address the root cause, or empty string","step":"one specific action, or empty string if clarity is not there yet","step_reason":"one sentence on why this step connected to what they shared, or empty string","question":"one question that opens things up or gets to the root","check_in":false}
 
-Set check_in to true only when you are certain the conversation has genuinely reached a natural conclusion — the person has real clarity AND a concrete next step. Never before 5 exchanges. After 7 exchanges always set it to true. When in doubt, set it to false and keep the conversation going.`;
-const gTh=['He is listening…','He sees you…','He is with you…','Grounding this now…'];
+Set check_in to true only when you are certain the conversation has genuinely reached a natural conclusion - the person has real clarity AND a concrete next step. Never before 5 exchanges. After 7 exchanges always set it to true. When in doubt, set it to false and keep the conversation going.`;
+const gTh=['He is listening...','He sees you...','He is with you...','Grounding this now...'];
 
 function enterGanymede(){
   showScreen('ganymedeScreen');foyerActive=false;
@@ -1349,11 +1349,11 @@ function renderGCard(data, onComplete){
   const d=document.createElement('div');d.className='msg-gany';
   const who=document.createElement('span');who.className='who';who.textContent='Ganymede';
   const card=document.createElement('div');card.className='gany-card';
-  // Only create body — everything else appended sequentially after streaming
+  // Only create body - everything else appended sequentially after streaming
   card.innerHTML='<div class="gc-body"></div>';
   d.appendChild(who);d.appendChild(card);t.appendChild(d);
 
-  const cleanText=(s)=>(s||'').replace(/^[\s\-–—•]+/gm,'').replace(/[\-–—]\s/g,' ').trim();
+  const cleanText=(s)=>(s||'').replace(/^[\s\---•]+/gm,'').replace(/[\---]\s/g,' ').trim();
   const scrollDown=()=>{const screen=document.getElementById('ganymedeScreen');if(screen)screen.scrollTop=screen.scrollHeight;};
 
   // Stream reflection, then sequentially add each section
@@ -1388,7 +1388,7 @@ function renderGCard(data, onComplete){
       },delay);
     }
 
-    // Question — fades in last
+    // Question - fades in last
     if(data.question&&data.question.trim()){      const qDelay=(data.step?900:data.structure?400:100);
       setTimeout(()=>{
         const q=document.createElement('div');q.className='gc-q';
@@ -1447,7 +1447,7 @@ function showGanyCheckIn(){
   q.textContent='Does this help clarify your thoughts? Or would you like to go deeper?';
   const yes=document.createElement('button');yes.className='gc-choice';
   yes.style.cssText='display:block;margin-bottom:.7rem;';
-  yes.textContent='Yes — this helped. I know what to do.';yes.onclick=ganyClose;
+  yes.textContent='Yes - this helped. I know what to do.';yes.onclick=ganyClose;
   const deeper=document.createElement('button');deeper.className='gc-choice';
   deeper.style.cssText='display:block;';
   deeper.textContent="Let's go deeper.";deeper.onclick=ganyDeeper;
@@ -1487,7 +1487,7 @@ function ganyDeeper(){
   if(gi){gi.focus();}
 }
 
-// ══ GANYMEDE SCULPTURE ══
+// == GANYMEDE SCULPTURE ==
 function initGanySculpture(){
   const canvas=document.getElementById('sculptureCanvas');canvas.width=window.innerWidth;canvas.height=window.innerHeight;
   if(typeof THREE!=='undefined')_buildGanySculpture(canvas);
@@ -1495,7 +1495,7 @@ function initGanySculpture(){
 }
 function _buildGanySculpture(canvas){
   const W=canvas.width,H=canvas.height;
-  // Mouse parallax state — declared here so drawCaveFrame can access
+  // Mouse parallax state - declared here so drawCaveFrame can access
   let smoothX=0,smoothY=0;
   const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
   renderer.setSize(W,H);renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setClearColor(0,0);renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.2;renderer.shadowMap.enabled=true;
@@ -1505,15 +1505,15 @@ function _buildGanySculpture(canvas){
   canvas.addEventListener('mousemove',e=>{if(!isDragging)return;targetTheta-=(e.clientX-prevMouse.x)*.008;spherical.phi=Math.max(.3,Math.min(Math.PI-.3,spherical.phi+(e.clientY-prevMouse.y)*.005));prevMouse={x:e.clientX,y:e.clientY};});
   canvas.addEventListener('mouseup',()=>{isDragging=false;setTimeout(()=>autoRotate=true,3000);});
   scene.add(new THREE.AmbientLight(0xffeedd,.3));
-  /* Key light — front slightly above, warm, main illumination on face/chest */
+  /* Key light - front slightly above, warm, main illumination on face/chest */
   const keyLight=new THREE.SpotLight(0xffd090,6,20,Math.PI/6,.4,1.2);
   keyLight.position.set(0,4,6);keyLight.target.position.set(0,1,0);
   keyLight.castShadow=true;scene.add(keyLight);scene.add(keyLight.target);
-  /* Top shaft — god ray from above for drama */
+  /* Top shaft - god ray from above for drama */
   const shaft=new THREE.SpotLight(0xfff5dd,4,18,Math.PI/12,.3,1.5);
   shaft.position.set(0,12,2);shaft.target.position.set(0,2,0);
   scene.add(shaft);scene.add(shaft.target);
-  /* Rim from behind — separates from background */
+  /* Rim from behind - separates from background */
   const rim=new THREE.PointLight(0xffd080,2,8);rim.position.set(0,4,-4);scene.add(rim);
   /* Candle warmth at base */
   const cL=new THREE.PointLight(0xff8820,1.0,6);cL.position.set(-2,-.5,2);scene.add(cL);
@@ -1574,14 +1574,14 @@ function _buildGanySculpture(canvas){
   };document.head.appendChild(ds);};document.head.appendChild(ls);
 }
 
-// ══ POOL ══
+// == POOL ==
 const PSYS=`Generate three possible timelines. JSON only: {"timelines":[{"tone":"word","vision":"2-3 sentences","lesson":"one sentence","principle":"The Principle of X"},{"tone":"","vision":"","lesson":"","principle":""},{"tone":"","vision":"","lesson":"","principle":""}],"closing_question":"one line"}`;
 document.getElementById('pi').addEventListener('keydown',e=>{if(e.key==='Enter')askPool();});
 async function askPool(){
   const inp=document.getElementById('pi'),q=inp.value.trim();
   if(!q||document.getElementById('pb').classList.contains('loading'))return;
   const btn=document.getElementById('pb'),th=document.getElementById('pthinking');
-  btn.classList.add('loading');btn.innerHTML=spinSvg('rgba(120,90,180,0.6)');th.textContent='The pool stirs…';
+  btn.classList.add('loading');btn.innerHTML=spinSvg('rgba(120,90,180,0.6)');th.textContent='The pool stirs...';
   document.getElementById('timelinesWrap').innerHTML='';document.getElementById('poolGanyQ').textContent='';
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:PSYS,messages:[{role:'user',content:q}]})});
@@ -1595,7 +1595,7 @@ async function askPool(){
   }catch(e){th.textContent='';btn.classList.remove('loading');btn.innerHTML=arrowSvg('rgba(120,90,180,0.8)');}
 }
 
-// ══ WELL ══
+// == WELL ==
 function openWell(){document.getElementById('wellOverlay').style.display='flex';showWS(1);}
 function closeWell(){document.getElementById('wellOverlay').style.display='none';}
 function showWS(n){document.querySelectorAll('.well-stage').forEach(s=>s.classList.remove('active'));document.getElementById('ws'+n).classList.add('active');}
@@ -1608,14 +1608,14 @@ async function generateDistilledIntention(intention){const sumEl=document.getEle
 function copyAddr(){navigator.clipboard.writeText('0x70F0082E7f47e3DC8cf62B2C7FA26100657297E9').then(()=>{const h=document.getElementById('copyHint');h.textContent='Copied ✦';h.classList.add('of-copied');setTimeout(()=>{h.textContent='Tap to copy address';h.classList.remove('of-copied');},2500);});}
 function saveSigil(){const wrap=document.getElementById('sigilWrap');const svg=wrap.querySelector('svg');if(!svg)return;const d=new XMLSerializer().serializeToString(svg);const b=new Blob([d],{type:'image/svg+xml'});const url=URL.createObjectURL(b);const a=document.createElement('a');a.href=url;a.download='ancient-temenos-sigil.svg';a.click();URL.revokeObjectURL(url);}
 
-// ══ TEACHINGS ══
-const principles=[{num:'I',name:'Mentalism',axiom:'"THE ALL is Mind; the Universe is Mental." — The Kybalion',body:'Everything begins as thought. Your beliefs are not descriptions of reality — they are creating it.',temenos:'The kintsugi fractures are golden because Ellis chose to see them as beauty rather than damage. The mental transmutation happened first.'},{num:'II',name:'Correspondence',axiom:'"As above, so below; as below, so above." — The Kybalion',body:'The outer world mirrors the inner. What you charge reflects what you believe you are worth.',temenos:'Ellis paints goddesses whose fractures become gold. Do you treat your own fractures with the same reverence?'},{num:'III',name:'Vibration',axiom:'"Nothing rests; everything moves; everything vibrates." — The Kybalion',body:'You are always broadcasting a frequency. Collectors respond to the field around your work — which is the field around you.',temenos:'The gold leaf raises the vibration of the broken place. This is what you are being asked to do internally.'},{num:'IV',name:'Polarity',axiom:'"Everything is dual; everything has poles." — The Kybalion',body:'You do not destroy doubt — you transmute it by moving along the scale toward its opposite.',temenos:'The goddess is broken AND golden simultaneously. The work asks you to alchemize the wound, not transcend it.'},{num:'V',name:'Rhythm',axiom:'"Everything flows out and in; everything has its tides." — The Kybalion',body:'The pendulum swings toward visibility, then contracts you back. The Master rises above the swing.',temenos:'The fracture is the low tide. The gold is the return. Both are the rhythm.'},{num:'VI',name:'Cause & Effect',axiom:'"Every Cause has its Effect; every Effect has its Cause." — The Kybalion',body:'Most people live as Effects. The initiate becomes a Cause. Every action or inaction is a cause with an effect.',temenos:'The act of gilding the fracture is a Cause. The beauty that emerges is the Effect.'},{num:'VII',name:'Gender',axiom:'"Gender is in everything; everything has its Masculine and Feminine Principles." — The Kybalion',body:'Creative genius without willingness to receive its rewards is the Feminine principle without the Masculine.',temenos:'The gold entering through the fractures — that is the Masculine principle meeting the Feminine. Complete only when both move.'}];
+// == TEACHINGS ==
+const principles=[{num:'I',name:'Mentalism',axiom:'"THE ALL is Mind; the Universe is Mental." - The Kybalion',body:'Everything begins as thought. Your beliefs are not descriptions of reality - they are creating it.',temenos:'The kintsugi fractures are golden because Ellis chose to see them as beauty rather than damage. The mental transmutation happened first.'},{num:'II',name:'Correspondence',axiom:'"As above, so below; as below, so above." - The Kybalion',body:'The outer world mirrors the inner. What you charge reflects what you believe you are worth.',temenos:'Ellis paints goddesses whose fractures become gold. Do you treat your own fractures with the same reverence?'},{num:'III',name:'Vibration',axiom:'"Nothing rests; everything moves; everything vibrates." - The Kybalion',body:'You are always broadcasting a frequency. Collectors respond to the field around your work - which is the field around you.',temenos:'The gold leaf raises the vibration of the broken place. This is what you are being asked to do internally.'},{num:'IV',name:'Polarity',axiom:'"Everything is dual; everything has poles." - The Kybalion',body:'You do not destroy doubt - you transmute it by moving along the scale toward its opposite.',temenos:'The goddess is broken AND golden simultaneously. The work asks you to alchemize the wound, not transcend it.'},{num:'V',name:'Rhythm',axiom:'"Everything flows out and in; everything has its tides." - The Kybalion',body:'The pendulum swings toward visibility, then contracts you back. The Master rises above the swing.',temenos:'The fracture is the low tide. The gold is the return. Both are the rhythm.'},{num:'VI',name:'Cause & Effect',axiom:'"Every Cause has its Effect; every Effect has its Cause." - The Kybalion',body:'Most people live as Effects. The initiate becomes a Cause. Every action or inaction is a cause with an effect.',temenos:'The act of gilding the fracture is a Cause. The beauty that emerges is the Effect.'},{num:'VII',name:'Gender',axiom:'"Gender is in everything; everything has its Masculine and Feminine Principles." - The Kybalion',body:'Creative genius without willingness to receive its rewards is the Feminine principle without the Masculine.',temenos:'The gold entering through the fractures - that is the Masculine principle meeting the Feminine. Complete only when both move.'}];
 (function buildPrinciples(){const grid=document.getElementById('pGrid');principles.forEach((p,idx)=>{const card=document.createElement('div');card.className='p-card';card.innerHTML=`<p class="pc-num">Principle ${p.num}</p><p class="pc-name">${p.name}</p><p class="pc-axiom">${p.axiom}</p><div class="pc-body" id="pb${idx}">${p.body}</div><div class="pc-temenos" id="pt${idx}"><span style="font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.3em;color:rgba(196,158,72,0.4);text-transform:uppercase;display:block;margin-bottom:.35rem;">In Ancient Temenos</span>${p.temenos}</div><button class="pc-toggle" onclick="toggleP(${idx})">Reveal ↓</button>`;grid.appendChild(card);});})();
 function toggleP(idx){const b=document.getElementById(`pb${idx}`),t=document.getElementById(`pt${idx}`);const tog=b.parentElement.querySelector('.pc-toggle');const open=b.classList.contains('open');b.classList.toggle('open',!open);t.classList.toggle('open',!open);tog.textContent=open?'Reveal ↓':'Close ↑';}
 function openTeachings(){document.getElementById('teachings').style.display='flex';}
 function closeTeachings(){document.getElementById('teachings').style.display='none';}
 
-// ══ UTILS ══
+// == UTILS ==
 function streamText(el,text,onDone,curClass='cur'){
   if(!text){if(onDone)onDone();return;}
   const words=text.split(' ');
@@ -1645,7 +1645,7 @@ function streamText(el,text,onDone,curClass='cur'){
 function spinSvg(col){return`<svg viewBox="0 0 14 14" fill="none" stroke="${col}" stroke-width="1.3" stroke-linecap="round"><circle cx="7" cy="7" r="5"/><line x1="7" y1="2" x2="7" y2="7"/></svg>`;}
 function arrowSvg(col){return`<svg viewBox="0 0 14 14" fill="none" stroke="${col}" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>`;}
 
-// ══ INIT ══
+// == INIT ==
 window.addEventListener('load',()=>{
   setTimeout(()=>{
     const lo=document.getElementById('loadingOverlay');
@@ -1654,7 +1654,7 @@ window.addEventListener('load',()=>{
   },800);
 });
 
-// ══ MAIN PAGE PARALLAX ══
+// == MAIN PAGE PARALLAX ==
 (function(){
   const foyer = document.getElementById('threshold');
   if(!foyer) return;
@@ -1686,15 +1686,15 @@ window.addEventListener('load',()=>{
     const btn = foyer.querySelector('.t-enter-btn');
 
     if(vid){
-      // Video moves most — deep layer
+      // Video moves most - deep layer
       vid.style.transform = `scale(1.08) translate(${cX * -18}px, ${cY * -12}px)`;
     }
     if(content){
-      // Title moves less — mid layer
+      // Title moves less - mid layer
       content.style.transform = `translate(${cX * 8}px, ${cY * 5}px)`;
     }
     if(btn){
-      // Button moves slightly — foreground layer
+      // Button moves slightly - foreground layer
       btn.style.transform = `translateX(calc(-50% + ${cX * 12}px)) translateY(${cY * 8}px)`;
     }
   }
@@ -1704,7 +1704,7 @@ window.addEventListener('load',()=>{
 })();
 
 
-// ══ SCROLL TO ENTER ══
+// == SCROLL TO ENTER ==
 (function(){
   const threshold = document.getElementById('threshold');
   if(!threshold) return;
@@ -1796,8 +1796,8 @@ window.addEventListener('load',()=>{
 })();
 
 
-// ══ FOYER COUNCIL ══
-// Completely isolated from navigation — safe to extend initFoyer
+// == FOYER COUNCIL ==
+// Completely isolated from navigation - safe to extend initFoyer
 
 function councilHover(side){
   try{
@@ -1828,7 +1828,7 @@ function councilLeave(side){
 }
 
 function foyerComingSoon(name){
-  // gentle flash tooltip — does NOT navigate
+  // gentle flash tooltip - does NOT navigate
   const el=document.getElementById('altar-'+name.toLowerCase());
   if(!el)return;
   const existing=el.querySelector('.fc-soon-toast');
@@ -1862,80 +1862,67 @@ function initCouncil(){
 }
 
 
-// ══════════════════════════════════════════
-// COUNCIL — clean rewrite, single module
-// ══════════════════════════════════════════
 
-// CSS injected once at runtime — zero conflict with existing styles
-(function injectCouncilStyles(){
-  if(document.getElementById('council-styles'))return;
-  const s=document.createElement('style');
-  s.id='council-styles';
-  s.textContent=`
-    #c-overlay{position:fixed;inset:0;z-index:50;background:rgba(3,2,1,0);pointer-events:none;transition:background 1.2s ease;}
-    #c-overlay.on{background:rgba(3,2,1,0.92);pointer-events:all;}
-    #c-card{position:fixed;top:50%;left:50%;transform:translate(-50%,-52%);z-index:51;text-align:center;width:min(540px,84vw);opacity:0;transition:opacity .8s ease,transform .8s ease;pointer-events:none;}
-    #c-card.in{opacity:1;transform:translate(-50%,-50%);}
-    #c-card.out{opacity:0;transform:translate(-50%,-58%);}
-    #c-who{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.55em;text-transform:uppercase;color:rgba(196,158,72,0.45);display:block;margin-bottom:1.6rem;}
-    #c-line{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(24px,3.2vw,40px);color:rgba(238,220,168,0.92);line-height:1.5;display:block;min-height:2em;}
-    #c-wait{display:flex;align-items:center;justify-content:center;gap:7px;margin-top:2rem;opacity:0;transition:opacity .4s;}
-    #c-wait.on{opacity:1;}
-    .c-d{width:5px;height:5px;border-radius:50%;background:rgba(196,158,72,0.4);animation:cd 1.4s ease-in-out infinite;}
-    .c-d:nth-child(2){animation-delay:.22s;}.c-d:nth-child(3){animation-delay:.44s;}
-    @keyframes cd{0%,100%{transform:translateY(0);opacity:.2;}50%{transform:translateY(-5px);opacity:.9;}}
-    #c-choose{position:fixed;inset:0;z-index:52;display:flex;flex-direction:column;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 1.2s ease;}
-    #c-choose.on{opacity:1;pointer-events:all;}
-    #c-choose-label{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.6em;text-transform:uppercase;color:rgba(196,158,72,0.35);margin-bottom:3rem;}
-    #c-names{display:flex;gap:clamp(3rem,7vw,8rem);flex-wrap:wrap;justify-content:center;}
-    .c-name{display:flex;flex-direction:column;align-items:center;gap:.6rem;opacity:0;transform:translateY(12px);transition:opacity .9s ease,transform .9s ease;}
-    .c-name.on{opacity:1;transform:translateY(0);}
-    .c-name-t{font-family:'Almendra',serif;font-style:italic;font-size:clamp(28px,4vw,52px);color:rgba(238,220,168,0.7);transition:color .3s,text-shadow .3s;letter-spacing:.02em;}
-    .c-name-s{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.5em;text-transform:uppercase;color:rgba(196,158,72,0.25);transition:color .3s;}
-    .c-name.live{cursor:pointer;}
-    .c-name.live:hover .c-name-t{color:rgba(238,220,168,1);text-shadow:0 0 40px rgba(196,158,72,0.45);}
-    .c-name.live:hover .c-name-s{color:rgba(196,158,72,0.7);}
-    .c-name.dead{opacity:0.22 !important;}
-    #c-again{margin-top:4rem;background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:7px;letter-spacing:.4em;color:rgba(196,158,72,0.18);text-transform:uppercase;transition:color .3s;}
-    #c-again:hover{color:rgba(196,158,72,0.5);}
-  `;
-  document.head.appendChild(s);
-})();
+// == COUNCIL DEBATE ==
 
-// Inject HTML once
-(function injectCouncilHTML(){
-  if(document.getElementById('c-overlay'))return;
-  document.body.insertAdjacentHTML('beforeend',`
-    <div id="c-overlay"></div>
-    <div id="c-card">
-      <span id="c-who"></span>
-      <span id="c-line"></span>
-      <div id="c-wait"><div class="c-d"></div><div class="c-d"></div><div class="c-d"></div></div>
+(function(){
+
+// -- Inject CSS --
+const s=document.createElement('style');
+s.textContent=`
+#c-overlay{position:fixed;inset:0;z-index:50;background:rgba(3,2,1,0);pointer-events:none;transition:background 1s ease;display:flex;align-items:center;justify-content:center;}
+#c-overlay.on{background:rgba(3,2,1,0.93);pointer-events:all;}
+#c-debate{width:min(560px,84vw);opacity:0;transition:opacity .6s ease;}
+#c-debate.on{opacity:1;}
+#c-debate-lines{font-family:'Cormorant Garamond',serif;font-size:clamp(15px,1.5vw,19px);line-height:1.9;color:rgba(238,220,168,0.82);}
+.c-speaker{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.45em;text-transform:uppercase;margin-right:.7rem;}
+.c-speaker.venus{color:rgba(210,150,100,0.7);}
+.c-speaker.persephone{color:rgba(150,100,210,0.6);}
+.c-speaker.psyche{color:rgba(100,175,220,0.6);}
+.c-speaker.ganymede{color:rgba(196,158,72,0.7);}
+.c-line{margin-bottom:.6rem;opacity:0;transform:translateY(4px);transition:opacity .5s ease,transform .5s ease;}
+.c-line.show{opacity:1;transform:translateY(0);}
+#c-recommendation{margin-top:2rem;text-align:center;opacity:0;transition:opacity .8s ease;}
+#c-recommendation.on{opacity:1;}
+#c-rec-label{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.5em;text-transform:uppercase;color:rgba(196,158,72,0.35);display:block;margin-bottom:1.2rem;}
+#c-rec-name{font-family:'Almendra',serif;font-style:italic;font-size:clamp(32px,5vw,56px);color:rgba(238,220,168,0.9);display:block;cursor:pointer;transition:text-shadow .4s;letter-spacing:.03em;}
+#c-rec-name:hover{text-shadow:0 0 40px rgba(196,158,72,0.5);}
+#c-rec-enter{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.5em;text-transform:uppercase;color:rgba(196,158,72,0.4);display:block;margin-top:.6rem;cursor:pointer;}
+#c-rec-soon{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.4em;text-transform:uppercase;color:rgba(196,158,72,0.2);display:block;margin-top:.6rem;}
+#c-again{margin-top:2rem;display:block;margin-left:auto;margin-right:auto;background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:7px;letter-spacing:.4em;color:rgba(196,158,72,0.18);text-transform:uppercase;transition:color .3s;}
+#c-again:hover{color:rgba(196,158,72,0.5);}
+#c-wait{text-align:center;padding:2rem 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:rgba(196,158,72,0.3);letter-spacing:.1em;}
+`;
+document.head.appendChild(s);
+
+// -- Inject HTML --
+document.body.insertAdjacentHTML('beforeend',`
+<div id="c-overlay">
+  <div id="c-debate">
+    <div id="c-wait">The council is listening...</div>
+    <div id="c-debate-lines" style="display:none"></div>
+    <div id="c-recommendation" style="display:none">
+      <span id="c-rec-label">The council recommends</span>
+      <span id="c-rec-name"></span>
+      <span id="c-rec-enter" style="display:none">enter</span>
+      <span id="c-rec-soon" style="display:none">opening soon</span>
     </div>
-    <div id="c-choose">
-      <div id="c-choose-label">Which is calling you?</div>
-      <div id="c-names"></div>
-      <button id="c-again" onclick="councilReset()">ask again ↺</button>
-    </div>
-  `);
-})();
+    <button id="c-again" onclick="councilReset()" style="display:none">ask again</button>
+  </div>
+</div>
+`);
 
-const CV=[
-  {k:'venus',n:'Venus',live:true,
-   s:'You are Venus in Ancient Temenos. ONE sentence only, 12 words max. Voice: Paulo Coelho — The Alchemist. Poetic, uplifting, the universe is conspiring for them. About love, beauty, receiving. No asterisks, no quotes.'},
-  {k:'persephone',n:'Persephone',live:false,
-   s:'You are Persephone in Ancient Temenos. ONE sentence only, 12 words max. Magnetic, mysterious, slightly dangerous. See what is hidden, what is ready to crack open. No asterisks, no quotes.'},
-  {k:'psyche',n:'Psyche',live:false,
-   s:'You are Psyche in Ancient Temenos. ONE sentence only, 12 words max. Playful, light, curious. Remind them what they forgot to enjoy. Make them smile. No asterisks, no quotes.'},
-  {k:'ganymede',n:'Ganymede',live:true,
-   s:'You are Ganymede in Ancient Temenos. ONE sentence only, 12 words max. Voice: David Ghiyam — warm, spiritually grounded, practical, expansive. About what needs to be built. No asterisks, no quotes.'}
-];
+// -- Wire input --
+document.addEventListener('DOMContentLoaded',()=>{
+  const inp=document.getElementById('fc-inp');
+  if(inp)inp.addEventListener('keydown',e=>{if(e.key==='Enter')sendCouncil();});
+});
 
-const FALLBACK={venus:'Everything you need is already inside you.',persephone:'Something beneath the surface is ready to rise.',psyche:'What would you do if it felt like play?',ganymede:'You already know the first step.'};
-
+const LIVE_CHAMBERS={venus:true,persephone:false,psyche:false,ganymede:true};
+const SPEAKER_CLASS={Venus:'venus',Persephone:'persephone',Psyche:'psyche',Ganymede:'ganymede'};
 let cBusy=false;
 
-async function sendCouncil(){
+window.sendCouncil=async function(){
   if(cBusy)return;
   const inp=document.getElementById('fc-inp');
   if(!inp)return;
@@ -1943,114 +1930,130 @@ async function sendCouncil(){
   if(!q)return;
   cBusy=true;
 
-  // hide input
+  // hide input, show overlay
   const cw=document.getElementById('foyer-council');
-  if(cw){cw.style.transition='opacity .5s';cw.style.opacity='0';cw.style.pointerEvents='none';}
+  if(cw){cw.style.transition='opacity .4s';cw.style.opacity='0';cw.style.pointerEvents='none';}
+  const overlay=document.getElementById('c-overlay');
+  overlay.classList.add('on');
+  document.getElementById('c-debate').classList.add('on');
+  document.getElementById('c-wait').style.display='block';
+  document.getElementById('c-debate-lines').style.display='none';
+  document.getElementById('c-recommendation').style.display='none';
+  document.getElementById('c-again').style.display='none';
 
-  // fire all 4 calls NOW in parallel
-  const fetches=CV.map(v=>cFetch(v,q));
+  // single API call - debate + recommendation
+  const sys=`You are writing a short, sharp debate between four archetypes in Ancient Temenos. They are deciding which chamber this person needs most.
 
-  // dim foyer
-  document.getElementById('c-overlay').classList.add('on');
+The four archetypes:
+- Venus: poetic, warm, Paulo Coelho register. Sees love and beauty and what the heart needs.
+- Persephone: magnetic, mysterious. Sees what is hidden and what needs to transform.
+- Psyche: light, playful. Sees what has been forgotten or needs to feel lighter.
+- Ganymede: grounded, warm like David Ghiyam. Sees what needs to be built or acted on.
 
-  const who=document.getElementById('c-who');
-  const line=document.getElementById('c-line');
-  const wait=document.getElementById('c-wait');
-  const card=document.getElementById('c-card');
+Rules:
+- Maximum 6 lines total. Each line is one short sentence, 10 words max.
+- They react to each other. Not four separate answers.
+- End with ONE recommendation: which archetype this person needs most.
+- Format EXACTLY like this, no extra text, no preamble:
+Venus: [line]
+Persephone: [line]
+Psyche: [line]
+Ganymede: [line]
+RECOMMENDS: [Venus/Persephone/Psyche/Ganymede]`;
 
-  for(let i=0;i<CV.length;i++){
-    const v=CV[i];
-    who.textContent=v.n;
-    line.textContent='';
-    wait.classList.add('on');
-    card.classList.remove('out');
-    card.classList.add('in');
-
-    const text=await fetches[i];
-    wait.classList.remove('on');
-    await cStream(line,text);
-
-    // hold — give them time to read
-    await cSleep(2000);
-
-    if(i<CV.length-1){
-      card.classList.remove('in');
-      card.classList.add('out');
-      await cSleep(700);
-    }
+  let fullText='';
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:200,system:sys,messages:[{role:'user',content:q}]})
+    });
+    const data=await res.json();
+    fullText=(data.content?.find(b=>b.type==='text')?.text||'').trim();
+  }catch(e){
+    fullText=`Venus: The heart already knows the answer.
+Persephone: Something beneath this is ready to move.
+Psyche: What if it was simpler than you think?
+Ganymede: Name the first step and take it.
+RECOMMENDS: Venus`;
   }
 
-  // exit card
-  card.classList.remove('in');
-  card.classList.add('out');
-  await cSleep(700);
+  // parse lines + recommendation
+  const lines=fullText.split('\n').filter(l=>l.trim());
+  const recLine=lines.find(l=>l.startsWith('RECOMMENDS:'));
+  const debateLines=lines.filter(l=>!l.startsWith('RECOMMENDS:'));
+  const recommended=recLine?recLine.replace('RECOMMENDS:','').trim():'Venus';
 
-  // show choose
-  cShowChoose();
-}
+  // render debate
+  document.getElementById('c-wait').style.display='none';
+  const linesEl=document.getElementById('c-debate-lines');
+  linesEl.style.display='block';
+  linesEl.innerHTML='';
 
-function cShowChoose(){
-  const names=document.getElementById('c-names');
-  names.innerHTML='';
-  CV.forEach((v,i)=>{
-    const el=document.createElement('div');
-    el.className='c-name'+(v.live?' live':' dead');
-    el.innerHTML=`<span class="c-name-t">${v.n}</span><span class="c-name-s">${v.live?'enter':'soon'}</span>`;
-    if(v.live){
-      el.addEventListener('click',()=>{
-        document.getElementById('c-choose').classList.remove('on');
-        document.getElementById('c-overlay').classList.remove('on');
-        if(v.k==='venus')flashTo(()=>enterVenusAltar());
-        else if(v.k==='ganymede')flashTo(()=>enterGanymede());
-      });
-    }
-    names.appendChild(el);
-    setTimeout(()=>el.classList.add('on'),200+i*180);
-  });
-  document.getElementById('c-choose').classList.add('on');
-}
+  for(let i=0;i<debateLines.length;i++){
+    const raw=debateLines[i];
+    const colon=raw.indexOf(':');
+    if(colon<0)continue;
+    const speaker=raw.slice(0,colon).trim();
+    const text=raw.slice(colon+1).trim();
+    const cls=SPEAKER_CLASS[speaker]||'venus';
 
-function councilReset(){
-  document.getElementById('c-choose').classList.remove('on');
+    const div=document.createElement('div');
+    div.className='c-line';
+    div.innerHTML=`<span class="c-speaker ${cls}">${speaker}</span>${text}`;
+    linesEl.appendChild(div);
+
+    // stagger appearance
+    await new Promise(r=>setTimeout(r,i===0?100:320));
+    div.classList.add('show');
+  }
+
+  // show recommendation
+  await new Promise(r=>setTimeout(r,500));
+  const recEl=document.getElementById('c-recommendation');
+  const recName=document.getElementById('c-rec-name');
+  const recEnter=document.getElementById('c-rec-enter');
+  const recSoon=document.getElementById('c-rec-soon');
+
+  recEl.style.display='block';
+  recName.textContent=recommended;
+  const isLive=LIVE_CHAMBERS[recommended.toLowerCase()]||false;
+
+  if(isLive){
+    recEnter.style.display='block';
+    recSoon.style.display='none';
+    const enter=()=>{
+      overlay.classList.remove('on');
+      if(recommended.toLowerCase()==='venus')flashTo(()=>enterVenusAltar());
+      else if(recommended.toLowerCase()==='ganymede')flashTo(()=>enterGanymede());
+    };
+    recName.addEventListener('click',enter);
+    recEnter.addEventListener('click',enter);
+  }else{
+    recEnter.style.display='none';
+    recSoon.style.display='block';
+  }
+
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    recEl.classList.add('on');
+  }));
+
+  document.getElementById('c-again').style.display='block';
+};
+
+window.councilReset=function(){
   document.getElementById('c-overlay').classList.remove('on');
-  document.getElementById('c-card').classList.remove('in','out');
+  document.getElementById('c-debate').classList.remove('on');
+  document.getElementById('c-recommendation').classList.remove('on');
   const cw=document.getElementById('foyer-council');
-  if(cw){const inp=document.getElementById('fc-inp');if(inp)inp.value='';cw.style.transition='opacity 1s';cw.style.opacity='1';cw.style.pointerEvents='all';}
+  if(cw){const inp=document.getElementById('fc-inp');if(inp)inp.value='';cw.style.transition='opacity .8s';cw.style.opacity='1';cw.style.pointerEvents='all';}
   cBusy=false;
-}
+};
 
-async function cFetch(v,q){
-  // MOCK MODE — instant responses, no API call
-  await cSleep(400+Math.random()*400);
-  const mocks={
-    venus:'Everything you are searching for is already searching for you.',
-    persephone:'Something in your life has already ended. You just have not named it yet.',
-    psyche:'When did you stop letting yourself want things just for the joy of wanting them?',
-    ganymede:'You know the first step. You have known it for a while.'
-  };
-  return mocks[v.k];
-}
+})(); // end council module
+// == END COUNCIL ==
 
-function cStream(el,text){
-  return new Promise(res=>{
-    el.textContent='';let i=0;
-    const iv=setInterval(()=>{
-      if(i<text.length){el.textContent=text.slice(0,++i);}
-      else{clearInterval(iv);res();}
-    },38);
-  });
-}
-
-function cSleep(ms){return new Promise(r=>setTimeout(r,ms));}
-
-// Wire enter key
-document.addEventListener('DOMContentLoaded',()=>{
-  const inp=document.getElementById('fc-inp');
-  if(inp)inp.addEventListener('keydown',e=>{if(e.key==='Enter')sendCouncil();});
-});
-// ══════════════════════════════════════════
-
-// Patch initFoyer to call initCouncil at the end — safe, no overwrites
+// Patch initFoyer to call initCouncil at the end - safe, no overwrites
 const _origInitFoyer=initFoyer;
 initFoyer=function(){
   _origInitFoyer.apply(this,arguments);
