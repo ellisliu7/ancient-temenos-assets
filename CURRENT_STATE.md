@@ -1,4 +1,5 @@
 # ✦ Ancient Temenos — Current State
+*Last updated: Session 2*
 
 ## Live Site
 https://ellisliu7.github.io/ancient-temenos-assets
@@ -10,94 +11,138 @@ https://github.com/ellisliu7/ancient-temenos-assets
 
 ## CRITICAL: Start Every Session With This
 
-1. Read this file
-2. Read BIBLE.md, CHARACTERS.md, DECISIONS.md
-3. Fetch latest code: `https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/index.html`
-4. Save to /tmp/index.html
-5. Work from /tmp/index.html only
-6. Never push until verified
+1. Read BIBLE.md, CHARACTERS.md, DECISIONS.md
+2. Fetch latest code: `https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/index.html`
+3. Save to /tmp/index.html
+4. Work from /tmp/index.html only
+5. Never push until syntax check passes: `node --check /tmp/t.js`
 
 ---
 
-## Current Build (as of last session)
+## Assets in Repo
+
+| File | Used for | Status |
+|------|----------|--------|
+| Foyer.mp4 | Foyer background video | Live |
+| Venus_Artwork.jpg | (removed from foyer) | Unused |
+| Ganymede_Artwork.jpg | (removed from foyer) | Unused |
+| Venus_Altar_Video.mp4 | Venus chamber background | Live |
+| Venus_Compressed.glb | Venus 3D sculpture | Live |
+| ganymedestatue-v1.glb | (replaced by new chamber) | Unused |
+| ganymede_cave.jpg | Ganymede chamber background | Live |
+| Ganymede_gold.jpg | Ganymede closing ritual | Live |
+| Ganymede_WIP.mov | Timelapse — works on Safari | Live |
+| Ganymede_WIP.mp4 | Timelapse — Chrome/Firefox | NOT YET (convert .mov) |
+| Venus Wishing Well_1.mp4 | Wishing well background | Live |
+| Sigil.mp4 | Sigil reveal background | Live |
+| ascii-art.mp4 | Threshold background | Live |
+
+---
+
+## Build Status
 
 ### Threshold ✓
 - Rune word field, "love" unlocks entry
 - Entry congratulation sequence
 - Working
 
-### Foyer ✓ (mostly)
-- Video: Foyer.mp4 (updated)
-- Hybrid video scrubber: auto pendulum + mouse scrub
-- Four altar figures: Venus (left), Persephone (center-left), Psyche (center-right), Ganymede (right)
-- Persephone + Psyche: coming soon (no artwork, filtered placeholders)
-- Oracle wheel SVG centered
-- Council input bar at bottom
-- Council fires 4 parallel AI responses (placeholder — needs real debate system)
+### Foyer ✓
+- Video: Foyer.mp4, simple play/loop at 0.75 speed
+- Subtle text parallax on mouse move
+- Four altar labels: Venus (bottom-left), Persephone (center-left), Psyche (center-right), Ganymede (bottom-right)
+- Persephone + Psyche: "Opening soon" on click
+- "Welcome home." heading + input bar center
+- Council debate system: one API call, streams debate line by line
+- Auto-transition to recommended chamber after debate ends
 - Navigation to Venus + Ganymede: working
 
+### Council Debate ✓
+- One API call generates full 4-voice debate + RECOMMENDS: line
+- Debate lines appear staggered (320ms each)
+- Lines fade out before recommendation appears
+- Recommended name appears alone, large
+- Auto-enters chamber after 2.5s if live
+- "Opening soon" + ask again if Persephone/Psyche recommended
+
 ### Venus Oracle ✓
-- Video background
+- Cave image background (ganymede_cave.jpg)
+- Video background (Venus_Altar_Video.mp4)
 - 3D sculpture (Venus_Compressed.glb)
-- Conversation thread with Kybalion-based responses
-- Wishing Well
-- Grimoire
+- Conversation thread with Kybalion-based JSON responses
+- Wishing Well + Sigil generation
+- Grimoire (seal + copy conversation)
 - Cupid / 528hz frequency toggle
 - Closing bridge to Ganymede
 
-### Ganymede ✓
-- Cave video (reverse playback)
-- 3D sculpture (ganymedestatue-v1.glb)
-- Conversation thread
-- Timeline Pool (Persephone antechamber placeholder)
-- Bronze / Holographic texture toggle
+### Ganymede Chamber ✓ (new experience)
+- Full screen: ganymede_cave.jpg background, starts dark, brightens each exchange
+- God rays intensify from exchange 3 onwards
+- Timelapse video (Ganymede_WIP.mov) plays top-right, framed "WITNESS THE MAKING"
+- Arrival: "You came here to build something. What is it?" fades in
+- Conversation: floating text center screen, no chat thread
+- Options: three candle flames — tap one, others extinguish
+- Journey-style ending: cave dims → gold artwork crossfades → "The blueprint is set. Now go build it." → black → foyer
 
-### Persephone chamber — NOT BUILT
-### Psyche chamber — NOT BUILT
+### Persephone chamber — NOT BUILT (no artwork yet)
+### Psyche chamber — NOT BUILT (no artwork yet)
 
 ---
 
-## Known Bugs / TODO
+## Known Issues / TODO
 
 ### High Priority
-- [ ] Foyer council: replace 4 parallel responses with real-time debate system
-- [ ] Foyer layout: doesn't match CONCEPT1.jpg yet (figures too equal-width, no depth)
-- [ ] Venus sculpture: position bug (Three.js r128 read-only property — wrap in THREE.Group)
+- [ ] Convert Ganymede_WIP.mov to .mp4 for Chrome/Firefox support
+- [ ] Venus chamber: check if 3D sculpture still loads correctly
+- [ ] Test full flow end-to-end on GitHub (threshold → foyer → council → chamber)
 
 ### Medium Priority
-- [ ] Free vs membership tier split (foyer free, chamber oracle gated)
-- [ ] Foyer figure labels: update to CONCEPT1 style (name, tagline, symbol below)
-- [ ] Council debate: ends with suggestion + "which is calling you?"
-
-### Low Priority
-- [ ] Persephone chamber (needs artwork first)
-- [ ] Psyche chamber (needs artwork first)
+- [ ] Foyer: fonts still not matching CONCEPT1 exactly
+- [ ] Free vs membership tier split
 - [ ] Mobile polish
 
----
-
-## Assets in Repo
-
-| File | Used for |
-|------|----------|
-| Foyer.mp4 | Foyer background video |
-| Venus_Artwork.jpg | Venus altar figure |
-| Ganymede_Artwork.jpg | Ganymede altar figure |
-| Venus_Altar_Video.mp4 | Venus chamber background |
-| Ganymede Cave_1.mp4 | Ganymede chamber background |
-| Venus_Compressed.glb | Venus 3D sculpture |
-| ganymedestatue-v1.glb | Ganymede 3D sculpture |
-| Venus Wishing Well_1.mp4 | Wishing well background |
-| Sigil.mp4 | Sigil reveal background |
-| ascii-art.mp4 | Threshold background |
-| Portal Frame.png | (unused currently) |
+### Low Priority
+- [ ] Persephone chamber (needs artwork)
+- [ ] Psyche chamber (needs artwork)
+- [ ] Move API key to serverless function before public launch
 
 ---
 
-## Next Priorities (in order)
+## How to Work Efficiently With Claude
 
-1. Real-time council debate system (foyer)
-2. Foyer layout polish toward CONCEPT1
-3. Venus sculpture fix
-4. Membership/free tier gate
-5. Persephone + Psyche chambers (after artwork)
+### Rule 1: Short focused sessions
+Each session = one feature only. Don't try to fix 5 things at once.
+
+### Rule 2: Always start with this prompt
+```
+Fetch the bible and latest code from GitHub. 
+Read CURRENT_STATE.md, BIBLE.md, CHARACTERS.md.
+Today I want to: [ONE SPECIFIC THING]
+```
+
+### Rule 3: Always end with this prompt
+```
+Update CURRENT_STATE.md with what we built today 
+and what's broken. Give me the file to push.
+```
+
+### Rule 4: Syntax check before every push
+Claude runs `node --check` before every output. 
+Never push if you see an error.
+
+### Rule 5: Test on GitHub before moving on
+Push → hard refresh → test the specific thing → confirm it works → next session.
+
+### Rule 6: One file at a time
+Never ask Claude to change multiple features in one message.
+"Fix the council AND the foyer AND the fonts" = bad session.
+"Fix the council" = good session.
+
+---
+
+## Next Session Priority Order
+
+1. Convert Ganymede_WIP.mov → .mp4 (do this yourself, 2 mins at cloudconvert.com)
+2. Test full flow on GitHub — report what breaks
+3. Fix any broken parts one at a time
+4. Venus chamber audit — make sure it still works after Ganymede rebuild
+5. Foyer font polish toward CONCEPT1

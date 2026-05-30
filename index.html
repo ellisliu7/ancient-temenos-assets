@@ -155,9 +155,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .q-i::placeholder{color:rgba(196,158,72,0.38);font-style:italic;}
 .q-b{width:38px;height:38px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:.6;transition:opacity .3s;}
 .q-b:hover{opacity:1;background:rgba(196,158,72,0.15);}
-.q-b svg,.g-b svg,.pool-btn svg{width:13px;height:13px;}
-.q-b.loading svg,.g-b.loading svg,.pool-btn.loading svg{animation:spin 1.2s linear infinite;}
-.thinking{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:rgba(196,158,72,0.3);letter-spacing:.1em;text-align:center;margin-top:.8rem;min-height:1.3em;}
+.q-b svg,.q-b.loading svg,.thinking{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:rgba(196,158,72,0.3);letter-spacing:.1em;text-align:center;margin-top:.8rem;min-height:1.3em;}
 
 /* ── CUPID ── */
 #cupidWrap{position:fixed;bottom:2rem;right:1.5rem;z-index:20;cursor:pointer;display:none;flex-direction:column;align-items:center;gap:.2rem;animation:cupidFloat 4s ease-in-out infinite;opacity:.45;transition:opacity .4s;}
@@ -182,34 +180,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .vc-grimoire-btn:hover{color:rgba(196,158,72,0.7);}
 
 /* ── GANYMEDE ── */
-#ganymedeScreen{overflow-y:auto;justify-content:flex-start;background:#000;}
-#ganymedeScreen::-webkit-scrollbar{width:0;}
-#cave-video-wrap{position:fixed;inset:0;z-index:0;overflow:hidden;pointer-events:none;}
-#caveReverseCanvas{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:brightness(.85) saturate(.85);opacity:0;transition:opacity 3s ease;}
-#cave-video-wrap::after{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 80% at 50% 30%,transparent 40%,rgba(2,1,1,0.7) 100%);}
-#sculptureWrap{position:fixed;inset:0;z-index:1;pointer-events:auto;cursor:pointer;}
-#sculptureCanvas{width:100%;height:100%;animation:sculptureGlow 4s ease-in-out infinite;}
-#caveHeader{position:fixed;top:1.8rem;left:0;right:0;z-index:20;text-align:center;pointer-events:none;opacity:1;}
-.cave-title{font-family:'Almendra',serif;font-style:italic;font-size:30px;color:rgba(230,200,150,0.88);letter-spacing:.04em;text-shadow:0 0 30px rgba(160,100,30,0.3);}
-.cave-sub{font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(180,130,60,0.45);}
-#textureToggle{position:fixed;bottom:7rem;left:50%;transform:translateX(-50%);z-index:20;opacity:0;transition:opacity 2s ease 2s;display:flex;gap:1rem;}
-#archConv{display:none;width:100%;max-width:580px;margin:0 auto;padding:0 1.5rem;flex-direction:column;flex:1;position:relative;z-index:10;margin-top:7rem;}
-.gany-thread{flex:1;padding:1rem 0;}
-.msg-gany{display:flex;flex-direction:column;align-items:flex-start;max-width:94%;margin-bottom:2rem;animation:fadeUp .9s ease forwards;}
 .msg-gany .who{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.35em;color:rgba(180,120,50,0.55);text-transform:uppercase;margin-bottom:.6rem;}
-.gany-card{background:rgba(20,12,5,0.75);backdrop-filter:blur(8px);border:.5px solid rgba(180,120,50,0.14);padding:1.4rem 1.6rem;width:100%;}
-.gc-stage{display:none;}
-.gc-body{font-family:'Cormorant Garamond',serif;font-size:18px;color:rgba(230,200,150,0.82);line-height:1.85;}
-.gc-q{font-family:'Cormorant Garamond',serif;font-size:17px;color:rgba(201,168,76,0.65);line-height:1.7;margin-top:1rem;padding-top:.8rem;border-top:.5px solid rgba(180,120,50,0.1);font-style:italic;}
-.gc-cur{display:inline-block;width:2px;height:1em;background:rgba(180,120,50,0.7);margin-left:2px;animation:blink .9s step-end infinite;vertical-align:text-bottom;}
-.gany-inp-area{width:100%;padding:.6rem 0 2.5rem;}
-.gany-inp-row{display:flex;align-items:center;border-bottom:.5px solid rgba(180,120,50,0.22);background:transparent;}
-.g-i{flex:1;background:transparent;border:none;outline:none;font-family:'Cormorant Garamond',serif;font-size:17px;color:rgba(230,200,150,0.7);padding:.9rem 1.2rem;caret-color:rgba(180,120,50,0.8);min-height:3.2rem;resize:none;}
-.g-i::placeholder{color:rgba(180,120,50,0.18);}
-.g-b{width:46px;height:46px;background:rgba(180,120,50,0.08);border:none;border-left:.5px solid rgba(180,120,50,0.12);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .3s;flex-shrink:0;}
-.g-b:hover{background:rgba(180,120,50,0.2);}
-.g-thinking{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:rgba(180,120,50,0.3);letter-spacing:.1em;text-align:center;margin-top:.8rem;min-height:1.3em;}
-
 /* ── POOL ── */
 #poolScreen{display:none;width:100%;max-width:580px;margin:0 auto;padding:0 1.5rem;flex-direction:column;align-items:center;flex:1;position:relative;z-index:10;margin-top:5rem;}
 .pq-text{font-family:'Cormorant Garamond',serif;font-size:19px;color:rgba(210,190,240,0.7);line-height:1.7;font-style:italic;text-align:center;margin-bottom:1.2rem;}
@@ -314,7 +285,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .pc-temenos.open{display:block;}
 .pc-toggle{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.3em;color:rgba(196,158,72,0.28);text-transform:uppercase;margin-top:.5rem;cursor:pointer;transition:color .3s;background:none;border:none;}
 .pc-toggle:hover{color:rgba(196,158,72,0.7);}
-@keyframes sculptureGlow{0%,100%{filter:drop-shadow(0 0 20px rgba(180,120,50,0.0));}50%{filter:drop-shadow(0 0 40px rgba(180,120,50,0.35));}}
+50%{filter:drop-shadow(0 0 40px rgba(180,120,50,0.35));}}
 #gany-click-prompt{
   position:fixed;bottom:9vh;left:50%;transform:translateX(-50%);
   z-index:20;text-align:center;cursor:pointer;
@@ -382,13 +353,51 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   }
 
 /* Ganymede option cards */
-.gc-options{margin-top:1rem;display:flex;flex-direction:column;gap:.45rem;}
-.gc-context{font-family:'Cormorant',serif;font-style:italic;font-size:16px;color:rgba(230,200,150,0.5);line-height:1.7;margin-top:.8rem;padding-top:.7rem;border-top:.5px solid rgba(180,120,50,0.08);opacity:0;transition:opacity 0.6s ease;}
-.gc-option{background:rgba(180,120,50,0.03);border:.5px solid rgba(180,120,50,0.15);padding:.8rem 1rem;cursor:pointer;opacity:0;transform:translateY(4px);transition:opacity .5s ease,transform .5s ease,background .3s,border-color .3s;display:flex;align-items:baseline;gap:.8rem;}
-.gc-option.show{opacity:1;transform:translateY(0);}
-.gc-option:hover{background:rgba(180,120,50,0.09);border-color:rgba(180,120,50,0.38);}
-.gc-option-key{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.3em;color:rgba(180,120,50,0.45);text-transform:uppercase;flex-shrink:0;width:14px;}
-.gc-option-text{font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(230,200,150,0.82);line-height:1.55;}
+/* == GANYMEDE CHAMBER == */
+#ganymedeScreen{position:fixed;inset:0;background:#000;overflow:hidden;}
+#g-cave-bg{position:fixed;inset:0;background:url('https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/ganymede_cave.jpg') center/cover no-repeat;opacity:0;transition:opacity 3s ease;filter:brightness(.45) saturate(.9);}
+#g-cave-bg.reveal{opacity:1;}
+#g-god-rays{position:fixed;inset:0;background:transparent;opacity:0;transition:opacity 4s ease;pointer-events:none;}
+#g-god-rays.glow{background:radial-gradient(ellipse 50% 60% at 50% 20%,rgba(255,220,120,0.12) 0%,rgba(255,200,80,0.04) 60%,transparent 100%);opacity:1;}
+#g-gold-bg{position:fixed;inset:0;background:url('https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_gold.jpg') center/cover no-repeat;opacity:0;transition:opacity 4s ease;filter:brightness(.8);}
+#g-timelapse-frame{position:fixed;top:2rem;right:2rem;width:clamp(160px,16vw,220px);z-index:20;opacity:0;transition:opacity 2s ease;border:.5px solid rgba(196,158,72,0.22);background:rgba(0,0,0,0.5);}
+#g-timelapse-frame.show{opacity:1;}
+#g-timelapse-label{font-family:'Cinzel',serif;font-size:6px;letter-spacing:.4em;color:rgba(196,158,72,0.45);text-transform:uppercase;text-align:center;padding:.4rem 0 .2rem;display:block;}
+#g-timelapse-vid{width:100%;display:block;filter:brightness(.85);}
+#g-convo{position:fixed;bottom:16%;left:50%;transform:translateX(-50%);width:min(580px,84vw);text-align:center;z-index:10;pointer-events:none;}
+#g-invitation{opacity:0;transition:opacity 2s ease;}
+#g-invitation.show{opacity:1;}
+#g-inv-line1{font-family:'Cormorant Garamond',serif;font-size:clamp(14px,1.4vw,17px);color:rgba(210,185,130,0.4);letter-spacing:.1em;display:block;margin-bottom:.8rem;}
+#g-inv-line2{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(22px,2.8vw,34px);color:rgba(238,220,168,0.82);display:block;}
+#g-exchange{display:none;}
+#g-prev-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.2vw,16px);color:rgba(238,220,168,0.2);line-height:1.7;display:block;margin-bottom:1rem;min-height:1em;}
+#g-curr-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(17px,2vw,26px);color:rgba(238,220,168,0.88);line-height:1.65;display:block;margin-bottom:.8rem;min-height:1.5em;white-space:pre-line;}
+#g-thinking-dots{display:none;justify-content:center;gap:6px;margin-top:.5rem;}
+#g-thinking-dots.show{display:flex;}
+#g-thinking-dots span{width:4px;height:4px;border-radius:50%;background:rgba(196,158,72,0.4);animation:gDot 1.4s ease-in-out infinite;}
+#g-thinking-dots span:nth-child(2){animation-delay:.2s;}#g-thinking-dots span:nth-child(3){animation-delay:.4s;}
+@keyframes gDot{0%,100%{transform:translateY(0);opacity:.2;}50%{transform:translateY(-4px);opacity:.8;}}
+#g-options{display:flex;justify-content:center;gap:clamp(1.5rem,4vw,3rem);margin-top:1.2rem;pointer-events:all;}
+.g-candle{display:flex;flex-direction:column;align-items:center;gap:.6rem;cursor:pointer;opacity:0;transform:translateY(6px);transition:opacity .6s ease,transform .6s ease;}
+.g-candle.show{opacity:1;transform:translateY(0);}
+.g-candle:hover .g-candle-text{color:rgba(238,220,168,1);}
+.g-candle.extinguished{opacity:.1;pointer-events:none;}
+.g-candle.chosen{opacity:1;}
+.g-candle-flame{width:18px;height:28px;}
+.g-candle-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.2vw,16px);color:rgba(238,220,168,0.72);line-height:1.5;max-width:160px;text-align:center;transition:color .3s;}
+#g-input-wrap{position:fixed;bottom:4%;left:50%;transform:translateX(-50%);width:min(560px,84vw);z-index:15;display:flex;align-items:center;border-bottom:.5px solid rgba(196,158,72,0.18);opacity:0;transition:opacity 1.5s ease;pointer-events:none;}
+#g-input-wrap.show{opacity:1;pointer-events:all;}
+#gi{flex:1;background:transparent;border:none;outline:none;font-family:'Cormorant Garamond',serif;font-size:clamp(16px,1.5vw,20px);color:rgba(238,220,168,0.85);padding:.8rem 1rem;caret-color:rgba(196,158,72,0.8);}
+#gi::placeholder{color:rgba(196,158,72,0.22);font-style:italic;}
+#gb{width:42px;height:42px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:.5;transition:opacity .3s;flex-shrink:0;}
+#gb:hover{opacity:1;}#gb svg{width:13px;height:13px;}
+#g-ritual{position:fixed;inset:0;z-index:60;background:rgba(3,2,1,0);pointer-events:none;transition:background 2.5s ease;display:flex;align-items:center;justify-content:center;}
+#g-ritual.dim{background:rgba(3,2,1,0.78);}
+#g-ritual.black{background:rgba(3,2,1,1);}
+#g-ritual-words{text-align:center;opacity:0;transition:opacity 2s ease;}
+#g-ritual-words.show{opacity:1;}
+#g-ritual-line1{font-family:'Cinzel',serif;font-size:clamp(8px,.85vw,10px);letter-spacing:.55em;text-transform:uppercase;color:rgba(196,158,72,0.5);display:block;margin-bottom:1.8rem;}
+#g-ritual-line2{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(24px,3vw,40px);color:rgba(238,220,168,0.9);display:block;}
 </style>
 </head>
 <body>
@@ -592,59 +601,42 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 </div>
 
 <!-- ══ GANYMEDE ══ -->
-<div class="screen" id="ganymedeScreen" style="justify-content:flex-start;">
-  <div id="cave-video-wrap">
-    <video id="caveVideo" muted playsinline preload="auto" style="display:none;">
-      <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Ganymede%20Cave_1.mp4" type="video/mp4">
+<div class="screen" id="ganymedeScreen" style="justify-content:flex-start;overflow:hidden;">
+  <div id="g-cave-bg"></div>
+  <div id="g-god-rays"></div>
+  <div id="g-gold-bg"></div>
+  <div id="g-timelapse-frame">
+    <p id="g-timelapse-label">WITNESS THE MAKING</p>
+    <video id="g-timelapse-vid" muted playsinline loop>
+      <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_WIP.mov" type="video/quicktime">
+      <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_WIP.mp4" type="video/mp4">
     </video>
-    <canvas id="caveReverseCanvas"></canvas>
   </div>
-  <div id="sculptureWrap"><canvas id="sculptureCanvas"></canvas></div>
-  <div id="caveHeader">
-    <p style="font-family:'Cinzel',serif;font-size:clamp(10px,1.1vw,14px);letter-spacing:.55em;color:rgba(180,130,60,0.7);text-transform:uppercase;text-shadow:0 0 20px rgba(180,120,50,0.3);">Altar of Ganymede</p>
+  <div id="g-convo">
+    <div id="g-invitation">
+      <p id="g-inv-line1">You came here to build something.</p>
+      <p id="g-inv-line2">What is it?</p>
+    </div>
+    <div id="g-exchange">
+      <p id="g-prev-text"></p>
+      <p id="g-curr-text"></p>
+      <div id="g-thinking-dots"><span></span><span></span><span></span></div>
+    </div>
+    <div id="g-options"></div>
   </div>
-
-  <div id="gany-click-prompt" onclick="revealGanyConv()">
-    <p class="gcp-line">Speak with Ganymede</p>
-    <svg width="18" height="24" viewBox="0 0 18 24" fill="none" style="margin-top:.5rem;animation:promptBob 2.5s ease-in-out infinite;">
-      <path d="M9 22 L9 2 M3 8 L9 2 L15 8" stroke="rgba(180,130,60,0.5)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
-    </svg>
+  <div id="g-input-wrap">
+    <input id="gi" type="text" placeholder="Speak into the cave..." autocomplete="off" spellcheck="false"/>
+    <button id="gb" onclick="sendGany()">
+      <svg viewBox="0 0 14 14" fill="none" stroke="rgba(196,158,72,0.8)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>
+    </button>
   </div>
-  <div id="archConv" style="display:none;">
-    <div class="gany-thread" id="gthread"></div>
-    <div class="gany-inp-area">
-      <div class="gany-inp-row">
-        <textarea class="g-i" id="gi" placeholder="Tell me…" autocomplete="off" spellcheck="false" rows="2" style="overflow-y:auto;line-height:1.6;"></textarea>
-        <button class="g-b" id="gb" onclick="sendGany()">
-          <svg viewBox="0 0 14 14" fill="none" stroke="rgba(180,120,50,0.8)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>
-        </button>
-      </div>
-      <p class="g-thinking" id="gthinking"></p>
-      <p style="text-align:center;margin-top:.6rem;"><button class="back-btn" onclick="backToAntechamber()">← Return to antechamber</button></p>
+  <div id="g-ritual">
+    <div id="g-ritual-words">
+      <span id="g-ritual-line1">The blueprint is set.</span>
+      <span id="g-ritual-line2">Now go build it.</span>
     </div>
   </div>
-  <div id="poolScreen">
-    <p class="pq-text">Tell me one thing you are standing at the edge of right now.</p>
-    <div class="pool-inp-row">
-      <input class="pool-inp" id="pi" type="text" placeholder="A decision, a threshold, an unknown…" autocomplete="off" spellcheck="false"/>
-      <button class="pool-btn" id="pb" onclick="askPool()">
-        <svg viewBox="0 0 14 14" fill="none" stroke="rgba(120,90,180,0.8)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>
-      </button>
-    </div>
-    <p class="pool-thinking" id="pthinking"></p>
-    <div class="timelines-wrap" id="timelinesWrap"></div>
-    <p class="pool-gany-q" id="poolGanyQ"></p>
-    <p style="text-align:center;"><button class="back-btn" onclick="backToAntechamber()">← Return to antechamber</button></p>
-  </div>
-  <div id="gany-closing">
-    <p class="gc-checkin">Does this help clarify your thoughts?<br>Or would you like to go deeper?</p>
-    <div class="gc-choices">
-      <button class="gc-choice" onclick="ganyClose()">Yes — this helped. I know what to do.</button>
-      <button class="gc-choice" onclick="ganyDeeper()">Let's go deeper.</button>
-    </div>
-    <button class="gc-grimoire-btn" onclick="openGrimoire()">✦ Seal this into my Grimoire ✦</button>
-  </div>
-
+</div>
 <!-- WISHING WELL -->
 <div id="wellOverlay">
   <div style="position:fixed;inset:0;z-index:90;overflow:hidden;pointer-events:none;">
@@ -1139,7 +1131,7 @@ function maybeShowVClosing(){
     }
   }
 }
-function bridgeToGanymede(){flashTo(()=>{showScreen('ganymedeScreen');if(!sculptureInited){sculptureInited=true;setTimeout(initGanySculpture,400);}setTimeout(revealGanyConv,600);});}
+function bridgeToGanymede(){flashTo(()=>enterGanymede());}
 function openGrimoire(){
   document.getElementById('grimoireScreen').style.display='flex';
   document.getElementById('grDate').textContent=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
@@ -1324,278 +1316,125 @@ function hideCupid(){document.getElementById('cupidWrap').style.display='none';i
 document.getElementById('venusOracle').addEventListener('scroll',function(){const vid=this.querySelector('video');if(vid)vid.style.transform=`scale(1.05) translateY(${this.scrollTop*.3}px)`;});
 
 // == GANYMEDE ==
-let gHistory=[],gOpened=false,sculptureInited=false;
 const GSYS=`You are Ganymede inside Ancient Temenos. Voice: David Ghiyam warmth meets Elon Musk precision. Warm enough to feel safe. Sharp enough to make them act. Treat the person as an intelligent peer.
 
 YOUR FLOW:
-- First 1-2 exchanges: ask ONE sharp question to understand what they are actually working on. No options yet.
-- Once you understand: give a reflection, then a short bridge line, then 3 concrete options.
-- After they pick an option: go deep with specific next steps for that path only.
+- First 1-2 exchanges: ask ONE sharp question to understand what they are working on. No options yet.
+- Once you understand: give reflection, a short bridge line, then 3 concrete options.
+- After they pick: go deep with specific next steps for that path only.
 
 WHEN GIVING OPTIONS:
 - reflection: one warm sentence naming what you see them building.
-- context: one short sentence bridging to the options, like "Here are three paths I see from where you are." or "Given what you have, these are the moves that make sense." Keep it natural, not formulaic.
-- options: 3 concrete actions, each a plain sentence, max 12 words. No labels. Just the action.
-  - Option A: the direct move, fast, requires commitment.
-  - Option B: the oblique approach, build the foundation or adjacent thing first.
-  - Option C: the minimum test, smallest thing this week that proves it works.
+- context: one short natural sentence bridging to options.
+- options: 3 concrete actions, plain sentence, max 12 words each. No labels.
 
-Rules: no bullet points, no dashes, no hollow affirmations. Plain sentences only. Set check_in true after 6+ exchanges when they have a clear path.
+Rules: no bullet points, no dashes, no hollow affirmations. Plain sentences only.
+Set check_in true after 6+ exchanges when they have a clear path.
 
 ALWAYS return valid JSON - no markdown, no backticks:
-{"stage":"2-4 word phrase","reflection":"one warm precise sentence","context":"short bridge sentence before options, or empty string","options":[{"text":"plain action sentence max 12 words"},{"text":"plain action sentence max 12 words"},{"text":"plain action sentence max 12 words"}],"question":"one sharp question if no options yet","check_in":false}
+{"stage":"2-4 word phrase","reflection":"one warm precise sentence","context":"short bridge or empty string","options":[{"text":"max 12 words"},{"text":"max 12 words"},{"text":"max 12 words"}],"question":"one sharp question if no options yet","check_in":false}
 
-If you need context first: options as [], question filled.
-If ready to give options: options as array of 3, context filled, question empty.
-Never both.`;
-const gTh=['He is listening...','He sees you...','He is with you...','Grounding this now...'];
+If need context first: options as [], question filled. If ready: options as 3, question empty. Never both.`;
+
+let gHistory=[], gExchangeCount=0, gBusy=false;
 
 function enterGanymede(){
-  showScreen('ganymedeScreen');foyerActive=false;
-  setTimeout(()=>document.getElementById('caveHeader').style.opacity='1', 800);
-  // show click prompt
-  const prompt=document.getElementById('gany-click-prompt');
-  if(prompt){prompt.style.display='flex';prompt.style.opacity='1';}
-  if(!sculptureInited){sculptureInited=true;setTimeout(initGanySculpture,400);}
+  const ov=document.getElementById('c-overlay');if(ov)ov.classList.remove('on');
+  const db=document.getElementById('c-debate');if(db)db.classList.remove('on');
+  showScreen('ganymedeScreen');
+  foyerActive=false;
+  gHistory=[];gExchangeCount=0;
+
+  setTimeout(()=>{const bg=document.getElementById('g-cave-bg');if(bg)bg.classList.add('reveal');},300);
+  setTimeout(()=>{const vid=document.getElementById('g-timelapse-vid');const frame=document.getElementById('g-timelapse-frame');if(vid)vid.play().catch(()=>{});if(frame)frame.classList.add('show');},2000);
+  setTimeout(()=>{const inv=document.getElementById('g-invitation');if(inv)inv.classList.add('show');},2500);
   setTimeout(()=>{
-    const sw=document.getElementById('sculptureWrap');
-    if(sw)sw.onclick=revealGanyConv;
-  },500);
+    const inp=document.getElementById('g-input-wrap');if(inp)inp.classList.add('show');
+    const gi=document.getElementById('gi');if(gi){gi.focus();gi.onkeydown=e=>{if(e.key==='Enter')sendGany();};}
+  },4500);
+  gHistory.push({role:'assistant',content:'You came here to build something.'});
 }
 
-function renderGCard(data, onComplete){
-  const t=document.getElementById('gthread');
-  const d=document.createElement('div');d.className='msg-gany';
-  const who=document.createElement('span');who.className='who';who.textContent='Ganymede';
-  const card=document.createElement('div');card.className='gany-card';
-  card.innerHTML='<div class="gc-body"></div>';
-  d.appendChild(who);d.appendChild(card);t.appendChild(d);
-
-  const clean=(s)=>(s||'').replace(/^[\s\-]+/gm,'').trim();
-  const scrollDown=()=>{const sc=document.getElementById('ganymedeScreen');if(sc)sc.scrollTop=sc.scrollHeight;};
-  const keys=['A','B','C'];
-
-  streamText(card.querySelector('.gc-body'),clean(data.reflection),()=>{
-    scrollDown();
-    const opts=Array.isArray(data.options)&&data.options.length===3?data.options:null;
-
-    if(opts){
-      const ctx=clean(data.context||'');
-      const showOptions=(delay)=>{
-        setTimeout(()=>{
-          const wrap=document.createElement('div');wrap.className='gc-options';
-          card.appendChild(wrap);
-          opts.forEach((opt,i)=>{
-            const btn=document.createElement('div');
-            btn.className='gc-option';
-            btn.innerHTML='<span class="gc-option-key">'+keys[i]+'</span><span class="gc-option-text">'+clean(opt.text)+'</span>';
-            wrap.appendChild(btn);
-            setTimeout(()=>{btn.classList.add('show');scrollDown();},i*180);
-            btn.addEventListener('click',()=>{
-              wrap.querySelectorAll('.gc-option').forEach(b=>{b.style.opacity='0.25';b.style.cursor='default';b.style.pointerEvents='none';});
-              btn.style.opacity='1';btn.style.borderColor='rgba(180,120,50,0.55)';btn.style.background='rgba(180,120,50,0.07)';
-              const inp=document.getElementById('gi');
-              if(inp){inp.value=clean(opt.text);sendGany();}
-            });
-          });
-          if(onComplete)setTimeout(onComplete,opts.length*180+300);
-        },delay);
-      };
-
-      if(ctx){
-        const ctxEl=document.createElement('div');ctxEl.className='gc-context';
-        ctxEl.textContent=ctx;card.appendChild(ctxEl);
-        setTimeout(()=>{ctxEl.style.opacity='1';scrollDown();},150);
-        showOptions(500);
-      } else {
-        showOptions(200);
-      }
-
-    } else if(data.question&&data.question.trim()){
-      setTimeout(()=>{
-        const q=document.createElement('div');q.className='gc-q';
-        q.style.cssText="font-family:'Cormorant Garamond',serif;font-size:17px;color:rgba(201,168,76,0.65);line-height:1.7;margin-top:1rem;padding-top:.8rem;border-top:.5px solid rgba(180,120,50,0.1);font-style:italic;opacity:0;transition:opacity 0.8s ease;";
-        card.appendChild(q);
-        streamText(q,clean(data.question),()=>{scrollDown();if(onComplete)onComplete();},'gc-cur');
-        setTimeout(()=>{q.style.opacity='1';scrollDown();},50);
-      },100);
-    } else {
-      setTimeout(()=>{if(onComplete)onComplete();},400);
-    }
-  },'gc-cur');
+function brightenCave(){
+  gExchangeCount++;
+  const bg=document.getElementById('g-cave-bg');
+  const rays=document.getElementById('g-god-rays');
+  if(bg)bg.style.filter='brightness('+Math.min(0.45+gExchangeCount*0.08,0.85)+') saturate(.9)';
+  if(gExchangeCount>=3&&rays)rays.classList.add('glow');
 }
 
 async function sendGany(){
-  const inp=document.getElementById('gi'),q=inp.value.trim();
-  if(!q||document.getElementById('gb').classList.contains('loading'))return;
-  inp.value='';inp.style.height='auto';gHistory.push({role:'user',content:q});addUserMsg(q,'gthread');
-  const btn=document.getElementById('gb'),th=document.getElementById('gthinking');
-  btn.classList.add('loading');btn.innerHTML=spinSvg('rgba(180,120,50,0.5)');th.textContent=gTh[Math.floor(Math.random()*gTh.length)];
+  if(gBusy)return;
+  const inp=document.getElementById('gi');if(!inp)return;
+  const q=inp.value.trim();if(!q)return;
+  gBusy=true;inp.value='';
+  const inv=document.getElementById('g-invitation');
+  const exch=document.getElementById('g-exchange');
+  const prev=document.getElementById('g-prev-text');
+  const curr=document.getElementById('g-curr-text');
+  const dots=document.getElementById('g-thinking-dots');
+  const opts=document.getElementById('g-options');
+  if(inv)inv.style.opacity='0';
+  if(exch)exch.style.display='block';
+  if(prev)prev.textContent=q;
+  if(curr)curr.textContent='';
+  if(opts)opts.innerHTML='';
+  if(dots)dots.classList.add('show');
+  gHistory.push({role:'user',content:q});
+  brightenCave();
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:600,system:GSYS,messages:gHistory})});
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,system:GSYS,messages:gHistory})});
     const data=await res.json();if(data.error)throw new Error(data.error.message);
     const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
-    th.textContent='';btn.classList.remove('loading');btn.innerHTML=arrowSvg('rgba(180,120,50,0.8)');
-    let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p={stage:'The cave receives',reflection:raw,question:'What is the first stone you can place today?'};}
+    let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p={reflection:raw,options:[],question:'',check_in:false};}
     gHistory.push({role:'assistant',content:raw});
-    const afterRender=p.check_in===true ? ()=>setTimeout(showGanyCheckIn,400) : ()=>maybeShowGanyClosing();
-    renderGCard(p, afterRender);
-  }catch(e){th.textContent='';btn.classList.remove('loading');btn.innerHTML=arrowSvg('rgba(180,120,50,0.8)');renderGCard({stage:'The cave',reflection:'The echo does not return tonight. Speak again.',question:'What are you here to build?'});}
-}
-document.getElementById('gi').addEventListener('keydown',e=>{if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendGany();}});
-function revealGanyConv(){
-  const prompt=document.getElementById('gany-click-prompt');
-  if(prompt){prompt.style.opacity='0';setTimeout(()=>prompt.style.display='none',500);}
-  if(gOpened)return;
-  gOpened=true;
-  const conv=document.getElementById('archConv');
-  if(conv){conv.style.opacity='0';conv.style.display='flex';setTimeout(()=>{conv.style.transition='opacity 0.8s ease';conv.style.opacity='1';},50);}
-  setTimeout(()=>renderGCard({stage:'Ganymede speaks',reflection:'What are you creating?',question:''}),600);
-  setTimeout(()=>{const gi=document.getElementById('gi');if(gi)gi.focus();},800);
+    if(dots)dots.classList.remove('show');
+    const ctx=p.context&&p.context.trim()?'\n\n'+p.context:'';
+    const fullText=(p.reflection||'...')+ctx;
+    await gStream(curr,fullText);
+    const options=Array.isArray(p.options)&&p.options.length===3?p.options:null;
+    if(options){setTimeout(()=>showCandles(options),600);}
+    else if(p.question&&p.question.trim()){await gStream(curr,fullText+'\n\n'+p.question);}
+    if(p.check_in===true)setTimeout(ganyRitual,2000);
+  }catch(e){if(dots)dots.classList.remove('show');if(curr)curr.textContent='The cave listens. Speak again.';}
+  gBusy=false;
 }
 
-function backToAntechamber(){}
-
-function showGanyCheckIn(){
-  if(document.getElementById('gany-checkin-card'))return;
-  // Find the last gany-card and append the check-in to it naturally
-  const allCards=document.querySelectorAll('.gany-card');
-  const lastCard=allCards[allCards.length-1];
-  if(!lastCard)return;
-  const wrap=document.createElement('div');wrap.id='gany-checkin-card';
-  wrap.style.cssText='margin-top:1.4rem;padding-top:1rem;border-top:.5px solid rgba(180,120,50,0.08);';
-  const q=document.createElement('p');
-  q.style.cssText="font-family:'Cormorant',serif;font-style:italic;font-size:17px;color:rgba(230,200,150,0.55);line-height:1.8;margin-bottom:1.2rem;";
-  q.textContent='Does this help clarify your thoughts? Or would you like to go deeper?';
-  const yes=document.createElement('button');yes.className='gc-choice';
-  yes.style.cssText='display:block;margin-bottom:.7rem;';
-  yes.textContent='Yes - this helped. I know what to do.';yes.onclick=ganyClose;
-  const deeper=document.createElement('button');deeper.className='gc-choice';
-  deeper.style.cssText='display:block;';
-  deeper.textContent="Let's go deeper.";deeper.onclick=ganyDeeper;
-  wrap.appendChild(q);wrap.appendChild(yes);wrap.appendChild(deeper);
-  lastCard.appendChild(wrap);
-  const screen=document.getElementById('ganymedeScreen');
-  setTimeout(()=>{if(screen)screen.scrollTop=screen.scrollHeight;},300);
+function showCandles(options){
+  const wrap=document.getElementById('g-options');if(!wrap)return;
+  wrap.innerHTML='';
+  options.forEach((opt,i)=>{
+    const c=document.createElement('div');c.className='g-candle';
+    c.innerHTML='<div class="g-candle-flame"><svg viewBox="0 0 18 28" fill="none"><ellipse cx="9" cy="24" rx="4" ry="2" fill="rgba(196,158,72,0.3)"/><rect x="7.5" y="14" width="3" height="10" fill="rgba(210,180,120,0.6)" rx="1"/><ellipse cx="9" cy="12" rx="5" ry="7" fill="rgba(255,200,80,0.85)"/><ellipse cx="9" cy="10" rx="3" ry="4" fill="rgba(255,240,180,0.9)"/></svg></div><span class="g-candle-text">'+(opt.text||'')+'</span>';
+    c.addEventListener('click',()=>{
+      wrap.querySelectorAll('.g-candle').forEach(x=>x.classList.add('extinguished'));
+      c.classList.remove('extinguished');c.classList.add('chosen');
+      const gi=document.getElementById('gi');if(gi){gi.value=opt.text||'';sendGany();}
+    });
+    wrap.appendChild(c);setTimeout(()=>c.classList.add('show'),i*200);
+  });
 }
 
-function maybeShowGanyClosing(){
-  if(gHistory.filter(m=>m.role==='user').length>=3){
-    showGanyCheckIn();
-  }
+function ganyRitual(){
+  const ritual=document.getElementById('g-ritual');const words=document.getElementById('g-ritual-words');const gold=document.getElementById('g-gold-bg');
+  if(!ritual)return;
+  const gi=document.getElementById('gi');const gb=document.getElementById('gb');
+  if(gi)gi.disabled=true;if(gb)gb.disabled=true;
+  ritual.style.pointerEvents='all';
+  setTimeout(()=>ritual.classList.add('dim'),500);
+  setTimeout(()=>{if(gold)gold.style.opacity='0.7';},4000);
+  setTimeout(()=>{if(words)words.classList.add('show');},6000);
+  setTimeout(()=>{if(words){words.style.transition='opacity 1.5s ease';words.style.opacity='0';}ritual.classList.add('black');},9500);
+  setTimeout(()=>{ritual.classList.remove('dim','black');ritual.style.background='rgba(3,2,1,0)';if(gold)gold.style.opacity='0';flashTo(()=>showScreen('foyer'));},11500);
 }
 
-function ganyClose(){
-  const t=document.getElementById('gthread');
-  const d=document.createElement('div');d.className='msg-gany';
-  const who=document.createElement('span');who.className='who';who.textContent='Ganymede';
-  const card=document.createElement('div');card.className='gany-card';
-  card.style.cssText='background:transparent;border:none;padding:.5rem 0;';
-  const msg=document.createElement('p');
-  msg.style.cssText="font-family:'Cormorant',serif;font-style:italic;font-size:19px;color:rgba(230,200,150,0.65);line-height:1.8;margin-bottom:1.2rem;";
-  msg.textContent="That's the one. Don't lose it.";
-  const gb=document.createElement('button');gb.className='gc-choice';gb.style.marginTop='.8rem';gb.textContent='Save this into my Grimoire';gb.onclick=openGrimoire;
-  const rb=document.createElement('button');rb.className='gc-choice';rb.style.marginTop='.5rem';rb.textContent='Return to the sanctuary';rb.onclick=()=>flashTo(()=>showScreen('foyer'));
-  card.appendChild(msg);card.appendChild(gb);card.appendChild(rb);
-  d.appendChild(who);d.appendChild(card);t.appendChild(d);
-  const screen=document.getElementById('ganymedeScreen');
-  setTimeout(()=>{if(screen)screen.scrollTop=screen.scrollHeight;},200);
+function gStream(el,text){
+  return new Promise(res=>{if(!el){res();return;}el.textContent='';let i=0;const iv=setInterval(()=>{if(i<text.length){el.textContent=text.slice(0,++i);}else{clearInterval(iv);res();}},22);});
 }
 
-function ganyDeeper(){
-  const c=document.getElementById('gany-closing');
-  if(c){c.classList.remove('visible');}
-  const gi=document.getElementById('gi');
-  if(gi){gi.focus();}
-}
+function bridgeToGanymede(){flashTo(()=>enterGanymede());}
 
-// == GANYMEDE SCULPTURE ==
-function initGanySculpture(){
-  const canvas=document.getElementById('sculptureCanvas');canvas.width=window.innerWidth;canvas.height=window.innerHeight;
-  if(typeof THREE!=='undefined')_buildGanySculpture(canvas);
-  else{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';s.onload=()=>_buildGanySculpture(canvas);document.head.appendChild(s);}
-}
-function _buildGanySculpture(canvas){
-  const W=canvas.width,H=canvas.height;
-  // Mouse parallax state - declared here so drawCaveFrame can access
-  let smoothX=0,smoothY=0;
-  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
-  renderer.setSize(W,H);renderer.setPixelRatio(Math.min(devicePixelRatio,2));renderer.setClearColor(0,0);renderer.toneMapping=THREE.ACESFilmicToneMapping;renderer.toneMappingExposure=1.2;renderer.shadowMap.enabled=true;
-  const scene=new THREE.Scene();const camera=new THREE.PerspectiveCamera(36,W/H,.1,100);camera.position.set(0,-0.5,7.5);
-  let isDragging=false,prevMouse={x:0,y:0},spherical={theta:Math.PI,phi:Math.PI/1.85,radius:7.5},targetTheta=Math.PI,autoRotate=true;
-  canvas.addEventListener('mousedown',e=>{isDragging=true;autoRotate=false;prevMouse={x:e.clientX,y:e.clientY};});
-  canvas.addEventListener('mousemove',e=>{if(!isDragging)return;targetTheta-=(e.clientX-prevMouse.x)*.008;spherical.phi=Math.max(.3,Math.min(Math.PI-.3,spherical.phi+(e.clientY-prevMouse.y)*.005));prevMouse={x:e.clientX,y:e.clientY};});
-  canvas.addEventListener('mouseup',()=>{isDragging=false;setTimeout(()=>autoRotate=true,3000);});
-  scene.add(new THREE.AmbientLight(0xffeedd,.3));
-  /* Key light - front slightly above, warm, main illumination on face/chest */
-  const keyLight=new THREE.SpotLight(0xffd090,6,20,Math.PI/6,.4,1.2);
-  keyLight.position.set(0,4,6);keyLight.target.position.set(0,1,0);
-  keyLight.castShadow=true;scene.add(keyLight);scene.add(keyLight.target);
-  /* Top shaft - god ray from above for drama */
-  const shaft=new THREE.SpotLight(0xfff5dd,4,18,Math.PI/12,.3,1.5);
-  shaft.position.set(0,12,2);shaft.target.position.set(0,2,0);
-  scene.add(shaft);scene.add(shaft.target);
-  /* Rim from behind - separates from background */
-  const rim=new THREE.PointLight(0xffd080,2,8);rim.position.set(0,4,-4);scene.add(rim);
-  /* Candle warmth at base */
-  const cL=new THREE.PointLight(0xff8820,1.0,6);cL.position.set(-2,-.5,2);scene.add(cL);
-  const cR=new THREE.PointLight(0xff9030,1.0,6);cR.position.set(2,-.5,2);scene.add(cR);
-  const holoMat=new THREE.MeshBasicMaterial({color:0x00eeff,wireframe:true,transparent:true,opacity:.55});
-  let model=null;
-  window.setSculptureTexture=function(mode){if(!model)return;const bB=document.getElementById('btnBronze'),bH=document.getElementById('btnHolo');if(mode==='holo'){model.traverse(c=>{if(c.isMesh){if(!c.userData.origMat)c.userData.origMat=c.material;c.material=holoMat;}});bB.style.color='rgba(196,158,72,0.35)';bH.style.color='rgba(100,220,255,0.9)';}else{model.traverse(c=>{if(c.isMesh&&c.userData.origMat)c.material=c.userData.origMat;});bB.style.color='rgba(196,158,72,0.8)';bH.style.color='rgba(100,220,255,0.5)';}};
-  const caveVid=document.getElementById('caveVideo');const cvs=document.getElementById('caveReverseCanvas');
-  cvs.width=window.innerWidth;cvs.height=window.innerHeight;const ctx2=cvs.getContext('2d');
-  if(caveVid){
-    caveVid.addEventListener('loadedmetadata',()=>{
-      const dur=caveVid.duration;let pos=dur;const step=1/30*.15;cvs.style.opacity='1';
-      function drawCaveFrame(){if(!document.getElementById('ganymedeScreen').classList.contains('active'))return;
-        ctx2.clearRect(0,0,cvs.width,cvs.height);
-        ctx2.drawImage(caveVid,0,0,cvs.width,cvs.height);
-        pos-=step;if(pos<=0)pos=dur;caveVid.currentTime=pos;requestAnimationFrame(drawCaveFrame);}
-      caveVid.addEventListener('seeked',function onFirstSeek(){caveVid.removeEventListener('seeked',onFirstSeek);drawCaveFrame();});
-      caveVid.currentTime=dur;
-    });caveVid.load();
-  }
-  const ls=document.createElement('script');ls.src='https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
-  ls.onload=()=>{const ds=document.createElement('script');ds.src='https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/DRACOLoader.js';ds.onload=()=>{
-    const dl=new THREE.DRACOLoader();dl.setDecoderPath('./');
-    const loader=new THREE.GLTFLoader();loader.setDRACOLoader(dl);
-    loader.load(GANY_GLB,(gltf)=>{
-      model=gltf.scene;model.traverse(c=>{if(c.isMesh){c.castShadow=true;c.receiveShadow=true;}});
-      const box=new THREE.Box3().setFromObject(model);const centre=box.getCenter(new THREE.Vector3());const size=box.getSize(new THREE.Vector3());const scale=3.2/Math.max(size.x,size.y,size.z);model.scale.setScalar(scale);model.position.copy(centre.multiplyScalar(-scale));model.position.y+=0;scene.add(model);
-      setTimeout(()=>{document.getElementById('caveHeader').style.opacity='1';},400);
-      let t=0;
-      let mouseX=0,mouseY=0;
-      const ganyScreen=document.getElementById('ganymedeScreen');
-      if(ganyScreen){
-        ganyScreen.addEventListener('mousemove',e=>{
-          mouseX=(e.clientX/window.innerWidth-0.5)*2;
-          mouseY=(e.clientY/window.innerHeight-0.5)*2;
-        });
-        ganyScreen.addEventListener('mouseleave',()=>{mouseX=0;mouseY=0;});
-      }
-      function animate(){requestAnimationFrame(animate);t+=.006;
-        smoothX+=(mouseX-smoothX)*0.04;
-        smoothY+=(mouseY-smoothY)*0.04;
-        if(autoRotate)targetTheta+=.00015;
-        const mTheta=targetTheta+smoothX*0.18;
-        const mPhi=Math.PI/1.85+smoothY*0.08;
-        spherical.theta+=(mTheta-spherical.theta)*.05;
-        spherical.phi+=(mPhi-spherical.phi)*.04;
-        const x=spherical.radius*Math.sin(spherical.phi)*Math.sin(spherical.theta);
-        const y=spherical.radius*Math.cos(spherical.phi)+1;
-        const z=spherical.radius*Math.sin(spherical.phi)*Math.cos(spherical.theta);
-        camera.position.set(x,y,z);camera.lookAt(0,1.2,0);
-        cL.intensity=1.3+Math.sin(t*3.7)*.4;cR.intensity=1.3+Math.sin(t*2.9+1)*.4;keyLight.intensity=2.3+Math.sin(t*1.3)*.3;
-        if(model)model.position.y=.8+Math.sin(t*.7)*.04;
-        renderer.render(scene,camera);
-      }
-      animate();
-      window.addEventListener('resize',()=>{camera.aspect=window.innerWidth/window.innerHeight;camera.updateProjectionMatrix();renderer.setSize(window.innerWidth,window.innerHeight);});
-    },undefined,(err)=>console.warn('Gany GLB:',err));
-  };document.head.appendChild(ds);};document.head.appendChild(ls);
-}
-
+(function(){if(document.getElementById('g-kf'))return;const s=document.createElement('style');s.id='g-kf';s.textContent='@keyframes candleFlicker{0%{transform:scaleX(1) scaleY(1);}50%{transform:scaleX(.92) scaleY(1.06);}100%{transform:scaleX(1.05) scaleY(.97);}}';document.head.appendChild(s);})();
 // == POOL ==
 const PSYS=`Generate three possible timelines. JSON only: {"timelines":[{"tone":"word","vision":"2-3 sentences","lesson":"one sentence","principle":"The Principle of X"},{"tone":"","vision":"","lesson":"","principle":""},{"tone":"","vision":"","lesson":"","principle":""}],"closing_question":"one line"}`;
 document.getElementById('pi').addEventListener('keydown',e=>{if(e.key==='Enter')askPool();});
