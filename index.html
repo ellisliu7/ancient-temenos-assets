@@ -1437,7 +1437,7 @@ function bridgeToGanymede(){flashTo(()=>enterGanymede());}
 (function(){if(document.getElementById('g-kf'))return;const s=document.createElement('style');s.id='g-kf';s.textContent='@keyframes candleFlicker{0%{transform:scaleX(1) scaleY(1);}50%{transform:scaleX(.92) scaleY(1.06);}100%{transform:scaleX(1.05) scaleY(.97);}}';document.head.appendChild(s);})();
 // == POOL ==
 const PSYS=`Generate three possible timelines. JSON only: {"timelines":[{"tone":"word","vision":"2-3 sentences","lesson":"one sentence","principle":"The Principle of X"},{"tone":"","vision":"","lesson":"","principle":""},{"tone":"","vision":"","lesson":"","principle":""}],"closing_question":"one line"}`;
-document.getElementById('pi').addEventListener('keydown',e=>{if(e.key==='Enter')askPool();});
+const _piEl=document.getElementById('pi');if(_piEl)_piEl.addEventListener('keydown',e=>{if(e.key==='Enter')askPool();});
 async function askPool(){
   const inp=document.getElementById('pi'),q=inp.value.trim();
   if(!q||document.getElementById('pb').classList.contains('loading'))return;
