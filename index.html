@@ -848,60 +848,42 @@ function initFoyer(){
   resizeFC();
   window.addEventListener('resize',resizeFC);
 
-  // ── HYBRID VIDEO SCRUBBER ──
-  // Idle: slow pendulum (auto forward/back). Mouse: scrubs to cursor X position.
-  let vidDur=0, scrubPos=0, pendulumDir=1, pendulumSpeed=0.028;
-  let mouseInfluence=0;   // 0=pure pendulum, 1=pure mouse
-  let targetScrub=0, rawMouseX=0.5;
-  const MOUSE_SCRUB_RANGE=0.65; // portion of duration mouse can reach
-
-  vid.addEventListener('loadedmetadata',()=>{
-    vidDur=vid.duration||10;
-    scrubPos=0;
-    vid.currentTime=0;
-    vid.pause(); // we drive time manually
+  // ── VIDEO: just play and loop ──
+  vid.addEventListener('loadeddata',()=>{
     foyerVidReady=true;
+    vid.playbackRate=0.75;
+    vid.play();
     startFoyerLoop();
   });
 
-  // track mouse over the foyer — drives video scrub + text parallax
+  // text parallax — subtle depth on mouse move only
   let mouseX=0.5, mouseY=0.5, tMouseX=0.5, tMouseY=0.5;
   document.getElementById('foyer').addEventListener('mousemove',e=>{
-    rawMouseX=e.clientX/window.innerWidth;
     tMouseX=e.clientX/window.innerWidth;
     tMouseY=e.clientY/window.innerHeight;
-    mouseInfluence=Math.min(1,mouseInfluence+0.04);
   });
   document.getElementById('foyer').addEventListener('mouseleave',()=>{
     tMouseX=0.5; tMouseY=0.5;
-    const fadeOut=setInterval(()=>{
-      mouseInfluence=Math.max(0,mouseInfluence-0.012);
-      if(mouseInfluence===0)clearInterval(fadeOut);
-    },16);
   });
 
-  // text parallax — runs in the RAF loop via closure
   const parallaxEls=[
-    {id:'foyer-title',      depth:0.012},
-    {id:'foyer-council',    depth:0.018},
-    {id:'foyer-choose',     depth:0.010},
-    {id:'venus-label',      depth:0.032},
-    {id:'gany-label',       depth:0.032},
-    {id:'persephone-label', depth:0.022},
-    {id:'psyche-label',     depth:0.022},
+    {id:'foyer-title',      depth:0.005},
+    {id:'foyer-council',    depth:0.007},
+    {id:'foyer-choose',     depth:0.004},
+    {id:'venus-label',      depth:0.012},
+    {id:'gany-label',       depth:0.012},
+    {id:'persephone-label', depth:0.008},
+    {id:'psyche-label',     depth:0.008},
   ];
-  // smooth mouse
   function tickParallax(){
-    mouseX+=(tMouseX-mouseX)*0.06;
-    mouseY+=(tMouseY-mouseY)*0.06;
+    mouseX+=(tMouseX-mouseX)*0.04;
+    mouseY+=(tMouseY-mouseY)*0.04;
     const dx=(mouseX-0.5), dy=(mouseY-0.5);
     parallaxEls.forEach(({id,depth})=>{
       const el=document.getElementById(id);
       if(!el)return;
-      const tx=(dx*depth*window.innerWidth*-1).toFixed(2);
-      const ty=(dy*depth*window.innerHeight*-0.6).toFixed(2);
-      el.style.setProperty('--px',tx+'px');
-      el.style.setProperty('--py',ty+'px');
+      el.style.setProperty('--px',(dx*depth*window.innerWidth*-1).toFixed(1)+'px');
+      el.style.setProperty('--py',(dy*depth*window.innerHeight*-0.5).toFixed(1)+'px');
     });
     requestAnimationFrame(tickParallax);
   }
@@ -915,25 +897,7 @@ function initFoyer(){
       foyerRafId=requestAnimationFrame(frame);
       if(!foyerActive)return;
 
-      if(foyerVidReady&&vidDur>0){
-        // pendulum target: oscillates 0..1 of duration
-        pendulumDir = scrubPos>=vidDur*0.95 ? -1 : scrubPos<=vidDur*0.05 ? 1 : pendulumDir;
-        const pendulumTarget = scrubPos + pendulumDir * pendulumSpeed * vidDur;
-
-        // mouse target: maps cursor X to 0..SCRUB_RANGE of duration
-        const mouseScrubTarget = rawMouseX * MOUSE_SCRUB_RANGE * vidDur;
-
-        // blend: at rest = pendulum, on hover = mouse
-        targetScrub = pendulumTarget*(1-mouseInfluence) + mouseScrubTarget*mouseInfluence;
-        targetScrub = Math.max(0,Math.min(vidDur,targetScrub));
-
-        // smooth scrub position (eases into target)
-        scrubPos += (targetScrub - scrubPos) * 0.045;
-
-        // only seek if change is meaningful (avoids seek-queue buildup)
-        if(Math.abs(vid.currentTime - scrubPos) > 0.015){
-          vid.currentTime = scrubPos;
-        }
+      if(foyerVidReady&&vid.readyState>=2){
 
         hallCanvas.style.filter='brightness(.48) saturate(.72)';
         if(vid.readyState>=2){
