@@ -61,9 +61,9 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #foyer-hall-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
 #foyer-hall-video{display:none;}
 #foyer-vignette{position:absolute;inset:0;z-index:1;pointer-events:none;background:
-  radial-gradient(ellipse 90% 90% at 50% 50%,transparent 30%,rgba(2,1,1,0.55) 100%),
-  linear-gradient(to bottom,rgba(2,1,1,0.7) 0%,transparent 18%,transparent 75%,rgba(2,1,1,0.85) 100%),
-  linear-gradient(to right,rgba(2,1,1,0.65) 0%,transparent 22%,transparent 78%,rgba(2,1,1,0.65) 100%);}
+  radial-gradient(ellipse 90% 90% at 50% 50%,transparent 45%,rgba(2,1,1,0.28) 100%),
+  linear-gradient(to bottom,rgba(2,1,1,0.38) 0%,transparent 14%,transparent 80%,rgba(2,1,1,0.55) 100%),
+  linear-gradient(to right,rgba(2,1,1,0.35) 0%,transparent 18%,transparent 82%,rgba(2,1,1,0.35) 100%);}
 #foyer-arch-glow{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:22%;height:70%;pointer-events:none;z-index:2;background:radial-gradient(ellipse 60% 80% at 50% 55%,rgba(220,170,80,0.09) 0%,rgba(200,150,60,0.04) 60%,transparent 100%);}
 #foyer-particles-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;}
 
@@ -911,7 +911,7 @@ function initFoyer(){
 
       if(foyerVidReady&&vid.readyState>=2){
 
-        hallCanvas.style.filter='brightness(.48) saturate(.72)';
+        hallCanvas.style.filter='brightness(.72) saturate(.88)';
         if(vid.readyState>=2){
           hallCtx.drawImage(vid,0,0,hallCanvas.width,hallCanvas.height);
           // dark overlay to kill the amber flash on bright video frames
@@ -1325,25 +1325,27 @@ function hideCupid(){document.getElementById('cupidWrap').style.display='none';i
 document.getElementById('venusOracle').addEventListener('scroll',function(){const vid=this.querySelector('video');if(vid)vid.style.transform=`scale(1.05) translateY(${this.scrollTop*.3}px)`;});
 
 // == GANYMEDE — Journey Polish ==
-const GSYS=`You are Ganymede inside Ancient Temenos. Voice: David Ghiyam warmth meets Elon Musk precision. Warm enough to feel safe. Sharp enough to make them act. Treat the person as an intelligent peer.
+const GSYS=`You are Ganymede inside Ancient Temenos. Voice: David Ghiyam warmth meets sharp structural intelligence. Warm enough to feel safe. Precise enough to cut through fog. Treat the person as a capable peer who just needs clarity.
+
+YOUR ROLE: You ground vision into form. You ask the right questions, name what you see, and give real specific next steps — not platitudes.
 
 YOUR FLOW:
-- First 1-2 exchanges: ask ONE sharp question to understand what they are working on. No options yet.
-- Once you understand: give reflection, a short bridge line, then 3 concrete options.
-- After they pick: go deep with specific next steps for that path only.
+- First 1-2 exchanges: ask ONE sharp question to truly understand what they are working on. No options yet. Show you understand the landscape.
+- Once you understand the full picture: give a rich reflection (3-5 sentences naming exactly what you see), then structure (the framework or approach), then a concrete next step, then 3 options.
+- After they pick an option: go DEEP on that path only. Give real steps, real timelines, real considerations. Be specific.
 
-WHEN GIVING OPTIONS:
-- reflection: one warm sentence naming what you see them building.
-- context: one short natural sentence bridging to options.
-- options: 3 concrete actions, plain sentence, max 12 words each. No labels.
+REFLECTION should be 3-5 sentences. Name what pattern you see. Name what is working. Name what is in the way. Speak to the PERSON not just the project.
+STRUCTURE is 2-3 sentences on HOW to approach this — the mental model or framework that applies.
+STEP is one specific concrete action they can take today or this week. Not vague. Real.
+QUESTION is the one thing they need to sit with if they are not ready for options yet.
 
-Rules: no bullet points, no dashes, no hollow affirmations. Plain sentences only.
-Set check_in true after 6+ exchanges when they have a clear path.
+Rules: No bullet points. No dashes. No hollow affirmations. Plain prose sentences. Speak like a trusted mentor who has seen this before.
+Set check_in true after 5+ exchanges when they have a clear path and real next steps.
 
-ALWAYS return valid JSON - no markdown, no backticks:
-{"stage":"2-4 word phrase","reflection":"one warm precise sentence","context":"short bridge or empty string","options":[{"text":"max 12 words"},{"text":"max 12 words"},{"text":"max 12 words"}],"question":"one sharp question if no options yet","check_in":false}
+ALWAYS return valid JSON no markdown no backticks:
+{"stage":"2-4 word phrase","reflection":"3-5 rich sentences","structure":"2-3 sentences on approach or framework","step":"one specific concrete action","options":[{"text":"short plain action phrase"},{"text":"short plain action phrase"},{"text":"short plain action phrase"}],"question":"one sharp question if not ready for options yet","check_in":false}
 
-If need context first: options as [], question filled. If ready: options as 3, question empty. Never both.`;
+If still gathering context: options as [], question filled. If ready: options as 3, question empty. Never both.`
 
 let gHistory=[], gExchangeCount=0, gBusy=false;
 let gDustParticles=[], gRaysRAF=null, gDustRAF=null, gCaveAudio=null;
@@ -1515,6 +1517,71 @@ async function sendGany(){
   if(gBusy)return;
   const inp=document.getElementById('gi');if(!inp)return;
   const q=inp.value.trim();if(!q)return;
+
+  // ── MOCK MODE: add ?mock=ganymede to URL ──
+  if(new URLSearchParams(window.location.search).get('mock')==='ganymede'){
+    gBusy=true;inp.value='';
+    const inv=document.getElementById('g-invitation');
+    const exch=document.getElementById('g-exchange');
+    const prev=document.getElementById('g-prev-text');
+    const curr=document.getElementById('g-curr-text');
+    const dots=document.getElementById('g-thinking-dots');
+    const opts=document.getElementById('g-options');
+    if(inv){inv.style.transition='opacity 1.2s ease';inv.style.opacity='0';}
+    if(exch)exch.style.display='block';
+    if(prev){prev.style.transition='opacity .8s ease';prev.style.opacity='0';setTimeout(()=>{if(prev)prev.textContent=q;prev.style.opacity='1';},300);}
+    if(curr)curr.textContent='';
+    if(opts)opts.innerHTML='';
+    if(dots)dots.classList.add('show');
+    brightenCave();
+    await new Promise(r=>setTimeout(r,1100));
+    if(dots)dots.classList.remove('show');
+    // Rotate through mock responses so you can test the full flow
+    const mockResponses=[
+      {stage:'Seeing the landscape',reflection:"You are standing at the edge of something real. The vision is clear enough to name but hasn't been given structure yet — and that gap between knowing and building is exactly where most people stay stuck. The fact that you're here means part of you is ready to move.",structure:"The first thing structure needs is a container. Not a full plan — just the smallest viable form that makes the vision real enough to touch. That's what we build first.",step:"Write the thing down in one sentence. Not a paragraph. One sentence that says what it is, who it's for, and why it matters.",options:[],question:"What is the one thing you're working on that, if it existed, would change everything?",check_in:false},
+      {stage:'Grounding the vision',reflection:"What you just described is not a small thing. Most people spend years circling something like this without ever naming it clearly. You named it. That already puts you ahead of where you were. The gap isn't in the vision — it's in the first stone.",structure:"Structure doesn't come after clarity. It creates clarity. The act of building the first piece will tell you more about what this actually is than any amount of thinking about it.",step:"Identify the single action that, if done this week, would make this feel real. Not finished — real. Book the call, write the first page, send the email.",options:[{text:"Define the exact first deliverable and give it a deadline"},{text:"Identify one person who needs to know about this"},{text:"Clear the calendar for one focused work block this week"}],question:"",check_in:false},
+      {stage:'Building the next stone',reflection:"You have more clarity now than when you arrived. The vision hasn't changed but the path into it has sharpened. This is how it works — you don't plan your way to the thing, you build your way to it one stone at a time.",structure:"The next phase is about momentum, not perfection. Small consistent actions compound faster than occasional heroic ones. What you need now is a rhythm, not a masterplan.",step:"Set a specific time tomorrow — not 'this week', tomorrow — to take the one action you just identified. Put it in your calendar now.",options:[],question:"",check_in:true}
+    ];
+    const mockIdx=Math.min(Math.floor(gHistory.filter(m=>m.role==='user').length/1),mockResponses.length-1);
+    gHistory.push({role:'user',content:q});
+    const p=mockResponses[mockIdx];
+    gHistory.push({role:'assistant',content:JSON.stringify(p)});
+    const excEl=document.getElementById('g-exchange');
+    if(excEl){Array.from(excEl.children).forEach(c=>{if(c.id!=='g-prev-text'&&c.id!=='g-curr-text'&&c.id!=='g-thinking-dots')c.remove();});}
+    await gStream(curr,p.reflection);
+    if(p.structure){
+      await new Promise(r=>setTimeout(r,280));
+      const sDiv=document.createElement('div');
+      sDiv.style.cssText="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,1.3vw,18px);color:rgba(238,220,168,0.48);line-height:1.8;margin-top:1.4rem;padding-top:1rem;border-top:.5px solid rgba(196,158,72,0.1);white-space:pre-line;text-align:center;max-width:560px;margin-left:auto;margin-right:auto;";
+      if(excEl)excEl.appendChild(sDiv);
+      await gStream(sDiv,p.structure);
+    }
+    if(p.step){
+      await new Promise(r=>setTimeout(r,200));
+      const stepWrap=document.createElement('div');
+      stepWrap.style.cssText="margin-top:1.2rem;padding:.75rem 1rem;border-left:1.5px solid rgba(196,158,72,0.38);background:rgba(196,158,72,0.04);text-align:left;max-width:520px;margin-left:auto;margin-right:auto;";
+      const stepLabel=document.createElement('div');
+      stepLabel.style.cssText="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.45em;color:rgba(196,158,72,0.45);text-transform:uppercase;margin-bottom:.4rem;";
+      stepLabel.textContent='Your next step';
+      const stepText=document.createElement('div');
+      stepText.style.cssText="font-family:'Cormorant Garamond',serif;font-size:clamp(15px,1.4vw,19px);color:rgba(238,220,168,0.88);line-height:1.65;";
+      stepWrap.appendChild(stepLabel);stepWrap.appendChild(stepText);
+      if(excEl)excEl.appendChild(stepWrap);
+      await gStream(stepText,p.step);
+    }
+    if(Array.isArray(p.options)&&p.options.length===3){
+      setTimeout(()=>showCandles(p.options),700);
+    } else if(p.question){
+      await new Promise(r=>setTimeout(r,280));
+      const qDiv=document.createElement('div');
+      qDiv.style.cssText="font-family:'Almendra',serif;font-style:italic;font-size:clamp(17px,1.8vw,24px);color:rgba(196,158,72,0.75);line-height:1.7;margin-top:1.4rem;text-align:center;max-width:560px;margin-left:auto;margin-right:auto;";
+      if(excEl)excEl.appendChild(qDiv);
+      await gStream(qDiv,p.question);
+    }
+    if(p.check_in===true)setTimeout(ganyRitual,2000);
+    gBusy=false;
+    return;
+  }
   gBusy=true;inp.value='';
   const inv=document.getElementById('g-invitation');
   const exch=document.getElementById('g-exchange');
@@ -1531,18 +1598,49 @@ async function sendGany(){
   gHistory.push({role:'user',content:q});
   brightenCave();
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:500,system:GSYS,messages:gHistory})});
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:GSYS,messages:gHistory})});
     const data=await res.json();if(data.error)throw new Error(data.error.message);
     const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
     let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p={reflection:raw,options:[],question:'',check_in:false};}
     gHistory.push({role:'assistant',content:raw});
     if(dots)dots.classList.remove('show');
-    const ctx2=p.context&&p.context.trim()?'\n\n'+p.context:'';
-    const fullText=(p.reflection||'...')+ctx2;
-    await gStream(curr,fullText);
-    const options=Array.isArray(p.options)&&p.options.length===3?p.options:null;
-    if(options){setTimeout(()=>showCandles(options),700);}
-    else if(p.question&&p.question.trim()){await gStream(curr,fullText+'\n\n'+p.question);}
+    const reflection = p.reflection||'...';
+    const structure  = p.structure||'';
+    const step       = p.step||'';
+    const question   = p.question||'';
+    const options    = Array.isArray(p.options)&&p.options.length===3?p.options:null;
+    const excEl=document.getElementById('g-exchange');
+    if(excEl){Array.from(excEl.children).forEach(c=>{if(c.id!=='g-prev-text'&&c.id!=='g-curr-text'&&c.id!=='g-thinking-dots')c.remove();});}
+    await gStream(curr,reflection);
+    if(structure){
+      await new Promise(r=>setTimeout(r,280));
+      const sDiv=document.createElement('div');
+      sDiv.style.cssText="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,1.3vw,18px);color:rgba(238,220,168,0.48);line-height:1.8;margin-top:1.4rem;padding-top:1rem;border-top:.5px solid rgba(196,158,72,0.1);white-space:pre-line;text-align:center;max-width:560px;margin-left:auto;margin-right:auto;";
+      if(excEl)excEl.appendChild(sDiv);
+      await gStream(sDiv,structure);
+    }
+    if(step){
+      await new Promise(r=>setTimeout(r,200));
+      const stepWrap=document.createElement('div');
+      stepWrap.style.cssText="margin-top:1.2rem;padding:.75rem 1rem;border-left:1.5px solid rgba(196,158,72,0.38);background:rgba(196,158,72,0.04);text-align:left;max-width:520px;margin-left:auto;margin-right:auto;";
+      const stepLabel=document.createElement('div');
+      stepLabel.style.cssText="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.45em;color:rgba(196,158,72,0.45);text-transform:uppercase;margin-bottom:.4rem;";
+      stepLabel.textContent='Your next step';
+      const stepText=document.createElement('div');
+      stepText.style.cssText="font-family:'Cormorant Garamond',serif;font-size:clamp(15px,1.4vw,19px);color:rgba(238,220,168,0.88);line-height:1.65;";
+      stepWrap.appendChild(stepLabel);stepWrap.appendChild(stepText);
+      if(excEl)excEl.appendChild(stepWrap);
+      await gStream(stepText,step);
+    }
+    if(options){
+      setTimeout(()=>showCandles(options),700);
+    } else if(question){
+      await new Promise(r=>setTimeout(r,280));
+      const qDiv=document.createElement('div');
+      qDiv.style.cssText="font-family:'Almendra',serif;font-style:italic;font-size:clamp(17px,1.8vw,24px);color:rgba(196,158,72,0.75);line-height:1.7;margin-top:1.4rem;text-align:center;white-space:pre-line;max-width:560px;margin-left:auto;margin-right:auto;";
+      if(excEl)excEl.appendChild(qDiv);
+      await gStream(qDiv,question);
+    }
     if(p.check_in===true)setTimeout(ganyRitual,2000);
   }catch(e){if(dots)dots.classList.remove('show');if(curr)curr.textContent='The cave listens. Speak again.';}
   gBusy=false;
