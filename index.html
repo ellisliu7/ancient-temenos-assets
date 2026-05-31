@@ -64,6 +64,9 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   radial-gradient(ellipse 90% 90% at 50% 50%,transparent 70%,rgba(2,1,1,0.06) 100%),
   linear-gradient(to bottom,rgba(2,1,1,0.08) 0%,transparent 10%,transparent 88%,rgba(2,1,1,0.18) 100%),
   linear-gradient(to right,rgba(2,1,1,0.08) 0%,transparent 12%,transparent 88%,rgba(2,1,1,0.08) 100%);}
+#altar-venus:hover .al-name,#altar-ganymede:hover .al-name{color:rgba(238,220,168,0.95);text-shadow:0 0 20px rgba(196,158,72,0.45);}
+#altar-persephone:hover .al-name,#altar-psyche:hover .al-name{color:rgba(238,220,168,0.85);text-shadow:0 0 20px rgba(196,158,72,0.35);}
+#altar-venus:hover .al-intent,#altar-ganymede:hover .al-intent{color:rgba(196,158,72,0.75);}
 #foyer-arch-glow{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:22%;height:70%;pointer-events:none;z-index:2;background:radial-gradient(ellipse 60% 80% at 50% 55%,rgba(220,170,80,0.09) 0%,rgba(200,150,60,0.04) 60%,transparent 100%);}
 #foyer-particles-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;}
 
@@ -80,12 +83,10 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .altar-poem p{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(11px,1.1vw,16px);color:rgba(238,220,168,0.72);letter-spacing:.06em;line-height:1.8;}
 .altar-label{position:absolute;bottom:6%;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;opacity:0;transition:opacity 1.5s ease;white-space:nowrap;z-index:5;}
 .altar-label{position:absolute;bottom:3%;left:50%;transform:translateX(calc(-50% + var(--px,0px))) translateY(var(--py,0px));text-align:center;pointer-events:none;opacity:0;transition:opacity 1.5s ease,transform .1s linear;white-space:nowrap;z-index:5;}
-.altar-label .al-name{font-family:'Cinzel',serif;font-style:normal;font-size:clamp(16px,1.9vw,26px);font-weight:300;color:rgba(210,185,130,0.85);letter-spacing:.18em;text-transform:uppercase;display:block;}
-.altar-label .al-intent{font-family:'Cinzel',serif;font-size:clamp(6px,.65vw,8px);letter-spacing:.45em;color:rgba(210,185,130,0.38);text-transform:uppercase;margin-top:.3rem;display:block;}
+.altar-label .al-name{font-family:'Cinzel',serif;transition:color 0.8s ease,letter-spacing 0.8s ease;font-style:normal;font-size:clamp(16px,1.9vw,26px);font-weight:300;color:rgba(210,185,130,0.85);letter-spacing:.18em;text-transform:uppercase;display:block;}
+.altar-label .al-intent{font-family:'Cinzel',serif;transition:color 0.8s ease;font-size:clamp(6px,.65vw,8px);letter-spacing:.45em;color:rgba(210,185,130,0.38);text-transform:uppercase;margin-top:.3rem;display:block;}
 .altar-label .al-attrs{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(9px,.9vw,12px);letter-spacing:.12em;color:rgba(196,158,72,0.35);margin-top:.15rem;display:block;}
 .altar-label .al-tagline{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(11px,1.05vw,14px);color:rgba(210,185,130,0.5);margin-top:.45rem;line-height:1.6;display:block;}
-.altar-label .al-symbol{font-size:clamp(14px,1.4vw,20px);color:rgba(196,158,72,0.4);margin-top:.5rem;display:block;transition:color .5s;}
-.foyer-altar:hover .al-symbol{color:rgba(196,158,72,0.85);}
 #foyer-title{position:absolute;top:5%;left:50%;transform:translateX(calc(-50% + var(--px,0px))) translateY(var(--py,0px));text-align:center;pointer-events:none;opacity:0;transition:opacity 2.5s ease,transform .1s linear;z-index:6;}
 #foyer-title h1{font-family:'Cinzel',serif;font-size:clamp(16px,2.4vw,32px);font-weight:300;letter-spacing:.55em;color:rgba(210,185,130,0.82);text-transform:uppercase;}
 #foyer-title p{font-family:'Cinzel',serif;font-style:normal;font-size:clamp(7px,.7vw,9px);letter-spacing:.35em;color:rgba(210,185,130,0.35);text-transform:uppercase;margin-top:.5rem;}
@@ -316,8 +317,8 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #altar-psyche{right:22%;width:18%;top:12%;bottom:12%;}
 /* center artwork fade mask — softer edges for depth */
 .altar-artwork-center{width:100%;height:100%;object-fit:cover;object-position:top center;transition:filter 1.8s cubic-bezier(.25,.46,.45,.94),transform 1.8s cubic-bezier(.25,.46,.45,.94);filter:brightness(.5) saturate(.6);transform-origin:center center;border-radius:2px;-webkit-mask-image:linear-gradient(to right,transparent 0%,black 18%,black 82%,transparent 100%),linear-gradient(to bottom,transparent 0%,black 5%,black 78%,transparent 100%);mask-image:linear-gradient(to right,transparent 0%,black 18%,black 82%,transparent 100%),linear-gradient(to bottom,transparent 0%,black 5%,black 78%,transparent 100%);-webkit-mask-composite:intersect;mask-composite:intersect;opacity:0;animation:altarFadeIn 3.2s ease 2s forwards;}
-#persephone-glow-layer{background:radial-gradient(ellipse 80% 100% at 50% 50%,rgba(80,30,120,0.32) 0%,rgba(40,10,80,0.14) 60%,transparent 100%);}
-#psyche-glow-layer{background:radial-gradient(ellipse 80% 100% at 50% 50%,rgba(100,160,200,0.28) 0%,rgba(60,120,180,0.12) 60%,transparent 100%);}
+#persephone-glow-layer{display:none;}
+#psyche-glow-layer{display:none;}
 
 /* oracle wheel */
 #foyer-oracle-wheel{position:absolute;left:50%;top:56%;transform:translate(-50%,-50%);width:min(280px,26vw);height:min(280px,26vw);pointer-events:none;z-index:5;opacity:0;transition:opacity 2s ease;}
@@ -503,11 +504,10 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     onmouseenter="foyerHover('venus')" onmouseleave="foyerLeave('venus')"
     onclick="foyerEnter('venus')" ontouchend="foyerEnter('venus')">
     <div class="altar-glow-layer" id="venus-glow-layer"></div>
-    <div class="altar-poem" id="venus-poem"><p>Enter the chamber<br>of receiving.</p></div>
+    <div class="altar-poem" id="venus-poem"><p>The chamber<br>of receiving.</p></div>
     <div class="altar-label" id="venus-label">
       <span class="al-name">Venus</span>
       <span class="al-intent">Intuition</span>
-      <span class="al-symbol">✦</span>
     </div>
   </div>
 
@@ -515,11 +515,10 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     onmouseenter="foyerHover('ganymede')" onmouseleave="foyerLeave('ganymede')"
     onclick="foyerEnter('ganymede')" ontouchend="foyerEnter('ganymede')">
     <div class="altar-glow-layer" id="gany-glow-layer"></div>
-    <div class="altar-poem" id="gany-poem"><p>Enter the chamber<br>of becoming.</p></div>
+    <div class="altar-poem" id="gany-poem"><p>The chamber<br>of becoming.</p></div>
     <div class="altar-label" id="gany-label">
       <span class="al-name">Ganymede</span>
       <span class="al-intent">Grounding</span>
-      <span class="al-symbol">✦</span>
     </div>
   </div>
 
@@ -528,12 +527,9 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     onmouseenter="councilHover('persephone')" onmouseleave="councilLeave('persephone')"
     onclick="foyerComingSoon('Persephone')">
     <div class="altar-glow-layer" id="persephone-glow-layer"></div>
-    <div class="altar-poem" id="persephone-poem"><p>Enter the chamber<br>of descent.</p></div>
     <div class="altar-label" id="persephone-label" style="opacity:0;transition:opacity 1.5s ease;">
       <span class="al-name">Persephone</span>
       <span class="al-intent">Shadow</span>
-      <span class="al-symbol">✦</span>
-      <span class="al-soon">Opening soon</span>
     </div>
   </div>
 
@@ -541,23 +537,19 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     onmouseenter="councilHover('psyche')" onmouseleave="councilLeave('psyche')"
     onclick="foyerComingSoon('Psyche')">
     <div class="altar-glow-layer" id="psyche-glow-layer"></div>
-    <div class="altar-poem" id="psyche-poem"><p>Enter the chamber<br>of play.</p></div>
     <div class="altar-label" id="psyche-label" style="opacity:0;transition:opacity 1.5s ease;">
       <span class="al-name">Psyche</span>
       <span class="al-intent">Wonder</span>
-      <span class="al-symbol">✦</span>
-      <span class="al-soon">Opening soon</span>
     </div>
   </div>
 
   <div id="foyer-title">
     <h1>Ancient Temenos</h1>
-    <p>A Sanctuary of Art, Myth, Memory and Divinity</p>
+    <p>A Sanctuary of Art, Myth &amp; Hidden Memories</p>
   </div>
     <!-- Bottom tagline -->
   <div id="foyer-choose">
     <span class="fc-council-line">The council will listen and respond.</span>
-    <span class="fc-lfc">Listen &nbsp;·&nbsp; Feel &nbsp;·&nbsp; Choose</span>
   </div>
 
   <!-- Council input — bottom center -->
@@ -980,7 +972,7 @@ function initFoyer(){
   },1200);
 }
 
-let foyerVenusParticles=false,foyerGanyParticles=false;
+let foyerVenusParticles=false,foyerGanyParticles=false,foyerHoverSide=null;
 
 function drawFoyerParticles(ctx,W,H){
   ctx.clearRect(0,0,W,H);
@@ -1000,6 +992,15 @@ function drawFoyerParticles(ctx,W,H){
   if(foyerVenusParticles&&Math.random()<.35)spawnFoyerParticle('venus',W,H);
   if(foyerGanyParticles&&Math.random()<.35)spawnFoyerParticle('ganymede',W,H);
   if(Math.random()<.03)spawnFoyerParticle(Math.random()<.5?'venus':'ganymede',W,H);
+  // Spotlight brightening on hovered side
+  if(foyerHoverSide){
+    const sx=foyerHoverSide==='venus'?W*0.14:W*0.86;
+    const sg=ctx.createRadialGradient(sx,H*0.45,0,sx,H*0.45,W*0.28);
+    sg.addColorStop(0,'rgba(255,220,160,0.13)');
+    sg.addColorStop(0.5,'rgba(220,180,100,0.05)');
+    sg.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.fillStyle=sg;ctx.fillRect(0,0,W,H);
+  }
 }
 
 function spawnFoyerParticle(side,W,H){
@@ -1053,16 +1054,22 @@ function foyerHover(side){
   // dim center figures too
   ['persephone','psyche'].forEach(k=>{
     const ca=document.getElementById(k+'-artwork');
-    if(ca)ca.style.filter='brightness(.25) saturate(.3) hue-rotate('+(k==='persephone'?'200':'160')+'deg)';
+    if(ca)ca.style.filter='brightness(.25) saturate(.3)';
   });
   glow.style.opacity='1';
   poem.style.opacity='1';
+  // name glow
+  const nameEl=document.getElementById(isV?'venus-artwork':'gany-artwork');
+  const labelName=document.querySelector('#altar-'+(isV?'venus':'ganymede')+' .al-name');
+  if(labelName)labelName.style.textShadow='0 0 24px rgba(196,158,72,0.55)';
+  if(labelName)labelName.style.color='rgba(238,220,168,0.95)';
   if(foyerVenusGain&&foyerGanyGain){
     const t=foyerAudioCtx.currentTime;
     if(isV){foyerVenusGain.gain.linearRampToValueAtTime(.18,t+1.2);foyerGanyGain.gain.linearRampToValueAtTime(0,t+1.2);}
     else{foyerGanyGain.gain.linearRampToValueAtTime(.22,t+1.2);foyerVenusGain.gain.linearRampToValueAtTime(0,t+1.2);}
   }
   if(isV)foyerVenusParticles=true;else foyerGanyParticles=true;
+  foyerHoverSide=side;
   document.body.classList.add('hovering');
 }
 
@@ -1077,18 +1084,24 @@ function foyerLeave(side){
   // restore center figures
   const pa=document.getElementById('persephone-artwork');
   const qa=document.getElementById('psyche-artwork');
-  if(pa)pa.style.filter='brightness(.42) saturate(.55) hue-rotate(200deg)';
-  if(qa)qa.style.filter='brightness(.42) saturate(.5) hue-rotate(160deg)';
+  if(pa)pa.style.filter='brightness(.42) saturate(.55)';
+  if(qa)qa.style.filter='brightness(.42) saturate(.5)';
   document.getElementById('venus-glow-layer').style.opacity='0';
   document.getElementById('gany-glow-layer').style.opacity='0';
   document.getElementById('venus-poem').style.opacity='0';
   document.getElementById('gany-poem').style.opacity='0';
+  // reset name glow
+  ['venus','ganymede'].forEach(s=>{
+    const n=document.querySelector('#altar-'+s+' .al-name');
+    if(n){n.style.textShadow='';n.style.color='';}
+  });
   if(foyerVenusGain&&foyerGanyGain){
     const t=foyerAudioCtx.currentTime;
     foyerVenusGain.gain.linearRampToValueAtTime(0,t+1.5);
     foyerGanyGain.gain.linearRampToValueAtTime(0,t+1.5);
   }
   foyerVenusParticles=false;foyerGanyParticles=false;
+  foyerHoverSide=null;
   document.body.classList.remove('hovering');
 }
 
@@ -1921,6 +1934,8 @@ function councilHover(side){
     if(glow)glow.style.opacity='1';
     if(poem)poem.style.opacity='1';
     document.body.classList.add('hovering');
+    const n=document.querySelector('#altar-'+side+' .al-name');
+    if(n){n.style.textShadow='0 0 20px rgba(196,158,72,0.4)';n.style.color='rgba(238,220,168,0.85)';}
   }catch(e){}
 }
 
@@ -1929,13 +1944,12 @@ function councilLeave(side){
     const glow=document.getElementById(side+'-glow-layer');
     const poem=document.getElementById(side+'-poem');
     const art=document.getElementById(side+'-artwork');
-    if(art){
-      const baseFilter=side==='persephone'?'brightness(.42) saturate(.55) hue-rotate(200deg)':'brightness(.42) saturate(.5) hue-rotate(160deg)';
-      art.style.filter=baseFilter;art.style.transform='scale(1)';
-    }
+    if(art){art.style.filter='brightness(.42) saturate(.5)';art.style.transform='scale(1)';}
     if(glow)glow.style.opacity='0';
     if(poem)poem.style.opacity='0';
     document.body.classList.remove('hovering');
+    const n=document.querySelector('#altar-'+side+' .al-name');
+    if(n){n.style.textShadow='';n.style.color='';}
   }catch(e){}
 }
 
