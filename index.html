@@ -368,7 +368,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   position:fixed;
   /* Oval medallion on far right wall — image analysis: ~83-97% x, ~28-72% y */
   right:1.5%;
-  top:38%;
+  top:44%;
   width:clamp(100px,12vw,180px);
   z-index:20;
   opacity:0;
@@ -1540,7 +1540,7 @@ function enterGanymede(){
   setTimeout(()=>{
     const inp=document.getElementById('g-input-wrap');if(inp)inp.classList.add('show');
     const gi=document.getElementById('gi');if(gi){gi.focus();gi.onkeydown=e=>{if(e.key==='Enter')sendGany();};}
-  },5000);
+  },2500);
   gHistory.push({role:'assistant',content:'You came here to build something.'});
 }
 
