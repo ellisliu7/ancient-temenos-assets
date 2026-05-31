@@ -52,7 +52,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 /* ── ENTRY CONGRAT ── */
 #entryCongrat{position:fixed;inset:0;z-index:80;background:rgba(4,2,1,0.97);display:none;flex-direction:column;align-items:center;justify-content:center;pointer-events:none;}
 .ec-line1{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.55em;color:rgba(196,158,72,0);text-transform:uppercase;margin-bottom:.8rem;}
-.ec-line2{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(18px,3vw,26px);color:rgba(238,220,168,0);letter-spacing:.08em;text-align:center;line-height:1.6;}
+.ec-line2{font-family:'Almendra',serif;font-style:italic;font-size:clamp(18px,3vw,26px);color:rgba(238,220,168,0);letter-spacing:.08em;text-align:center;line-height:1.6;}
 .ec-line3{font-family:'Cormorant Garamond',serif;font-size:14px;color:rgba(196,158,72,0);margin-top:.8rem;}
 @keyframes ecPulse{0%,100%{opacity:.4;}50%{opacity:1;}}
 
@@ -80,7 +80,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .altar-poem p{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(11px,1.1vw,16px);color:rgba(238,220,168,0.72);letter-spacing:.06em;line-height:1.8;}
 .altar-label{position:absolute;bottom:6%;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;opacity:0;transition:opacity 1.5s ease;white-space:nowrap;z-index:5;}
 .altar-label{position:absolute;bottom:3%;left:50%;transform:translateX(calc(-50% + var(--px,0px))) translateY(var(--py,0px));text-align:center;pointer-events:none;opacity:0;transition:opacity 1.5s ease,transform .1s linear;white-space:nowrap;z-index:5;}
-.altar-label .al-name{font-family:'Cinzel',serif;font-style:normal;font-size:clamp(16px,1.9vw,26px);font-weight:300;color:rgba(210,185,130,0.85);letter-spacing:.18em;text-transform:uppercase;display:block;}
+.altar-label .al-name{font-family:'Almendra',serif;font-style:normal;font-size:clamp(16px,1.9vw,26px);font-weight:300;color:rgba(210,185,130,0.85);letter-spacing:.18em;text-transform:uppercase;display:block;}
 .altar-label .al-intent{font-family:'Cinzel',serif;font-size:clamp(6px,.65vw,8px);letter-spacing:.45em;color:rgba(210,185,130,0.38);text-transform:uppercase;margin-top:.3rem;display:block;}
 .altar-label .al-attrs{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(9px,.9vw,12px);letter-spacing:.12em;color:rgba(196,158,72,0.35);margin-top:.15rem;display:block;}
 .altar-label .al-tagline{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(11px,1.05vw,14px);color:rgba(210,185,130,0.5);margin-top:.45rem;line-height:1.6;display:block;}
@@ -111,7 +111,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #venus-sculpture-wrap{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity 2s ease 0.5s;}
 #venus-sculpture-canvas{width:100%;height:100%;pointer-events:auto;}
 #venus-prompt{position:fixed;bottom:4rem;left:50%;transform:translateX(-50%);z-index:15;text-align:center;pointer-events:all;cursor:pointer;opacity:0;transition:opacity 1.5s ease;}
-#venus-prompt .vp-main{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:rgba(238,220,168,0.75);letter-spacing:.06em;animation:pulse 3s ease-in-out infinite;}
+#venus-prompt .vp-main{font-family:'Cormorant',serif;font-style:italic;font-size:18px;color:rgba(238,220,168,0.75);letter-spacing:.06em;animation:pulse 3s ease-in-out infinite;}
 #venus-prompt .vp-sub{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.48em;color:rgba(196,158,72,0.38);text-transform:uppercase;margin-top:.5rem;}
 #venus-conv{position:relative;z-index:5;width:100%;display:none;flex-direction:column;align-items:center;}
 .o-title{font-family:'Almendra',serif;font-style:italic;font-size:clamp(32px,4vw,56px);color:rgba(238,220,168,0.9);letter-spacing:.03em;margin-bottom:.4rem;text-shadow:0 0 40px rgba(196,158,72,0.22);}
@@ -860,12 +860,16 @@ function initFoyer(){
   resizeFC();
   window.addEventListener('resize',resizeFC);
 
-  // -- VIDEO: just play and loop --
+  // -- VIDEO: reverse loop (scrub backward each frame) --
   vid.addEventListener('loadeddata',()=>{
     foyerVidReady=true;
-    vid.playbackRate=0.75;
-    vid.play();
-    startFoyerLoop();
+    vid.pause();
+    vid.currentTime=vid.duration||0;
+    // Wait for first seek then start loop
+    vid.addEventListener('seeked',function onReady(){
+      vid.removeEventListener('seeked',onReady);
+      startFoyerLoop();
+    });
   });
 
   // text parallax - subtle depth on mouse move only
@@ -903,26 +907,39 @@ function initFoyer(){
 
   vid.load();
 
+  // Reverse scrub state
+  let foyerRevPos=0, foyerRevSeeking=false, foyerRevStep=1/24*0.4;
+
   function startFoyerLoop(){
     if(foyerRafId)cancelAnimationFrame(foyerRafId);
-    function frame(){
+    foyerRevPos=vid.duration||0;
+    let lastT=performance.now();
+
+    function frame(now){
       foyerRafId=requestAnimationFrame(frame);
       if(!foyerActive)return;
 
+      // Advance reverse position
+      const dt=(now-lastT)/1000;
+      lastT=now;
+      if(!foyerRevSeeking&&foyerVidReady&&vid.duration){
+        foyerRevPos-=dt*0.45; // 0.45x speed in reverse
+        if(foyerRevPos<=0)foyerRevPos=vid.duration;
+        foyerRevSeeking=true;
+        vid.currentTime=foyerRevPos;
+      }
+
       if(foyerVidReady&&vid.readyState>=2){
-
         hallCanvas.style.filter='brightness(.72) saturate(.88)';
-        if(vid.readyState>=2){
-          hallCtx.drawImage(vid,0,0,hallCanvas.width,hallCanvas.height);
-          // dark overlay to kill the amber flash on bright video frames
-
-        }
+        hallCtx.drawImage(vid,0,0,hallCanvas.width,hallCanvas.height);
         const wg=hallCtx.createRadialGradient(hallCanvas.width*.5,hallCanvas.height*.45,0,hallCanvas.width*.5,hallCanvas.height*.45,hallCanvas.width*.5);
         wg.addColorStop(0,'rgba(180,100,20,0.04)');wg.addColorStop(1,'rgba(0,0,0,0)');
         hallCtx.fillStyle=wg;hallCtx.fillRect(0,0,hallCanvas.width,hallCanvas.height);
       }
       drawFoyerParticles(pCtx,pCanvas.width,pCanvas.height);
     }
+    // Unblock seeking after each seek completes
+    vid.addEventListener('seeked',()=>{ foyerRevSeeking=false; });
     foyerRafId=requestAnimationFrame(frame);
   }
 
