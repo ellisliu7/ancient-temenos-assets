@@ -114,7 +114,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #venus-prompt .vp-main{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:rgba(238,220,168,0.75);letter-spacing:.06em;animation:pulse 3s ease-in-out infinite;}
 #venus-prompt .vp-sub{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.48em;color:rgba(196,158,72,0.38);text-transform:uppercase;margin-top:.5rem;}
 #venus-conv{position:relative;z-index:5;width:100%;display:none;flex-direction:column;align-items:center;}
-.o-title{font-family:'Almendra',serif;font-style:italic;font-size:36px;color:rgba(238,220,168,0.9);letter-spacing:.04em;margin-bottom:.4rem;text-shadow:0 0 30px rgba(196,158,72,0.2);}
+.o-title{font-family:'Almendra',serif;font-style:italic;font-size:clamp(32px,4vw,56px);color:rgba(238,220,168,0.9);letter-spacing:.03em;margin-bottom:.4rem;text-shadow:0 0 40px rgba(196,158,72,0.22);}
 .o-sub{font-family:'Cormorant Garamond',serif;font-size:15px;color:rgba(196,158,72,0.38);letter-spacing:.06em;font-style:italic;}
 .thread{width:100%;max-width:600px;margin:0 auto;padding:1.2rem 1.5rem 1rem;position:relative;z-index:1;}
 .msg{margin-bottom:2rem;animation:fadeUp .8s ease forwards;}
@@ -353,51 +353,58 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   }
 
 /* Ganymede option cards */
-/* == GANYMEDE CHAMBER == */
+/* == GANYMEDE CHAMBER — Journey Polish == */
 #ganymedeScreen{position:fixed;inset:0;background:#000;overflow:hidden;}
-#g-cave-bg{position:fixed;inset:0;background:url('https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/ganymede_cave.jpg') center/cover no-repeat;opacity:0;transition:opacity 3s ease;filter:brightness(.45) saturate(.9);}
+#g-cave-bg{position:fixed;inset:0;background:url('https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/ganymede_cave.jpg') center/cover no-repeat;opacity:0;filter:brightness(.32) saturate(.7) contrast(1.05);transform:scale(1.04);transition:opacity 3.5s ease,filter 4s ease,transform 18s ease;}
 #g-cave-bg.reveal{opacity:1;}
-#g-god-rays{position:fixed;inset:0;background:transparent;opacity:0;transition:opacity 4s ease;pointer-events:none;}
-#g-god-rays.glow{background:radial-gradient(ellipse 50% 60% at 50% 20%,rgba(255,220,120,0.12) 0%,rgba(255,200,80,0.04) 60%,transparent 100%);opacity:1;}
-#g-gold-bg{position:fixed;inset:0;background:url('https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_gold.jpg') center/cover no-repeat;opacity:0;transition:opacity 4s ease;filter:brightness(.8);}
-#g-timelapse-frame{position:fixed;top:2rem;right:2rem;width:clamp(160px,16vw,220px);z-index:20;opacity:0;transition:opacity 2s ease;border:.5px solid rgba(196,158,72,0.22);background:rgba(0,0,0,0.5);}
+#g-cave-haze{position:fixed;inset:0;pointer-events:none;z-index:1;background:radial-gradient(ellipse 100% 50% at 50% 0%,rgba(12,8,2,0.9) 0%,transparent 65%),linear-gradient(to bottom,rgba(6,4,1,0.7) 0%,transparent 30%,transparent 70%,rgba(6,4,1,0.95) 100%);}
+#g-rays-canvas{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;transition:opacity 5s ease;}
+#g-rays-canvas.glow{opacity:1;}
+#g-dust-canvas{position:fixed;inset:0;z-index:3;pointer-events:none;}
+#g-gold-bg{position:fixed;inset:0;z-index:4;background:url('https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_gold.jpg') center/cover no-repeat;opacity:0;transition:opacity 5s ease;filter:brightness(.85) saturate(1.1);}
+#g-timelapse-frame{position:fixed;top:1.8rem;right:1.8rem;width:clamp(140px,14vw,200px);z-index:20;opacity:0;transition:opacity 2.5s ease;background:rgba(0,0,0,0.85);}
 #g-timelapse-frame.show{opacity:1;}
-#g-timelapse-label{font-family:'Cinzel',serif;font-size:6px;letter-spacing:.4em;color:rgba(196,158,72,0.45);text-transform:uppercase;text-align:center;padding:.4rem 0 .2rem;display:block;}
-#g-timelapse-vid{width:100%;display:block;filter:brightness(.85);}
-#g-convo{position:fixed;bottom:16%;left:50%;transform:translateX(-50%);width:min(580px,84vw);text-align:center;z-index:10;pointer-events:none;}
-#g-invitation{opacity:0;transition:opacity 2s ease;}
+#g-timelapse-frame::before{content:'';position:absolute;inset:0;border:.5px solid rgba(196,158,72,0.18);pointer-events:none;z-index:1;}
+#g-timelapse-frame::after{content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(6,4,1,0.25) 0%,transparent 25%,transparent 80%,rgba(6,4,1,0.55) 100%);pointer-events:none;z-index:2;}
+#g-timelapse-label{font-family:'Cinzel',serif;font-size:5.5px;letter-spacing:.5em;color:rgba(196,158,72,0.35);text-transform:uppercase;text-align:center;padding:.45rem 0 .2rem;display:block;position:relative;z-index:3;}
+#g-timelapse-vid{width:100%;display:block;filter:brightness(.8) saturate(.75);aspect-ratio:16/9;object-fit:cover;}
+#g-convo{position:fixed;bottom:18%;left:50%;transform:translateX(-50%);width:min(620px,88vw);text-align:center;z-index:10;pointer-events:none;}
+#g-invitation{opacity:0;transition:opacity 2.5s ease;}
 #g-invitation.show{opacity:1;}
-#g-inv-line1{font-family:'Cormorant Garamond',serif;font-size:clamp(14px,1.4vw,17px);color:rgba(210,185,130,0.4);letter-spacing:.1em;display:block;margin-bottom:.8rem;}
-#g-inv-line2{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(22px,2.8vw,34px);color:rgba(238,220,168,0.82);display:block;}
+#g-inv-line1{font-family:'Cinzel',serif;font-size:clamp(7px,.75vw,9px);letter-spacing:.6em;color:rgba(196,158,72,0.28);text-transform:uppercase;display:block;margin-bottom:1.4rem;}
+#g-inv-line2{font-family:'Almendra',serif;font-style:italic;font-size:clamp(28px,3.2vw,48px);color:rgba(238,220,168,0.88);display:block;text-shadow:0 0 40px rgba(196,158,72,0.18);letter-spacing:.02em;}
 #g-exchange{display:none;}
-#g-prev-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.2vw,16px);color:rgba(238,220,168,0.2);line-height:1.7;display:block;margin-bottom:1rem;min-height:1em;}
-#g-curr-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(17px,2vw,26px);color:rgba(238,220,168,0.88);line-height:1.65;display:block;margin-bottom:.8rem;min-height:1.5em;white-space:pre-line;}
-#g-thinking-dots{display:none;justify-content:center;gap:6px;margin-top:.5rem;}
+#g-prev-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(12px,1.1vw,15px);color:rgba(238,220,168,0.18);line-height:1.7;display:block;margin-bottom:1.2rem;min-height:1em;transition:opacity 1s ease;}
+#g-curr-text{font-family:'Almendra',serif;font-style:italic;font-size:clamp(18px,2vw,28px);color:rgba(238,220,168,0.88);line-height:1.7;display:block;margin-bottom:1rem;min-height:1.5em;white-space:pre-line;text-shadow:0 2px 30px rgba(0,0,0,0.9);}
+#g-thinking-dots{display:none;justify-content:center;gap:8px;margin-top:.6rem;}
 #g-thinking-dots.show{display:flex;}
-#g-thinking-dots span{width:4px;height:4px;border-radius:50%;background:rgba(196,158,72,0.4);animation:gDot 1.4s ease-in-out infinite;}
-#g-thinking-dots span:nth-child(2){animation-delay:.2s;}#g-thinking-dots span:nth-child(3){animation-delay:.4s;}
-@keyframes gDot{0%,100%{transform:translateY(0);opacity:.2;}50%{transform:translateY(-4px);opacity:.8;}}
-#g-options{display:flex;justify-content:center;gap:clamp(1.5rem,4vw,3rem);margin-top:1.2rem;pointer-events:all;}
-.g-candle{display:flex;flex-direction:column;align-items:center;gap:.6rem;cursor:pointer;opacity:0;transform:translateY(6px);transition:opacity .6s ease,transform .6s ease;}
+#g-thinking-dots span{width:3px;height:3px;border-radius:50%;background:rgba(196,158,72,0.35);animation:gDot 1.6s ease-in-out infinite;}
+#g-thinking-dots span:nth-child(2){animation-delay:.28s;}#g-thinking-dots span:nth-child(3){animation-delay:.56s;}
+@keyframes gDot{0%,100%{transform:translateY(0);opacity:.15;}50%{transform:translateY(-5px);opacity:.75;}}
+#g-options{display:flex;justify-content:center;gap:clamp(2rem,5vw,4rem);margin-top:1.6rem;pointer-events:all;}
+.g-candle{display:flex;flex-direction:column;align-items:center;gap:.7rem;cursor:pointer;opacity:0;transform:translateY(8px);transition:opacity .7s ease,transform .7s ease;}
 .g-candle.show{opacity:1;transform:translateY(0);}
-.g-candle:hover .g-candle-text{color:rgba(238,220,168,1);}
-.g-candle.extinguished{opacity:.1;pointer-events:none;}
+.g-candle:hover .g-candle-text{color:rgba(255,240,200,1);}
+.g-candle:hover .g-candle-flame-svg{filter:drop-shadow(0 0 8px rgba(255,200,80,0.6));}
+.g-candle.extinguished{opacity:.07;pointer-events:none;transition:opacity 1.2s ease;}
 .g-candle.chosen{opacity:1;}
-.g-candle-flame{width:18px;height:28px;}
-.g-candle-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.2vw,16px);color:rgba(238,220,168,0.72);line-height:1.5;max-width:160px;text-align:center;transition:color .3s;}
-#g-input-wrap{position:fixed;bottom:4%;left:50%;transform:translateX(-50%);width:min(560px,84vw);z-index:15;display:flex;align-items:center;border-bottom:.5px solid rgba(196,158,72,0.18);opacity:0;transition:opacity 1.5s ease;pointer-events:none;}
+.g-candle-flame{width:20px;height:32px;}
+.g-candle-flame-svg{width:100%;height:100%;animation:candleFlicker 2.2s ease-in-out infinite;}
+.g-candle-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.2vw,16px);color:rgba(238,220,168,0.65);line-height:1.55;max-width:170px;text-align:center;transition:color .4s;}
+#g-input-wrap{position:fixed;bottom:5%;left:50%;transform:translateX(-50%);width:min(520px,84vw);z-index:15;display:flex;align-items:center;border-bottom:.5px solid rgba(196,158,72,0.14);opacity:0;transition:opacity 2s ease;pointer-events:none;}
 #g-input-wrap.show{opacity:1;pointer-events:all;}
-#gi{flex:1;background:transparent;border:none;outline:none;font-family:'Cormorant Garamond',serif;font-size:clamp(16px,1.5vw,20px);color:rgba(238,220,168,0.85);padding:.8rem 1rem;caret-color:rgba(196,158,72,0.8);}
-#gi::placeholder{color:rgba(196,158,72,0.22);font-style:italic;}
-#gb{width:42px;height:42px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:.5;transition:opacity .3s;flex-shrink:0;}
+#gi{flex:1;background:transparent;border:none;outline:none;font-family:'Cormorant Garamond',serif;font-size:clamp(16px,1.6vw,21px);color:rgba(238,220,168,0.82);padding:.85rem 1rem;caret-color:rgba(196,158,72,0.7);}
+#gi::placeholder{color:rgba(196,158,72,0.18);font-style:italic;}
+#gb{width:40px;height:40px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:.45;transition:opacity .3s;flex-shrink:0;}
 #gb:hover{opacity:1;}#gb svg{width:13px;height:13px;}
-#g-ritual{position:fixed;inset:0;z-index:60;background:rgba(3,2,1,0);pointer-events:none;transition:background 2.5s ease;display:flex;align-items:center;justify-content:center;}
-#g-ritual.dim{background:rgba(3,2,1,0.78);}
+#g-ritual{position:fixed;inset:0;z-index:60;background:rgba(3,2,1,0);pointer-events:none;transition:background 3s ease;display:flex;align-items:center;justify-content:center;}
+#g-ritual.dim{background:rgba(3,2,1,0.82);}
 #g-ritual.black{background:rgba(3,2,1,1);}
-#g-ritual-words{text-align:center;opacity:0;transition:opacity 2s ease;}
+#g-ritual-words{text-align:center;opacity:0;transition:opacity 2.5s ease;}
 #g-ritual-words.show{opacity:1;}
-#g-ritual-line1{font-family:'Cinzel',serif;font-size:clamp(8px,.85vw,10px);letter-spacing:.55em;text-transform:uppercase;color:rgba(196,158,72,0.5);display:block;margin-bottom:1.8rem;}
-#g-ritual-line2{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(24px,3vw,40px);color:rgba(238,220,168,0.9);display:block;}
+#g-ritual-line1{font-family:'Cinzel',serif;font-size:clamp(7px,.75vw,9px);letter-spacing:.65em;text-transform:uppercase;color:rgba(196,158,72,0.45);display:block;margin-bottom:2.2rem;}
+#g-ritual-line2{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(26px,3.2vw,44px);color:rgba(238,220,168,0.92);display:block;text-shadow:0 0 60px rgba(196,158,72,0.3);}
+@keyframes candleFlicker{0%{transform:scaleX(1) scaleY(1) rotate(-.5deg);}30%{transform:scaleX(.93) scaleY(1.07) rotate(.8deg);}60%{transform:scaleX(1.04) scaleY(.95) rotate(-.4deg);}80%{transform:scaleX(.97) scaleY(1.04) rotate(.3deg);}100%{transform:scaleX(1) scaleY(1) rotate(0deg);}}
 </style>
 </head>
 <body>
@@ -529,7 +536,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
       </div>
     </div>
   </div>
-</div>iv>
+</div>
 
 <!-- VENUS BREATH -->
 <div class="screen" id="venusBreath" style="background:transparent;">
@@ -603,19 +610,21 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 <!-- ══ GANYMEDE ══ -->
 <div class="screen" id="ganymedeScreen" style="justify-content:flex-start;overflow:hidden;">
   <div id="g-cave-bg"></div>
-  <div id="g-god-rays"></div>
+  <div id="g-cave-haze"></div>
+  <canvas id="g-rays-canvas"></canvas>
+  <canvas id="g-dust-canvas"></canvas>
   <div id="g-gold-bg"></div>
   <div id="g-timelapse-frame">
-    <p id="g-timelapse-label">WITNESS THE MAKING</p>
+    <span id="g-timelapse-label">witness the making</span>
     <video id="g-timelapse-vid" muted playsinline loop>
+      <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Ganymede_WIP.mp4" type="video/mp4">
       <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_WIP.mov" type="video/quicktime">
-      <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_WIP.mp4" type="video/mp4">
     </video>
   </div>
   <div id="g-convo">
     <div id="g-invitation">
-      <p id="g-inv-line1">You came here to build something.</p>
-      <p id="g-inv-line2">What is it?</p>
+      <p id="g-inv-line1">Ancient Temenos · Cave of Remembrance</p>
+      <p id="g-inv-line2">You came here to build something.</p>
     </div>
     <div id="g-exchange">
       <p id="g-prev-text"></p>
@@ -625,9 +634,9 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     <div id="g-options"></div>
   </div>
   <div id="g-input-wrap">
-    <input id="gi" type="text" placeholder="Speak into the cave..." autocomplete="off" spellcheck="false"/>
+    <input id="gi" type="text" placeholder="Speak into the cave…" autocomplete="off" spellcheck="false"/>
     <button id="gb" onclick="sendGany()">
-      <svg viewBox="0 0 14 14" fill="none" stroke="rgba(196,158,72,0.8)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>
+      <svg viewBox="0 0 14 14" fill="none" stroke="rgba(196,158,72,0.7)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>
     </button>
   </div>
   <div id="g-ritual">
@@ -1315,7 +1324,7 @@ function showCupid(){document.getElementById('cupidWrap').style.display='flex';}
 function hideCupid(){document.getElementById('cupidWrap').style.display='none';if(freqActive){freqActive=false;stopFrequency();document.getElementById('cupidWrap').classList.remove('active');}}
 document.getElementById('venusOracle').addEventListener('scroll',function(){const vid=this.querySelector('video');if(vid)vid.style.transform=`scale(1.05) translateY(${this.scrollTop*.3}px)`;});
 
-// == GANYMEDE ==
+// == GANYMEDE — Journey Polish ==
 const GSYS=`You are Ganymede inside Ancient Temenos. Voice: David Ghiyam warmth meets Elon Musk precision. Warm enough to feel safe. Sharp enough to make them act. Treat the person as an intelligent peer.
 
 YOUR FLOW:
@@ -1337,30 +1346,169 @@ ALWAYS return valid JSON - no markdown, no backticks:
 If need context first: options as [], question filled. If ready: options as 3, question empty. Never both.`;
 
 let gHistory=[], gExchangeCount=0, gBusy=false;
+let gDustParticles=[], gRaysRAF=null, gDustRAF=null, gCaveAudio=null;
+
+function startCaveAmbient(){
+  if(gCaveAudio)return;
+  try{
+    const ctx=new(window.AudioContext||window.webkitAudioContext)();
+    const master=ctx.createGain();master.gain.setValueAtTime(0,ctx.currentTime);
+    master.gain.linearRampToValueAtTime(0.055,ctx.currentTime+4);
+    master.connect(ctx.destination);
+    [[41.2,0],[41.2,8],[82.4,-4]].forEach(([f,d])=>{
+      const o=ctx.createOscillator(),g=ctx.createGain();
+      o.type='sine';o.frequency.value=f;o.detune.value=d;g.gain.value=.4;
+      o.connect(g);g.connect(master);o.start();
+    });
+    const noise=ctx.createOscillator();noise.type='triangle';noise.frequency.value=220;
+    const nGain=ctx.createGain();nGain.gain.value=0.04;
+    const filter=ctx.createBiquadFilter();filter.type='lowpass';filter.frequency.value=300;filter.Q.value=2;
+    noise.connect(filter);filter.connect(nGain);nGain.connect(master);noise.start();
+    const lfo=ctx.createOscillator();lfo.frequency.value=0.04;
+    const lfoGain=ctx.createGain();lfoGain.gain.value=120;
+    lfo.connect(lfoGain);lfoGain.connect(filter.frequency);lfo.start();
+    gCaveAudio={ctx,master};
+  }catch(e){}
+}
+function deepenCaveAmbient(){
+  if(!gCaveAudio)return;
+  const t=gCaveAudio.ctx.currentTime;
+  gCaveAudio.master.gain.linearRampToValueAtTime(Math.min(0.055+gExchangeCount*0.018,0.13),t+3);
+}
+function stopCaveAmbient(){
+  if(!gCaveAudio)return;
+  const t=gCaveAudio.ctx.currentTime;
+  gCaveAudio.master.gain.linearRampToValueAtTime(0,t+3);
+  setTimeout(()=>{try{gCaveAudio.ctx.close();}catch(e){}gCaveAudio=null;},3200);
+}
+
+function initGodRays(){
+  const canvas=document.getElementById('g-rays-canvas');if(!canvas)return;
+  canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+  const ctx=canvas.getContext('2d');
+  let t=0,intensity=0,targetIntensity=0;
+  function drawRays(){
+    requestAnimationFrame(drawRays);
+    if(!document.getElementById('ganymedeScreen').classList.contains('active'))return;
+    intensity+=(targetIntensity-intensity)*0.02;
+    t+=0.008;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    if(intensity<0.005)return;
+    const cx=canvas.width*0.5,cy=canvas.height*-0.08;
+    for(let i=0;i<12;i++){
+      const angle=(i/12)*Math.PI+(Math.sin(t+i*0.7)*0.04);
+      const spread=Math.PI*0.72;
+      const a=angle*spread/12-(spread/2);
+      const len=canvas.height*1.4;
+      const w=(0.018+Math.sin(t*0.9+i)*0.008)*canvas.width;
+      const alpha=(0.028+Math.sin(t*1.1+i*1.3)*0.012)*intensity;
+      const x2=cx+Math.sin(a)*len,y2=cy+Math.cos(a)*len;
+      const grad=ctx.createLinearGradient(cx,cy,x2,y2);
+      grad.addColorStop(0,`rgba(255,210,100,${alpha*2.2})`);
+      grad.addColorStop(0.15,`rgba(220,170,70,${alpha})`);
+      grad.addColorStop(1,'rgba(180,130,40,0)');
+      ctx.save();
+      ctx.beginPath();
+      ctx.moveTo(cx-Math.cos(a)*w*0.5,cy+Math.sin(a)*w*0.5);
+      ctx.lineTo(x2-Math.cos(a)*w*3,y2+Math.sin(a)*w*3);
+      ctx.lineTo(x2+Math.cos(a)*w*3,y2-Math.sin(a)*w*3);
+      ctx.lineTo(cx+Math.cos(a)*w*0.5,cy-Math.sin(a)*w*0.5);
+      ctx.closePath();
+      ctx.fillStyle=grad;
+      ctx.globalCompositeOperation='screen';
+      ctx.fill();
+      ctx.restore();
+    }
+    const bloom=ctx.createRadialGradient(cx,cy,0,cx,cy,canvas.height*0.55);
+    bloom.addColorStop(0,`rgba(255,220,120,${0.06*intensity})`);
+    bloom.addColorStop(0.4,`rgba(200,150,50,${0.025*intensity})`);
+    bloom.addColorStop(1,'rgba(0,0,0,0)');
+    ctx.globalCompositeOperation='screen';
+    ctx.fillStyle=bloom;ctx.fillRect(0,0,canvas.width,canvas.height);
+    ctx.globalCompositeOperation='source-over';
+  }
+  window._gRaysSetIntensity=(v)=>{targetIntensity=v;};
+  drawRays();
+}
+
+function initDust(){
+  const canvas=document.getElementById('g-dust-canvas');if(!canvas)return;
+  canvas.width=window.innerWidth;canvas.height=window.innerHeight;
+  const ctx=canvas.getContext('2d');
+  gDustParticles=[];
+  for(let i=0;i<60;i++)gDustParticles.push(makeDust(true));
+  let t=0;
+  function drawDust(){
+    requestAnimationFrame(drawDust);
+    if(!document.getElementById('ganymedeScreen').classList.contains('active'))return;
+    t+=0.006;
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    if(Math.random()<0.18)gDustParticles.push(makeDust(false));
+    for(let i=gDustParticles.length-1;i>=0;i--){
+      const p=gDustParticles[i];
+      p.x+=p.vx+Math.sin(t*p.wf+p.wp)*p.wa;
+      p.y+=p.vy;
+      p.life-=p.decay;
+      if(p.life<=0||p.y<-10){gDustParticles.splice(i,1);continue;}
+      ctx.beginPath();
+      ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+      ctx.fillStyle=`rgba(${p.r255},${p.g255},${p.b255},${p.life*p.maxAlpha})`;
+      ctx.fill();
+    }
+  }
+  drawDust();
+}
+
+function makeDust(initial){
+  const W=window.innerWidth,H=window.innerHeight;
+  const isGold=Math.random()<0.6;
+  return{x:Math.random()*W,y:initial?Math.random()*H:H+5,vx:(Math.random()-0.5)*0.18,vy:-(0.12+Math.random()*0.35),r:0.4+Math.random()*1.4,life:1,decay:0.0012+Math.random()*0.002,maxAlpha:0.08+Math.random()*0.22,wf:0.5+Math.random()*1.5,wp:Math.random()*Math.PI*2,wa:0.2+Math.random()*0.5,r255:isGold?196+Math.floor(Math.random()*50):210,g255:isGold?158+Math.floor(Math.random()*40):195,b255:isGold?60+Math.floor(Math.random()*30):165};
+}
 
 function enterGanymede(){
   const ov=document.getElementById('c-overlay');if(ov)ov.classList.remove('on');
   const db=document.getElementById('c-debate');if(db)db.classList.remove('on');
   showScreen('ganymedeScreen');
   foyerActive=false;
-  gHistory=[];gExchangeCount=0;
-
-  setTimeout(()=>{const bg=document.getElementById('g-cave-bg');if(bg)bg.classList.add('reveal');},300);
-  setTimeout(()=>{const vid=document.getElementById('g-timelapse-vid');const frame=document.getElementById('g-timelapse-frame');if(vid)vid.play().catch(()=>{});if(frame)frame.classList.add('show');},2000);
-  setTimeout(()=>{const inv=document.getElementById('g-invitation');if(inv)inv.classList.add('show');},2500);
+  gHistory=[];gExchangeCount=0;gDustParticles=[];
+  const bg=document.getElementById('g-cave-bg');
+  const gold=document.getElementById('g-gold-bg');
+  const raysC=document.getElementById('g-rays-canvas');
+  if(bg){bg.style.filter='brightness(.32) saturate(.7) contrast(1.05)';bg.style.transform='scale(1.04)';}
+  if(gold)gold.style.opacity='0';
+  if(raysC){raysC.classList.remove('glow');raysC.style.opacity='0';}
+  if(window._gRaysSetIntensity)window._gRaysSetIntensity(0);
+  setTimeout(()=>{if(bg)bg.classList.add('reveal');},300);
+  setTimeout(()=>{
+    const vid=document.getElementById('g-timelapse-vid');
+    const frame=document.getElementById('g-timelapse-frame');
+    if(vid)vid.play().catch(()=>{});
+    if(frame)frame.classList.add('show');
+    startCaveAmbient();
+    initGodRays();
+    initDust();
+  },2000);
+  setTimeout(()=>{const inv=document.getElementById('g-invitation');if(inv)inv.classList.add('show');},2800);
   setTimeout(()=>{
     const inp=document.getElementById('g-input-wrap');if(inp)inp.classList.add('show');
     const gi=document.getElementById('gi');if(gi){gi.focus();gi.onkeydown=e=>{if(e.key==='Enter')sendGany();};}
-  },4500);
+  },5000);
   gHistory.push({role:'assistant',content:'You came here to build something.'});
 }
 
 function brightenCave(){
   gExchangeCount++;
   const bg=document.getElementById('g-cave-bg');
-  const rays=document.getElementById('g-god-rays');
-  if(bg)bg.style.filter='brightness('+Math.min(0.45+gExchangeCount*0.08,0.85)+') saturate(.9)';
-  if(gExchangeCount>=3&&rays)rays.classList.add('glow');
+  const raysC=document.getElementById('g-rays-canvas');
+  const br=Math.min(0.32+gExchangeCount*0.09,0.88);
+  const sat=Math.min(0.7+gExchangeCount*0.06,1.05);
+  if(bg){bg.style.filter=`brightness(${br}) saturate(${sat}) contrast(1.02)`;bg.style.transform=`scale(${Math.max(1.04-gExchangeCount*0.004,1.0)})`;}
+  if(gExchangeCount>=3){
+    if(raysC){raysC.classList.add('glow');}
+    if(window._gRaysSetIntensity)window._gRaysSetIntensity(Math.min(gExchangeCount*0.25,1));
+    for(let i=0;i<Math.min(gExchangeCount*3,20);i++)gDustParticles.push(makeDust(true));
+  }
+  deepenCaveAmbient();
 }
 
 async function sendGany(){
@@ -1374,9 +1522,9 @@ async function sendGany(){
   const curr=document.getElementById('g-curr-text');
   const dots=document.getElementById('g-thinking-dots');
   const opts=document.getElementById('g-options');
-  if(inv)inv.style.opacity='0';
+  if(inv){inv.style.transition='opacity 1.2s ease';inv.style.opacity='0';}
   if(exch)exch.style.display='block';
-  if(prev)prev.textContent=q;
+  if(prev){prev.style.transition='opacity .8s ease';prev.style.opacity='0';setTimeout(()=>{if(prev)prev.textContent=q;prev.style.opacity='1';},300);}
   if(curr)curr.textContent='';
   if(opts)opts.innerHTML='';
   if(dots)dots.classList.add('show');
@@ -1389,11 +1537,11 @@ async function sendGany(){
     let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p={reflection:raw,options:[],question:'',check_in:false};}
     gHistory.push({role:'assistant',content:raw});
     if(dots)dots.classList.remove('show');
-    const ctx=p.context&&p.context.trim()?'\n\n'+p.context:'';
-    const fullText=(p.reflection||'...')+ctx;
+    const ctx2=p.context&&p.context.trim()?'\n\n'+p.context:'';
+    const fullText=(p.reflection||'...')+ctx2;
     await gStream(curr,fullText);
     const options=Array.isArray(p.options)&&p.options.length===3?p.options:null;
-    if(options){setTimeout(()=>showCandles(options),600);}
+    if(options){setTimeout(()=>showCandles(options),700);}
     else if(p.question&&p.question.trim()){await gStream(curr,fullText+'\n\n'+p.question);}
     if(p.check_in===true)setTimeout(ganyRitual,2000);
   }catch(e){if(dots)dots.classList.remove('show');if(curr)curr.textContent='The cave listens. Speak again.';}
@@ -1405,13 +1553,13 @@ function showCandles(options){
   wrap.innerHTML='';
   options.forEach((opt,i)=>{
     const c=document.createElement('div');c.className='g-candle';
-    c.innerHTML='<div class="g-candle-flame"><svg viewBox="0 0 18 28" fill="none"><ellipse cx="9" cy="24" rx="4" ry="2" fill="rgba(196,158,72,0.3)"/><rect x="7.5" y="14" width="3" height="10" fill="rgba(210,180,120,0.6)" rx="1"/><ellipse cx="9" cy="12" rx="5" ry="7" fill="rgba(255,200,80,0.85)"/><ellipse cx="9" cy="10" rx="3" ry="4" fill="rgba(255,240,180,0.9)"/></svg></div><span class="g-candle-text">'+(opt.text||'')+'</span>';
+    c.innerHTML=`<div class="g-candle-flame"><svg class="g-candle-flame-svg" viewBox="0 0 20 32" fill="none"><ellipse cx="10" cy="29" rx="4.5" ry="2" fill="rgba(150,110,40,0.25)"/><rect x="8.5" y="18" width="3" height="11" fill="rgba(180,140,80,0.55)" rx="1.5"/><ellipse cx="10" cy="15" rx="5.5" ry="8" fill="rgba(255,185,55,0.82)"/><ellipse cx="10" cy="13" rx="3.2" ry="5" fill="rgba(255,235,150,0.9)"/><ellipse cx="10" cy="11" rx="1.6" ry="2.5" fill="rgba(255,255,220,0.95)"/></svg></div><span class="g-candle-text">${opt.text||''}</span>`;
     c.addEventListener('click',()=>{
       wrap.querySelectorAll('.g-candle').forEach(x=>x.classList.add('extinguished'));
       c.classList.remove('extinguished');c.classList.add('chosen');
       const gi=document.getElementById('gi');if(gi){gi.value=opt.text||'';sendGany();}
     });
-    wrap.appendChild(c);setTimeout(()=>c.classList.add('show'),i*200);
+    wrap.appendChild(c);setTimeout(()=>c.classList.add('show'),i*280);
   });
 }
 
@@ -1421,20 +1569,37 @@ function ganyRitual(){
   const gi=document.getElementById('gi');const gb=document.getElementById('gb');
   if(gi)gi.disabled=true;if(gb)gb.disabled=true;
   ritual.style.pointerEvents='all';
-  setTimeout(()=>ritual.classList.add('dim'),500);
-  setTimeout(()=>{if(gold)gold.style.opacity='0.7';},4000);
-  setTimeout(()=>{if(words)words.classList.add('show');},6000);
-  setTimeout(()=>{if(words){words.style.transition='opacity 1.5s ease';words.style.opacity='0';}ritual.classList.add('black');},9500);
-  setTimeout(()=>{ritual.classList.remove('dim','black');ritual.style.background='rgba(3,2,1,0)';if(gold)gold.style.opacity='0';flashTo(()=>showScreen('foyer'));},11500);
+  const raysC=document.getElementById('g-rays-canvas');
+  const dustC=document.getElementById('g-dust-canvas');
+  if(raysC){raysC.style.transition='opacity 3s ease';raysC.style.opacity='0';}
+  if(dustC){dustC.style.transition='opacity 3s ease';dustC.style.opacity='0';}
+  setTimeout(()=>ritual.classList.add('dim'),600);
+  setTimeout(()=>{
+    if(gold){gold.style.opacity='0.8';}
+    if(window._gRaysSetIntensity)window._gRaysSetIntensity(1.5);
+    if(raysC)raysC.style.opacity='0.6';
+  },4500);
+  setTimeout(()=>{if(words)words.classList.add('show');},6500);
+  setTimeout(()=>{
+    if(words){words.style.transition='opacity 2s ease';words.style.opacity='0';}
+    ritual.classList.add('black');
+    stopCaveAmbient();
+  },10000);
+  setTimeout(()=>{
+    ritual.classList.remove('dim','black');ritual.style.background='rgba(3,2,1,0)';
+    if(gold)gold.style.opacity='0';
+    if(raysC){raysC.style.transition='';raysC.style.opacity='1';}
+    if(dustC){dustC.style.transition='';dustC.style.opacity='1';}
+    flashTo(()=>showScreen('foyer'));
+  },12500);
 }
 
 function gStream(el,text){
-  return new Promise(res=>{if(!el){res();return;}el.textContent='';let i=0;const iv=setInterval(()=>{if(i<text.length){el.textContent=text.slice(0,++i);}else{clearInterval(iv);res();}},22);});
+  return new Promise(res=>{if(!el){res();return;}el.textContent='';let i=0;const iv=setInterval(()=>{if(i<text.length){el.textContent=text.slice(0,++i);}else{clearInterval(iv);res();}},20);});
 }
 
 function bridgeToGanymede(){flashTo(()=>enterGanymede());}
 
-(function(){if(document.getElementById('g-kf'))return;const s=document.createElement('style');s.id='g-kf';s.textContent='@keyframes candleFlicker{0%{transform:scaleX(1) scaleY(1);}50%{transform:scaleX(.92) scaleY(1.06);}100%{transform:scaleX(1.05) scaleY(.97);}}';document.head.appendChild(s);})();
 // == POOL ==
 const PSYS=`Generate three possible timelines. JSON only: {"timelines":[{"tone":"word","vision":"2-3 sentences","lesson":"one sentence","principle":"The Principle of X"},{"tone":"","vision":"","lesson":"","principle":""},{"tone":"","vision":"","lesson":"","principle":""}],"closing_question":"one line"}`;
 const _piEl=document.getElementById('pi');if(_piEl)_piEl.addEventListener('keydown',e=>{if(e.key==='Enter')askPool();});
@@ -1784,6 +1949,62 @@ const SPEAKER_CLASS={Venus:'venus',Persephone:'persephone',Psyche:'psyche',Ganym
 let cBusy=false;
 
 window.sendCouncil=async function(){
+  // ── MOCK MODE: add ?mock=1 to URL to bypass API ──
+  const _mock=new URLSearchParams(window.location.search).get('mock');
+  if(_mock){
+    if(cBusy)return;
+    const inp=document.getElementById('fc-inp');
+    if(!inp)return;const q=inp.value.trim();if(!q)return;
+    cBusy=true;
+    const cw=document.getElementById('foyer-council');
+    if(cw){cw.style.transition='opacity .4s';cw.style.opacity='0';cw.style.pointerEvents='none';}
+    const overlay=document.getElementById('c-overlay');
+    overlay.classList.add('on');
+    document.getElementById('c-debate').classList.add('on');
+    document.getElementById('c-wait').style.display='block';
+    document.getElementById('c-debate-lines').style.display='none';
+    document.getElementById('c-recommendation').style.display='none';
+    document.getElementById('c-again').style.display='none';
+    await new Promise(r=>setTimeout(r,900));
+    document.getElementById('c-wait').style.display='none';
+    const mockLines=[
+      {speaker:'Venus',text:'There is something here that wants to be received, not fixed.'},
+      {speaker:'Persephone',text:'The pattern underneath this has been waiting a long time.'},
+      {speaker:'Psyche',text:'What would it feel like to set down the weight for a moment?'},
+      {speaker:'Ganymede',text:'You already know what to build. You need the first stone.'}
+    ];
+    const mockRec=_mock==='ganymede'?'Ganymede':'Venus';
+    const linesEl=document.getElementById('c-debate-lines');
+    linesEl.style.display='block';linesEl.innerHTML='';
+    for(let i=0;i<mockLines.length;i++){
+      const {speaker,text}=mockLines[i];
+      const cls=SPEAKER_CLASS[speaker]||'venus';
+      const div=document.createElement('div');div.className='c-line';
+      div.innerHTML=`<span class="c-speaker ${cls}">${speaker}</span>${text}`;
+      linesEl.appendChild(div);
+      await new Promise(r=>setTimeout(r,i===0?100:340));
+      div.classList.add('show');
+    }
+    await new Promise(r=>setTimeout(r,500));
+    const recEl=document.getElementById('c-recommendation');
+    const recName=document.getElementById('c-rec-name');
+    const recSoon=document.getElementById('c-rec-soon');
+    recEl.style.display='block';recName.textContent=mockRec;
+    recSoon.style.display='none';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>recEl.classList.add('on')));
+    const isLive=LIVE_CHAMBERS[mockRec.toLowerCase()]||false;
+    if(isLive){
+      await new Promise(r=>setTimeout(r,2200));
+      overlay.classList.remove('on');
+      if(mockRec.toLowerCase()==='venus')flashTo(()=>enterVenusAltar());
+      else if(mockRec.toLowerCase()==='ganymede')flashTo(()=>enterGanymede());
+    }else{
+      recSoon.style.display='block';
+      document.getElementById('c-again').style.display='block';
+    }
+    return;
+  }
+
   if(cBusy)return;
   const inp=document.getElementById('fc-inp');
   if(!inp)return;
@@ -1869,37 +2090,29 @@ RECOMMENDS: Venus`;
     div.classList.add('show');
   }
 
-  // show recommendation
+  // show recommendation then auto-enter
   await new Promise(r=>setTimeout(r,500));
   const recEl=document.getElementById('c-recommendation');
   const recName=document.getElementById('c-rec-name');
-  const recEnter=document.getElementById('c-rec-enter');
   const recSoon=document.getElementById('c-rec-soon');
 
   recEl.style.display='block';
   recName.textContent=recommended;
   const isLive=LIVE_CHAMBERS[recommended.toLowerCase()]||false;
 
+  requestAnimationFrame(()=>requestAnimationFrame(()=>recEl.classList.add('on')));
+
   if(isLive){
-    recEnter.style.display='block';
     recSoon.style.display='none';
-    const enter=()=>{
-      overlay.classList.remove('on');
-      if(recommended.toLowerCase()==='venus')flashTo(()=>enterVenusAltar());
-      else if(recommended.toLowerCase()==='ganymede')flashTo(()=>enterGanymede());
-    };
-    recName.addEventListener('click',enter);
-    recEnter.addEventListener('click',enter);
+    // auto-enter after 2.2s — council has spoken, no button needed
+    await new Promise(r=>setTimeout(r,2200));
+    overlay.classList.remove('on');
+    if(recommended.toLowerCase()==='venus')flashTo(()=>enterVenusAltar());
+    else if(recommended.toLowerCase()==='ganymede')flashTo(()=>enterGanymede());
   }else{
-    recEnter.style.display='none';
     recSoon.style.display='block';
+    document.getElementById('c-again').style.display='block';
   }
-
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    recEl.classList.add('on');
-  }));
-
-  document.getElementById('c-again').style.display='block';
 };
 
 window.councilReset=function(){
