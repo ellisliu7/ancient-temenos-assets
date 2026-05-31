@@ -61,9 +61,9 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #foyer-hall-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
 #foyer-hall-video{display:none;}
 #foyer-vignette{position:absolute;inset:0;z-index:1;pointer-events:none;background:
-  radial-gradient(ellipse 90% 90% at 50% 50%,transparent 30%,rgba(2,1,1,0.55) 100%),
-  linear-gradient(to bottom,rgba(2,1,1,0.7) 0%,transparent 18%,transparent 75%,rgba(2,1,1,0.85) 100%),
-  linear-gradient(to right,rgba(2,1,1,0.65) 0%,transparent 22%,transparent 78%,rgba(2,1,1,0.65) 100%);}
+  radial-gradient(ellipse 90% 90% at 50% 50%,transparent 55%,rgba(2,1,1,0.15) 100%),
+  linear-gradient(to bottom,rgba(2,1,1,0.18) 0%,transparent 12%,transparent 82%,rgba(2,1,1,0.35) 100%),
+  linear-gradient(to right,rgba(2,1,1,0.18) 0%,transparent 15%,transparent 85%,rgba(2,1,1,0.18) 100%);}
 #foyer-arch-glow{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:22%;height:70%;pointer-events:none;z-index:2;background:radial-gradient(ellipse 60% 80% at 50% 55%,rgba(220,170,80,0.09) 0%,rgba(200,150,60,0.04) 60%,transparent 100%);}
 #foyer-particles-canvas{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:3;}
 
@@ -358,7 +358,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #g-cave-bg{position:fixed;inset:0;opacity:0;transition:opacity 3.5s ease;}
 #g-cave-bg.reveal{opacity:1;}
 #g-cave-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;
-  filter:brightness(.72) saturate(.88);display:block;}
+  filter:brightness(.88) saturate(.92);display:block;}
 #g-cave-haze{position:fixed;inset:0;pointer-events:none;z-index:1;background:radial-gradient(ellipse 100% 50% at 50% 0%,rgba(12,8,2,0.9) 0%,transparent 65%),linear-gradient(to bottom,rgba(6,4,1,0.7) 0%,transparent 30%,transparent 70%,rgba(6,4,1,0.95) 100%);}
 #g-rays-canvas{position:fixed;inset:0;z-index:2;pointer-events:none;opacity:0;transition:opacity 5s ease;}
 #g-rays-canvas.glow{opacity:1;}
@@ -366,43 +366,48 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #g-gold-bg{position:fixed;inset:0;z-index:4;background:url('https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_gold.jpg') center/cover no-repeat;opacity:0;transition:opacity 5s ease;filter:brightness(.85) saturate(1.1);}
 #g-timelapse-frame{
   position:fixed;
-  /* Sits over the oval frame on the right wall of the cave */
-  right:7%;
-  top:12%;
-  width:clamp(160px,16vw,260px);
+  /* Oval medallion on far right wall — image analysis: ~83-97% x, ~28-72% y */
+  right:1.5%;
+  top:38%;
+  width:clamp(100px,12vw,180px);
   z-index:20;
   opacity:0;
   transition:opacity 2.5s ease;
   background:transparent;
 }
 #g-timelapse-frame.show{opacity:1;}
-/* Oval clip mask to match the arch frame in the cave image */
+/* Circle clip — the frame in the cave is a circular medallion */
 #g-timelapse-vid-wrap{
   position:relative;
   width:100%;
-  border-radius:50% 50% 46% 46% / 60% 60% 40% 40%;
+  padding-bottom:110%; /* slightly taller than wide — portrait oval */
+  border-radius:50%;
   overflow:hidden;
-  box-shadow:0 0 40px rgba(196,158,72,0.15),inset 0 0 20px rgba(0,0,0,0.5);
+  box-shadow:0 0 25px rgba(180,140,60,0.2),inset 0 0 15px rgba(0,0,0,0.6);
+}
+#g-timelapse-vid-wrap video{
+  position:absolute;
+  inset:0;width:100%;height:100%;object-fit:cover;
 }
 #g-timelapse-vid-wrap::after{
   content:'';
   position:absolute;
   inset:0;
-  border-radius:50% 50% 46% 46% / 60% 60% 40% 40%;
-  border:.5px solid rgba(196,158,72,0.22);
+  border-radius:50%;
+  border:1px solid rgba(196,158,72,0.18);
   pointer-events:none;
   z-index:2;
-  box-shadow:inset 0 0 30px rgba(0,0,0,0.6);
+  box-shadow:inset 0 0 20px rgba(0,0,0,0.5);
 }
 #g-timelapse-label{
-  font-family:'Cinzel',serif;font-size:5.5px;letter-spacing:.5em;
-  color:rgba(196,158,72,0.28);text-transform:uppercase;
-  text-align:center;padding:.5rem 0 0;display:block;
+  font-family:'Cinzel',serif;font-size:5px;letter-spacing:.45em;
+  color:rgba(196,158,72,0.22);text-transform:uppercase;
+  text-align:center;padding:.4rem 0 0;display:block;
 }
 #g-timelapse-vid{
   width:100%;display:block;
-  filter:brightness(.75) saturate(.7) sepia(.15);
-  aspect-ratio:9/11;object-fit:cover;
+  filter:brightness(.85) saturate(.75) sepia(.1);
+  aspect-ratio:1;object-fit:cover;
 }
 #g-convo{position:fixed;bottom:18%;left:50%;transform:translateX(-50%);width:min(620px,88vw);text-align:center;z-index:10;pointer-events:none;}
 #g-invitation{opacity:0;transition:opacity 2.5s ease;}
@@ -657,7 +662,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   <div id="g-timelapse-frame">
     <div id="g-timelapse-vid-wrap">
       <video id="g-timelapse-vid" muted playsinline loop>
-        <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Ganymede_WIP.mp4" type="video/mp4">
+        <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_WIP.mp4" type="video/mp4">
         <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_WIP.mov" type="video/quicktime">
       </video>
     </div>
@@ -953,7 +958,7 @@ function initFoyer(){
 
       if(foyerVidReady&&vid.readyState>=2){
 
-        hallCanvas.style.filter='brightness(.48) saturate(.72)';
+        hallCanvas.style.filter='brightness(.92) saturate(.95)';
         if(vid.readyState>=2){
           hallCtx.drawImage(vid,0,0,hallCanvas.width,hallCanvas.height);
           // dark overlay to kill the amber flash on bright video frames
@@ -1543,7 +1548,7 @@ function brightenCave(){
   gExchangeCount++;
   const vid=document.getElementById('g-cave-video');
   const raysC=document.getElementById('g-rays-canvas');
-  const br=Math.min(0.72+gExchangeCount*0.04,0.94);
+  const br=Math.min(0.88+gExchangeCount*0.02,0.96);
   const sat=Math.min(0.88+gExchangeCount*0.02,1.05);
   if(vid){vid.style.filter=`brightness(${br}) saturate(${sat})`;}
   if(gExchangeCount>=3){
@@ -1558,6 +1563,44 @@ async function sendGany(){
   if(gBusy)return;
   const inp=document.getElementById('gi');if(!inp)return;
   const q=inp.value.trim();if(!q)return;
+  // ── MOCK MODE ──
+  if(new URLSearchParams(window.location.search).get('mock')==='ganymede'){
+    gBusy=true;inp.value='';
+    const inv=document.getElementById('g-invitation');
+    const exch=document.getElementById('g-exchange');
+    const prev=document.getElementById('g-prev-text');
+    const curr=document.getElementById('g-curr-text');
+    const dots=document.getElementById('g-thinking-dots');
+    const opts=document.getElementById('g-options');
+    if(inv){inv.style.transition='opacity 1.2s ease';inv.style.opacity='0';}
+    if(exch)exch.style.display='block';
+    if(prev){prev.style.transition='opacity .8s ease';prev.style.opacity='0';setTimeout(()=>{if(prev)prev.textContent=q;prev.style.opacity='1';},300);}
+    if(curr)curr.textContent='';if(opts)opts.innerHTML='';
+    if(dots)dots.classList.add('show');
+    brightenCave();
+    await new Promise(r=>setTimeout(r,1100));
+    if(dots)dots.classList.remove('show');
+    const mockResponses=[
+      {reflection:"You're trying to make something that lives up to what you see in your head. That gap between the vision and what's on screen — that's not a design problem. That's the gap between knowing what you want to feel and knowing how to make it feel that way.",structure:"The simplest fix is almost always the right one. Remove what's competing for attention. The cave, the text, the input — each one needs to breathe.",step:"Pick the one element that feels most off right now. Fix only that. Don't touch anything else.",options:[],question:"What's the single thing that, if fixed, would make the whole thing feel right?",check_in:false},
+      {reflection:"You've built something genuinely rare here. Most people can't hold this level of visual and emotional coherence. The issue isn't talent — it's that you're too close to it now. You need to see it the way a stranger sees it for the first time.",structure:"A stranger lands on this and feels something before they read anything. That feeling is the product. Every element either serves that feeling or dilutes it.",step:"Open an incognito window. Go to the site cold. Write down the first three words that come to mind before you interact with anything.",options:[{text:"The cave atmosphere needs to be darker and moodier"},{text:"The text positioning feels off — needs to breathe more"},{text:"The oracle voice isn't quite landing yet"}],question:"",check_in:false},
+      {reflection:"You've made it this far by trusting your eye. The fact that something feels wrong is the data. Your instinct is the quality bar — and it's higher than most people's finished product.",structure:"Ship the 80% version. Real feedback from real people will tell you more in one hour than another week of refinement alone.",step:"Send the link to three people who don't know you built it. Ask them one question: what did you feel when you first arrived?",options:[],question:"",check_in:true}
+    ];
+    const idx=Math.min(gHistory.filter(m=>m.role==='user').length,mockResponses.length-1);
+    gHistory.push({role:'user',content:q});
+    const p=mockResponses[idx];
+    gHistory.push({role:'assistant',content:JSON.stringify(p)});
+    if(curr)curr.textContent='';
+    const parts=[];
+    if(p.reflection)parts.push(p.reflection);
+    if(p.structure)parts.push(p.structure);
+    if(p.step)parts.push('→ '+p.step);
+    if(!p.options||!p.options.length){if(p.question)parts.push(p.question);}
+    await gStream(curr,parts.join('\n\n'));
+    if(Array.isArray(p.options)&&p.options.length===3)setTimeout(()=>showCandles(p.options),700);
+    if(p.check_in===true)setTimeout(ganyRitual,2000);
+    gBusy=false;
+    return;
+  }
   gBusy=true;inp.value='';
   const inv=document.getElementById('g-invitation');
   const exch=document.getElementById('g-exchange');
