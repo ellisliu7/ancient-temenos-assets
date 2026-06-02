@@ -2080,13 +2080,24 @@ window.sendCouncil=async function(){
     cBusy=true;
     const cw=document.getElementById('foyer-council');
     if(cw){cw.style.transition='opacity .4s';cw.style.opacity='0';cw.style.pointerEvents='none';}
-    const overlay=document.getElementById('c-overlay');
+    // Wait for council DOM to be injected if not ready yet
+    let overlay=document.getElementById('c-overlay');
+    if(!overlay){
+      await new Promise(r=>setTimeout(r,1200));
+      overlay=document.getElementById('c-overlay');
+    }
+    if(!overlay){cBusy=false;return;}
     overlay.classList.add('on');
-    document.getElementById('c-debate').classList.add('on');
-    document.getElementById('c-wait').style.display='block';
-    document.getElementById('c-debate-lines').style.display='none';
-    document.getElementById('c-recommendation').style.display='none';
-    document.getElementById('c-again').style.display='none';
+    const debateEl=document.getElementById('c-debate');
+    if(debateEl)debateEl.classList.add('on');
+    const waitEl=document.getElementById('c-wait');
+    const linesEl2=document.getElementById('c-debate-lines');
+    const recEl2=document.getElementById('c-recommendation');
+    const againEl=document.getElementById('c-again');
+    if(waitEl)waitEl.style.display='block';
+    if(linesEl2){linesEl2.style.display='none';linesEl2.innerHTML='';}
+    if(recEl2){recEl2.style.display='none';recEl2.classList.remove('on');}
+    if(againEl)againEl.style.display='none';
     await new Promise(r=>setTimeout(r,900));
     document.getElementById('c-wait').style.display='none';
     const mockLines=[
