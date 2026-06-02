@@ -61,9 +61,9 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #foyer-hall-canvas{position:absolute;inset:0;width:100%;height:100%;z-index:0;}
 #foyer-hall-video{display:none;}
 #foyer-vignette{position:absolute;inset:0;z-index:1;pointer-events:none;background:
-  radial-gradient(ellipse 90% 90% at 50% 50%,transparent 70%,rgba(2,1,1,0.06) 100%),
-  linear-gradient(to bottom,rgba(2,1,1,0.08) 0%,transparent 10%,transparent 88%,rgba(2,1,1,0.18) 100%),
-  linear-gradient(to right,rgba(2,1,1,0.08) 0%,transparent 12%,transparent 88%,rgba(2,1,1,0.08) 100%);}
+  radial-gradient(ellipse 90% 90% at 50% 50%,transparent 60%,rgba(2,1,1,0.18) 100%),
+  linear-gradient(to bottom,rgba(2,1,1,0.22) 0%,transparent 12%,transparent 82%,rgba(2,1,1,0.38) 100%),
+  linear-gradient(to right,rgba(2,1,1,0.18) 0%,transparent 14%,transparent 86%,rgba(2,1,1,0.18) 100%);}
 #altar-venus:hover .al-name,#altar-ganymede:hover .al-name{color:rgba(238,220,168,0.95);text-shadow:0 0 20px rgba(196,158,72,0.45);}
 #altar-persephone:hover .al-name,#altar-psyche:hover .al-name{color:rgba(238,220,168,0.85);text-shadow:0 0 20px rgba(196,158,72,0.35);}
 #altar-venus:hover .al-intent,#altar-ganymede:hover .al-intent{color:rgba(196,158,72,0.75);}
@@ -83,12 +83,12 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .altar-poem p{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(11px,1.1vw,16px);color:rgba(238,220,168,0.72);letter-spacing:.06em;line-height:1.8;}
 .altar-label{position:absolute;bottom:6%;left:50%;transform:translateX(-50%);text-align:center;pointer-events:none;opacity:0;transition:opacity 1.5s ease;white-space:nowrap;z-index:5;}
 .altar-label{position:absolute;bottom:3%;left:50%;transform:translateX(calc(-50% + var(--px,0px))) translateY(var(--py,0px));text-align:center;pointer-events:none;opacity:0;transition:opacity 1.5s ease,transform .1s linear;white-space:nowrap;z-index:5;}
-.altar-label .al-name{font-family:'Cinzel',serif;transition:color 0.8s ease,letter-spacing 0.8s ease;font-style:normal;font-size:clamp(16px,1.9vw,26px);font-weight:300;color:rgba(210,185,130,0.85);letter-spacing:.18em;text-transform:uppercase;display:block;}
-.altar-label .al-intent{font-family:'Cinzel',serif;transition:color 0.8s ease;font-size:clamp(6px,.65vw,8px);letter-spacing:.45em;color:rgba(210,185,130,0.38);text-transform:uppercase;margin-top:.3rem;display:block;}
+.altar-label .al-name{font-family:'Cinzel',serif;transition:color 0.8s ease,letter-spacing 0.8s ease;font-style:normal;font-size:clamp(16px,1.9vw,26px);font-weight:300;color:rgba(218,192,138,0.97);letter-spacing:.18em;text-transform:uppercase;display:block;}
+.altar-label .al-intent{font-family:'Cinzel',serif;transition:color 0.8s ease;font-size:clamp(6px,.65vw,8px);letter-spacing:.45em;color:rgba(210,185,130,0.62);text-transform:uppercase;margin-top:.3rem;display:block;}
 .altar-label .al-attrs{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(9px,.9vw,12px);letter-spacing:.12em;color:rgba(196,158,72,0.35);margin-top:.15rem;display:block;}
-.altar-label .al-tagline{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(11px,1.05vw,14px);color:rgba(210,185,130,0.5);margin-top:.45rem;line-height:1.6;display:block;}
-#foyer-title{position:absolute;top:5%;left:50%;transform:translateX(calc(-50% + var(--px,0px))) translateY(var(--py,0px));text-align:center;pointer-events:none;opacity:0;transition:opacity 2.5s ease,transform .1s linear;z-index:6;}
-#foyer-title h1{font-family:'Cinzel',serif;font-size:clamp(16px,2.4vw,32px);font-weight:300;letter-spacing:.55em;color:rgba(210,185,130,0.82);text-transform:uppercase;}
+.altar-label .al-tagline{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(11px,1.05vw,14px);color:rgba(210,185,130,0.72);margin-top:.45rem;line-height:1.6;display:block;}
+#foyer-title{position:absolute;top:0;left:0;right:0;text-align:center;pointer-events:none;opacity:0;transition:opacity 2.5s ease,transform .1s linear;z-index:6;padding:3% 0 4%;background:linear-gradient(to bottom,rgba(0,0,0,0.18),transparent);}
+#foyer-title h1{font-family:'Cinzel',serif;font-size:clamp(16px,2.4vw,32px);font-weight:300;letter-spacing:.55em;color:rgba(225,200,145,0.94);text-transform:uppercase;text-shadow:0 2px 12px rgba(0,0,0,0.65),0 0 40px rgba(180,130,50,0.12);}
 #foyer-title p{font-family:'Cinzel',serif;font-style:normal;font-size:clamp(7px,.7vw,9px);letter-spacing:.35em;color:rgba(210,185,130,0.35);text-transform:uppercase;margin-top:.5rem;}
 #foyer-choose{position:absolute;bottom:3%;left:50%;transform:translateX(calc(-50% + var(--px,0px))) translateY(var(--py,0px));text-align:center;pointer-events:none;opacity:0;transition:opacity 2s ease,transform .1s linear;z-index:6;white-space:nowrap;}
 #foyer-choose .fc-council-line{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(11px,1.05vw,14px);color:rgba(210,185,130,0.3);letter-spacing:.06em;margin-bottom:.4rem;display:block;}
@@ -328,13 +328,13 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 @keyframes oracleRotateRev{to{transform:rotate(-360deg);}}
 
 /* council input */
-#foyer-council{position:absolute;top:26%;left:50%;transform:translateX(-50%);z-index:6;width:min(480px,72vw);opacity:0;transition:opacity 2s ease;pointer-events:none;text-align:center;}
+#foyer-council{position:absolute;top:26%;left:50%;transform:translateX(-50%);z-index:6;width:min(480px,72vw);opacity:0;transition:opacity 2s ease;pointer-events:none;text-align:center;padding:1.8rem 2rem 1.5rem;background:rgba(38,22,8,0.48);backdrop-filter:blur(22px) saturate(.82);-webkit-backdrop-filter:blur(22px) saturate(.82);border-radius:16px;border:.5px solid rgba(210,160,60,0.12);box-shadow:0 0 80px rgba(4,2,1,0.2),inset 0 0 50px rgba(180,110,30,0.13),inset 0 1px 0 rgba(255,200,90,0.14),inset 0 -1px 0 rgba(120,60,10,0.08);mask-image:radial-gradient(ellipse 92% 88% at 50% 50%,black 50%,transparent 100%);-webkit-mask-image:radial-gradient(ellipse 92% 88% at 50% 50%,black 50%,transparent 100%);}
 #foyer-council.visible{opacity:1;pointer-events:all;}
-.fc-inp-wrap{position:relative;background:rgba(8,5,2,0.35);backdrop-filter:blur(10px);border:.5px solid rgba(196,158,72,0.2);border-radius:4px;padding:.8rem 1.1rem;overflow:hidden;}
+.fc-inp-wrap{position:relative;background:rgba(40,28,20,0.35);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:10px;padding:.85rem 1.2rem;overflow:hidden;border:1px solid rgba(255,255,255,0.06);box-shadow:inset 0 1px 0 rgba(255,210,120,0.07),inset 0 0 20px rgba(140,85,20,0.08);}
 .fc-inp-wrap::after{content:'';position:absolute;top:0;left:10%;right:10%;height:.5px;background:linear-gradient(90deg,transparent,rgba(255,230,140,0.3) 50%,transparent);}
 .fc-inp-row{display:flex;align-items:center;gap:.6rem;}
 .fc-inp{flex:1;background:transparent;border:none;outline:none;font-family:'Cormorant Garamond',serif;font-size:clamp(14px,1.3vw,18px);color:rgba(238,220,168,0.88);caret-color:rgba(196,158,72,0.8);}
-.fc-inp::placeholder{color:rgba(196,158,72,0.3);font-style:italic;}
+.fc-inp::placeholder{color:rgba(210,175,95,0.72);font-style:italic;}
 .fc-send{width:32px;height:32px;background:transparent;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;opacity:.55;transition:opacity .3s;flex-shrink:0;}
 .fc-send:hover{opacity:1;}
 .fc-send svg{width:13px;height:13px;}
@@ -493,7 +493,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 <!-- ══ FOYER (REBUILT) ══ -->
 <div class="screen" id="foyer">
   <video id="foyer-hall-video" muted playsinline preload="auto" loop>
-    <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Foyer.mp4" type="video/mp4">
+    <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Foyer_Current.mp4" type="video/mp4">
   </video>
   <canvas id="foyer-hall-canvas"></canvas>
   <div id="foyer-vignette"></div>
@@ -554,11 +554,11 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 
   <!-- Council input — bottom center -->
   <div id="foyer-council">
-    <p style="font-family:'Cormorant',serif;font-style:italic;font-size:clamp(24px,3vw,38px);color:rgba(210,185,130,0.75);letter-spacing:.02em;margin-bottom:.3rem;display:block;">Welcome home.</p>
-    <p style="font-family:'Cinzel',serif;font-size:clamp(7px,.8vw,10px);letter-spacing:.4em;text-transform:uppercase;color:rgba(210,185,130,0.3);margin-bottom:1rem;display:block;">What's on your mind today?</p>
+    <p style="font-family:'Cormorant',serif;font-style:italic;font-size:clamp(24px,3vw,38px);color:rgba(238,220,168,0.95);letter-spacing:.02em;margin-bottom:.3rem;display:block;text-shadow:0 2px 20px rgba(0,0,0,0.9),0 0 40px rgba(0,0,0,0.7);">Welcome home.</p>
+    <p style="font-family:'Cinzel',serif;font-size:clamp(7px,.8vw,10px);letter-spacing:.4em;text-transform:uppercase;color:rgba(215,190,138,0.82);margin-bottom:1rem;display:block;text-shadow:0 1px 12px rgba(0,0,0,0.9);">Speak, and the temple will listen.</p>
     <div class="fc-inp-wrap">
       <div class="fc-inp-row">
-        <input class="fc-inp" id="fc-inp" type="text" placeholder="Share what you seek guidance on..." autocomplete="off" spellcheck="false"/>
+        <input class="fc-inp" id="fc-inp" type="text" placeholder="What guidance do you seek today?" autocomplete="off" spellcheck="false"/>
         <button class="fc-send" id="fc-send" onclick="sendCouncil()">
           <svg viewBox="0 0 14 14" fill="none" stroke="rgba(196,158,72,0.7)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>
         </button>
@@ -825,7 +825,29 @@ function goReturn(){
   const prev={foyer:'threshold',venusBreath:'foyer',venusOracle:'foyer',ganymedeScreen:'foyer'};
   const target=prev[currentScreen]||'foyer';
   if(currentScreen==='venusOracle'){hideCupid();resetVenusState();}
-  flashTo(()=>showScreen(target));
+  flashTo(()=>{
+    showScreen(target);
+    // Always fully reset council state when returning to foyer
+    if(target==='foyer'){
+      const ov=document.getElementById('c-overlay');
+      const rec=document.getElementById('c-recommendation');
+      const debate=document.getElementById('c-debate');
+      const recName=document.getElementById('c-rec-name');
+      const cEl=document.getElementById('foyer-council');
+      if(ov)ov.classList.remove('on');
+      if(debate)debate.classList.remove('on');
+      if(rec){rec.classList.remove('on');rec.style.display='none';}
+      if(recName)recName.textContent='';
+      // Reset debate lines and busy state
+      const dl=document.getElementById('c-debate-lines');
+      const cw2=document.getElementById('c-wait');
+      if(dl){dl.innerHTML='';dl.style.display='none';}
+      if(cw2)cw2.style.display='block';
+      cBusy=false;
+      // Restore the council input panel
+      if(cEl)setTimeout(()=>cEl.classList.add('visible'),400);
+    }
+  });
   if(target==='threshold'){document.getElementById('returnBtn').style.display='none';document.getElementById('teachingsBtn').style.display='none';}
 }
 
@@ -1381,25 +1403,25 @@ function hideCupid(){document.getElementById('cupidWrap').style.display='none';i
 document.getElementById('venusOracle').addEventListener('scroll',function(){const vid=this.querySelector('video');if(vid)vid.style.transform=`scale(1.05) translateY(${this.scrollTop*.3}px)`;});
 
 // == GANYMEDE — Journey Polish ==
-const GSYS=`You are Ganymede inside Ancient Temenos. Voice: David Ghiyam warmth meets Elon Musk precision. Warm enough to feel safe. Sharp enough to make them act. Treat the person as an intelligent peer.
+const GSYS=`You are Ganymede — the grounding oracle of Ancient Temenos. You speak with the warmth and depth of David Ghiyam: you see the soul correction (tikkun) underneath every practical problem, and you name it with love. You also have precise structural intelligence: you cut to the real constraint and give a concrete next stone.
 
-YOUR FLOW:
-- First 1-2 exchanges: ask ONE sharp question to understand what they are working on. No options yet.
-- Once you understand: give reflection, a short bridge line, then 3 concrete options.
-- After they pick: go deep with specific next steps for that path only.
+You see the person whole. You name what is happening in their life, their pattern, their tikkun — and then you give them the practical structure to move through it. These two things are always present: the inner truth AND the outer action.
 
-WHEN GIVING OPTIONS:
-- reflection: one warm sentence naming what you see them building.
-- context: one short natural sentence bridging to options.
-- options: 3 concrete actions, plain sentence, max 12 words each. No labels.
+YOUR CONVERSATION ARC:
+Exchange 1-2: Ask ONE sharp question to understand what they are working on. Show you are listening. No options yet.
+Exchange 3-4: Once you understand — give a rich reflection (3-5 sentences). Name the PATTERN you see. Name the TIKKUN: the soul correction this moment is asking for. Name what is in the way. Then give structure: the mental model or framework that applies. Then give one concrete next step. Then 3 options.
+After they choose: Go deep on that path only. Real steps, real timeline, real considerations. Be specific. Keep tracking the tikkun underneath.
+Final exchange: When they have a clear path and real steps, bring it home. Summarise what they came in carrying, what they are leaving with, and the deeper meaning of this work. Set check_in to true.
 
-Rules: no bullet points, no dashes, no hollow affirmations. Plain sentences only.
-Set check_in true after 6+ exchanges when they have a clear path.
+THE TIKKUN: Every person who comes here is working on something practical AND something deeper. The practical thing is the vehicle. The tikkun is the soul lesson woven into it — learning to receive, to commit, to trust themselves, to stop hiding, to take up space. Always name it gently. Never preach it. Weave it into the reflection.
 
-ALWAYS return valid JSON - no markdown, no backticks:
-{"stage":"2-4 word phrase","reflection":"one warm precise sentence","context":"short bridge or empty string","options":[{"text":"max 12 words"},{"text":"max 12 words"},{"text":"max 12 words"}],"question":"one sharp question if no options yet","check_in":false}
+VOICE RULES:
+No bullet points. No dashes. Plain prose sentences. Warm, precise, grounded. Never hollow. Never vague. Speak like a trusted elder who has seen this pattern before and loves you anyway. The reflection should feel like being truly seen. The structure should feel like clarity. The step should be so specific they can do it today.
 
-If need context first: options as [], question filled. If ready: options as 3, question empty. Never both.`;
+ALWAYS return valid JSON, no markdown, no backticks:
+{"stage":"2-4 word phrase","reflection":"3-5 sentences — pattern, tikkun, what is in the way","structure":"2-3 sentences — the framework or mental model","step":"one specific concrete action for today or this week","context":"one short bridge sentence before options, or empty","options":[{"text":"concrete action phrase"},{"text":"concrete action phrase"},{"text":"concrete action phrase"}],"question":"one sharp question if not ready for options yet","check_in":false}
+
+If still gathering: options as [], question filled. If ready: all fields filled, question empty. On final exchange: check_in true.`
 
 let gHistory=[], gExchangeCount=0, gBusy=false;
 let gDustParticles=[], gRaysRAF=null, gDustRAF=null, gCaveAudio=null;
@@ -1626,7 +1648,7 @@ async function sendGany(){
   gHistory.push({role:'user',content:q});
   brightenCave();
   try{
-    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:GSYS,messages:gHistory})});
+    const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:GSYS,messages:gHistory})});
     const data=await res.json();if(data.error)throw new Error(data.error.message);
     const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
     let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p={reflection:raw,options:[],question:'',check_in:false};}
@@ -2102,6 +2124,7 @@ window.sendCouncil=async function(){
       recSoon.style.display='block';
       document.getElementById('c-again').style.display='block';
     }
+    cBusy=false;
     return;
   }
 
@@ -2153,11 +2176,13 @@ RECOMMENDS: [Venus/Persephone/Psyche/Ganymede]`;
     const data=await res.json();
     fullText=(data.content?.find(b=>b.type==='text')?.text||'').trim();
   }catch(e){
+    // Rotate fallback recommendation based on question length (odd=Venus, even=Ganymede)
+    const fb=q.length%2===0?'Ganymede':'Venus';
     fullText=`Venus: The heart already knows the answer.
 Persephone: Something beneath this is ready to move.
 Psyche: What if it was simpler than you think?
 Ganymede: Name the first step and take it.
-RECOMMENDS: Venus`;
+RECOMMENDS: ${fb}`;
   }
 
   // parse lines + recommendation
