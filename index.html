@@ -838,6 +838,10 @@ function goReturn(){
       if(debate)debate.classList.remove('on');
       if(rec){rec.classList.remove('on');rec.style.display='none';}
       if(recName)recName.textContent='';
+      // Restore altar names
+      document.querySelectorAll('.al-name').forEach(n=>{n.style.transition='opacity 1.2s ease';n.style.opacity='';});
+      const pg=document.getElementById('c-portal-glow');
+      if(pg)pg.classList.remove('on');
       // Reset debate lines and busy state
       const dl=document.getElementById('c-debate-lines');
       const cw2=document.getElementById('c-wait');
@@ -2018,8 +2022,10 @@ function initCouncil(){
 // -- Inject CSS --
 const s=document.createElement('style');
 s.textContent=`
-#c-overlay{position:fixed;inset:0;z-index:50;background:rgba(3,2,1,0);pointer-events:none;transition:background 1s ease;display:flex;align-items:center;justify-content:center;}
+#c-overlay{position:fixed;inset:0;z-index:50;background:rgba(3,2,1,0);pointer-events:none;transition:background 1.8s ease;display:flex;align-items:center;justify-content:center;}
 #c-overlay.on{background:rgba(3,2,1,0.82);pointer-events:all;}
+#c-portal-glow{position:fixed;inset:0;z-index:49;pointer-events:none;opacity:0;transition:opacity 2.5s ease;background:radial-gradient(ellipse 60% 55% at 50% 48%,rgba(196,140,40,0.18) 0%,rgba(160,100,20,0.08) 50%,transparent 100%);}
+#c-portal-glow.on{opacity:1;}
 #c-debate{width:min(560px,84vw);opacity:0;transition:opacity .6s ease;}
 #c-debate.on{opacity:1;}
 #c-debate-lines{font-family:'Cormorant Garamond',serif;font-size:clamp(15px,1.5vw,19px);line-height:1.9;color:rgba(238,220,168,0.82);}
@@ -2045,6 +2051,7 @@ document.head.appendChild(s);
 
 // -- Inject HTML --
 document.body.insertAdjacentHTML('beforeend',`
+<div id="c-portal-glow"></div>
 <div id="c-overlay">
   <div id="c-debate">
     <div id="c-wait">The council is listening...</div>
@@ -2146,9 +2153,16 @@ window.sendCouncil=async function(){
   if(!q)return;
   cBusy=true;
 
-  // hide input, show overlay
+  // ── BREATH MOMENT ── slow fade, portal glow, altar shimmer
   const cw=document.getElementById('foyer-council');
-  if(cw){cw.style.transition='opacity .4s';cw.style.opacity='0';cw.style.pointerEvents='none';}
+  if(cw){cw.style.transition='opacity 1.2s ease';cw.style.opacity='0';cw.style.pointerEvents='none';}
+  // Portal glow blooms at centre
+  const portalGlow=document.getElementById('c-portal-glow');
+  if(portalGlow)portalGlow.classList.add('on');
+  // Altar names soften
+  document.querySelectorAll('.al-name').forEach(n=>{n.style.transition='opacity 1.5s ease';n.style.opacity='0.22';});
+  await new Promise(r=>setTimeout(r,1400));
+  // Now darken and show council
   const overlay=document.getElementById('c-overlay');
   overlay.classList.add('on');
   document.getElementById('c-debate').classList.add('on');
@@ -2156,6 +2170,8 @@ window.sendCouncil=async function(){
   document.getElementById('c-debate-lines').style.display='none';
   document.getElementById('c-recommendation').style.display='none';
   document.getElementById('c-again').style.display='none';
+  await new Promise(r=>setTimeout(r,600));
+  if(portalGlow)portalGlow.classList.remove('on');
 
   // single API call - debate + recommendation
   const sys=`You are writing a short, sharp debate between four archetypes in Ancient Temenos. They are deciding which chamber this person needs most.
