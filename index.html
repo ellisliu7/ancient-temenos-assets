@@ -568,6 +568,182 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 </div>
 
 <!-- VENUS BREATH -->
+<!-- ══ VENUS ALTAR LAYER ══ -->
+<div class="screen" id="venusAltarLayer" style="overflow:hidden;background:#0a0604;">
+  <style>
+    #venusAltarLayer { position:relative; }
+    #va-bg { position:absolute;inset:0;z-index:0;overflow:hidden; }
+    #va-bg video { width:100%;height:100%;object-fit:cover;filter:brightness(.85) saturate(1.05); }
+    #va-bg::after { content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,2,1,0.15) 0%,rgba(4,2,1,0.05) 50%,rgba(4,2,1,0.55) 100%); }
+    #va-content { position:relative;z-index:10;width:100%;height:100vh;display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:0 4vw; }
+
+    /* ARTWORK — left */
+    #va-artwork-wrap { display:flex;align-items:center;justify-content:center;height:100vh; }
+    #va-artwork { position:relative;transition:transform .1s ease;will-change:transform; }
+    #va-artwork img {
+      height:72vh;
+      max-height:620px;
+      width:auto;
+      object-fit:contain;
+      display:block;
+      filter:brightness(.92) contrast(1.04);
+      box-shadow: 0 0 80px rgba(196,158,72,0.08), 0 0 160px rgba(196,158,72,0.04);
+    }
+    #va-artwork-credit {
+      position:absolute;
+      bottom:-1.75rem;
+      left:0;right:0;
+      text-align:center;
+      font-family:'Cinzel',serif;
+      font-size:7.5px;
+      letter-spacing:.28em;
+      text-transform:uppercase;
+      color:rgba(196,158,72,0.22);
+    }
+
+    /* CENTER — just breathing space, sculpture stays from oracle */
+    #va-center { width:2vw; }
+
+    /* RIGHT PANEL */
+    #va-right { display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:2rem;padding-left:2vw; }
+
+    /* timelapse */
+    #va-timelapse-wrap { display:flex;flex-direction:column;gap:.625rem; }
+    #va-timelapse-label { font-family:'Cinzel',serif;font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:rgba(196,158,72,0.3); }
+    #va-timelapse {
+      width:min(22vw,280px);
+      aspect-ratio:9/16;
+      max-height:38vh;
+      overflow:hidden;
+      border:0.5px solid rgba(196,158,72,0.12);
+      position:relative;
+      background:#0a0604;
+    }
+    #va-timelapse video { width:100%;height:100%;object-fit:cover;opacity:.88; }
+    #va-timelapse::after { content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 60%,rgba(4,2,1,0.45) 100%);pointer-events:none; }
+
+    /* oracle gate */
+    #va-gate { display:flex;flex-direction:column;gap:.75rem; }
+    #va-gate-line { width:min(22vw,280px);height:.5px;background:linear-gradient(to right,rgba(196,158,72,0.25),transparent); }
+    #va-gate-text { font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:rgba(238,220,168,0.38);letter-spacing:.04em;line-height:1.6; }
+    #va-gate-btn {
+      display:inline-flex;align-items:center;gap:.625rem;
+      background:transparent;
+      border:.5px solid rgba(196,158,72,0.25);
+      border-radius:2px;
+      padding:.5rem 1.125rem;
+      cursor:pointer;
+      transition:all .3s;
+      width:fit-content;
+    }
+    #va-gate-btn:hover { border-color:rgba(196,158,72,0.5);background:rgba(196,158,72,0.04); }
+    #va-gate-btn svg { flex-shrink:0; }
+    #va-gate-btn span { font-family:'Cinzel',serif;font-size:8px;letter-spacing:.22em;text-transform:uppercase;color:rgba(196,158,72,0.5); }
+    #va-gate-btn:hover span { color:rgba(196,158,72,0.8); }
+
+    /* waitlist */
+    #va-waitlist { display:none;flex-direction:column;gap:.5rem;animation:vaFadeUp .4s ease both; }
+    #va-waitlist.show { display:flex; }
+    @keyframes vaFadeUp { from{opacity:0;transform:translateY(6px)} to{opacity:1;transform:translateY(0)} }
+    #va-waitlist-input {
+      background:rgba(196,158,72,0.04);
+      border:.5px solid rgba(196,158,72,0.18);
+      border-radius:2px;
+      padding:.5rem .875rem;
+      font-family:'Cormorant Garamond',serif;
+      font-style:italic;
+      font-size:13px;
+      color:rgba(238,220,168,0.7);
+      outline:none;
+      width:min(22vw,280px);
+      transition:border-color .3s;
+    }
+    #va-waitlist-input::placeholder { color:rgba(196,158,72,0.22); }
+    #va-waitlist-input:focus { border-color:rgba(196,158,72,0.35); }
+    #va-waitlist-submit {
+      background:transparent;
+      border:.5px solid rgba(196,158,72,0.22);
+      border-radius:2px;
+      padding:.45rem 1.125rem;
+      font-family:'Cinzel',serif;
+      font-size:7.5px;
+      letter-spacing:.2em;
+      text-transform:uppercase;
+      color:rgba(196,158,72,0.45);
+      cursor:pointer;
+      width:fit-content;
+      transition:all .3s;
+    }
+    #va-waitlist-submit:hover { border-color:rgba(196,158,72,0.45);color:rgba(196,158,72,0.7); }
+    #va-waitlist-confirm { font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:rgba(196,158,72,0.45);display:none; }
+
+    /* name bottom center */
+    #va-name {
+      position:absolute;
+      bottom:1.5rem;left:0;right:0;
+      text-align:center;
+      z-index:10;
+      font-family:'Cinzel',serif;
+      font-size:8px;
+      letter-spacing:.4em;
+      text-transform:uppercase;
+      color:rgba(196,158,72,0.18);
+    }
+  </style>
+
+  <div id="va-bg">
+    <video autoplay muted loop playsinline preload="auto">
+      <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Altar.mp4" type="video/mp4">
+    </video>
+  </div>
+
+  <div id="va-content">
+    <!-- ARTWORK -->
+    <div id="va-artwork-wrap">
+      <div id="va-artwork">
+        <img src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Artwork.jpg" alt="Venus — El Liu">
+        <div id="va-artwork-credit">Venus · El Liu</div>
+      </div>
+    </div>
+
+    <div id="va-center"></div>
+
+    <!-- RIGHT -->
+    <div id="va-right">
+      <div id="va-timelapse-wrap">
+        <div id="va-timelapse-label">How she was made</div>
+        <div id="va-timelapse">
+          <video autoplay muted loop playsinline preload="auto">
+            <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_timelapse.mp4" type="video/mp4">
+          </video>
+        </div>
+      </div>
+
+      <div id="va-gate">
+        <div id="va-gate-line"></div>
+        <div id="va-gate-text">The oracle requires initiation.</div>
+        <button id="va-gate-btn" onclick="vaToggleGate()">
+          <svg width="10" height="13" viewBox="0 0 10 13" fill="none">
+            <rect x=".5" y="5.5" width="9" height="7" rx="1" stroke="rgba(196,158,72,0.5)" stroke-width=".8"/>
+            <path d="M2.5 5.5V3.5a2.5 2.5 0 015 0v2" stroke="rgba(196,158,72,0.5)" stroke-width=".8" stroke-linecap="round"/>
+          </svg>
+          <span>Enter the Oracle</span>
+        </button>
+        <div id="va-waitlist">
+          <input id="va-waitlist-input" type="email" placeholder="your@email.com" />
+          <button id="va-waitlist-submit" onclick="vaSubmitWaitlist()">Join the waitlist</button>
+          <div id="va-waitlist-confirm">You will be among the first to receive your key.</div>
+        </div>
+        <div style="margin-top:.25rem;">
+          <button onclick="flashTo(()=>enterVenusOracle())" style="background:transparent;border:none;font-family:'Cinzel',serif;font-size:7px;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,158,72,0.22);cursor:pointer;padding:0;transition:color .3s;" onmouseover="this.style.color='rgba(196,158,72,0.5)'" onmouseout="this.style.color='rgba(196,158,72,0.22)'">I already have a key →</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="va-name">Ancient Temenos · Venus</div>
+</div>
+
 <div class="screen" id="venusBreath" style="background:transparent;">
   <div style="text-align:center;padding:2rem;animation:fadeUp 1.5s ease forwards;">
     <p style="font-family:'Cormorant',serif;font-style:italic;font-size:clamp(14px,2vw,20px);color:rgba(238,220,168,0.35);line-height:2.2;letter-spacing:.08em;">take a moment to set an intention<br>and just breathe</p>
@@ -814,15 +990,15 @@ function showScreen(id){
   currentScreen=id;
   inCave=(id==='ganymedeScreen');
   bgC.style.display='block';
-  const showReturn=['foyer','venusBreath','venusOracle','ganymedeScreen'].includes(id);
-  const showTeachings=['venusOracle','ganymedeScreen','foyer'].includes(id);
+  const showReturn=['foyer','venusBreath','venusOracle','ganymedeScreen','persephoneScreen','venusAltarLayer'].includes(id);
+  const showTeachings=['venusOracle','ganymedeScreen','foyer','venusAltarLayer'].includes(id);
   document.getElementById('returnBtn').style.display=showReturn?'flex':'none';
   document.getElementById('teachingsBtn').style.display=showTeachings?'flex':'none';
   if(id==='foyer')setTimeout(initFoyer,150);
 }
 
 function goReturn(){
-  const prev={foyer:'threshold',venusBreath:'foyer',venusOracle:'foyer',ganymedeScreen:'foyer'};
+  const prev={foyer:'threshold',venusBreath:'foyer',venusOracle:'foyer',ganymedeScreen:'foyer',persephoneScreen:'foyer',venusAltarLayer:'foyer'};
   const target=prev[currentScreen]||'foyer';
   if(currentScreen==='venusOracle'){hideCupid();resetVenusState();}
   flashTo(()=>{
@@ -1147,7 +1323,40 @@ document.getElementById('foyer').addEventListener('touchstart',initFoyerAudio,{o
 let vHistory=[],venusOracleOpened=false,venusConvOpen=false;
 let lastPrinciple='The Principle of Cause and Effect',lastMirror='';
 
-function enterVenusAltar(){enterVenusOracle();}
+function enterVenusAltar(){
+  showScreen('venusAltarLayer');
+  vaInitParallax();
+}
+
+function vaToggleGate(){
+  const w=document.getElementById('va-waitlist');
+  w.classList.toggle('show');
+  if(w.classList.contains('show'))setTimeout(()=>document.getElementById('va-waitlist-input').focus(),150);
+}
+
+function vaSubmitWaitlist(){
+  const email=document.getElementById('va-waitlist-input').value.trim();
+  if(!email||!email.includes('@'))return;
+  document.getElementById('va-waitlist-submit').style.display='none';
+  document.getElementById('va-waitlist-input').style.display='none';
+  document.getElementById('va-waitlist-confirm').style.display='block';
+}
+
+let vaParallaxInit=false;
+function vaInitParallax(){
+  if(vaParallaxInit)return; vaParallaxInit=true;
+  const wrap=document.getElementById('venusAltarLayer');
+  const art=document.getElementById('va-artwork');
+  if(!wrap||!art)return;
+  wrap.addEventListener('mousemove',function(e){
+    const rx=(e.clientX/window.innerWidth-.5);
+    const ry=(e.clientY/window.innerHeight-.5);
+    art.style.transform=`translate(${rx*8}px,${ry*5}px)`;
+  });
+  wrap.addEventListener('mouseleave',function(){
+    art.style.transform='translate(0,0)';
+  });
+}
 
 function enterVenusOracle(){
   showScreen('venusOracle');showCupid();
@@ -1205,18 +1414,41 @@ ALWAYS return valid JSON only, no markdown, no backticks:
 {"principle":"the truth they came to remember, stated plainly","mirror":"3 sentences spoken as their higher self, specific and grounded, no em dashes, no poetic punctuation","kybalion":"one short Kybalion line","affirmation":"a fact they already know stated so cleanly it lands, first person present tense","question":"one specific question about today, actionable not philosophical","actions":["one concrete thing to do today","one thing to stop or let go of"]}`;
 const vTh=['You already know this…','Coming back to what is real…','Finding the truth underneath…','Remembering…'];
 
+const VENUS_MOCK_RESPONSES=[
+  {principle:"You are not behind. You are becoming.",mirror:"You have been measuring yourself against a timeline that was never yours. The urgency you feel is borrowed — from expectations you absorbed before you were old enough to question them. Nothing that is truly yours is late.",kybalion:'"As within, so without. As above, so below."',affirmation:"I am exactly where I need to be.",question:"What would you do today if you stopped trying to catch up?",actions:["Write down one thing you have been postponing because it didn't feel 'ready'","Let go of one deadline you set for yourself that no longer serves you"]},
+  {principle:"Receiving is not weakness.",mirror:"You give because it feels safer than being given to. To receive is to be seen — and being seen means someone could decide you are not enough. But that is not softness. That is armour wearing a generous face.",kybalion:'"The lips of wisdom are closed, except to the ears of understanding."',affirmation:"I am allowed to receive without explanation.",question:"Who in your life do you actually let in?",actions:["Accept one offer of help this week without deflecting","Notice once today when you minimise a compliment — and don't"]},
+  {principle:"You already know what this is.",mirror:"The answer has been present for longer than you want to admit. You are not confused. You are hoping that if you wait long enough, the easier choice will become the right one. It will not. The knowing doesn't go away. It just gets quieter — and you get better at not hearing it.",kybalion:'"Nothing rests; everything moves; everything vibrates."',affirmation:"I trust what I already know.",question:"What have you known for a while that you have not yet said out loud?",actions:["Write the thing you know in one sentence — privately, just for you","Take one small action today that is consistent with what you know"]}
+];
+
 async function sendVenus(){
   const inp=document.getElementById('qi'),q=inp.value.trim();
   if(!q||document.getElementById('qb').classList.contains('loading'))return;
   inp.value='';vHistory.push({role:'user',content:q});addUserMsg(q,'vthread');
   const btn=document.getElementById('qb'),th=document.getElementById('vthinking');
   btn.classList.add('loading');btn.innerHTML=spinSvg('rgba(196,158,72,0.5)');th.textContent=vTh[Math.floor(Math.random()*vTh.length)];
+
+  // Mock mode
+  const _mock=new URLSearchParams(window.location.search).get('mock');
+  if(_mock==='venus'||_mock==='1'){
+    await new Promise(r=>setTimeout(r,1100));
+    const idx=Math.min(vHistory.filter(m=>m.role==='user').length-1,VENUS_MOCK_RESPONSES.length-1);
+    const p=VENUS_MOCK_RESPONSES[idx];
+    th.textContent='';resetVBtn();
+    lastPrinciple=p.principle;lastMirror=p.mirror;
+    vHistory.push({role:'assistant',content:JSON.stringify(p)});renderVCard(p);maybeShowVClosing();
+    return;
+  }
+
   try{
     const res=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':API_KEY,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,system:VSYS,messages:vHistory})});
     const data=await res.json();if(data.error)throw new Error(data.error.message);
     const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
     th.textContent='';resetVBtn();
     let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p={principle:'Venus speaks',mirror:raw,kybalion:'"The fracture is not the wound. It is the door."',question:'What would you see if you stopped looking away?',actions:[]};}
+    lastPrinciple=p.principle||lastPrinciple;lastMirror=p.mirror||lastMirror;
+    vHistory.push({role:'assistant',content:raw});renderVCard(p);maybeShowVClosing();
+  }catch(e){th.textContent='';resetVBtn();renderVCard({principle:'The veil',mirror:'The connection stirs but does not hold tonight. Return when you are ready.',kybalion:'"She is always here."',question:'What did you come to say?',actions:[]});}
+}
     lastPrinciple=p.principle||lastPrinciple;lastMirror=p.mirror||lastMirror;
     vHistory.push({role:'assistant',content:raw});renderVCard(p);maybeShowVClosing();
   }catch(e){th.textContent='';resetVBtn();renderVCard({principle:'The veil',mirror:'The connection stirs but does not hold tonight. Return when you are ready.',kybalion:'"She is always here."',question:'What did you come to say?',actions:[]});}
@@ -2135,7 +2367,7 @@ window.sendCouncil=async function(){
       {speaker:'Psyche',text:'What would it feel like to set down the weight for a moment?'},
       {speaker:'Ganymede',text:'You already know what to build. You need the first stone.'}
     ];
-    const mockRec=_mock==='ganymede'?'Ganymede':'Venus';
+    const mockRec=_mock==='ganymede'?'Ganymede':_mock==='persephone'?'Persephone':_mock==='venus'?'Venus':'Venus';
     const linesEl=document.getElementById('c-debate-lines');
     linesEl.style.display='block';linesEl.innerHTML='';
     for(let i=0;i<mockLines.length;i++){
@@ -2159,6 +2391,7 @@ window.sendCouncil=async function(){
       await new Promise(r=>setTimeout(r,2200));
       overlay.classList.remove('on');
       if(mockRec.toLowerCase()==='venus')flashTo(()=>enterVenusAltar());
+      else if(mockRec.toLowerCase()==='persephone')flashTo(()=>enterPersephone());
       else if(mockRec.toLowerCase()==='ganymede')flashTo(()=>enterGanymede());
     }else{
       recSoon.style.display='block';
