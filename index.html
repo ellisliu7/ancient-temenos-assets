@@ -1449,10 +1449,6 @@ async function sendVenus(){
     vHistory.push({role:'assistant',content:raw});renderVCard(p);maybeShowVClosing();
   }catch(e){th.textContent='';resetVBtn();renderVCard({principle:'The veil',mirror:'The connection stirs but does not hold tonight. Return when you are ready.',kybalion:'"She is always here."',question:'What did you come to say?',actions:[]});}
 }
-    lastPrinciple=p.principle||lastPrinciple;lastMirror=p.mirror||lastMirror;
-    vHistory.push({role:'assistant',content:raw});renderVCard(p);maybeShowVClosing();
-  }catch(e){th.textContent='';resetVBtn();renderVCard({principle:'The veil',mirror:'The connection stirs but does not hold tonight. Return when you are ready.',kybalion:'"She is always here."',question:'What did you come to say?',actions:[]});}
-}
 function resetVBtn(){const b=document.getElementById('qb');b.classList.remove('loading');b.innerHTML=arrowSvg('rgba(196,158,72,0.8)');}
 function addUserMsg(text,tid){const t=document.getElementById(tid);const d=document.createElement('div');d.className='msg msg-user';d.innerHTML=`<div class="bub">${text}</div><span class="who">You</span>`;t.appendChild(d);t.scrollTop=t.scrollHeight;}
 function renderVCard(data){
