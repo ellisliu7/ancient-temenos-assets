@@ -450,6 +450,33 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #g-ritual-line2{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(26px,3.2vw,44px);color:rgba(238,220,168,0.92);display:block;text-shadow:0 0 60px rgba(196,158,72,0.3);}
 @keyframes candleFlicker{0%{transform:scaleX(1) scaleY(1) rotate(-.5deg);}30%{transform:scaleX(.93) scaleY(1.07) rotate(.8deg);}60%{transform:scaleX(1.04) scaleY(.95) rotate(-.4deg);}80%{transform:scaleX(.97) scaleY(1.04) rotate(.3deg);}100%{transform:scaleX(1) scaleY(1) rotate(0deg);}}
 
+/* === ATMOSPHERE — film grain unifies video, image and UI into one substance === */
+#film-grain{
+  position:fixed;inset:-60px;z-index:9990;pointer-events:none;
+  opacity:.05;mix-blend-mode:overlay;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:160px 160px;
+}
+@keyframes grainShift{
+  0%{transform:translate(0,0);}12.5%{transform:translate(-18px,9px);}25%{transform:translate(11px,-22px);}
+  37.5%{transform:translate(-9px,-14px);}50%{transform:translate(20px,7px);}62.5%{transform:translate(-14px,18px);}
+  75%{transform:translate(8px,-9px);}87.5%{transform:translate(-20px,-5px);}100%{transform:translate(0,0);}
+}
+@media (prefers-reduced-motion: no-preference){
+  #film-grain{animation:grainShift .9s steps(1) infinite;}
+}
+
+/* === CURSOR PRESENCE — the temple notices you (desktop only) === */
+#cursor-halo{position:fixed;top:0;left:0;width:110px;height:110px;pointer-events:none;z-index:9991;opacity:0;transition:opacity 1.2s ease;}
+#cursor-halo::before{
+  content:'';position:absolute;inset:0;border-radius:50%;
+  background:radial-gradient(circle,rgba(238,216,160,0.28) 0%,rgba(196,158,72,0.11) 40%,transparent 70%);
+  mix-blend-mode:screen;transform:scale(1);
+  transition:transform .45s cubic-bezier(.22,.68,0,.98);
+}
+#cursor-halo.ch-active::before{transform:scale(1.7);}
+@media (hover:none),(pointer:coarse){#cursor-halo{display:none;}}
+
 /* === VENUS ALTAR LAYER === */
 
     /* BG VIDEO */
@@ -458,10 +485,10 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     #venusAltarLayer #va-bg::after { content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,2,1,0.08) 0%,transparent 35%,rgba(4,2,1,0.45) 100%);pointer-events:none;opacity:0;transition:opacity 2.5s ease; }
     #venusAltarLayer #va-bg.va-bg-ready::after { opacity:1; }
 
-    /* SCULPTURE — center, fades in */
+    /* SCULPTURE — center, fades in AFTER the drawing (the relic leads, the attendant follows) */
     #venusAltarLayer #va-sculpture-wrap {
       position:absolute;inset:0;z-index:2;pointer-events:none;
-      opacity:0;transition:opacity 2.5s ease 1s;
+      opacity:0;transition:opacity 3s ease 3.6s;
     }
     #venusAltarLayer #va-sculpture-wrap.show { opacity:1; }
     #venusAltarLayer #va-sculpture-canvas { width:100%;height:100%;pointer-events:auto; }
@@ -473,11 +500,30 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     #venusAltarLayer #va-artwork-wrap { flex:0 0 auto;display:flex;align-items:center;justify-content:center;height:100vh;pointer-events:none;opacity:0;transform:translateY(12px);transition:opacity 2.4s ease,transform 2.4s cubic-bezier(.22,.68,0,.98); }
     #venusAltarLayer #va-artwork { position:relative;transition:transform .18s ease;will-change:transform; }
     #venusAltarLayer #va-artwork img {
-      height:55vh;max-height:480px;width:auto;display:block;
-      opacity:0.88;
-      filter:brightness(1.05) contrast(0.92) sepia(0.25) saturate(0.75);
-      -webkit-mask-image:radial-gradient(ellipse 80% 88% at 50% 50%,black 30%,rgba(0,0,0,0.6) 55%,transparent 80%);
-      mask-image:radial-gradient(ellipse 80% 88% at 50% 50%,black 30%,rgba(0,0,0,0.6) 55%,transparent 80%);
+      height:78vh;max-height:820px;max-width:44vw;width:auto;display:block;
+      opacity:1;
+      /* The relic is shown honestly — full contrast, sharp paper edge, museum hang */
+      border:.5px solid rgba(196,158,72,0.22);
+      box-shadow:0 30px 90px -18px rgba(0,0,0,0.88), 0 0 140px rgba(196,158,72,0.07);
+      background:#0a0604;
+    }
+    /* Raking gold light — a slow candle-pass across the graphite and gold leaf */
+    #venusAltarLayer #va-artwork::before {
+      content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
+      background:linear-gradient(105deg,transparent 38%,rgba(238,216,160,0.16) 50%,transparent 62%);
+      background-size:300% 100%;background-position:140% 0;
+      mix-blend-mode:soft-light;
+    }
+    @keyframes vaRakingLight {
+      0%   { background-position:140% 0; }
+      22%  { background-position:-40% 0; }
+      100% { background-position:-40% 0; }
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      #venusAltarLayer #va-artwork::before { animation:vaRakingLight 19s ease-in-out 6s infinite; }
+    }
+    @media (max-width:768px) {
+      #venusAltarLayer #va-artwork img { height:48vh;max-width:52vw; }
     }
     #venusAltarLayer #va-artwork-credit {
       position:absolute;bottom:-1.5rem;left:0;right:0;text-align:center;
@@ -499,8 +545,11 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
       height:55vh;max-height:480px;
       width:auto;aspect-ratio:9/16;overflow:hidden;
       border:.5px solid rgba(196,158,72,0.18);position:relative;background:#0a0604;
-      opacity:.88;
+      opacity:.4;filter:saturate(.55) brightness(.78);
+      cursor:pointer;
+      transition:opacity .9s ease,filter .9s ease;
     }
+    #venusAltarLayer #va-timelapse.awake { opacity:.95;filter:none; }
     #venusAltarLayer #va-timelapse video { width:100%;height:100%;object-fit:cover; }
     #venusAltarLayer #va-timelapse::after { content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 65%,rgba(4,2,1,0.5) 100%);pointer-events:none; }
 
@@ -640,6 +689,8 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 </style>
 </head>
 <body>
+<div id="film-grain" aria-hidden="true"></div>
+<div id="cursor-halo" aria-hidden="true"></div>
 
 <!-- LOADING -->
 <div id="loadingOverlay"><p>Ancient Temenos</p></div>
@@ -786,7 +837,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
       <div id="va-timelapse-wrap">
         <div id="va-timelapse-label">How she was made</div>
         <div id="va-timelapse">
-          <video autoplay muted loop playsinline preload="auto">
+          <video id="va-timelapse-video" muted loop playsinline preload="metadata">
             <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_timelapse.mp4" type="video/mp4">
           </video>
         </div>
@@ -1628,15 +1679,6 @@ document.addEventListener('DOMContentLoaded',()=>{
     qi.addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,90)+'px';});
     qi.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();vaSendOracle();}});
   }
-
-  // === DEV SHORTCUT: ?skip=entry jumps straight to Venus room ===
-  if(new URLSearchParams(window.location.search).get('skip')==='entry'){
-    setTimeout(()=>{
-      document.getElementById('threshold').classList.remove('active','visible');
-      currentScreen='foyer'; // satisfy foyerEnter guard
-      enterVenusAltar();
-    },100);
-  }
 });
 
 let vaRoomInit=false;
@@ -1681,33 +1723,29 @@ function vaInitRoom(){
     if(bgEl) bgEl.classList.add('va-bg-ready');
   }, 600);
 
-  // === BEAT 3 — 800ms: Sculpture emerges from the dark center ===
-  // GLB's _buildVaSculpture fires sw.classList.add('show') on model load.
-  // The sculpture CSS already has: opacity:0; transition:opacity 2.5s ease 1s
-  // No action needed here — the load itself is the reveal.
-
-  // === BEAT 4 — 3200ms–4200ms: Stillness. Sculpture present. Nothing else. ===
-  // [Intentional empty space — room breathes with sculpture alone]
-
-  // === BEAT 5 — 4200ms: The artwork materialises ===
-  // El's painting blooms in — mythology before words
+  // === BEAT 3 — 1400ms: THE DRAWING emerges first from darkness ===
+  // The relic leads. Everything else in this room is attendant to her.
   setTimeout(()=>{
     const artWrap=document.getElementById('va-artwork-wrap');
     if(artWrap){ artWrap.style.opacity='1'; artWrap.style.transform='translateY(0)'; }
-  }, 4200);
+  }, 1400);
 
-  // === BEAT 6 — 5800ms: Artwork credit whispers in ===
+  // === BEAT 4 — 4200ms: Artwork credit whispers in ===
   setTimeout(()=>{
     const credit=document.getElementById('va-artwork-credit');
     if(credit){ credit.style.opacity='1'; }
-  }, 5800);
+  }, 4200);
 
-  // === BEAT 7 — 6400ms: The timelapse portal opens on the right ===
-  // The memory of its making — arrives after the painting, never with it
+  // === BEAT 5 — ~5s: Sculpture resolves in the center, after the drawing ===
+  // GLB's _buildVaSculpture fires sw.classList.add('show') on model load.
+  // Sculpture CSS now carries transition delay 3.6s — she can never precede the drawing.
+
+  // === BEAT 6 — 6800ms: The timelapse portal opens — dim, asleep, motionless ===
+  // The memory of its making waits to be attended to; it never competes with her.
   setTimeout(()=>{
     const tlWrap=document.getElementById('va-timelapse-wrap');
     if(tlWrap){ tlWrap.style.opacity='1'; tlWrap.style.transform='translateY(0)'; }
-  }, 6400);
+  }, 6800);
 
   // === BEAT 8 — 7600ms: "How she was made" label surfaces ===
   setTimeout(()=>{
@@ -3250,6 +3288,44 @@ initFoyer=function(){
   try{initCouncil();}catch(e){console.warn('Council init failed:',e);}
 };
 
+
+/* === ATMOSPHERE & PRESENCE ============================================ */
+(function(){
+  // — Timelapse: asleep until attended to. Motion never competes with the relic. —
+  const tl=document.getElementById('va-timelapse');
+  const tlv=document.getElementById('va-timelapse-video');
+  if(tl&&tlv){
+    const wake=()=>{tl.classList.add('awake');tlv.play().catch(()=>{});};
+    const sleep=()=>{tl.classList.remove('awake');tlv.pause();};
+    if(window.matchMedia('(hover:hover)').matches){
+      tl.addEventListener('mouseenter',wake);
+      tl.addEventListener('mouseleave',sleep);
+    }else{
+      tl.addEventListener('click',()=>tl.classList.contains('awake')?sleep():wake());
+    }
+  }
+  // — Cursor presence: a soft gold halo that lags behind, swelling near anything touchable —
+  if(window.matchMedia('(hover:hover) and (pointer:fine)').matches
+     && !window.matchMedia('(prefers-reduced-motion: reduce)').matches){
+    const halo=document.getElementById('cursor-halo');
+    if(halo){
+      let tx=innerWidth/2,ty=innerHeight/2,cx=tx,cy=ty,seen=false;
+      document.addEventListener('mousemove',e=>{
+        tx=e.clientX;ty=e.clientY;
+        if(!seen){seen=true;cx=tx;cy=ty;halo.style.opacity='1';}
+      });
+      document.addEventListener('mouseover',e=>{
+        const el=(e.target instanceof Element)?e.target:null;
+        halo.classList.toggle('ch-active',!!(el&&el.closest('button,a,[onclick],input,textarea,.foyer-altar')));
+      });
+      (function chLoop(){
+        requestAnimationFrame(chLoop);
+        cx+=(tx-cx)*0.12;cy+=(ty-cy)*0.12;
+        halo.style.transform=`translate(${cx}px,${cy}px) translate(-50%,-50%)`;
+      })();
+    }
+  }
+})();
 </script>
 </body>
 </html>
