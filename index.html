@@ -1628,6 +1628,15 @@ document.addEventListener('DOMContentLoaded',()=>{
     qi.addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,90)+'px';});
     qi.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();vaSendOracle();}});
   }
+
+  // === DEV SHORTCUT: ?skip=entry jumps straight to Venus room ===
+  if(new URLSearchParams(window.location.search).get('skip')==='entry'){
+    setTimeout(()=>{
+      document.getElementById('threshold').classList.remove('active','visible');
+      currentScreen='foyer'; // satisfy foyerEnter guard
+      enterVenusAltar();
+    },100);
+  }
 });
 
 let vaRoomInit=false;
