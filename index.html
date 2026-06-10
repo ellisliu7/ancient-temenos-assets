@@ -454,8 +454,9 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 
     /* BG VIDEO */
     #venusAltarLayer #va-bg { position:absolute;inset:0;z-index:0;overflow:hidden; }
-    #venusAltarLayer 
-    #venusAltarLayer #va-bg::after { content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,2,1,0.08) 0%,transparent 35%,rgba(4,2,1,0.45) 100%);pointer-events:none; }
+    #venusAltarLayer #va-bg video { opacity:0;transition:opacity 3s ease; }
+    #venusAltarLayer #va-bg::after { content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,2,1,0.08) 0%,transparent 35%,rgba(4,2,1,0.45) 100%);pointer-events:none;opacity:0;transition:opacity 2.5s ease; }
+    #venusAltarLayer #va-bg.va-bg-ready::after { opacity:1; }
 
     /* SCULPTURE — center, fades in */
     #venusAltarLayer #va-sculpture-wrap {
@@ -469,7 +470,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     #venusAltarLayer #va-content { position:relative;z-index:10;width:100%;height:100vh;display:flex;align-items:center;justify-content:space-between;padding:0 3vw;pointer-events:none; }
 
     /* ARTWORK — left, blended into room */
-    #venusAltarLayer #va-artwork-wrap { flex:0 0 auto;display:flex;align-items:center;justify-content:center;height:100vh;pointer-events:none; }
+    #venusAltarLayer #va-artwork-wrap { flex:0 0 auto;display:flex;align-items:center;justify-content:center;height:100vh;pointer-events:none;opacity:0;transform:translateY(12px);transition:opacity 2.4s ease,transform 2.4s cubic-bezier(.22,.68,0,.98); }
     #venusAltarLayer #va-artwork { position:relative;transition:transform .18s ease;will-change:transform; }
     #venusAltarLayer #va-artwork img {
       height:55vh;max-height:480px;width:auto;display:block;
@@ -492,8 +493,8 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     }
 
     /* TIMELAPSE — 9:16, matches artwork height */
-    #venusAltarLayer #va-timelapse-wrap { display:flex;flex-direction:column;gap:.5rem; }
-    #venusAltarLayer #va-timelapse-label { font-family:'Cinzel',serif;font-size:6.5px;letter-spacing:.25em;text-transform:uppercase;color:rgba(196,158,72,0.28); }
+    #venusAltarLayer #va-timelapse-wrap { display:flex;flex-direction:column;gap:.5rem;opacity:0;transform:translateY(10px);transition:opacity 2.2s ease,transform 2.2s cubic-bezier(.22,.68,0,.98); }
+    #venusAltarLayer #va-timelapse-label { font-family:'Cinzel',serif;font-size:6.5px;letter-spacing:.25em;text-transform:uppercase;color:rgba(196,158,72,0.28);opacity:0;transition:opacity 1.8s ease; }
     #venusAltarLayer #va-timelapse {
       height:55vh;max-height:480px;
       width:auto;aspect-ratio:9/16;overflow:hidden;
@@ -504,7 +505,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     #venusAltarLayer #va-timelapse::after { content:'';position:absolute;inset:0;background:linear-gradient(to bottom,transparent 65%,rgba(4,2,1,0.5) 100%);pointer-events:none; }
 
     /* ORACLE GATE */
-    #venusAltarLayer #va-gate { display:flex;flex-direction:column;gap:.6rem; }
+    #venusAltarLayer #va-gate { display:flex;flex-direction:column;gap:.6rem;opacity:0;transform:translateY(8px);transition:opacity 2s ease,transform 2s cubic-bezier(.22,.68,0,.98); }
     #venusAltarLayer #va-gate-line { width:100%;height:.5px;background:linear-gradient(to right,rgba(196,158,72,0.3),transparent); }
     #venusAltarLayer #va-gate-text { font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:rgba(238,220,168,0.32);letter-spacing:.04em;line-height:1.6; }
     #venusAltarLayer #va-gate-btn {
@@ -540,6 +541,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
       position:absolute;bottom:1.5rem;left:0;right:0;text-align:center;z-index:11;
       font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.42em;
       text-transform:uppercase;color:rgba(196,158,72,0.14);pointer-events:none;
+      opacity:0;transition:opacity 2.5s ease;
     }
 
     /* ORACLE OVERLAY — opens inside the room */
@@ -1631,21 +1633,119 @@ document.addEventListener('DOMContentLoaded',()=>{
 let vaRoomInit=false;
 function vaInitRoom(){
   if(vaRoomInit)return; vaRoomInit=true;
-  // Parallax
+
+  // === DEV SHORTCUT: ?skip=entry reveals everything instantly ===
+  const _skip=new URLSearchParams(window.location.search).get('skip')==='entry';
+  if(_skip){
+    vaInitSculpture();
+    vaInitParticles();
+    vaInitParallax();
+    const bgVid=document.querySelector('#va-bg video');
+    if(bgVid) bgVid.style.opacity='1';
+    document.getElementById('va-bg').classList.add('va-bg-ready');
+    const ids=['va-artwork-wrap','va-timelapse-wrap','va-timelapse-label','va-gate','va-name','va-artwork-credit'];
+    ids.forEach(id=>{
+      const el=document.getElementById(id);
+      if(el){el.style.opacity='1';el.style.transform='translateY(0)';}
+    });
+    return;
+  }
+
+  // === BEAT 0: Start loading sculpture immediately (GLB fetch begins now) ===
+  vaInitSculpture();
+
+  // === BEAT 1 — 0ms: Room exhales from darkness ===
+  // Background video fades in first — pure architecture, warm shadow
+  const bgVid=document.querySelector('#va-bg video');
+  if(bgVid) bgVid.style.opacity='1';
+
+  // Particles begin drifting silently
+  vaInitParticles();
+
+  // === BEAT 2 — 600ms: Room vignette deepens ===
+  // The gradient overlay settles — darkness pools at floor and ceiling
+  setTimeout(()=>{
+    const bgAfterHost=document.getElementById('va-bg');
+    if(bgAfterHost) bgAfterHost.style.setProperty('--va-overlay-ready','1');
+    // Trigger ::after fade by adding a class the CSS transitions on
+    const bgEl=document.querySelector('#venusAltarLayer #va-bg');
+    if(bgEl) bgEl.classList.add('va-bg-ready');
+  }, 600);
+
+  // === BEAT 3 — 800ms: Sculpture emerges from the dark center ===
+  // GLB's _buildVaSculpture fires sw.classList.add('show') on model load.
+  // The sculpture CSS already has: opacity:0; transition:opacity 2.5s ease 1s
+  // No action needed here — the load itself is the reveal.
+
+  // === BEAT 4 — 3200ms–4200ms: Stillness. Sculpture present. Nothing else. ===
+  // [Intentional empty space — room breathes with sculpture alone]
+
+  // === BEAT 5 — 4200ms: The artwork materialises ===
+  // El's painting blooms in — mythology before words
+  setTimeout(()=>{
+    const artWrap=document.getElementById('va-artwork-wrap');
+    if(artWrap){ artWrap.style.opacity='1'; artWrap.style.transform='translateY(0)'; }
+  }, 4200);
+
+  // === BEAT 6 — 5800ms: Artwork credit whispers in ===
+  setTimeout(()=>{
+    const credit=document.getElementById('va-artwork-credit');
+    if(credit){ credit.style.opacity='1'; }
+  }, 5800);
+
+  // === BEAT 7 — 6400ms: The timelapse portal opens on the right ===
+  // The memory of its making — arrives after the painting, never with it
+  setTimeout(()=>{
+    const tlWrap=document.getElementById('va-timelapse-wrap');
+    if(tlWrap){ tlWrap.style.opacity='1'; tlWrap.style.transform='translateY(0)'; }
+  }, 6400);
+
+  // === BEAT 8 — 7600ms: "How she was made" label surfaces ===
+  setTimeout(()=>{
+    const tlLabel=document.getElementById('va-timelapse-label');
+    if(tlLabel) tlLabel.style.opacity='1';
+  }, 7600);
+
+  // === BEAT 9 — 8800ms: The oracle gate offers itself ===
+  // Last to arrive — the invitation waits until the seeker has had time to be here
+  setTimeout(()=>{
+    const gate=document.getElementById('va-gate');
+    if(gate){ gate.style.opacity='1'; gate.style.transform='translateY(0)'; }
+  }, 8800);
+
+  // === BEAT 10 — 10500ms: Room inscription appears at the base ===
+  setTimeout(()=>{
+    const name=document.getElementById('va-name');
+    if(name) name.style.opacity='1';
+  }, 10500);
+
+  // === PARALLAX — wire after room is visible ===
+  setTimeout(()=>vaInitParallax(), 2000);
+}
+
+function vaInitParallax(){
   const wrap=document.getElementById('venusAltarLayer');
+  const stage=document.getElementById('va-stage');
   const art=document.getElementById('va-artwork');
-  if(wrap&&art){
+  const right=document.getElementById('va-right');
+  const bgVid=document.querySelector('#va-bg video');
+  let tX=0,tY=0,curX=0,curY=0;
+  if(wrap){
     wrap.addEventListener('mousemove',function(e){
       if(document.getElementById('va-oracle-overlay').classList.contains('open'))return;
-      const rx=(e.clientX/window.innerWidth-.5);
-      const ry=(e.clientY/window.innerHeight-.5);
-      art.style.transform=`translate(${rx*7}px,${ry*4}px)`;
+      tX=(e.clientX/window.innerWidth-.5);
+      tY=(e.clientY/window.innerHeight-.5);
     });
-    wrap.addEventListener('mouseleave',function(){art.style.transform='translate(0,0)';});
+    wrap.addEventListener('mouseleave',function(){tX=0;tY=0;});
   }
-  // Pingpong removed — video loops natively
-  // Sculpture on pedestal
-  setTimeout(()=>vaInitSculpture(),500);
+  (function loop(){
+    requestAnimationFrame(loop);
+    curX+=(tX-curX)*0.055; curY+=(tY-curY)*0.055;
+    if(stage) stage.style.transform=`rotateY(${curX*1.8}deg) rotateX(${-curY*0.9}deg)`;
+    if(art) art.style.transform=`translate(${curX*9}px,${curY*5}px)`;
+    if(right) right.style.transform=`translate(${curX*5}px,${curY*3}px)`;
+    if(bgVid) bgVid.style.transform=`scale(1.04) translate(${-curX*12}px,${-curY*7}px)`;
+  })();
 }
 
 function vaInitSculpture(){
