@@ -1653,7 +1653,8 @@ function enterVenusOracle(){
   }
   if(!venusOracleOpened){
     venusOracleOpened=true;
-    vHistory.push({role:'assistant',content:"What's on your mind?"});
+    /* Opener is displayed in the UI only - never sent to the API.
+       Anthropic requires conversations to start with the seeker. */
   }
 }
 
@@ -2474,7 +2475,7 @@ function enterGanymede(){
     const inp=document.getElementById('g-input-wrap');if(inp)inp.classList.add('show');
     const gi=document.getElementById('gi');if(gi){gi.focus();gi.onkeydown=e=>{if(e.key==='Enter')sendGany();};}
   },2500);
-  gHistory.push({role:'assistant',content:'You came here to build something.'});
+  /* Opener displayed in UI only - conversations sent to the API must start with the seeker. */
 }
 
 function brightenCave(){
