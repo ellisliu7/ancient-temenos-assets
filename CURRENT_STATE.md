@@ -1,3 +1,33 @@
+## Session log — Jun 11 (e) — DESIGN LANGUAGE LOCKED
+- NEW ARCHITECTURE (supersedes empty-arch plan): no more compositing
+  flat assets over plates. Four rules:
+  1. Art lives in the world, UI lives on glass — physical things
+     (artwork, frames, sculpture) are BAKED INTO renders, lit in-scene.
+     Interactive things (oracle text, input, options) are typography on
+     frosted glass that admits it's an interface. Nothing pretends.
+  2. The camera is the visitor — each chamber bg = one slow camera
+     dolly video; SCROLL SCRUBS it (reuse existing foyer scrub engine).
+  3. Scroll is the approach, stillness is the communion — scrub ends
+     at the altar; oracle conversation = held frame, scroll locked.
+  4. Hand off to the true asset at arrival — camera lands square-on at
+     artwork -> crossfade render to high-res JPG (contemplation/collect).
+- GANYMEDE = PILOT. Venus untouched until pattern proven.
+- RENDER BRIEF (El, zero credits): cave WITH artwork baked into center
+  arch, lit in-scene (gold drip can stay). One camera move 8-12s,
+  1080p: START AT THRESHOLD/doorway POV (so the same video doubles as
+  foyer->cave entry) -> slow dolly -> end square-on at the arch.
+  Scrub-friendly encoding (dense keyframes). Render ROUGH DRAFT first;
+  wire scroll to draft, only then pay for final quality.
+- FOYER: no rebuild. Hub stays as-is. Choose first, then travel:
+  altar click -> crossfade into chamber dolly start. Rejected: realtime
+  3D free-roam foyer (months of WebGL, kills the painterly feel).
+- BUILD SESSION (next, one patch): scroll-scrub chamber video +
+  arrival crossfade to JPG + frosted-glass oracle panel (~520px, amber
+  glass, smaller text, slow line-by-line reveal).
+- STILL PENDING: El's incognito 3-word test + Venus walkthrough
+  (3 flinch moments). API credits at console.anthropic.com to wake
+  the oracle; ?mock=ganymede for free flow testing meanwhile.
+
 ## Session log — Jun 11 (d)
 - BUG FIXED: medallion removal in (c) accidentally deleted the artwork
   CSS (deletion range overlapped). Artwork HTML+JS were intact; CSS
