@@ -1,3 +1,14 @@
+## Session log — Jun 11
+- Oracle 400 RESOLVED: root cause was API credit balance, not code.
+  Client + proxy verified clean. Load $5-10 credits, leave auto-reload
+  OFF until proxy has origin check + rate limiting.
+- DIRECTION RESET: oracle is FROZEN. No new oracle features.
+  New arc: 1) Ganymede artwork museum-hang + contemplation mode,
+  2) site-wide ambient sound layer, 3) relic/mint design on paper.
+  First 30 seconds must deliver wonder before friction.
+- WORKFLOW: CURRENT_STATE.md is now repo-sourced. Claude fetches it
+  at session start via raw GitHub URL. No more manual uploads.
+
 # ✦ Ancient Temenos — Current State
 *Last updated: Session 2*
 
@@ -146,3 +157,12 @@ Never ask Claude to change multiple features in one message.
 3. Fix any broken parts one at a time
 4. Venus chamber audit — make sure it still works after Ganymede rebuild
 5. Foyer font polish toward CONCEPT1
+
+## Session log — Jun 11
+- Oracle 400 RESOLVED: root cause was API credit balance, not code.
+  Client + proxy verified clean. Load credits, leave auto-reload OFF
+  until proxy has origin check + rate limiting.
+- DIRECTION RESET: oracle is FROZEN (finished, no new oracle features).
+  New arc: 1) Ganymede artwork museum-hang + contemplation mode for all
+  art, 2) site-wide ambient sound layer, 3) relic/mint design on paper.
+  First 30 seconds of the site must deliver wonder before friction.
