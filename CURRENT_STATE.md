@@ -28,6 +28,10 @@
   4. mobile: touch-drag scrub
   5. judge: pillar warp visible during slow scrub? haze too dark on
      sunlit footage? approach too short at 8s?
+- HOTFIX (same session): scrub loop died at entry — showScreen adds
+  .active 200ms after call, loop's screen-active check failed and it
+  self-terminated. Fixed: loop starts at +600ms; gScrubBy revives a
+  dead loop on any scroll input (safety net).
 - NEXT: El's verdicts from checklist -> one fix patch if needed ->
   finalize render brief -> pay for final render once.
 ## Session log — Jun 11 (e) — DESIGN LANGUAGE LOCKED

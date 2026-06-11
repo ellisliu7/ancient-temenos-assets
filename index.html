@@ -2480,6 +2480,7 @@ function gScrubBy(px){
   const k=gScrub.dur/3600;
   gScrub.target=Math.max(0,Math.min(gScrub.dur,gScrub.target+px*k));
   if(!gScrub.hinted&&px>0){gScrub.hinted=true;const h=document.getElementById('g-scroll-hint');if(h)h.classList.add('gone');}
+  if(!gScrub.raf&&!gScrub.arrived&&gScreenActive())gScrub.raf=requestAnimationFrame(gScrubLoop);
 }
 function gScrubLoop(){
   if(!gScreenActive()){gScrub.raf=null;return;}
@@ -2544,7 +2545,7 @@ function enterGanymede(){
     initDust();
   },2000);
   setTimeout(()=>{if(hint&&!gScrub.hinted&&!gScrub.arrived)hint.classList.add('show');},2600);
-  gScrub.raf=requestAnimationFrame(gScrubLoop);
+  setTimeout(()=>{if(!gScrub.raf&&!gScrub.arrived)gScrub.raf=requestAnimationFrame(gScrubLoop);},600);
   if(new URLSearchParams(window.location.search).get('skip')==='approach'){
     setTimeout(()=>{if(!gScrub.arrived){gScrub.target=gScrub.dur;gScrub.current=gScrub.dur;gArrive();}},900);
   }
