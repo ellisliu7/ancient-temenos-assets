@@ -367,6 +367,21 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #g-rays-canvas.glow{opacity:1;}
 #g-dust-canvas{position:fixed;inset:0;z-index:3;pointer-events:none;}
 #g-gold-bg{position:fixed;inset:0;z-index:4;background:url('https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_gold.jpg') center/cover no-repeat;opacity:0;transition:opacity 5s ease;filter:brightness(.85) saturate(1.1);}
+/* == GANYMEDE — approach scrub · arrival · amber glass == */
+#g-scroll-hint{position:fixed;bottom:7%;left:50%;transform:translateX(-50%);z-index:8;font-family:'Cinzel',serif;font-size:clamp(7px,.75vw,9px);letter-spacing:.6em;text-transform:uppercase;color:rgba(238,220,168,0.42);opacity:0;transition:opacity 2.4s ease;pointer-events:none;text-shadow:0 1px 14px rgba(0,0,0,.85);white-space:nowrap;}
+#g-scroll-hint.show{opacity:1;animation:gHintBreathe 5s ease-in-out infinite;}
+#g-scroll-hint.gone{opacity:0!important;transition:opacity 1.4s ease;animation:none;}
+@keyframes gHintBreathe{0%,100%{opacity:1;}50%{opacity:.45;}}
+#g-arrival-art{position:fixed;left:50%;top:44%;transform:translate(-50%,-50%) scale(.985);width:clamp(220px,24vw,360px);z-index:5;opacity:0;transition:opacity 2.8s ease,transform 2.8s cubic-bezier(.22,.68,0,.98);pointer-events:none;}
+#g-arrival-art.revealed{opacity:1;transform:translate(-50%,-50%) scale(1);}
+#g-arrival-art img{width:100%;height:auto;display:block;box-shadow:0 18px 80px rgba(0,0,0,0.85),0 0 120px rgba(196,158,72,0.07);border:.5px solid rgba(196,158,72,0.18);filter:sepia(0.1) saturate(0.92) brightness(0.9);background:#080502;}
+#g-arrival-credit{position:absolute;bottom:-1.7rem;left:0;right:0;text-align:center;font-family:'Cinzel',serif;font-size:6.5px;letter-spacing:.28em;text-transform:uppercase;color:rgba(196,158,72,0.3);}
+#g-glass{position:fixed;bottom:5%;left:50%;transform:translateX(-50%) translateY(10px);width:min(520px,90vw);z-index:12;padding:1.5rem 1.7rem 1rem;background:linear-gradient(to bottom,rgba(30,20,8,0.32),rgba(14,9,3,0.46));backdrop-filter:blur(16px) saturate(1.15);-webkit-backdrop-filter:blur(16px) saturate(1.15);border:.5px solid rgba(196,158,72,0.14);border-radius:2px;box-shadow:0 24px 70px rgba(0,0,0,0.55);opacity:0;transition:opacity 2.2s ease,transform 2.2s ease;pointer-events:none;}
+#g-glass.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:all;}
+#g-glass #g-curr-text{font-size:clamp(14px,1.25vw,17px);line-height:1.85;}
+#g-glass #g-inv-line2{font-size:clamp(16px,1.8vw,23px);}
+#g-glass #gi{font-size:clamp(15px,1.4vw,18px);}
+@media (max-width:720px){#g-glass{bottom:3%;}#g-arrival-art{width:min(62vw,300px);top:40%;}}
 /* GANYMEDE ARTWORK — mounted on left cave wall, museum treatment (mirror of Venus) */
 #g-artwork-wrap{
   position:fixed;
@@ -415,7 +430,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   text-transform:uppercase;color:rgba(180,130,50,0.22);
 }
 @media (max-width:720px){#g-artwork-wrap{display:none;}}
-#g-convo{position:fixed;bottom:18%;left:50%;transform:translateX(-50%);width:min(620px,88vw);text-align:center;z-index:10;pointer-events:none;}
+#g-convo{position:relative;width:100%;text-align:center;pointer-events:none;}
 #g-invitation{opacity:0;transition:opacity 2.5s ease;}
 #g-invitation.show{opacity:1;}
 #g-inv-line1{font-family:'Cinzel',serif;font-size:clamp(7px,.75vw,9px);letter-spacing:.6em;color:rgba(196,158,72,0.28);text-transform:uppercase;display:block;margin-bottom:1.4rem;}
@@ -438,7 +453,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .g-candle-flame{width:20px;height:32px;}
 .g-candle-flame-svg{width:100%;height:100%;animation:candleFlicker 2.2s ease-in-out infinite;}
 .g-candle-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.2vw,16px);color:rgba(238,220,168,0.65);line-height:1.55;max-width:170px;text-align:center;transition:color .4s;}
-#g-input-wrap{position:fixed;bottom:5%;left:50%;transform:translateX(-50%);width:min(520px,84vw);z-index:15;display:flex;align-items:center;border-bottom:.5px solid rgba(196,158,72,0.14);opacity:0;transition:opacity 2s ease;pointer-events:none;}
+#g-input-wrap{position:relative;width:100%;margin-top:1.1rem;display:flex;align-items:center;border-bottom:.5px solid rgba(196,158,72,0.14);opacity:0;transition:opacity 2s ease;pointer-events:none;}
 #g-input-wrap.show{opacity:1;pointer-events:all;}
 #gi{flex:1;background:transparent;border:none;outline:none;font-family:'Cormorant Garamond',serif;font-size:clamp(16px,1.6vw,21px);color:rgba(238,220,168,0.82);padding:.85rem 1rem;caret-color:rgba(196,158,72,0.7);}
 #gi::placeholder{color:rgba(196,158,72,0.18);font-style:italic;}
@@ -1026,8 +1041,8 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 <!-- ══ GANYMEDE ══ -->
 <div class="screen" id="ganymedeScreen" style="justify-content:flex-start;overflow:hidden;">
   <div id="g-cave-bg">
-    <video id="g-cave-video" autoplay muted playsinline loop preload="auto">
-      <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_cave_animated.mp4" type="video/mp4">
+    <video id="g-cave-video" muted playsinline preload="auto">
+      <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_Dolly_draft.mp4" type="video/mp4">
     </video>
   </div>
   <div id="g-cave-haze"></div>
@@ -1040,6 +1055,12 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     </div>
   </div>
   <div id="g-gold-bg"></div>
+  <div id="g-scroll-hint">Scroll to approach</div>
+  <div id="g-arrival-art">
+    <img src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_Artwork.jpg" alt="Ganymede — El Liu">
+    <div id="g-arrival-credit">Ganymede &middot; El Liu</div>
+  </div>
+  <div id="g-glass">
   <div id="g-convo">
     <div id="g-invitation">
       <p id="g-inv-line1">Ancient Temenos · Cave of Remembrance</p>
@@ -1057,6 +1078,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     <button id="gb" onclick="sendGany()">
       <svg viewBox="0 0 14 14" fill="none" stroke="rgba(196,158,72,0.7)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>
     </button>
+  </div>
   </div>
   <div id="g-ritual">
     <div id="g-ritual-words">
@@ -2446,34 +2468,86 @@ function makeDust(initial){
   return{x:Math.random()*W,y:initial?Math.random()*H:H+5,vx:(Math.random()-0.5)*0.18,vy:-(0.12+Math.random()*0.35),r:0.4+Math.random()*1.4,life:1,decay:0.0012+Math.random()*0.002,maxAlpha:0.08+Math.random()*0.22,wf:0.5+Math.random()*1.5,wp:Math.random()*Math.PI*2,wa:0.2+Math.random()*0.5,r255:isGold?196+Math.floor(Math.random()*50):210,g255:isGold?158+Math.floor(Math.random()*40):195,b255:isGold?60+Math.floor(Math.random()*30):165};
 }
 
+/* == GANYMEDE — scroll-scrub approach engine == */
+let gScrub={target:0,current:0,dur:8,raf:null,arrived:false,hinted:false};
+let gTouchY=null;
+function gVid(){return document.getElementById('g-cave-video');}
+function gScreenActive(){const s=document.getElementById('ganymedeScreen');return s&&s.classList.contains('active');}
+function gOnWheel(e){if(!gScreenActive()||gScrub.arrived)return;e.preventDefault();gScrubBy(e.deltaY);}
+function gOnTouchStart(e){if(!gScreenActive()||gScrub.arrived)return;gTouchY=e.touches[0].clientY;}
+function gOnTouchMove(e){if(!gScreenActive()||gScrub.arrived||gTouchY===null)return;e.preventDefault();const y=e.touches[0].clientY;gScrubBy((gTouchY-y)*2.4);gTouchY=y;}
+function gScrubBy(px){
+  const k=gScrub.dur/3600;
+  gScrub.target=Math.max(0,Math.min(gScrub.dur,gScrub.target+px*k));
+  if(!gScrub.hinted&&px>0){gScrub.hinted=true;const h=document.getElementById('g-scroll-hint');if(h)h.classList.add('gone');}
+}
+function gScrubLoop(){
+  if(!gScreenActive()){gScrub.raf=null;return;}
+  if(!gScrub.arrived){
+    const v=gVid();
+    if(v&&v.readyState>=2){
+      const next=gScrub.current+(gScrub.target-gScrub.current)*0.08;
+      if(Math.abs(next-gScrub.current)>0.0008){gScrub.current=next;try{v.currentTime=next;}catch(e){}}
+      if(gScrub.current>=gScrub.dur-0.08&&gScrub.target>=gScrub.dur-0.02){gArrive();return;}
+    }
+  }
+  gScrub.raf=requestAnimationFrame(gScrubLoop);
+}
+function gArrive(){
+  gScrub.arrived=true;gScrub.raf=null;
+  const v=gVid();if(v){try{v.currentTime=Math.max(0,gScrub.dur-0.05);}catch(e){}}
+  const h=document.getElementById('g-scroll-hint');if(h)h.classList.add('gone');
+  setTimeout(()=>{const a=document.getElementById('g-arrival-art');if(a)a.classList.add('revealed');},700);
+  setTimeout(()=>{
+    const gl=document.getElementById('g-glass');if(gl)gl.classList.add('show');
+    const inv=document.getElementById('g-invitation');if(inv)inv.classList.add('show');
+    const inp=document.getElementById('g-input-wrap');if(inp)inp.classList.add('show');
+    const gi=document.getElementById('gi');if(gi){gi.focus();gi.onkeydown=e=>{if(e.key==='Enter')sendGany();};}
+  },2300);
+}
+window.addEventListener('wheel',gOnWheel,{passive:false});
+window.addEventListener('touchstart',gOnTouchStart,{passive:true});
+window.addEventListener('touchmove',gOnTouchMove,{passive:false});
+
 function enterGanymede(){
   const ov=document.getElementById('c-overlay');if(ov)ov.classList.remove('on');
   const db=document.getElementById('c-debate');if(db)db.classList.remove('on');
   showScreen('ganymedeScreen');
   foyerActive=false;
   gHistory=[];gExchangeCount=0;gDustParticles=[];
+  gScrub={target:0,current:0,dur:8,raf:null,arrived:false,hinted:false};
   const bg=document.getElementById('g-cave-bg');
-  const vid=document.getElementById('g-cave-video');
+  const vid=gVid();
   const gold=document.getElementById('g-gold-bg');
   const raysC=document.getElementById('g-rays-canvas');
-  if(vid)vid.style.filter='brightness(.72) saturate(.88)';
+  if(vid){
+    vid.pause();
+    vid.style.filter='brightness(.82) saturate(.95)';
+    const setDur=()=>{if(vid.duration&&isFinite(vid.duration))gScrub.dur=vid.duration;};
+    if(vid.readyState>=1)setDur();else vid.addEventListener('loadedmetadata',setDur,{once:true});
+    try{vid.currentTime=0;}catch(e){}
+  }
   if(gold)gold.style.opacity='0';
   if(raysC){raysC.classList.remove('glow');raysC.style.opacity='0';}
   if(window._gRaysSetIntensity)window._gRaysSetIntensity(0);
   const gArt=document.getElementById('g-artwork-wrap');
-  if(gArt)gArt.classList.remove('revealed');
+  if(gArt)gArt.classList.remove('revealed'); /* legacy wall hang stays dormant — arrival artwork replaces it */
+  const arr=document.getElementById('g-arrival-art');if(arr)arr.classList.remove('revealed');
+  const gl=document.getElementById('g-glass');if(gl)gl.classList.remove('show');
+  const inv=document.getElementById('g-invitation');if(inv){inv.classList.remove('show');inv.style.opacity='';inv.style.transition='';}
+  const inpw=document.getElementById('g-input-wrap');if(inpw)inpw.classList.remove('show');
+  const hint=document.getElementById('g-scroll-hint');if(hint)hint.classList.remove('gone','show');
   setTimeout(()=>{if(bg)bg.classList.add('reveal');},300);
-  setTimeout(()=>{if(gArt)gArt.classList.add('revealed');},1600);
   setTimeout(()=>{
     startCaveAmbient();
     initGodRays();
     initDust();
   },2000);
-  setTimeout(()=>{const inv=document.getElementById('g-invitation');if(inv)inv.classList.add('show');},2800);
-  setTimeout(()=>{
-    const inp=document.getElementById('g-input-wrap');if(inp)inp.classList.add('show');
-    const gi=document.getElementById('gi');if(gi){gi.focus();gi.onkeydown=e=>{if(e.key==='Enter')sendGany();};}
-  },2500);
+  setTimeout(()=>{if(hint&&!gScrub.hinted&&!gScrub.arrived)hint.classList.add('show');},2600);
+  gScrub.raf=requestAnimationFrame(gScrubLoop);
+  if(new URLSearchParams(window.location.search).get('skip')==='approach'){
+    setTimeout(()=>{if(!gScrub.arrived){gScrub.target=gScrub.dur;gScrub.current=gScrub.dur;gArrive();}},900);
+  }
   /* Opener displayed in UI only - conversations sent to the API must start with the seeker. */
 }
 

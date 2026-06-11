@@ -1,3 +1,35 @@
+## Session log — Jun 11 (f) — GANYMEDE SCRUB SHIPPED (draft)
+- 3-WORD TEST PASSED: awe, curiosity, wonder. Cleared from docket.
+- ARRIVAL DECISION: dissolve option dead. Final render will have artwork
+  BAKED INTO arch alcove, lit in-scene, REFLECTED IN THE WATER (only
+  baking gives the reflection), pillars fixed, 10-12s. ONE render spend
+  at the end batches all fixes. Current crossfade to JPG is a stub —
+  visible seam is expected until final render.
+- BUILT (one patch, syntax-checked): Ganymede approach scrub.
+  - Chamber bg = Ganymede_Dolly_draft.mp4 (8s, all-intra, 20MB, live
+    in repo), paused, wheel + touch-drag scrub currentTime via RAF
+    lerp (~3600px wheel = full approach, touch gain 2.4x).
+  - "Scroll to approach" hint (Cinzel, breathing) at 2.6s, fades on
+    first scroll.
+  - Arrival (scrub completes): Ganymede_Artwork.jpg crossfades in
+    centered over arch (#g-arrival-art, z5) -> 2.3s later frosted
+    amber glass panel (#g-glass, 520px, blur 16px) fades up holding
+    invitation + conversation + input. Scroll locks at arrival.
+  - Legacy left-wall museum hang left DORMANT (code intact, never
+    revealed) — arrival artwork replaces it. Cleanup later.
+  - Dev shortcut: ?skip=approach jumps straight to arrival.
+  - Oracle logic untouched (frozen): sendGany, candles, ritual,
+    brighten arc, mock mode all work inside the glass panel.
+- TEST CHECKLIST (El, live URL after push):
+  1. foyer -> Ganymede: video frame 0, hint appears, scrub feels
+     smooth and SACRED (the whole point)
+  2. arrival: artwork fade timing, glass panel legibility over water
+  3. ?mock=ganymede full conversation in glass panel
+  4. mobile: touch-drag scrub
+  5. judge: pillar warp visible during slow scrub? haze too dark on
+     sunlit footage? approach too short at 8s?
+- NEXT: El's verdicts from checklist -> one fix patch if needed ->
+  finalize render brief -> pay for final render once.
 ## Session log — Jun 11 (e) — DESIGN LANGUAGE LOCKED
 - NEW ARCHITECTURE (supersedes empty-arch plan): no more compositing
   flat assets over plates. Four rules:
