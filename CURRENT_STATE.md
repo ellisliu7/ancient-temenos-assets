@@ -1,3 +1,13 @@
+## Session log — Jun 11 (d)
+- BUG FIXED: medallion removal in (c) accidentally deleted the artwork
+  CSS (deletion range overlapped). Artwork HTML+JS were intact; CSS
+  restored, verified all 3 layers present, medallion still gone.
+  Lesson: after any deletion patch, verify adjacent features survived.
+- ORACLE TESTING: oracle code is frozen and working. To test live,
+  confirm API credits are loaded at console.anthropic.com (Jun 11 root
+  cause was zero credit balance). Until then, ?mock=ganymede and
+  ?mock=venus test the full conversation flow with no API cost.
+
 ## Session log — Jun 11 (c)
 - CUT: Ganymede timelapse medallion removed (CSS + HTML + JS, zero
   leftover refs). Reason: artwork appeared 4x on screen; the cave
