@@ -1,13 +1,38 @@
+## Session log — Jun 11 (c)
+- CUT: Ganymede timelapse medallion removed (CSS + HTML + JS, zero
+  leftover refs). Reason: artwork appeared 4x on screen; the cave
+  background already depicts "the making" (painted oval, artist's
+  hand). Medallion clashed with that oval and was viewport-fragile.
+  Ganymede_WIP.mp4/.mov stay in repo — timelapse will live inside
+  contemplation mode (click hung artwork -> expand -> timelapse).
+- Artwork hang confirmed good by El on live test.
+- NEXT: El's homework (zero credits): walk full flow once, write the
+  3 exact moments the experience breaks the dream. Bring all 3 + one
+  screenshot in a single message next session. Fix moment #1 only.
+  Then: ambient sound layer. Then: contemplation mode absorbs timelapse.
+
+## Session log — Jun 11 (b)
+- SHIPPED: Ganymede artwork museum-hang. Ganymede_Artwork.jpg mounted
+  left cave wall (mirror of Venus treatment): perspective lean, wall
+  shadow, raking torchlight (21s), Cinzel credit "Ganymede · El Liu".
+  Reveals at 1.6s in entry stagger, resets on re-entry. Dust drifts in
+  front (z3, before dust canvas in DOM); gold closing crossfade (z4)
+  still covers it. Hidden <720px. Awaiting El's visual feedback.
+- WORKFLOW: Claude now outputs the full updated CURRENT_STATE.md file
+  at session end alongside index.html. El drags both into repo folder,
+  one commit via GitHub Desktop. No more manual log pasting.
+- NEXT: El walks full flow once, writes down the 3 exact moments the
+  Venus experience breaks the dream. Next session = fix moment #1 only.
+  Then: site-wide ambient sound layer.
+
 ## Session log — Jun 11
 - Oracle 400 RESOLVED: root cause was API credit balance, not code.
-  Client + proxy verified clean. Load $5-10 credits, leave auto-reload
-  OFF until proxy has origin check + rate limiting.
-- DIRECTION RESET: oracle is FROZEN. No new oracle features.
-  New arc: 1) Ganymede artwork museum-hang + contemplation mode,
-  2) site-wide ambient sound layer, 3) relic/mint design on paper.
-  First 30 seconds must deliver wonder before friction.
-- WORKFLOW: CURRENT_STATE.md is now repo-sourced. Claude fetches it
-  at session start via raw GitHub URL. No more manual uploads.
+  Client + proxy verified clean. Load credits, leave auto-reload OFF
+  until proxy has origin check + rate limiting.
+- DIRECTION RESET: oracle is FROZEN (finished, no new oracle features).
+  New arc: 1) Ganymede artwork museum-hang + contemplation mode for all
+  art, 2) site-wide ambient sound layer, 3) relic/mint design on paper.
+  First 30 seconds of the site must deliver wonder before friction.
 
 # ✦ Ancient Temenos — Current State
 *Last updated: Session 2*
@@ -157,12 +182,3 @@ Never ask Claude to change multiple features in one message.
 3. Fix any broken parts one at a time
 4. Venus chamber audit — make sure it still works after Ganymede rebuild
 5. Foyer font polish toward CONCEPT1
-
-## Session log — Jun 11
-- Oracle 400 RESOLVED: root cause was API credit balance, not code.
-  Client + proxy verified clean. Load credits, leave auto-reload OFF
-  until proxy has origin check + rate limiting.
-- DIRECTION RESET: oracle is FROZEN (finished, no new oracle features).
-  New arc: 1) Ganymede artwork museum-hang + contemplation mode for all
-  art, 2) site-wide ambient sound layer, 3) relic/mint design on paper.
-  First 30 seconds of the site must deliver wonder before friction.

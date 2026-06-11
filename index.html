@@ -367,103 +367,6 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #g-rays-canvas.glow{opacity:1;}
 #g-dust-canvas{position:fixed;inset:0;z-index:3;pointer-events:none;}
 #g-gold-bg{position:fixed;inset:0;z-index:4;background:url('https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_gold.jpg') center/cover no-repeat;opacity:0;transition:opacity 5s ease;filter:brightness(.85) saturate(1.1);}
-#g-timelapse-frame{
-  position:fixed;
-  /* Oval medallion on far right wall — image analysis: ~83-97% x, ~28-72% y */
-  right:1.5%;
-  top:52%;
-  width:clamp(100px,12vw,180px);
-  z-index:20;
-  opacity:0;
-  transition:opacity 2.5s ease;
-  background:transparent;
-}
-#g-timelapse-frame.show{opacity:1;}
-/* Circle clip — the frame in the cave is a circular medallion */
-#g-timelapse-vid-wrap{
-  position:relative;
-  width:100%;
-  padding-bottom:110%; /* slightly taller than wide — portrait oval */
-  border-radius:50%;
-  overflow:hidden;
-  box-shadow:0 0 25px rgba(180,140,60,0.2),inset 0 0 15px rgba(0,0,0,0.6);
-}
-#g-timelapse-vid-wrap video{
-  position:absolute;
-  inset:0;width:100%;height:100%;object-fit:cover;
-}
-#g-timelapse-vid-wrap::after{
-  content:'';
-  position:absolute;
-  inset:0;
-  border-radius:50%;
-  border:1px solid rgba(196,158,72,0.18);
-  pointer-events:none;
-  z-index:2;
-  box-shadow:inset 0 0 20px rgba(0,0,0,0.5);
-}
-#g-timelapse-label{
-  font-family:'Cinzel',serif;font-size:5px;letter-spacing:.45em;
-  color:rgba(196,158,72,0.22);text-transform:uppercase;
-  text-align:center;padding:.4rem 0 0;display:block;
-}
-#g-timelapse-vid{
-  width:100%;display:block;
-  filter:brightness(.85) saturate(.75) sepia(.1);
-  aspect-ratio:1;object-fit:cover;
-}
-/* GANYMEDE ARTWORK — mounted on left cave wall, museum treatment (mirror of Venus) */
-#g-artwork-wrap{
-  position:fixed;
-  left:2.5%;
-  top:50%;transform:translateY(-50%) translateY(12px);
-  width:clamp(200px,21vw,320px);
-  z-index:3;
-  pointer-events:none;
-  opacity:0;
-  transition:opacity 2.6s ease,transform 2.6s cubic-bezier(.22,.68,0,.98);
-}
-#g-artwork-wrap.revealed{opacity:1;transform:translateY(-50%) translateY(0);}
-#g-artwork{
-  position:relative;width:100%;
-  /* Lean into left cave wall — matched to Venus room's vanishing-point treatment */
-  transform:perspective(900px) rotateY(4deg) rotateX(0.5deg);
-  transform-origin:left center;
-  will-change:transform;
-}
-#g-artwork img{
-  width:100%;height:auto;display:block;
-  /* Wall-cast shadow — heavier right/bottom, reads as mounted stone, not floating UI */
-  box-shadow:
-    6px 12px 60px rgba(0,0,0,0.94),
-    2px 4px 18px rgba(0,0,0,0.88),
-    -2px 0 40px rgba(0,0,0,0.55),
-    0 0 80px rgba(180,130,50,0.05);
-  border:.5px solid rgba(180,130,50,0.16);
-  /* Cave light is dimmer than Venus's room — sit the drawing into the dark */
-  filter:sepia(0.16) saturate(0.88) brightness(0.84) contrast(1.03);
-  background:#080502;
-}
-/* Raking torchlight — slow pass, same ritual as Venus's candle-pass */
-#g-artwork::before{
-  content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
-  background:linear-gradient(105deg,transparent 38%,rgba(230,200,140,0.14) 50%,transparent 62%);
-  background-size:300% 100%;background-position:140% 0;
-  mix-blend-mode:soft-light;
-}
-#g-artwork::after{
-  content:'';position:absolute;inset:-8px;z-index:-1;pointer-events:none;
-  background:radial-gradient(ellipse 85% 70% at 60% 50%, rgba(180,130,50,0.06) 0%, transparent 70%);
-}
-@media (prefers-reduced-motion: no-preference){
-  #g-artwork::before{animation:vaRakingLight 21s ease-in-out 7s infinite;}
-}
-#g-artwork-credit{
-  position:absolute;bottom:-1.6rem;left:0;right:0;text-align:center;
-  font-family:'Cinzel',serif;font-size:6.5px;letter-spacing:.28em;
-  text-transform:uppercase;color:rgba(180,130,50,0.22);
-}
-@media (max-width:720px){#g-artwork-wrap{display:none;}}
 #g-convo{position:fixed;bottom:18%;left:50%;transform:translateX(-50%);width:min(620px,88vw);text-align:center;z-index:10;pointer-events:none;}
 #g-invitation{opacity:0;transition:opacity 2.5s ease;}
 #g-invitation.show{opacity:1;}
@@ -1089,15 +992,6 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     </div>
   </div>
   <div id="g-gold-bg"></div>
-  <div id="g-timelapse-frame">
-    <div id="g-timelapse-vid-wrap">
-      <video id="g-timelapse-vid" muted playsinline loop>
-        <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_WIP.mp4" type="video/mp4">
-        <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_WIP.mov" type="video/quicktime">
-      </video>
-    </div>
-    <span id="g-timelapse-label">witness the making</span>
-  </div>
   <div id="g-convo">
     <div id="g-invitation">
       <p id="g-inv-line1">Ancient Temenos · Cave of Remembrance</p>
@@ -2523,10 +2417,6 @@ function enterGanymede(){
   setTimeout(()=>{if(bg)bg.classList.add('reveal');},300);
   setTimeout(()=>{if(gArt)gArt.classList.add('revealed');},1600);
   setTimeout(()=>{
-    const vid=document.getElementById('g-timelapse-vid');
-    const frame=document.getElementById('g-timelapse-frame');
-    if(vid)vid.play().catch(()=>{});
-    if(frame)frame.classList.add('show');
     startCaveAmbient();
     initGodRays();
     initDust();
