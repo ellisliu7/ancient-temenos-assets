@@ -1,3 +1,27 @@
+## Session log — Jun 12 — SCRUB VERDICTS IN, RENDER BRIEF LOCKED
+- SCRUB CONFIRMED by El on live test: approach feels like traveling
+  THROUGH the cave. "Felt amazing." 8s duration is RIGHT — do not
+  lengthen. Pacing of the draft is the reference; final render must
+  match it.
+- WARP VERDICT: whole-scene warp reads as dreamlike, not broken.
+  NOT a hard fix requirement. Only constraint: artwork itself must
+  stay stable/recognizable in the final 2 seconds of the landing.
+- NO CODE CHANGED this session. index.html untouched.
+- RENDER BRIEF FINALIZED (full text in Jun 12 conversation):
+  Same cave, same 8s dolly threshold-POV -> square-on at arch.
+  ONE change to the world: Ganymede artwork baked INTO the arch
+  alcove, lit in-scene, REFLECTED in the water (rendered, not
+  composited). Match draft exposure/haze. 1080p, all-intra/dense
+  keyframes (video is scrubbed, never played).
+- EL'S HOMEWORK (zero Claude credits): take brief to render tool,
+  iterate there, judge against two tests with own eyes: (1) artwork
+  stable at landing, (2) reflection present throughout. Bring only
+  the WINNER. Push final mp4 to repo.
+- NEXT SESSION (one patch): swap dolly URL draft -> final, delete
+  JPG crossfade stub (#g-arrival-art becomes unnecessary — artwork
+  lives in the video), arrival = glass panel rise only, remove
+  dormant left-wall museum-hang code in same pass. One commit,
+  Ganymede DONE. Then pattern rolls to Venus (future session).
 ## Session log — Jun 11 (f) — GANYMEDE SCRUB SHIPPED (draft)
 - 3-WORD TEST PASSED: awe, curiosity, wonder. Cleared from docket.
 - ARRIVAL DECISION: dissolve option dead. Final render will have artwork
