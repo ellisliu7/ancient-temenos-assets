@@ -375,6 +375,26 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #g-glass{position:fixed;bottom:5%;left:50%;transform:translateX(-50%) translateY(10px);width:min(520px,90vw);z-index:12;padding:1.5rem 1.7rem 1rem;background:linear-gradient(to bottom,rgba(30,20,8,0.20),rgba(14,9,3,0.30));backdrop-filter:blur(16px) saturate(1.15);-webkit-backdrop-filter:blur(16px) saturate(1.15);border:.5px solid rgba(196,158,72,0.08);border-radius:9px;box-shadow:0 18px 55px rgba(0,0,0,0.38);opacity:0;transition:opacity 2.2s ease,transform 2.2s ease;pointer-events:none;}
 #g-glass.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:all;}
 #g-glass.show.sunk{opacity:0;transform:translateX(-50%) translateY(46px);pointer-events:none;transition:opacity 1.4s ease,transform 1.4s ease;}
+#g-gate{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,rgba(8,5,2,0.74),rgba(2,1,0,0.95));opacity:0;transition:opacity 2.6s ease;pointer-events:none;}
+#g-gate.show{display:flex;opacity:1;pointer-events:all;}
+#g-gate-sigil{width:min(360px,62vw);opacity:0;transition:opacity 3s ease;filter:drop-shadow(0 0 38px rgba(196,158,72,0.32));mix-blend-mode:screen;}
+#g-gate.lit #g-gate-sigil{opacity:0.92;}
+#g-gate-words{text-align:center;margin-top:1.4rem;opacity:0;transform:translateY(10px);transition:opacity 2.4s ease,transform 2.4s ease;max-width:min(440px,86vw);}
+#g-gate.lit #g-gate-words{opacity:1;transform:translateY(0);}
+.g-gate-eyebrow{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:rgba(196,158,72,0.62);margin:0 0 1.1rem;}
+.g-gate-line{font-family:'Cormorant Garamond',serif;font-size:clamp(17px,1.7vw,22px);line-height:1.7;color:rgba(232,216,186,0.9);margin:.2rem 0;font-style:italic;}
+#g-gate-actions{display:flex;gap:.9rem;justify-content:center;margin-top:1.8rem;flex-wrap:wrap;}
+.g-gate-btn{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;padding:.7rem 1.5rem;border-radius:2px;cursor:pointer;background:transparent;transition:all .5s ease;}
+.g-gate-btn.primary{border:.5px solid rgba(196,158,72,0.55);color:rgba(232,216,186,0.95);}
+.g-gate-btn.primary:hover{background:rgba(196,158,72,0.12);border-color:rgba(196,158,72,0.8);}
+.g-gate-btn.ghost{border:.5px solid rgba(196,158,72,0.18);color:rgba(196,158,72,0.6);}
+.g-gate-btn.ghost:hover{color:rgba(232,216,186,0.9);border-color:rgba(196,158,72,0.4);}
+#g-gate-keyform{display:none;margin-top:1.6rem;gap:.6rem;justify-content:center;align-items:center;}
+#g-gate-keyform.show{display:flex;}
+#g-gate-keyinput{background:rgba(20,14,6,0.5);border:.5px solid rgba(196,158,72,0.22);border-radius:2px;padding:.6rem .9rem;font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(232,216,186,0.95);outline:none;width:min(220px,52vw);text-align:center;letter-spacing:.04em;transition:border-color .8s ease;}
+#g-gate-keyinput:focus{border-color:rgba(196,158,72,0.5);}
+#g-gate-keyinput.deny{animation:gKeyRipple 1.8s ease;}
+@keyframes gKeyRipple{0%{border-color:rgba(196,158,72,0.5);}30%{border-color:rgba(196,158,72,0.08);}100%{border-color:rgba(196,158,72,0.22);}}
 #g-glass #g-curr-text{font-size:clamp(14px,1.25vw,17px);line-height:1.85;}
 #g-glass #g-inv-line2{font-size:clamp(16px,1.8vw,23px);}
 #g-glass #gi{font-size:clamp(15px,1.4vw,18px);}
@@ -1018,6 +1038,24 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
       <svg viewBox="0 0 14 14" fill="none" stroke="rgba(196,158,72,0.7)" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>
     </button>
   </div>
+  </div>
+  <div id="g-gate">
+    <video id="g-gate-sigil" muted playsinline preload="auto">
+      <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Sigil.mp4" type="video/mp4">
+    </video>
+    <div id="g-gate-words">
+      <p class="g-gate-eyebrow">The cave goes quiet</p>
+      <p class="g-gate-line">Ganymede has given what the open temple holds.</p>
+      <p class="g-gate-line">To go deeper, the cave asks for a Sigil Key.</p>
+      <div id="g-gate-actions">
+        <button class="g-gate-btn primary" id="g-gate-receive">Receive a Sigil Key</button>
+        <button class="g-gate-btn ghost" id="g-gate-have">I carry a Key</button>
+      </div>
+      <div id="g-gate-keyform">
+        <input id="g-gate-keyinput" type="text" placeholder="Speak your key…" autocomplete="off" spellcheck="false"/>
+        <button class="g-gate-btn primary" id="g-gate-keysubmit">Enter</button>
+      </div>
+    </div>
   </div>
   <div id="g-ritual">
     <div id="g-ritual-words">
@@ -2563,7 +2601,7 @@ async function sendGany(){
     if(!p.options||!p.options.length){if(p.question)parts.push(p.question);}
     await gStream(curr,parts.join('\n\n'));
     if(Array.isArray(p.options)&&p.options.length===3)setTimeout(()=>showCandles(p.options),700);
-    if(p.check_in===true)setTimeout(ganyRitual,2000);
+    if(p.check_in===true)setTimeout(()=>{if(!gHasKey()&&gExchangeCount>=G_FREE_LIMIT){ganyGate();}else{ganyRitual();}},2000);
     gBusy=false;
     return;
   }
@@ -2599,7 +2637,7 @@ async function sendGany(){
     await gStream(curr,fullText);
     const options=Array.isArray(p.options)&&p.options.length===3?p.options:null;
     if(options)setTimeout(()=>showCandles(options),700);
-    if(p.check_in===true)setTimeout(ganyRitual,2000);
+    if(p.check_in===true)setTimeout(()=>{if(!gHasKey()&&gExchangeCount>=G_FREE_LIMIT){ganyGate();}else{ganyRitual();}},2000);
   }catch(e){if(dots)dots.classList.remove('show');if(curr)curr.textContent='The cave listens. Speak again.';}
   gBusy=false;
 }
@@ -2618,6 +2656,40 @@ function showCandles(options){
     wrap.appendChild(c);setTimeout(()=>c.classList.add('show'),i*280);
   });
 }
+
+const G_FREE_LIMIT=3;
+function gHasKey(){try{return localStorage.getItem('temenos_sigil_key')==='1';}catch(e){return false;}}
+function gGrantKey(){try{localStorage.setItem('temenos_sigil_key','1');}catch(e){}}
+/* Ganymede's closing has already streamed. The cave now asks for the Key. */
+function ganyGate(){
+  const gate=document.getElementById('g-gate');if(!gate)return;
+  const gi=document.getElementById('gi');const gb=document.getElementById('gb');
+  if(gi)gi.disabled=true;if(gb)gb.disabled=true;
+  const sig=document.getElementById('g-gate-sigil');
+  gate.classList.add('show');
+  if(sig){try{sig.currentTime=0;sig.play().catch(()=>{});}catch(e){}}
+  setTimeout(()=>gate.classList.add('lit'),1400);
+}
+function ganyGateInit(){
+  const recv=document.getElementById('g-gate-receive');
+  const have=document.getElementById('g-gate-have');
+  const form=document.getElementById('g-gate-keyform');
+  const input=document.getElementById('g-gate-keyinput');
+  const submit=document.getElementById('g-gate-keysubmit');
+  if(!recv)return;
+  recv.addEventListener('click',()=>{window.open('https://opensea.io/','_blank');});
+  have.addEventListener('click',()=>{if(form)form.classList.add('show');if(input)input.focus();});
+  function trySubmit(){
+    const v=(input.value||'').trim().toLowerCase();
+    if(v===G_GATE_PASS){gGrantKey();const gate=document.getElementById('g-gate');if(gate){gate.classList.remove('lit');setTimeout(()=>{gate.classList.remove('show');const gi=document.getElementById('gi');const gb=document.getElementById('gb');if(gi)gi.disabled=false;if(gb){gb.disabled=false;}if(gi)gi.focus();},1600);}}
+    else{input.classList.remove('deny');void input.offsetWidth;input.classList.add('deny');input.value='';}
+  }
+  submit.addEventListener('click',trySubmit);
+  input.addEventListener('keydown',e=>{if(e.key==='Enter')trySubmit();});
+}
+document.addEventListener('DOMContentLoaded',ganyGateInit);
+/* v1 key: held in the proxy for real verification later. Client placeholder only. */
+const G_GATE_PASS='remember';
 
 function ganyRitual(){
   const ritual=document.getElementById('g-ritual');const words=document.getElementById('g-ritual-words');const gold=document.getElementById('g-gold-bg');

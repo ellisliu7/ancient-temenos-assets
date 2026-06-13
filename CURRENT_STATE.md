@@ -1,3 +1,37 @@
+## Session log — Jun 13 — SIGIL KEY GATE V1 (trial gate, shipped)
+WHAT: Ganymede oracle now has a freemium trial gate. Seeker gets the
+full natural conversation; when Ganymede completes his arc (check_in
+true), IF no key AND exchanges >= G_FREE_LIMIT (3), his closing words
+land fully, then the Sigil gate rises INSTEAD of the foyer flush.
+First-option behavior El chose: he is never cut off mid-sentence.
+
+MECHANICS (decided this session):
+- Acquisition = NFT collectible (mint/buy). "Receive a Sigil Key" btn
+  currently points to opensea.io as placeholder — SWAP for real
+  collection URL when minted.
+- "I carry a Key" -> reveals key input -> correct word grants access
+  (localStorage temenos_sigil_key=1), gate dissolves, oracle re-opens
+  with conversation intact. Wrong word -> silent ripple, no error text
+  (threshold-riddle behavior).
+- Sigil.mp4 reused as the gate's living artifact (screen-blended,
+  gold drop-shadow). NO GLB — decided against; reads crypto, costs
+  load time. GLB stays deferred to collect layer.
+
+KNOWN-TEMP / NEXT (the real build, not yet done):
+- G_GATE_PASS='remember' is a CLIENT placeholder. localStorage is
+  bypassable (clear storage = reset trial). Fine for v1 — converts
+  honest visitors. REAL gate = proxy verifies NFT ownership /
+  issued-key list server-side. That is the Supabase/auth project.
+- "Receive a Key" URL is a placeholder.
+TEST (?mock=ganymede): walk 3 messages, 3rd is Ganymede's close ->
+  his words finish -> gate rises with Sigil video -> "I carry a Key"
+  -> type "remember" -> gate dissolves, oracle returns. Clear
+  localStorage to re-test. With key present: 3rd message -> normal
+  ganyRitual -> foyer (no gate).
+
+DEFERRED EARLIER, STILL OPEN: contemplation/collect layer (touch mural
+-> true artwork + timelapse + collect rite). Now has a reason to
+exist: a Key to covet.
 ## Session log — Jun 13 — PATCH 2 (same day, feedback round)
 - INVITATION LINE REVERTED to "You came here to build something."
   El's call: straightforward over fluffy. LOCKED — this line tells
