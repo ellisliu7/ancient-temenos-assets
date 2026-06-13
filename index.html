@@ -1003,7 +1003,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   <div id="g-convo">
     <div id="g-invitation">
       <p id="g-inv-line1">Ancient Temenos · Cave of Remembrance</p>
-      <p id="g-inv-line2">Something you carry is ready to take form.</p>
+      <p id="g-inv-line2">You came here to build something.</p>
     </div>
     <div id="g-exchange">
       <p id="g-prev-text"></p>
@@ -2438,7 +2438,7 @@ function gArrive(){
   const v=gVid();if(v){try{v.currentTime=Math.max(0,gScrub.dur-0.05);}catch(e){}}
   const h=document.getElementById('g-scroll-hint');if(h)h.classList.add('gone');
   setTimeout(()=>{
-    const gl=document.getElementById('g-glass');if(gl)gl.classList.add('show');
+    const gl=document.getElementById('g-glass');if(gl){gl.classList.remove('sunk');gl.classList.add('show');}
     const inv=document.getElementById('g-invitation');if(inv)inv.classList.add('show');
     const inp=document.getElementById('g-input-wrap');if(inp)inp.classList.add('show');
     const gi=document.getElementById('gi');if(gi){gi.focus();gi.onkeydown=e=>{if(e.key==='Enter')sendGany();};}
@@ -2448,16 +2448,28 @@ window.addEventListener('wheel',gOnWheel,{passive:false});
 window.addEventListener('touchstart',gOnTouchStart,{passive:true});
 window.addEventListener('touchmove',gOnTouchMove,{passive:false});
 
-/* Glass dismiss: click outside or Esc sinks the panel into the water; click recalls it */
-function gGlassSink(s){const gl=document.getElementById('g-glass');if(!gl||!gl.classList.contains('show'))return;gl.classList.toggle('sunk',s);}
+/* Glass dismiss: click outside or Esc sinks the panel and returns the room to you —
+   scrolling scrubs the cave again. Click anywhere to glide back to the arch; the glass rises on arrival. */
+function gGlassSink(){
+  const gl=document.getElementById('g-glass');if(!gl||!gl.classList.contains('show')||gl.classList.contains('sunk'))return;
+  gl.classList.add('sunk');
+  gScrub.arrived=false;
+  gScrub.target=Math.max(0,gScrub.dur-1.5);
+  if(!gScrub.raf&&gScreenActive())gScrub.raf=requestAnimationFrame(gScrubLoop);
+}
+function gGlassRecall(){
+  const gl=document.getElementById('g-glass');if(!gl||!gl.classList.contains('sunk'))return;
+  gScrub.target=gScrub.dur;
+  if(!gScrub.raf&&gScreenActive())gScrub.raf=requestAnimationFrame(gScrubLoop);
+}
 document.addEventListener('click',e=>{
-  if(!gScreenActive()||!gScrub.arrived)return;
+  if(!gScreenActive())return;
   const gl=document.getElementById('g-glass');if(!gl||!gl.classList.contains('show'))return;
   if(e.target.closest('#returnBtn,#teachingsBtn,#teachings,#grimoireScreen'))return;
-  if(gl.classList.contains('sunk')){gGlassSink(false);return;}
-  if(!e.target.closest('#g-glass'))gGlassSink(true);
+  if(gl.classList.contains('sunk')){gGlassRecall();return;}
+  if(gScrub.arrived&&!e.target.closest('#g-glass'))gGlassSink();
 });
-document.addEventListener('keydown',e=>{if(e.key==='Escape'&&gScreenActive()&&gScrub.arrived)gGlassSink(true);});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&gScreenActive()&&gScrub.arrived)gGlassSink();});
 
 function enterGanymede(){
   const ov=document.getElementById('c-overlay');if(ov)ov.classList.remove('on');

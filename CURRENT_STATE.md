@@ -1,3 +1,23 @@
+## Session log — Jun 13 — PATCH 2 (same day, feedback round)
+- INVITATION LINE REVERTED to "You came here to build something."
+  El's call: straightforward over fluffy. LOCKED — this line tells
+  the seeker what to type. Do not poeticize it again.
+- DISMISS GESTURE UPGRADED: sinking the glass now hands the room
+  back. gScrub.arrived flips false, target steps back 1.5s into the
+  cave, wheel/touch scrub re-enabled — seeker can travel the cave
+  freely while the panel is sunk. Click anywhere -> gGlassRecall():
+  scrub glides forward to the arch, gArrive() re-fires, glass rises
+  (sunk class cleared inside gArrive). Esc still sinks only.
+  Conversation state untouched throughout — sink/recall never
+  resets gHistory.
+- TEST: arrive -> click cave -> panel sinks -> scroll back through
+  cave -> click -> glide returns to arch -> glass rises with
+  conversation intact. Also: ?mock=ganymede mid-conversation sink.
+- SIGIL KEY V1 DESIGN LOCKED (discussion, no code): keep Sigil.mp4
+  as the reveal artifact, build the RITUAL around it — passphrase
+  typed as "speak the word" gate. No GLB for v1. GLB key deferred
+  to contemplation/collect layer.
+
 ## Session log — Jun 13 — GANYMEDE REFINEMENT PATCH (one commit, 5 changes)
 - CAVE BRIGHTNESS +10%: base filter .88 -> .97, enterGanymede inline
   .82 -> .90, brightenCave ramp 0.88/cap 0.96 -> 0.97/cap 1.05.
