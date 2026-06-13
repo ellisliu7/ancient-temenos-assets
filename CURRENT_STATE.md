@@ -1,3 +1,37 @@
+## Session log — Jun 13 — GANYMEDE REFINEMENT PATCH (one commit, 5 changes)
+- CAVE BRIGHTNESS +10%: base filter .88 -> .97, enterGanymede inline
+  .82 -> .90, brightenCave ramp 0.88/cap 0.96 -> 0.97/cap 1.05.
+  Haze gradient UNTOUCHED — it is the next lever if still too dark
+  (top rgba 0.9 / bottom 0.95 are heavy; lighten those before
+  touching filters again).
+- GLASS PANEL: bg opacity .32/.46 -> .20/.30, border gold .14 -> .08,
+  radius 2px -> 9px, shadow softened (.55 -> .38). Blur kept at 16px
+  so text stays readable over the brighter cave.
+- CEREMONIAL LINE-REVEAL: gStream rewritten. Typewriter (20ms/char)
+  DELETED. Now each paragraph block fades+rises in over 2.4s,
+  1.9s apart. Candles/ritual timing unchanged (they fire after the
+  full reveal promise resolves, as before).
+- INVITATION LINE: "You came here to build something." ->
+  "Something you carry is ready to take form." (receives the
+  Venus->Ganymede arc; invitation, not presumption).
+- DISMISS GESTURE: click outside glass or Esc -> panel sinks into
+  the water (46px down + fade, 1.4s); click anywhere recalls it.
+  Nav buttons (#returnBtn/#teachingsBtn) and overlays excluded from
+  the gesture. New CSS state: #g-glass.show.sunk. New fn: gGlassSink.
+- Syntax-checked (script block parses clean), every edit verified
+  landing exactly once. No other changes.
+- EL'S TEST CHECKLIST (live URL, hard refresh):
+  1. cave reads ~10% brighter on arrival — verdict: enough, or
+     lighten haze next?
+  2. glass: more transparent, softer — does text still hold over the
+     brighter video?
+  3. ?mock=ganymede: line-by-line reveal feels ceremonial, not slow
+  4. new invitation line lands
+  5. click cave background -> glass sinks; click again -> recalls;
+     Esc sinks; candles/input unaffected
+- NEXT SHIP unchanged: Sigil Key v1 gate (proxy passphrase check +
+  ritual gate UI). El brings sigil key image + chosen passphrase.
+
 ## Session log — Jun 13 — GANYMEDE DONE (final render swapped)
 - FINAL RENDER SHIPPED: Ganymede_Dolly_final.mp4 live in repo.
   720p chosen over 1080p (Veo upscale warped the mural — artwork
