@@ -1,3 +1,39 @@
+## Session log — Jun 13 — GANYMEDE DONE (final render swapped)
+- FINAL RENDER SHIPPED: Ganymede_Dolly_final.mp4 live in repo.
+  720p chosen over 1080p (Veo upscale warped the mural — artwork
+  stability test wins). Veo watermark cropped in HandBrake (bottom 48,
+  sides 0). Pipeline locked: Veo 720p -> HandBrake H.264 RF19,
+  Constant Framerate, keyint=1:min-keyint=1, Web Optimized, no audio,
+  filters off, Pixel Aspect 1:1 (Display Size on Automatic — a stale
+  manual 1242 was silently squeezing the frame 3%).
+- SWAP PATCH SHIPPED (one commit, syntax-checked, zero leftovers):
+  - g-cave-video source: draft -> Ganymede_Dolly_final.mp4
+  - DELETED: #g-arrival-art JPG crossfade stub (CSS+HTML+JS)
+  - DELETED: dormant left-wall museum-hang code (#g-artwork-wrap
+    block, CSS+HTML+JS). vaRakingLight keyframe KEPT (Venus uses it).
+  - gArrive rewired: scrub completes -> hint fades -> glass panel
+    rises directly at 1400ms (was 2300ms waiting on crossfade)
+  - 720px media query trimmed to #g-glass only
+- ARTWORK DETAIL DECISION: baked mural owns the room (sacred,
+  reflected, in-world). The detailed pencil original is PROMOTED to
+  contemplation mode (future session): touch the mural -> true
+  artwork opens full-detail. Timelapse + collect rite also live there.
+- EL'S TEST CHECKLIST (live URL, hard refresh):
+  1. foyer -> Ganymede: scrub travels the new cave, feels sacred
+  2. arrival: glass rises from the water, no JPG flash, no seam
+  3. glass panel position over new composition — verdict needed:
+     does it crowd the mural/pool? (reposition is a future patch,
+     judge only)
+  4. ?mock=ganymede full conversation in panel
+  5. mobile touch-drag scrub
+- NEXT SHIP: Sigil Key v1 gate (proxy key-phrase check = also closes
+  missing rate-limit/origin security hole + ritual gate UI in
+  index.html). El brings: sigil key image pushed to repo + chosen v1
+  passphrase. SEASON2.md added to repo (future unlocks vision —
+  offer/surrender/transmute language locked).
+- PARALLEL ZERO-CREDIT: chamber sigil designs x3, ambient loops for
+  threshold/foyer, collect-rite page on paper.
+
 ## Session log — Jun 12 — SCRUB VERDICTS IN, RENDER BRIEF LOCKED
 - SCRUB CONFIRMED by El on live test: approach feels like traveling
   THROUGH the cave. "Felt amazing." 8s duration is RIGHT — do not
