@@ -368,7 +368,9 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #g-dust-canvas{position:fixed;inset:0;z-index:3;pointer-events:none;}
 #g-gold-bg{position:fixed;inset:0;z-index:4;background:url('https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_gold.jpg') center/cover no-repeat;opacity:0;transition:opacity 5s ease;filter:brightness(.85) saturate(1.1);}
 /* == GANYMEDE — approach scrub · arrival · amber glass == */
-#g-scroll-hint{position:fixed;bottom:7%;left:50%;transform:translateX(-50%);z-index:8;font-family:'Cinzel',serif;font-size:clamp(7px,.75vw,9px);letter-spacing:.6em;text-transform:uppercase;color:rgba(238,220,168,0.42);opacity:0;transition:opacity 2.4s ease;pointer-events:none;text-shadow:0 1px 14px rgba(0,0,0,.85);white-space:nowrap;}
+#g-scroll-hint{position:fixed;bottom:6%;left:50%;transform:translateX(-50%);z-index:8;display:flex;flex-direction:column;align-items:center;gap:.5rem;font-family:'Cinzel',serif;font-size:clamp(8px,.8vw,10px);letter-spacing:.5em;text-transform:uppercase;color:rgba(238,220,168,0.6);opacity:0;transition:opacity 2.4s ease;pointer-events:none;text-shadow:0 1px 14px rgba(0,0,0,.85);white-space:nowrap;}
+.g-hint-chev{font-size:18px;letter-spacing:0;line-height:.4;color:rgba(196,158,72,0.55);animation:gChevDrift 2.6s ease-in-out infinite;}
+@keyframes gChevDrift{0%,100%{transform:translateY(0);opacity:.4;}50%{transform:translateY(5px);opacity:.85;}}
 #g-scroll-hint.show{opacity:1;animation:gHintBreathe 5s ease-in-out infinite;}
 #g-scroll-hint.gone{opacity:0!important;transition:opacity 1.4s ease;animation:none;}
 @keyframes gHintBreathe{0%,100%{opacity:1;}50%{opacity:.45;}}
@@ -1013,7 +1015,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   <canvas id="g-rays-canvas"></canvas>
   <canvas id="g-dust-canvas"></canvas>
   <div id="g-gold-bg"></div>
-  <div id="g-scroll-hint">Scroll to approach</div>
+  <div id="g-scroll-hint"><span>Scroll to approach Ganymede</span><span class="g-hint-chev">⌄</span></div>
   <div id="g-glass">
   <div id="g-convo">
     <div id="g-invitation">
@@ -2448,7 +2450,7 @@ function gOnTouchMove(e){if(!gScreenActive()||gScrub.arrived||gTouchY===null)ret
 function gScrubBy(px){
   const k=gScrub.dur/3600;
   gScrub.target=Math.max(0,Math.min(gScrub.dur,gScrub.target+px*k));
-  if(!gScrub.hinted&&px>0){gScrub.hinted=true;const h=document.getElementById('g-scroll-hint');if(h)h.classList.add('gone');}
+  if(!gScrub.hinted&&px>0){gScrub.hinted=true;}
   if(!gScrub.raf&&!gScrub.arrived&&gScreenActive())gScrub.raf=requestAnimationFrame(gScrubLoop);
 }
 function gScrubLoop(){
@@ -2593,8 +2595,13 @@ async function sendGany(){
     if(p.step)parts.push('→ '+p.step);
     if(!p.options||!p.options.length){if(p.question)parts.push(p.question);}
     await gStream(curr,parts.join('\n\n'));
-    if(Array.isArray(p.options)&&p.options.length===3)setTimeout(()=>showCandles(p.options),700);
-    if(p.check_in===true)setTimeout(()=>{if(!gHasKey()&&gExchangeCount>=G_FREE_LIMIT){ganyGate();}else{ganyRitual();}},2000);
+    if(!gHasKey()&&gExchangeCount>=G_FREE_LIMIT){
+      if(opts)opts.innerHTML='';
+      setTimeout(ganyGate,2200);
+    }else{
+      if(Array.isArray(p.options)&&p.options.length===3)setTimeout(()=>showCandles(p.options),700);
+      if(p.check_in===true)setTimeout(ganyRitual,2000);
+    }
     gBusy=false;
     return;
   }
@@ -2628,9 +2635,14 @@ async function sendGany(){
     if(!p.options||!p.options.length){if(p.question)parts.push(p.question.trim());}
     const fullText=parts.join('\n\n');
     await gStream(curr,fullText);
-    const options=Array.isArray(p.options)&&p.options.length===3?p.options:null;
-    if(options)setTimeout(()=>showCandles(options),700);
-    if(p.check_in===true)setTimeout(()=>{if(!gHasKey()&&gExchangeCount>=G_FREE_LIMIT){ganyGate();}else{ganyRitual();}},2000);
+    if(!gHasKey()&&gExchangeCount>=G_FREE_LIMIT){
+      if(opts)opts.innerHTML='';
+      setTimeout(ganyGate,2200);
+    }else{
+      const options=Array.isArray(p.options)&&p.options.length===3?p.options:null;
+      if(options)setTimeout(()=>showCandles(options),700);
+      if(p.check_in===true)setTimeout(ganyRitual,2000);
+    }
   }catch(e){if(dots)dots.classList.remove('show');if(curr)curr.textContent='The cave listens. Speak again.';}
   gBusy=false;
 }

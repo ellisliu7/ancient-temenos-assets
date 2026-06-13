@@ -1,3 +1,31 @@
+## Session log — Jun 13 — HARD CAP + SCROLL HINT (3rd screenshot round)
+- FREE TIER IS NOW A REAL TASTE (El confirmed): gate fires AFTER the
+  seeker's 3rd Ganymede response finishes streaming, regardless of
+  check_in. Logic in BOTH mock + live tails: after gStream resolves,
+  if !gHasKey() && gExchangeCount>=3 -> clear options, ganyGate after
+  2.2s. Else (has key OR under limit) -> normal options/ganyRitual.
+  Never cuts mid-sentence (gStream awaited).
+- FIXES "3rd message options pop up before conversation": the gated
+  turn now suppresses options entirely (opts cleared, no showCandles),
+  so the leftover/early candles El saw can't appear on the capped turn.
+- SCROLL HINT now PERSISTS through the whole approach. Was dismissed
+  on the first scroll tick (gScrubBy added 'gone' immediately) which
+  is why it felt unclear. Now only gArrive dismisses it. Copy: "Scroll
+  to approach Ganymede" + a breathing down-chevron, opacity bumped
+  0.42 -> 0.6. The arrival invitation ("Speak into the cave…") remains
+  the speak cue once he's reached.
+
+OBSERVED, NOT CHANGED — "Ganymede artwork shows in background when it
+  fades": that is the cave video's endframe behind the sinking glass,
+  not a separate artwork element (none on this screen). Currently
+  unintentional. OPTION for next session if El wants to lean in: hold
+  a clean artwork/endframe behind the gate as the altar backdrop
+  instead of the radial-over-cave. El to say whether to feature or
+  darken it.
+
+KEY UNLOCK + temp-state unchanged from prior entry (G_GATE_PASS=
+  'remember' client-side; "Become an Initiate" -> opensea placeholder;
+  real gate = proxy NFT verification, the Supabase build).
 ## Session log — Jun 13 — GATE + ORACLE REFINEMENT (screenshot feedback round)
 - CANDLE ICONS REMOVED from the 3 options (read childish). Options are
   now quiet italic lines with a thin gold underline on hover. More
