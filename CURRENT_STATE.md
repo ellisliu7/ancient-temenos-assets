@@ -1,3 +1,26 @@
+## Session log — Jun 13 — GATE TESTABILITY + OPTION ORDERING
+- "I don't see the gate" diagnosis: El typed the key ('remember')
+  earlier while testing the unlock, so localStorage holds the key and
+  the gate correctly no longer fires for an initiate. Gate logic is
+  working. FIX for testing: entering Ganymede in mock mode (or with
+  ?reset in the URL) now clears the stored key, so the gate shows
+  every time you walk the mock. To test as an initiate, type the key
+  during that session.
+- OPTION ORDERING hardened: gStream now resolves only AFTER the last
+  line's full 3s fade completes (res delay 2600 -> 3200), and options
+  appear 1100ms after that (was 700). Options can no longer overlap a
+  still-fading final line. With the hard cap, the 3rd (gated) free
+  turn shows no options at all; options only appear on earlier
+  choice-turns or for initiates.
+- TEST: ?mock=ganymede -> 3 messages. Msg with options: text fully
+  settles, clear beat, THEN options. Msg 3 (free): text finishes ->
+  gate. Type 'remember' -> ritual + grimoire. Re-enter mock -> key
+  cleared, gate returns.
+
+Unchanged: G_GATE_PASS='remember' client placeholder; "Become an
+Initiate" -> opensea placeholder; real gate = proxy NFT verification
+(next big build, deferred until El validates demand with the live
+link). Open: gate backdrop (artwork vs darkness) still El's call.
 ## Session log — Jun 13 — HARD CAP + SCROLL HINT (3rd screenshot round)
 - FREE TIER IS NOW A REAL TASTE (El confirmed): gate fires AFTER the
   seeker's 3rd Ganymede response finishes streaming, regardless of

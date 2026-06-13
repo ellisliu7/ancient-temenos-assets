@@ -2509,6 +2509,8 @@ function enterGanymede(){
   const db=document.getElementById('c-debate');if(db)db.classList.remove('on');
   showScreen('ganymedeScreen');
   foyerActive=false;
+  const _gp=new URLSearchParams(location.search);
+  if(['ganymede','all'].includes(_gp.get('mock'))||_gp.get('reset')!==null){try{localStorage.removeItem('temenos_sigil_key');}catch(e){}}
   gHistory=[];gExchangeCount=0;gDustParticles=[];
   gScrub={target:0,current:0,dur:8,raf:null,arrived:false,hinted:false};
   const bg=document.getElementById('g-cave-bg');
@@ -2599,7 +2601,7 @@ async function sendGany(){
       if(opts)opts.innerHTML='';
       setTimeout(ganyGate,2200);
     }else{
-      if(Array.isArray(p.options)&&p.options.length===3)setTimeout(()=>showCandles(p.options),700);
+      if(Array.isArray(p.options)&&p.options.length===3)setTimeout(()=>showCandles(p.options),1100);
       if(p.check_in===true)setTimeout(ganyRitual,2000);
     }
     gBusy=false;
@@ -2640,7 +2642,7 @@ async function sendGany(){
       setTimeout(ganyGate,2200);
     }else{
       const options=Array.isArray(p.options)&&p.options.length===3?p.options:null;
-      if(options)setTimeout(()=>showCandles(options),700);
+      if(options)setTimeout(()=>showCandles(options),1100);
       if(p.check_in===true)setTimeout(ganyRitual,2000);
     }
   }catch(e){if(dots)dots.classList.remove('show');if(curr)curr.textContent='The cave listens. Speak again.';}
@@ -2736,7 +2738,7 @@ function gStream(el,text){
       d.textContent=ln;
       d.style.cssText='opacity:0;transform:translateY(7px);transition:opacity 3s ease,transform 3s ease;'+(i<lines.length-1?'margin-bottom:2.2em;':'');
       el.appendChild(d);
-      setTimeout(()=>{d.style.opacity='1';d.style.transform='translateY(0)';if(i===lines.length-1)setTimeout(res,2600);},600+i*2600);
+      setTimeout(()=>{d.style.opacity='1';d.style.transform='translateY(0)';if(i===lines.length-1)setTimeout(res,3200);},600+i*2600);
     });
   });
 }
