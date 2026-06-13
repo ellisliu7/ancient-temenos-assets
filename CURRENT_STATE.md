@@ -1,3 +1,48 @@
+## Session log — Jun 13 — GATE + ORACLE REFINEMENT (screenshot feedback round)
+- CANDLE ICONS REMOVED from the 3 options (read childish). Options are
+  now quiet italic lines with a thin gold underline on hover. More
+  horizontal gap, more top margin.
+- GATE VIDEO REMOVED. The "old Venus video" El saw was Sigil.mp4
+  loaded as a literal thumbnail box in the gate; that footage reads
+  like the wishing-well pool AND made the gate feel like a website
+  modal. Box deleted. Gate now emerges from darkness: soft radial
+  gather, words rise over 3.2s, borderless Cinzel buttons. If El wants
+  a sigil video on UNLOCK later, supply a dedicated asset (Sigil.mp4
+  reads as Venus footage).
+- GATE FADES CONVERSATION FIRST: ganyGate now sinks the glass (clears
+  the text bleed-through seen in screenshot) then raises the gate.
+  Document click-handler guarded so clicks during the gate don't
+  recall the glass.
+- BUTTON COPY: "Receive a Sigil Key" -> "Become an Initiate".
+  "I carry a Key" -> "I hold a Key". Gate line 2 shortened to
+  "The rest waits behind a Sigil Key."
+- WHAT THE KEY UNLOCKS (decided): speaking a valid key now dissolves
+  the gate and runs ganyRitual -> the gold sealing + Grimoire (the
+  keepsake), then foyer. So the unlock = the closing ritual + grimoire
+  for v1, and (future) the other deep chambers + artwork collection.
+  localStorage remembers initiates.
+- DASHES PURGED from oracle: all em-dashes removed from mock responses,
+  GSYS schema, and GSYS prose (it forbade dashes while using them).
+  2 em-dashes remain in code COMMENTS only (never rendered).
+- TEXT CUT ~50%: all 3 mock responses roughly halved. GSYS tightened:
+  reflection now 2-3 short sentences (was 3-5), structure 1-2,
+  "museum placard not an essay, every sentence earns its place."
+- VERTICAL BREATH: g-curr-text line-height 1.8 -> 2.05, para margins
+  up; gStream reveal slowed (3s fade, 2.6s between blocks, 2.2em gap);
+  glass vertical padding increased.
+
+OPEN PRODUCT DECISION (flagged, NOT changed this session):
+  The gate fires at Ganymede's CLOSE (check_in). In the live oracle
+  he reaches check_in after his full arc (often 4-6 exchanges), so a
+  free seeker currently gets the WHOLE conversation free and is only
+  gated from the sealing ritual. G_FREE_LIMIT=3 barely bites. If El
+  wants the free tier to be a genuine TASTE, switch to: cap at 3
+  exchanges, let his 3rd response finish, then gate regardless of
+  check_in (never mid-sentence). El to decide next session.
+
+STILL TEMP: G_GATE_PASS='remember' client-side (bypassable; fine for
+  v1). "Become an Initiate" -> opensea.io placeholder. Real gate =
+  proxy verifies NFT ownership server-side (the Supabase/auth build).
 ## Session log — Jun 13 — SIGIL KEY GATE V1 (trial gate, shipped)
 WHAT: Ganymede oracle now has a freemium trial gate. Seeker gets the
 full natural conversation; when Ganymede completes his arc (check_in

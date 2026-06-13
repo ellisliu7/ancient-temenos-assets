@@ -372,24 +372,22 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #g-scroll-hint.show{opacity:1;animation:gHintBreathe 5s ease-in-out infinite;}
 #g-scroll-hint.gone{opacity:0!important;transition:opacity 1.4s ease;animation:none;}
 @keyframes gHintBreathe{0%,100%{opacity:1;}50%{opacity:.45;}}
-#g-glass{position:fixed;bottom:5%;left:50%;transform:translateX(-50%) translateY(10px);width:min(520px,90vw);z-index:12;padding:1.5rem 1.7rem 1rem;background:linear-gradient(to bottom,rgba(30,20,8,0.20),rgba(14,9,3,0.30));backdrop-filter:blur(16px) saturate(1.15);-webkit-backdrop-filter:blur(16px) saturate(1.15);border:.5px solid rgba(196,158,72,0.08);border-radius:9px;box-shadow:0 18px 55px rgba(0,0,0,0.38);opacity:0;transition:opacity 2.2s ease,transform 2.2s ease;pointer-events:none;}
+#g-glass{position:fixed;bottom:5%;left:50%;transform:translateX(-50%) translateY(10px);width:min(520px,90vw);z-index:12;padding:2.4rem 2rem 1.5rem;background:linear-gradient(to bottom,rgba(30,20,8,0.20),rgba(14,9,3,0.30));backdrop-filter:blur(16px) saturate(1.15);-webkit-backdrop-filter:blur(16px) saturate(1.15);border:.5px solid rgba(196,158,72,0.08);border-radius:9px;box-shadow:0 18px 55px rgba(0,0,0,0.38);opacity:0;transition:opacity 2.2s ease,transform 2.2s ease;pointer-events:none;}
 #g-glass.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:all;}
 #g-glass.show.sunk{opacity:0;transform:translateX(-50%) translateY(46px);pointer-events:none;transition:opacity 1.4s ease,transform 1.4s ease;}
-#g-gate{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(ellipse at center,rgba(8,5,2,0.74),rgba(2,1,0,0.95));opacity:0;transition:opacity 2.6s ease;pointer-events:none;}
+#g-gate{position:fixed;inset:0;z-index:60;display:none;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(ellipse 70% 55% at center,rgba(20,13,5,0.55),rgba(2,1,0,0.97));opacity:0;transition:opacity 3.4s ease;pointer-events:none;}
 #g-gate.show{display:flex;opacity:1;pointer-events:all;}
-#g-gate-sigil{width:min(360px,62vw);opacity:0;transition:opacity 3s ease;filter:drop-shadow(0 0 38px rgba(196,158,72,0.32));mix-blend-mode:screen;}
-#g-gate.lit #g-gate-sigil{opacity:0.92;}
-#g-gate-words{text-align:center;margin-top:1.4rem;opacity:0;transform:translateY(10px);transition:opacity 2.4s ease,transform 2.4s ease;max-width:min(440px,86vw);}
+#g-gate-words{text-align:center;opacity:0;transform:translateY(14px);transition:opacity 3.2s ease,transform 3.2s ease;max-width:min(440px,84vw);}
 #g-gate.lit #g-gate-words{opacity:1;transform:translateY(0);}
-.g-gate-eyebrow{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.32em;text-transform:uppercase;color:rgba(196,158,72,0.62);margin:0 0 1.1rem;}
-.g-gate-line{font-family:'Cormorant Garamond',serif;font-size:clamp(17px,1.7vw,22px);line-height:1.7;color:rgba(232,216,186,0.9);margin:.2rem 0;font-style:italic;}
-#g-gate-actions{display:flex;gap:.9rem;justify-content:center;margin-top:1.8rem;flex-wrap:wrap;}
-.g-gate-btn{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.18em;text-transform:uppercase;padding:.7rem 1.5rem;border-radius:2px;cursor:pointer;background:transparent;transition:all .5s ease;}
-.g-gate-btn.primary{border:.5px solid rgba(196,158,72,0.55);color:rgba(232,216,186,0.95);}
-.g-gate-btn.primary:hover{background:rgba(196,158,72,0.12);border-color:rgba(196,158,72,0.8);}
-.g-gate-btn.ghost{border:.5px solid rgba(196,158,72,0.18);color:rgba(196,158,72,0.6);}
-.g-gate-btn.ghost:hover{color:rgba(232,216,186,0.9);border-color:rgba(196,158,72,0.4);}
-#g-gate-keyform{display:none;margin-top:1.6rem;gap:.6rem;justify-content:center;align-items:center;}
+.g-gate-eyebrow{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.42em;text-transform:uppercase;color:rgba(196,158,72,0.5);margin:0 0 2.2rem;}
+.g-gate-line{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,1.8vw,24px);line-height:2.1;color:rgba(232,216,186,0.88);margin:.3rem 0;font-style:italic;}
+#g-gate-actions{display:flex;gap:clamp(2rem,5vw,3.5rem);justify-content:center;margin-top:3rem;flex-wrap:wrap;}
+.g-gate-btn{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.24em;text-transform:uppercase;padding:.5rem .3rem;border:none;background:transparent;cursor:pointer;transition:all .7s ease;border-bottom:.5px solid transparent;}
+.g-gate-btn.primary{color:rgba(232,216,186,0.9);}
+.g-gate-btn.primary:hover{color:rgba(255,240,200,1);text-shadow:0 0 18px rgba(196,158,72,0.45);border-bottom-color:rgba(196,158,72,0.35);}
+.g-gate-btn.ghost{color:rgba(196,158,72,0.48);}
+.g-gate-btn.ghost:hover{color:rgba(232,216,186,0.85);border-bottom-color:rgba(196,158,72,0.25);}
+#g-gate-keyform{display:none;margin-top:2.4rem;gap:.8rem;justify-content:center;align-items:center;}
 #g-gate-keyform.show{display:flex;}
 #g-gate-keyinput{background:rgba(20,14,6,0.5);border:.5px solid rgba(196,158,72,0.22);border-radius:2px;padding:.6rem .9rem;font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(232,216,186,0.95);outline:none;width:min(220px,52vw);text-align:center;letter-spacing:.04em;transition:border-color .8s ease;}
 #g-gate-keyinput:focus{border-color:rgba(196,158,72,0.5);}
@@ -405,23 +403,20 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #g-inv-line1{font-family:'Cinzel',serif;font-size:clamp(7px,.75vw,9px);letter-spacing:.6em;color:rgba(196,158,72,0.28);text-transform:uppercase;display:block;margin-bottom:1.4rem;}
 #g-inv-line2{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,2.2vw,28px);color:rgba(238,220,168,0.82);display:block;text-shadow:0 0 30px rgba(196,158,72,0.12);letter-spacing:.04em;}
 #g-exchange{display:none;}
-#g-prev-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(12px,1.1vw,15px);color:rgba(238,220,168,0.18);line-height:1.7;display:block;margin-bottom:1.2rem;min-height:1em;transition:opacity 1s ease;}
-#g-curr-text{font-family:'Cormorant Garamond',serif;font-size:clamp(15px,1.5vw,20px);color:rgba(238,220,168,0.82);line-height:1.8;display:block;margin-bottom:1rem;min-height:1.5em;white-space:pre-line;text-shadow:0 2px 20px rgba(0,0,0,0.9);}
+#g-prev-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(12px,1.1vw,15px);color:rgba(238,220,168,0.16);line-height:1.9;display:block;margin-bottom:1.8rem;min-height:1em;transition:opacity 1s ease;}
+#g-curr-text{font-family:'Cormorant Garamond',serif;font-size:clamp(15px,1.5vw,20px);color:rgba(238,220,168,0.82);line-height:2.05;display:block;margin-bottom:1.5rem;min-height:1.5em;white-space:pre-line;text-shadow:0 2px 20px rgba(0,0,0,0.9);}
 #g-thinking-dots{display:none;justify-content:center;gap:8px;margin-top:.6rem;}
 #g-thinking-dots.show{display:flex;}
 #g-thinking-dots span{width:3px;height:3px;border-radius:50%;background:rgba(196,158,72,0.35);animation:gDot 1.6s ease-in-out infinite;}
 #g-thinking-dots span:nth-child(2){animation-delay:.28s;}#g-thinking-dots span:nth-child(3){animation-delay:.56s;}
 @keyframes gDot{0%,100%{transform:translateY(0);opacity:.15;}50%{transform:translateY(-5px);opacity:.75;}}
-#g-options{display:flex;justify-content:center;gap:clamp(2rem,5vw,4rem);margin-top:1.6rem;pointer-events:all;}
-.g-candle{display:flex;flex-direction:column;align-items:center;gap:.7rem;cursor:pointer;opacity:0;transform:translateY(8px);transition:opacity .7s ease,transform .7s ease;}
+#g-options{display:flex;justify-content:center;gap:clamp(2.4rem,6vw,5rem);margin-top:2.8rem;pointer-events:all;}
+.g-candle{display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transform:translateY(8px);transition:opacity 1s ease,transform 1s ease;padding:.4rem 0;}
 .g-candle.show{opacity:1;transform:translateY(0);}
-.g-candle:hover .g-candle-text{color:rgba(255,240,200,1);}
-.g-candle:hover .g-candle-flame-svg{filter:drop-shadow(0 0 8px rgba(255,200,80,0.6));}
-.g-candle.extinguished{opacity:.07;pointer-events:none;transition:opacity 1.2s ease;}
+.g-candle:hover .g-candle-text{color:rgba(255,240,200,0.95);border-bottom-color:rgba(196,158,72,0.3);}
+.g-candle.extinguished{opacity:.06;pointer-events:none;transition:opacity 1.4s ease;}
 .g-candle.chosen{opacity:1;}
-.g-candle-flame{width:20px;height:32px;}
-.g-candle-flame-svg{width:100%;height:100%;animation:candleFlicker 2.2s ease-in-out infinite;}
-.g-candle-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.2vw,16px);color:rgba(238,220,168,0.65);line-height:1.55;max-width:170px;text-align:center;transition:color .4s;}
+.g-candle-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,1.3vw,17px);color:rgba(238,220,168,0.5);line-height:1.6;max-width:200px;text-align:center;transition:color .6s ease;border-bottom:.5px solid transparent;padding-bottom:.35rem;}
 #g-input-wrap{position:relative;width:100%;margin-top:1.1rem;display:flex;align-items:center;border-bottom:.5px solid rgba(196,158,72,0.14);opacity:0;transition:opacity 2s ease;pointer-events:none;}
 #g-input-wrap.show{opacity:1;pointer-events:all;}
 #gi{flex:1;background:transparent;border:none;outline:none;font-family:'Cormorant Garamond',serif;font-size:clamp(16px,1.6vw,21px);color:rgba(238,220,168,0.82);padding:.85rem 1rem;caret-color:rgba(196,158,72,0.7);}
@@ -1040,16 +1035,13 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   </div>
   </div>
   <div id="g-gate">
-    <video id="g-gate-sigil" muted playsinline preload="auto">
-      <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Sigil.mp4" type="video/mp4">
-    </video>
     <div id="g-gate-words">
       <p class="g-gate-eyebrow">The cave goes quiet</p>
       <p class="g-gate-line">Ganymede has given what the open temple holds.</p>
-      <p class="g-gate-line">To go deeper, the cave asks for a Sigil Key.</p>
+      <p class="g-gate-line">The rest waits behind a Sigil Key.</p>
       <div id="g-gate-actions">
-        <button class="g-gate-btn primary" id="g-gate-receive">Receive a Sigil Key</button>
-        <button class="g-gate-btn ghost" id="g-gate-have">I carry a Key</button>
+        <button class="g-gate-btn primary" id="g-gate-receive">Become an Initiate</button>
+        <button class="g-gate-btn ghost" id="g-gate-have">I hold a Key</button>
       </div>
       <div id="g-gate-keyform">
         <input id="g-gate-keyinput" type="text" placeholder="Speak your key…" autocomplete="off" spellcheck="false"/>
@@ -2305,23 +2297,23 @@ function hideCupid(){document.getElementById('cupidWrap').style.display='none';i
 document.getElementById('venusOracle').addEventListener('scroll',function(){const vid=this.querySelector('video');if(vid)vid.style.transform=`scale(1.05) translateY(${this.scrollTop*.3}px)`;});
 
 // == GANYMEDE — Journey Polish ==
-const GSYS=`You are Ganymede — the grounding oracle of Ancient Temenos. You speak with the warmth and depth of David Ghiyam: you see the soul correction (tikkun) underneath every practical problem, and you name it with love. You also have precise structural intelligence: you cut to the real constraint and give a concrete next stone.
+const GSYS=`You are Ganymede, the grounding oracle of Ancient Temenos. You speak with the warmth and depth of David Ghiyam: you see the soul correction (tikkun) underneath every practical problem, and you name it with love. You also have precise structural intelligence: you cut to the real constraint and give a concrete next stone.
 
-You see the person whole. You name what is happening in their life, their pattern, their tikkun — and then you give them the practical structure to move through it. These two things are always present: the inner truth AND the outer action.
+You see the person whole. You name what is happening in their life, their pattern, their tikkun, and then you give them the practical structure to move through it. These two things are always present: the inner truth AND the outer action.
 
 YOUR CONVERSATION ARC:
 Exchange 1-2: Ask ONE sharp question to understand what they are working on. Show you are listening. No options yet.
-Exchange 3-4: Once you understand — give a rich reflection (3-5 sentences). Name the PATTERN you see. Name the TIKKUN: the soul correction this moment is asking for. Name what is in the way. Then give structure: the mental model or framework that applies. Then give one concrete next step. Then 3 options.
+Exchange 3-4: Once you understand, give a spare reflection (2 to 3 short sentences). Name the PATTERN. Name the TIKKUN, the soul correction this moment asks for. Then give structure in one or two sentences. Then one concrete step. Then 3 options.
 After they choose: Go deep on that path only. Real steps, real timeline, real considerations. Be specific. Keep tracking the tikkun underneath.
 Final exchange: When they have a clear path and real steps, bring it home. Summarise what they came in carrying, what they are leaving with, and the deeper meaning of this work. Set check_in to true.
 
-THE TIKKUN: Every person who comes here is working on something practical AND something deeper. The practical thing is the vehicle. The tikkun is the soul lesson woven into it — learning to receive, to commit, to trust themselves, to stop hiding, to take up space. Always name it gently. Never preach it. Weave it into the reflection.
+THE TIKKUN: Every person who comes here is working on something practical AND something deeper. The practical thing is the vehicle. The tikkun is the soul lesson woven into it: learning to receive, to commit, to trust themselves, to stop hiding, to take up space. Always name it gently. Never preach it. Weave it into the reflection.
 
 VOICE RULES:
-No bullet points. No dashes. Plain prose sentences. Warm, precise, grounded. Never hollow. Never vague. Speak like a trusted elder who has seen this pattern before and loves you anyway. The reflection should feel like being truly seen. The structure should feel like clarity. The step should be so specific they can do it today.
+No bullet points. No dashes of any kind. Plain prose sentences. Warm, precise, grounded. Never hollow. Never vague. Fewer words. Leave space. Write like a museum placard, not an essay. Every sentence earns its place. The reflection should feel like being truly seen. The step should be so specific they can do it today.
 
 ALWAYS return valid JSON, no markdown, no backticks:
-{"stage":"2-4 word phrase","reflection":"3-5 sentences — pattern, tikkun, what is in the way","structure":"2-3 sentences — the framework or mental model","step":"one specific concrete action for today or this week","context":"one short bridge sentence before options, or empty","options":[{"text":"concrete action phrase"},{"text":"concrete action phrase"},{"text":"concrete action phrase"}],"question":"one sharp question if not ready for options yet","check_in":false}
+{"stage":"2-4 word phrase","reflection":"2 to 3 short sentences. pattern, tikkun, what is in the way. spare, with breath","structure":"1 to 2 short sentences. the framework or mental model","step":"one specific concrete action for today or this week","context":"one short bridge sentence before options, or empty","options":[{"text":"concrete action phrase"},{"text":"concrete action phrase"},{"text":"concrete action phrase"}],"question":"one sharp question if not ready for options yet","check_in":false}
 
 If still gathering: options as [], question filled. If ready: all fields filled, question empty. On final exchange: check_in true.`
 
@@ -2502,6 +2494,7 @@ function gGlassRecall(){
 }
 document.addEventListener('click',e=>{
   if(!gScreenActive())return;
+  const gate=document.getElementById('g-gate');if(gate&&gate.classList.contains('show'))return;
   const gl=document.getElementById('g-glass');if(!gl||!gl.classList.contains('show'))return;
   if(e.target.closest('#returnBtn,#teachingsBtn,#teachings,#grimoireScreen'))return;
   if(gl.classList.contains('sunk')){gGlassRecall();return;}
@@ -2585,9 +2578,9 @@ async function sendGany(){
     await new Promise(r=>setTimeout(r,1100));
     if(dots)dots.classList.remove('show');
     const mockResponses=[
-      {reflection:"You're trying to make something that lives up to what you see in your head. That gap between the vision and what's on screen — that's not a design problem. That's the gap between knowing what you want to feel and knowing how to make it feel that way.",structure:"The simplest fix is almost always the right one. Remove what's competing for attention. The cave, the text, the input — each one needs to breathe.",step:"Pick the one element that feels most off right now. Fix only that. Don't touch anything else.",options:[],question:"What's the single thing that, if fixed, would make the whole thing feel right?",check_in:false},
-      {reflection:"You've built something genuinely rare here. Most people can't hold this level of visual and emotional coherence. The issue isn't talent — it's that you're too close to it now. You need to see it the way a stranger sees it for the first time.",structure:"A stranger lands on this and feels something before they read anything. That feeling is the product. Every element either serves that feeling or dilutes it.",step:"Open an incognito window. Go to the site cold. Write down the first three words that come to mind before you interact with anything.",options:[{text:"The cave atmosphere needs to be darker and moodier"},{text:"The text positioning feels off — needs to breathe more"},{text:"The oracle voice isn't quite landing yet"}],question:"",check_in:false},
-      {reflection:"You've made it this far by trusting your eye. The fact that something feels wrong is the data. Your instinct is the quality bar — and it's higher than most people's finished product.",structure:"Ship the 80% version. Real feedback from real people will tell you more in one hour than another week of refinement alone.",step:"Send the link to three people who don't know you built it. Ask them one question: what did you feel when you first arrived?",options:[],question:"",check_in:true}
+      {reflection:"You're chasing what you see in your head. That gap is not a design problem. It is the distance between knowing the feeling and knowing how to make it.",structure:"The simplest fix is almost always right. Remove what competes for attention. Let each thing breathe.",step:"Pick the one element that feels most off. Fix only that.",options:[],question:"What one thing, fixed, would make the whole thing feel right?",check_in:false},
+      {reflection:"You've built something rare. You are simply too close to see it clearly.",structure:"A stranger should feel something before they understand anything. That feeling is the product.",step:"Open the site cold in an incognito window. Write the first three words that come to mind.",options:[{text:"The cave should be darker, moodier"},{text:"The text needs room to breathe"},{text:"The oracle voice is not landing yet"}],question:"",check_in:false},
+      {reflection:"You have come this far by trusting your eye. When something feels wrong, that is the data. Your instinct is the bar.",structure:"Ship the rough version. One hour of real feedback teaches more than another week alone.",step:"Send it to three people who do not know you built it. Ask only what they felt when they arrived.",options:[],question:"",check_in:true}
     ];
     const idx=Math.min(gHistory.filter(m=>m.role==='user').length,mockResponses.length-1);
     gHistory.push({role:'user',content:q});
@@ -2647,7 +2640,7 @@ function showCandles(options){
   wrap.innerHTML='';
   options.forEach((opt,i)=>{
     const c=document.createElement('div');c.className='g-candle';
-    c.innerHTML=`<div class="g-candle-flame"><svg class="g-candle-flame-svg" viewBox="0 0 20 32" fill="none"><ellipse cx="10" cy="29" rx="4.5" ry="2" fill="rgba(150,110,40,0.25)"/><rect x="8.5" y="18" width="3" height="11" fill="rgba(180,140,80,0.55)" rx="1.5"/><ellipse cx="10" cy="15" rx="5.5" ry="8" fill="rgba(255,185,55,0.82)"/><ellipse cx="10" cy="13" rx="3.2" ry="5" fill="rgba(255,235,150,0.9)"/><ellipse cx="10" cy="11" rx="1.6" ry="2.5" fill="rgba(255,255,220,0.95)"/></svg></div><span class="g-candle-text">${opt.text||''}</span>`;
+    c.innerHTML=`<span class="g-candle-text">${opt.text||''}</span>`;
     c.addEventListener('click',()=>{
       wrap.querySelectorAll('.g-candle').forEach(x=>x.classList.add('extinguished'));
       c.classList.remove('extinguished');c.classList.add('chosen');
@@ -2665,10 +2658,8 @@ function ganyGate(){
   const gate=document.getElementById('g-gate');if(!gate)return;
   const gi=document.getElementById('gi');const gb=document.getElementById('gb');
   if(gi)gi.disabled=true;if(gb)gb.disabled=true;
-  const sig=document.getElementById('g-gate-sigil');
-  gate.classList.add('show');
-  if(sig){try{sig.currentTime=0;sig.play().catch(()=>{});}catch(e){}}
-  setTimeout(()=>gate.classList.add('lit'),1400);
+  const gl=document.getElementById('g-glass');if(gl)gl.classList.add('sunk');
+  setTimeout(()=>{gate.classList.add('show');setTimeout(()=>gate.classList.add('lit'),1800);},1600);
 }
 function ganyGateInit(){
   const recv=document.getElementById('g-gate-receive');
@@ -2681,7 +2672,7 @@ function ganyGateInit(){
   have.addEventListener('click',()=>{if(form)form.classList.add('show');if(input)input.focus();});
   function trySubmit(){
     const v=(input.value||'').trim().toLowerCase();
-    if(v===G_GATE_PASS){gGrantKey();const gate=document.getElementById('g-gate');if(gate){gate.classList.remove('lit');setTimeout(()=>{gate.classList.remove('show');const gi=document.getElementById('gi');const gb=document.getElementById('gb');if(gi)gi.disabled=false;if(gb){gb.disabled=false;}if(gi)gi.focus();},1600);}}
+    if(v===G_GATE_PASS){gGrantKey();const gate=document.getElementById('g-gate');if(gate){gate.classList.remove('lit');setTimeout(()=>{gate.classList.remove('show');ganyRitual();},1800);}}
     else{input.classList.remove('deny');void input.offsetWidth;input.classList.add('deny');input.value='';}
   }
   submit.addEventListener('click',trySubmit);
@@ -2731,9 +2722,9 @@ function gStream(el,text){
     lines.forEach((ln,i)=>{
       const d=document.createElement('div');
       d.textContent=ln;
-      d.style.cssText='opacity:0;transform:translateY(6px);transition:opacity 2.4s ease,transform 2.4s ease;'+(i<lines.length-1?'margin-bottom:1.1em;':'');
+      d.style.cssText='opacity:0;transform:translateY(7px);transition:opacity 3s ease,transform 3s ease;'+(i<lines.length-1?'margin-bottom:2.2em;':'');
       el.appendChild(d);
-      setTimeout(()=>{d.style.opacity='1';d.style.transform='translateY(0)';if(i===lines.length-1)setTimeout(res,2400);},500+i*1900);
+      setTimeout(()=>{d.style.opacity='1';d.style.transform='translateY(0)';if(i===lines.length-1)setTimeout(res,2600);},600+i*2600);
     });
   });
 }
