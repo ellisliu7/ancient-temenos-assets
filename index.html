@@ -389,6 +389,12 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .g-gate-btn.primary:hover{color:rgba(255,240,200,1);text-shadow:0 0 18px rgba(196,158,72,0.45);border-bottom-color:rgba(196,158,72,0.35);}
 .g-gate-btn.ghost{color:rgba(196,158,72,0.48);}
 .g-gate-btn.ghost:hover{color:rgba(232,216,186,0.85);border-bottom-color:rgba(196,158,72,0.25);}
+#g-gate-waitlist{display:none;margin-top:2.4rem;flex-direction:column;align-items:center;gap:1.2rem;}
+#g-gate-waitlist.show{display:flex;}
+.g-gate-waitlist-sub{font-family:'Cormorant Garamond',serif;font-size:clamp(13px,1.3vw,16px);color:rgba(196,158,72,0.6);font-style:italic;margin:0;max-width:320px;line-height:1.8;text-align:center;}
+#g-gate-email{background:rgba(20,14,6,0.5);border:.5px solid rgba(196,158,72,0.22);border-radius:2px;padding:.6rem .9rem;font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(232,216,186,0.95);outline:none;width:min(260px,60vw);text-align:center;letter-spacing:.04em;transition:border-color .8s ease;}
+#g-gate-email:focus{border-color:rgba(196,158,72,0.5);}
+#g-gate-waitconfirm{display:none;font-family:'Cormorant Garamond',serif;font-size:clamp(15px,1.5vw,19px);font-style:italic;color:rgba(232,216,186,0.75);margin:0;}
 #g-gate-keyform{display:none;margin-top:2.4rem;gap:.8rem;justify-content:center;align-items:center;}
 #g-gate-keyform.show{display:flex;}
 #g-gate-keyinput{background:rgba(20,14,6,0.5);border:.5px solid rgba(196,158,72,0.22);border-radius:2px;padding:.6rem .9rem;font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(232,216,186,0.95);outline:none;width:min(220px,52vw);text-align:center;letter-spacing:.04em;transition:border-color .8s ease;}
@@ -1038,12 +1044,18 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   </div>
   <div id="g-gate">
     <div id="g-gate-words">
-      <p class="g-gate-eyebrow">The cave goes quiet</p>
-      <p class="g-gate-line">Ganymede has given what the open temple holds.</p>
-      <p class="g-gate-line">The rest waits behind a Sigil Key.</p>
+      <p class="g-gate-eyebrow">The Temple Opens Slowly</p>
+      <p class="g-gate-line">Ancient Temenos is still unfolding.</p>
+      <p class="g-gate-line">Some chambers remain hidden.</p>
       <div id="g-gate-actions">
-        <button class="g-gate-btn primary" id="g-gate-receive">Become an Initiate</button>
+        <button class="g-gate-btn primary" id="g-gate-receive">Request a Sigil Key</button>
         <button class="g-gate-btn ghost" id="g-gate-have">I hold a Key</button>
+      </div>
+      <div id="g-gate-waitlist">
+        <p class="g-gate-waitlist-sub">If you wish to return when the Sigil Keys awaken, leave your name below.</p>
+        <input id="g-gate-email" type="email" placeholder="your@email.com" autocomplete="off" spellcheck="false"/>
+        <button class="g-gate-btn primary" id="g-gate-waitsubmit">Enter the Waiting</button>
+        <p id="g-gate-waitconfirm">You are remembered.</p>
       </div>
       <div id="g-gate-keyform">
         <input id="g-gate-keyinput" type="text" placeholder="Speak your key…" autocomplete="off" spellcheck="false"/>
@@ -2682,7 +2694,26 @@ function ganyGateInit(){
   const input=document.getElementById('g-gate-keyinput');
   const submit=document.getElementById('g-gate-keysubmit');
   if(!recv)return;
-  recv.addEventListener('click',()=>{window.open('https://opensea.io/','_blank');});
+  recv.addEventListener('click',()=>{
+    const wl=document.getElementById('g-gate-waitlist');
+    if(wl){wl.classList.add('show');const em=document.getElementById('g-gate-email');if(em)em.focus();}
+  });
+  const waitSubmit=document.getElementById('g-gate-waitsubmit');
+  const emailInput=document.getElementById('g-gate-email');
+  const waitConfirm=document.getElementById('g-gate-waitconfirm');
+  if(waitSubmit){
+    waitSubmit.addEventListener('click',async()=>{
+      const email=(emailInput.value||'').trim();
+      if(!email||!email.includes('@'))return;
+      waitSubmit.disabled=true;
+      try{
+        await fetch('https://formspree.io/f/xkoakgkk',{method:'POST',headers:{'Content-Type':'application/json','Accept':'application/json'},body:JSON.stringify({email})});
+      }catch(e){}
+      emailInput.style.display='none';waitSubmit.style.display='none';
+      if(waitConfirm)waitConfirm.style.display='block';
+    });
+    emailInput.addEventListener('keydown',e=>{if(e.key==='Enter')waitSubmit.click();});
+  }
   have.addEventListener('click',()=>{if(form)form.classList.add('show');if(input)input.focus();});
   function trySubmit(){
     const v=(input.value||'').trim().toLowerCase();
