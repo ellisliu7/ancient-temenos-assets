@@ -395,6 +395,8 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #g-gate-email{background:rgba(20,14,6,0.5);border:.5px solid rgba(196,158,72,0.22);border-radius:2px;padding:.6rem .9rem;font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(232,216,186,0.95);outline:none;width:min(260px,60vw);text-align:center;letter-spacing:.04em;transition:border-color .8s ease;}
 #g-gate-email:focus{border-color:rgba(196,158,72,0.5);}
 #g-gate-waitconfirm{display:none;font-family:'Cormorant Garamond',serif;font-size:clamp(15px,1.5vw,19px);font-style:italic;color:rgba(232,216,186,0.75);margin:0;}
+#g-gate-keyholder-note{display:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(12px,1.1vw,14px);color:rgba(196,158,72,0.4);margin:2.4rem 0 0;letter-spacing:.04em;}
+#g-gate-keyholder-note.show{display:block;}
 #g-gate-keyform{display:none;margin-top:2.4rem;gap:.8rem;justify-content:center;align-items:center;}
 #g-gate-keyform.show{display:flex;}
 #g-gate-keyinput{background:rgba(20,14,6,0.5);border:.5px solid rgba(196,158,72,0.22);border-radius:2px;padding:.6rem .9rem;font-family:'Cormorant Garamond',serif;font-size:16px;color:rgba(232,216,186,0.95);outline:none;width:min(220px,52vw);text-align:center;letter-spacing:.04em;transition:border-color .8s ease;}
@@ -1051,6 +1053,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
         <button class="g-gate-btn primary" id="g-gate-receive">Request a Sigil Key</button>
         <button class="g-gate-btn ghost" id="g-gate-have">I hold a Key</button>
       </div>
+      <p id="g-gate-keyholder-note">More of the temple awakens with each Key.</p>
       <div id="g-gate-waitlist">
         <p class="g-gate-waitlist-sub">If you wish to return when the Sigil Keys awaken, leave your name below.</p>
         <input id="g-gate-email" type="email" placeholder="your@email.com" autocomplete="off" spellcheck="false"/>
@@ -2733,7 +2736,7 @@ function ganyGateInit(){
   have.addEventListener('click',()=>{if(form)form.classList.add('show');if(input)input.focus();});
   function trySubmit(){
     const v=(input.value||'').trim().toLowerCase();
-    if(v===G_GATE_PASS){gGrantKey();const gate=document.getElementById('g-gate');if(gate){gate.classList.remove('lit');setTimeout(()=>{gate.classList.remove('show');ganyKeyWelcome();},1800);}}
+    if(v===G_GATE_PASS){gGrantKey();const note=document.getElementById('g-gate-keyholder-note');if(note)note.classList.add('show');const gate=document.getElementById('g-gate');if(gate){gate.classList.remove('lit');setTimeout(()=>{gate.classList.remove('show');ganyKeyWelcome();},1800);}}
     else{input.classList.remove('deny');void input.offsetWidth;input.classList.add('deny');input.value='';}
   }
   submit.addEventListener('click',trySubmit);
@@ -2761,7 +2764,8 @@ function ganyKeyWelcome(){
     ritual.classList.remove('dim','black');ritual.style.background='rgba(3,2,1,0)';
     if(gold)gold.style.opacity='0';
     if(raysC){raysC.style.transition='';raysC.style.opacity='1';}
-    words.style.opacity='1';words.style.transition='';words.classList.remove('show');
+    words.style.opacity='0';words.style.transition='';words.classList.remove('show');
+    ritual.style.pointerEvents='none';
     const glass=document.getElementById('g-glass');
     if(glass)glass.classList.remove('sunk');
     const gi=document.getElementById('gi');const gb=document.getElementById('gb');
