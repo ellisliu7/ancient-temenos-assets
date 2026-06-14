@@ -419,9 +419,9 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #g-thinking-dots span:nth-child(2){animation-delay:.28s;}#g-thinking-dots span:nth-child(3){animation-delay:.56s;}
 @keyframes gDot{0%,100%{transform:translateY(0);opacity:.15;}50%{transform:translateY(-5px);opacity:.75;}}
 #g-options{display:flex;justify-content:center;gap:clamp(2.4rem,6vw,5rem);margin-top:2.8rem;pointer-events:all;}
-.g-candle{display:flex;align-items:center;justify-content:center;cursor:pointer;opacity:0;transform:translateY(8px);transition:opacity 1s ease,transform 1s ease;padding:.4rem 0;}
+.g-candle{display:flex;align-items:center;justify-content:center;cursor:pointer;transition:opacity 1s ease,transform 1s ease,filter .6s ease;filter:none;opacity:0;transform:translateY(8px);transition:opacity 1s ease,transform 1s ease;padding:.4rem 0;}
 .g-candle.show{opacity:1;transform:translateY(0);}
-.g-candle:hover .g-candle-text{color:rgba(255,240,200,0.95);border-bottom-color:rgba(196,158,72,0.3);}
+.g-candle:hover .g-candle-text{color:rgba(255,240,200,1);text-shadow:0 0 14px rgba(196,158,72,0.35);border-bottom-color:rgba(196,158,72,0.3);}
 .g-candle.extinguished{opacity:.06;pointer-events:none;transition:opacity 1.4s ease;}
 .g-candle.chosen{opacity:1;}
 .g-candle-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,1.3vw,17px);color:rgba(238,220,168,0.5);line-height:1.6;max-width:200px;text-align:center;transition:color .6s ease;border-bottom:.5px solid transparent;padding-bottom:.35rem;}
@@ -437,7 +437,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #g-ritual-words{text-align:center;opacity:0;transition:opacity 2.5s ease;}
 #g-ritual-words.show{opacity:1;}
 #g-ritual-line1{font-family:'Cinzel',serif;font-size:clamp(7px,.75vw,9px);letter-spacing:.65em;text-transform:uppercase;color:rgba(196,158,72,0.45);display:block;margin-bottom:2.2rem;}
-#g-ritual-line2{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(26px,3.2vw,44px);color:rgba(238,220,168,0.92);display:block;text-shadow:0 0 60px rgba(196,158,72,0.3);}
+#g-ritual-line2{font-family:'Cormorant Garamond',serif;font-style:oblique 8deg;font-size:clamp(26px,3.2vw,44px);color:rgba(238,220,168,0.92);display:block;text-shadow:0 0 60px rgba(196,158,72,0.3);}
 @keyframes candleFlicker{0%{transform:scaleX(1) scaleY(1) rotate(-.5deg);}30%{transform:scaleX(.93) scaleY(1.07) rotate(.8deg);}60%{transform:scaleX(1.04) scaleY(.95) rotate(-.4deg);}80%{transform:scaleX(.97) scaleY(1.04) rotate(.3deg);}100%{transform:scaleX(1) scaleY(1) rotate(0deg);}}
 
 /* === ATMOSPHERE — film grain unifies video, image and UI into one substance === */
@@ -1065,8 +1065,8 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   </div>
   <div id="g-ritual">
     <div id="g-ritual-words">
-      <span id="g-ritual-line1">The blueprint is set.</span>
-      <span id="g-ritual-line2">Now go build it.</span>
+      <span id="g-ritual-line1">The gate remembers you.</span>
+      <span id="g-ritual-line2">You may descend as far as you wish.</span>
     </div>
   </div>
 </div>
@@ -2613,7 +2613,7 @@ async function sendGany(){
       if(opts)opts.innerHTML='';
       setTimeout(ganyGate,2200);
     }else{
-      if(Array.isArray(p.options)&&p.options.length===3)setTimeout(()=>showCandles(p.options),1100);
+      if(Array.isArray(p.options)&&p.options.length===3)setTimeout(()=>showCandles(p.options,p.context||''),1100);
       if(p.check_in===true)setTimeout(ganyRitual,2000);
     }
     gBusy=false;
@@ -2654,16 +2654,31 @@ async function sendGany(){
       setTimeout(ganyGate,2200);
     }else{
       const options=Array.isArray(p.options)&&p.options.length===3?p.options:null;
-      if(options)setTimeout(()=>showCandles(options),1100);
+      if(options)setTimeout(()=>showCandles(options,p.context||''),1100);
       if(p.check_in===true)setTimeout(ganyRitual,2000);
     }
   }catch(e){if(dots)dots.classList.remove('show');if(curr)curr.textContent='The cave listens. Speak again.';}
   gBusy=false;
 }
 
-function showCandles(options){
+function showCandles(options,context){
   const wrap=document.getElementById('g-options');if(!wrap)return;
   wrap.innerHTML='';
+  if(context){
+    const ctx=document.createElement('p');
+    ctx.style.cssText="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.2vw,15px);color:rgba(196,158,72,0.55);text-align:center;margin:0 0 .6rem;letter-spacing:.02em;width:100%;opacity:0;transition:opacity 1.2s ease;";
+    ctx.textContent=context;
+    wrap.appendChild(ctx);
+    setTimeout(()=>ctx.style.opacity='1',200);
+  }
+  const eyebrow=document.createElement('p');
+  eyebrow.style.cssText="font-family:'Cinzel',serif;font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:rgba(196,158,72,0.3);text-align:center;margin:0 0 1.4rem;width:100%;opacity:0;transition:opacity 1.4s ease;";
+  eyebrow.textContent='The next stone is yours to place';
+  wrap.appendChild(eyebrow);
+  setTimeout(()=>eyebrow.style.opacity='1',400);
+  const row=document.createElement('div');
+  row.style.cssText='display:flex;justify-content:center;gap:clamp(2.4rem,6vw,5rem);width:100%;';
+  wrap.appendChild(row);
   options.forEach((opt,i)=>{
     const c=document.createElement('div');c.className='g-candle';
     c.innerHTML=`<span class="g-candle-text">${opt.text||''}</span>`;
@@ -2672,7 +2687,7 @@ function showCandles(options){
       c.classList.remove('extinguished');c.classList.add('chosen');
       const gi=document.getElementById('gi');if(gi){gi.value=opt.text||'';sendGany();}
     });
-    wrap.appendChild(c);setTimeout(()=>c.classList.add('show'),i*280);
+    row.appendChild(c);setTimeout(()=>c.classList.add('show'),i*280);
   });
 }
 
@@ -2711,13 +2726,14 @@ function ganyGateInit(){
       }catch(e){}
       emailInput.style.display='none';waitSubmit.style.display='none';
       if(waitConfirm)waitConfirm.style.display='block';
+      setTimeout(()=>{const gate=document.getElementById('g-gate');if(gate){gate.classList.remove('lit');setTimeout(()=>{gate.classList.remove('show');flashTo(()=>showScreen('foyer'));},1800);}},3500);
     });
     emailInput.addEventListener('keydown',e=>{if(e.key==='Enter')waitSubmit.click();});
   }
   have.addEventListener('click',()=>{if(form)form.classList.add('show');if(input)input.focus();});
   function trySubmit(){
     const v=(input.value||'').trim().toLowerCase();
-    if(v===G_GATE_PASS){gGrantKey();const gate=document.getElementById('g-gate');if(gate){gate.classList.remove('lit');setTimeout(()=>{gate.classList.remove('show');ganyRitual();},1800);}}
+    if(v===G_GATE_PASS){gGrantKey();const gate=document.getElementById('g-gate');if(gate){gate.classList.remove('lit');setTimeout(()=>{gate.classList.remove('show');ganyKeyWelcome();},1800);}}
     else{input.classList.remove('deny');void input.offsetWidth;input.classList.add('deny');input.value='';}
   }
   submit.addEventListener('click',trySubmit);
@@ -2727,6 +2743,31 @@ document.addEventListener('DOMContentLoaded',ganyGateInit);
 /* v1 key: held in the proxy for real verification later. Client placeholder only. */
 const G_GATE_PASS='remember';
 
+function ganyKeyWelcome(){
+  const ritual=document.getElementById('g-ritual');
+  const words=document.getElementById('g-ritual-words');
+  const gold=document.getElementById('g-gold-bg');
+  if(!ritual)return;
+  const raysC=document.getElementById('g-rays-canvas');
+  ritual.style.pointerEvents='all';
+  setTimeout(()=>ritual.classList.add('dim'),600);
+  setTimeout(()=>{if(gold)gold.style.opacity='0.6';if(raysC){raysC.style.transition='opacity 3s ease';raysC.style.opacity='0.4';}},3000);
+  setTimeout(()=>{if(words)words.classList.add('show');},5000);
+  setTimeout(()=>{
+    if(words){words.style.transition='opacity 2s ease';words.style.opacity='0';}
+    ritual.classList.add('black');
+  },8500);
+  setTimeout(()=>{
+    ritual.classList.remove('dim','black');ritual.style.background='rgba(3,2,1,0)';
+    if(gold)gold.style.opacity='0';
+    if(raysC){raysC.style.transition='';raysC.style.opacity='1';}
+    words.style.opacity='1';words.style.transition='';words.classList.remove('show');
+    const glass=document.getElementById('g-glass');
+    if(glass)glass.classList.remove('sunk');
+    const gi=document.getElementById('gi');const gb=document.getElementById('gb');
+    if(gi)gi.disabled=false;if(gb)gb.disabled=false;
+  },11000);
+}
 function ganyRitual(){
   const ritual=document.getElementById('g-ritual');const words=document.getElementById('g-ritual-words');const gold=document.getElementById('g-gold-bg');
   if(!ritual)return;
