@@ -1,3 +1,29 @@
+## Session log — Jun 13/14 — STRATEGY SESSION (no code)
+- TWO NEW REPO DOCS created and pushed alongside this file:
+  * MILESTONES.md — 14-day V1 launch plan. V1 = ONE perfected path
+    (arrival -> council -> Ganymede -> grimoire), invite-only keys.
+    Cut list: NFT/wallet, Persephone, Psyche, Supabase, file-split.
+    Has a daily ritual + parking lot. This is the tracker to check
+    against each session.
+  * CHAMBER_TEMPLATE.md — reusable 10-section SOP for future chambers
+    (soul test, wound/theme, voice, environment, ritual, oracle,
+    animation, sound, art integration, collector, completion). Copy
+    it to birth Persephone/Psyche. Do NOT build a new chamber yet.
+- 80/20 finding: emotional impact lives in 4 moments only — first 10s,
+  council seeing you, oracle's first precise reflection, grimoire.
+  A third chamber adds surface area, not depth. Perfect ONE path.
+- SESSION HYGIENE established: one focused task per conversation, then
+  start fresh (single 222KB file = context cost compounds). New-session
+  prompt: "Read CURRENT_STATE.md and MILESTONES.md. Fetch the live
+  index.html. Don't make changes yet — tell me which milestone I'm in,
+  the single next ship, and what to cut. Then wait for my go."
+- NEXT SHIP (unchanged, top of MILESTONES Days 1-3): decide Ganymede
+  gate backdrop (artwork vs darkness) -> one patch -> walk cold-stranger
+  test -> send live link to 10 people. Validate demand BEFORE building
+  NFT verification.
+- TOOLING: stay on Opus-in-this-Project. Cowork later if doc upkeep
+  gets heavy. iOS app for testing the live URL on the go.
+
 ## Session log — Jun 13 — GATE TESTABILITY + OPTION ORDERING
 - "I don't see the gate" diagnosis: El typed the key ('remember')
   earlier while testing the unlock, so localStorage holds the key and
