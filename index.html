@@ -1046,9 +1046,9 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   </div>
   <div id="g-gate">
     <div id="g-gate-words">
-      <p class="g-gate-eyebrow">The Temple Opens Slowly</p>
-      <p class="g-gate-line">Ancient Temenos is still unfolding.</p>
-      <p class="g-gate-line">Some chambers remain hidden.</p>
+      <p class="g-gate-eyebrow">You have reached the threshold</p>
+      <p class="g-gate-line">The cave goes deeper.</p>
+      <p class="g-gate-line">A Sigil Key opens the way.</p>
       <div id="g-gate-actions">
         <button class="g-gate-btn primary" id="g-gate-receive">Request a Sigil Key</button>
         <button class="g-gate-btn ghost" id="g-gate-have">I hold a Key</button>
@@ -1057,7 +1057,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
       <div id="g-gate-waitlist">
         <p class="g-gate-waitlist-sub">If you wish to return when the Sigil Keys awaken, leave your name below.</p>
         <input id="g-gate-email" type="email" placeholder="your@email.com" autocomplete="off" spellcheck="false"/>
-        <button class="g-gate-btn primary" id="g-gate-waitsubmit">Enter the Waiting</button>
+        <button class="g-gate-btn primary" id="g-gate-waitsubmit">Leave my name</button>
         <p id="g-gate-waitconfirm">You are remembered.</p>
       </div>
       <div id="g-gate-keyform">
@@ -2688,6 +2688,7 @@ function showCandles(options,context){
     c.addEventListener('click',()=>{
       wrap.querySelectorAll('.g-candle').forEach(x=>x.classList.add('extinguished'));
       c.classList.remove('extinguished');c.classList.add('chosen');
+      gBusy=false;
       const gi=document.getElementById('gi');if(gi){gi.value=opt.text||'';sendGany();}
     });
     row.appendChild(c);setTimeout(()=>c.classList.add('show'),i*280);
@@ -3430,10 +3431,10 @@ window.sendCouncil=async function(){
     await new Promise(r=>setTimeout(r,900));
     document.getElementById('c-wait').style.display='none';
     const mockLines=[
-      {speaker:'Venus',text:'There is something here that wants to be received, not fixed.'},
-      {speaker:'Persephone',text:'The pattern underneath this has been waiting a long time.'},
-      {speaker:'Psyche',text:'What would it feel like to set down the weight for a moment?'},
-      {speaker:'Ganymede',text:'You already know what to build. You need the first stone.'}
+      {speaker:'Venus',text:'You are allowed to want this. You do not need to earn it first.'},
+      {speaker:'Persephone',text:'You have been here before. Ask yourself why this still feels safer.'},
+      {speaker:'Psyche',text:'What if the part of you that does not know is the most honest part?'},
+      {speaker:'Ganymede',text:'Stop thinking about the whole thing. What have you been avoiding this week?'}
     ];
     const mockRec=_mock==='ganymede'?'Ganymede':_mock==='persephone'?'Persephone':_mock==='venus'?'Venus':_mock==='all'?(['Venus','Ganymede','Persephone'][Math.floor(Math.random()*3)]):'Venus';
     const linesEl=document.getElementById('c-debate-lines');
@@ -3442,10 +3443,14 @@ window.sendCouncil=async function(){
       const {speaker,text}=mockLines[i];
       const cls=SPEAKER_CLASS[speaker]||'venus';
       const div=document.createElement('div');div.className='c-line';
-      div.innerHTML=`<span class="c-speaker ${cls}">${speaker}</span>${text}`;
+      const spSpan=document.createElement('span');spSpan.className=`c-speaker ${cls}`;spSpan.textContent=speaker;
+      const txSpan=document.createElement('span');txSpan.className='c-line-text';
+      div.appendChild(spSpan);div.appendChild(txSpan);
       linesEl.appendChild(div);
-      await new Promise(r=>setTimeout(r,i===0?100:340));
+      await new Promise(r=>setTimeout(r,i===0?200:600));
       div.classList.add('show');
+      await new Promise(r=>{let j=0;const ch=text.split('');const tick=()=>{if(j<ch.length){txSpan.textContent+=ch[j++];setTimeout(tick,22);}else r();};tick();});
+      await new Promise(r=>setTimeout(r,320));
     }
     await new Promise(r=>setTimeout(r,500));
     const recEl=document.getElementById('c-recommendation');
@@ -3456,7 +3461,7 @@ window.sendCouncil=async function(){
     requestAnimationFrame(()=>requestAnimationFrame(()=>recEl.classList.add('on')));
     const isLive=LIVE_CHAMBERS[mockRec.toLowerCase()]||false;
     if(isLive){
-      await new Promise(r=>setTimeout(r,2200));
+      await new Promise(r=>setTimeout(r,5000));
       overlay.classList.remove('on');
       if(mockRec.toLowerCase()==='venus')flashTo(()=>enterVenusAltar());
       else if(mockRec.toLowerCase()==='persephone')flashTo(()=>enterPersephone());
@@ -3497,19 +3502,27 @@ window.sendCouncil=async function(){
   if(portalGlow)portalGlow.classList.remove('on');
 
   // single API call - debate + recommendation
-  const sys=`You are writing a short, sharp debate between four archetypes in Ancient Temenos. They are deciding which chamber this person needs most.
+  const sys=`You are the council of Ancient Temenos. Four archetypes, four completely different ways of seeing. Each speaks ONE line about what this person needs. Exactly 4 lines then a recommendation.
 
-The four archetypes:
-- Venus: poetic, warm, Paulo Coelho register. Sees love and beauty and what the heart needs.
-- Persephone: magnetic, mysterious. Sees what is hidden and what needs to transform.
-- Psyche: light, playful. Sees what has been forgotten or needs to feel lighter.
-- Ganymede: grounded, warm like David Ghiyam. Sees what needs to be built or acted on.
+VENUS — she is the permission giver. She speaks about self-worth, receiving, softness, being seen. Her line should feel like a relief. Like something the person has been waiting to hear.
+Bad: "There is something here that wants to be received." (vague)
+Good: "You are allowed to want this. You do not need to earn it first."
+
+PERSEPHONE — she sees the shadow, the pattern, what keeps repeating. Her line names the uncomfortable truth underneath. Should feel like a quiet shock of recognition.
+Bad: "The pattern underneath this has been waiting a long time." (vague)
+Good: "You have chosen this kind of pain before. The question is why it still feels safer than the alternative."
+
+PSYCHE — she is wonder and the inner child. She finds delight, play, curiosity in the situation. Her line reframes everything with lightness — not toxic positivity, but genuine wonder.
+Bad: "What would it feel like to set down the weight?" (generic)
+Good: "What if the part of you that doesn't know what to do is actually the most honest part?"
+
+GANYMEDE — he is structure and the first stone. His line is always a concrete instruction or challenge. No philosophy. Just: what to do next.
+Bad: "You already know what to build. You need the first stone." (cliché)
+Good: "Stop thinking about the whole thing. What is the one action you have been avoiding this week?"
 
 Rules:
-- Maximum 6 lines total. Each line is one short sentence, 10 words max.
-- They react to each other. Not four separate answers.
-- End with ONE recommendation: which archetype this person needs most.
-- Format EXACTLY like this, no extra text, no preamble:
+- Exactly 4 lines. Max 15 words each. Each line must feel like a completely different person speaking.
+- Format EXACTLY, nothing else:
 Venus: [line]
 Persephone: [line]
 Psyche: [line]
@@ -3557,12 +3570,28 @@ RECOMMENDS: ${fb}`;
 
     const div=document.createElement('div');
     div.className='c-line';
-    div.innerHTML=`<span class="c-speaker ${cls}">${speaker}</span>${text}`;
+    const speakerSpan=document.createElement('span');
+    speakerSpan.className=`c-speaker ${cls}`;
+    speakerSpan.textContent=speaker;
+    const textSpan=document.createElement('span');
+    textSpan.className='c-line-text';
+    div.appendChild(speakerSpan);
+    div.appendChild(textSpan);
     linesEl.appendChild(div);
 
-    // stagger appearance
-    await new Promise(r=>setTimeout(r,i===0?100:320));
+    await new Promise(r=>setTimeout(r,i===0?200:600));
     div.classList.add('show');
+    // typewrite the text
+    await new Promise(r=>{
+      let j=0;
+      const chars=text.split('');
+      const tick=()=>{
+        if(j<chars.length){textSpan.textContent+=chars[j++];setTimeout(tick,22);}
+        else r();
+      };
+      tick();
+    });
+    await new Promise(r=>setTimeout(r,320));
   }
 
   // show recommendation then auto-enter
@@ -3579,8 +3608,7 @@ RECOMMENDS: ${fb}`;
 
   if(isLive){
     recSoon.style.display='none';
-    // auto-enter after 2.2s — council has spoken, no button needed
-    await new Promise(r=>setTimeout(r,2200));
+    await new Promise(r=>setTimeout(r,5000));
     overlay.classList.remove('on');
     if(recommended.toLowerCase()==='venus')flashTo(()=>enterVenusAltar());
     else if(recommended.toLowerCase()==='ganymede')flashTo(()=>enterGanymede());
