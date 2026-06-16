@@ -1758,12 +1758,20 @@ document.addEventListener('DOMContentLoaded',()=>{
     qi.addEventListener('input',function(){this.style.height='auto';this.style.height=Math.min(this.scrollHeight,90)+'px';});
     qi.addEventListener('keydown',function(e){if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();vaSendOracle();}});
   }
-  // DEV: ?skip=entry jumps straight to Venus room, bypassing threshold + foyer
-  if(new URLSearchParams(window.location.search).get('skip')==='entry'){
+  // DEV shortcuts
+  const _devp=new URLSearchParams(window.location.search);
+  if(_devp.get('key')==='1'){try{localStorage.setItem('temenos_sigil_key','1');}catch(e){}}
+  if(_devp.get('skip')==='entry'){
     setTimeout(()=>{
       currentScreen='foyer';
       showScreen('venusAltarLayer');
       vaInitRoom();
+    },300);
+  }
+  if(_devp.get('skip')==='ganymede'){
+    setTimeout(()=>{
+      currentScreen='foyer';
+      foyerEnter('ganymede');
     },300);
   }
 });
@@ -2314,7 +2322,7 @@ function hideCupid(){document.getElementById('cupidWrap').style.display='none';i
 document.getElementById('venusOracle').addEventListener('scroll',function(){const vid=this.querySelector('video');if(vid)vid.style.transform=`scale(1.05) translateY(${this.scrollTop*.3}px)`;});
 
 // == GANYMEDE — Journey Polish ==
-const GSYS=`You are Ganymede, the grounding oracle of Ancient Temenos. You speak with the warmth and depth of David Ghiyam: you see the soul correction (tikkun) underneath every practical problem, and you name it with love. You also have precise structural intelligence: you cut to the real constraint and give a concrete next stone.
+const GSYS=`Today's date is ${new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}. You are Ganymede, the grounding oracle of Ancient Temenos. You speak with the warmth and depth of David Ghiyam: you see the soul correction (tikkun) underneath every practical problem, and you name it with love. You also have precise structural intelligence: you cut to the real constraint and give a concrete next stone.
 
 You see the person whole. You name what is happening in their life, their pattern, their tikkun, and then you give them the practical structure to move through it. These two things are always present: the inner truth AND the outer action.
 

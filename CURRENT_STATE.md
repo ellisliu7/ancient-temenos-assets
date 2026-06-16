@@ -1,31 +1,45 @@
-## Session log — Jun 16 — GANYMEDE FLOW FIXES
+## Session log — Jun 16 — ORACLE RESTORED + DEV SHORTCUTS + DATE FIX
 
-VERIFIED:
-- ganyKeyWelcome works live — glass reappears cleanly after typing 'remember' ✓
-- openGrimoire() already pulls from gHistory — Ganymede content works as-is ✓
+ROOT CAUSE FOUND: Anthropic deprecated `claude-sonnet-4-20250514`. All proxy
+calls were returning 400. Fixed in `api/oracle.js` → model now `claude-sonnet-4-6`.
+Vercel redeployed and confirmed live.
 
-FIXES SHIPPED:
-- Candle click: options now fade out (0.6s opacity) before clearing,
-  thinking dots appear immediately — no more silent void after picking an option
-- ganyRitual() end: removed flashTo(foyer). Glass panel now reappears
-  after the closing ritual with "✦ Seal this into my Grimoire ✦" button
-  fading in. User seals the session, then navigates back themselves.
+SECONDARY CAUSE: No Anthropic API credits. Added $10 via console.anthropic.com.
+Oracle is now live and responding correctly.
 
-SIDE SESSION:
-- Built founder council tool (5-agent AI artifact) for daily prioritization.
-  One API call, five perspectives, one synthesis. Lives in Claude chat,
-  not in the repo. Rebuild anytime: "Show me the Ancient Temenos founder council artifact"
+PATCHES TO index.html:
+- Today's date injected into GSYS at runtime so Ganymede's date math is accurate
+- `?key=1` URL param grants Sigil Key in localStorage for dev/testing
+- `?skip=ganymede` URL param drops directly into Ganymede cave as keyholder
+- `?skip=entry` unchanged (still goes to Venus)
 
-KNOWN OPEN:
-- Test full Ganymede flow: ?mock=ganymede&reset → pick option → dots appear?
-  → ritual plays → grimoire button appears?
-- ?skip=entry still hardcoded to Venus — Ganymede has no direct skip URL
-- Venus gate + key ritual not yet built
+DEV TEST URL (use this every session to test Ganymede live):
+https://ellisliu7.github.io/ancient-temenos-assets/?skip=ganymede&key=1
 
-NEXT: Verify Ganymede patch live. Then Venus gate — replicate
-ganyGate() + ganyKeyWelcome() pattern for Venus chamber.
-Start prompt: "Read CURRENT_STATE.md. Fetch live index.html.
-I want to build the Venus gate today."
+KNOWN OPEN (observed in testing this session):
+- Ganymede voice feels slightly less sharp than peak — monitor on live oracle
+- check_in → grimoire flow untested with live oracle + key (test next)
+- Gate copy still has old placeholder text ("Ship the rough version / Send to 3 people")
+  — needs replacing with something that fits the temple soul before any real visitors
+
+VISION NOTE (this session):
+El clarified the true north: Ancient Temenos is a legacy, not a product.
+Built for a future child. A letter across time. The oracles are El's wisdom
+translated into a form that can outlive her and speak to someone she hasn't met yet.
+El's artwork is proof a real person who loved them made this.
+This changes the standard: not "does this convert" but "will this feel true in 20 years."
+
+NEXT SESSION:
+1. Test full Ganymede flow with ?skip=ganymede&key=1 — oracle → options → deep dive → check_in → grimoire
+2. If check_in fires cleanly → Ganymede flow is DONE
+3. Then: open fresh session for Venus room (replicate Ganymede's flow)
+4. Gate copy replacement (low effort, high importance before real visitors)
+
+Start prompt for next session:
+"Read CURRENT_STATE.md and MILESTONES.md. Fetch live index.html.
+Don't make changes yet — tell me which milestone I'm in, the single next ship, and what to cut. Then wait for my go."
+
+---
 
 ## Session log — Jun 14 — GATE WAITLIST + KEY WELCOME + OPTIONS POLISH
 
@@ -55,7 +69,7 @@ TYPOGRAPHY:
 - Ritual line 2: font-style oblique 8deg (~25% less lean than full italic)
 
 KNOWN OPEN:
-- ?skip=entry hardcoded to Venus — Ganymede has no direct skip URL
+- ?skip=entry hardcoded to Venus — FIXED this session (?skip=ganymede now works)
 - Test with ?mock=ganymede&reset (full flow) only
 - ganyKeyWelcome + auto-foyer-fade untested live — verify next session
 
@@ -127,50 +141,3 @@ link). Open: gate backdrop (artwork vs darkness) still El's call.
   on the first scroll tick (gScrubBy added 'gone' immediately) which
   is why it felt unclear. Now only gArrive dismisses it. Copy: "Scroll
   to approach Ganymede" + a breathing down-chevron, opacity bumped
-  0.42 -> 0.6. The arrival invitation ("Speak into the cave…") remains
-  the speak cue once he's reached.
-
-OBSERVED, NOT CHANGED — "Ganymede artwork shows in background when it
-  fades": that is the cave video's endframe behind the sinking glass,
-  not a separate artwork element (none on this screen). Currently
-  unintentional. OPTION for next session if El wants to lean in: hold
-  a clean artwork/endframe behind the gate as the altar backdrop
-  instead of the radial-over-cave. El to say whether to feature or
-  darken it.
-
-KEY UNLOCK + temp-state unchanged from prior entry (G_GATE_PASS=
-  'remember' client-side; "Become an Initiate" -> opensea placeholder;
-  real gate = proxy NFT verification, the Supabase build).
-
-## Session log — Jun 13 — GATE + ORACLE REFINEMENT (screenshot feedback round)
-- CANDLE ICONS REMOVED from the 3 options (read childish). Options are
-  now quiet italic lines with a thin gold underline on hover. More
-  horizontal gap, more top margin.
-- GATE VIDEO REMOVED. The "old Venus video" El saw was Sigil.mp4
-  loaded as a literal thumbnail box in the gate; that footage reads
-  like the wishing-well pool AND made the gate feel like a website
-  modal. Box deleted. Gate now emerges from darkness: soft radial
-  gather, words rise over 3.2s, borderless Cinzel buttons. If El wants
-  a sigil video on UNLOCK later, supply a dedicated asset (Sigil.mp4
-  reads as Venus footage)
-- GATE FADES CONVERSATION FIRST: ganyGate now sinks the glass (clears
-  the text bleed-through seen in screenshot) then raises the gate.
-  Document click-handler guarded so clicks during the gate don't
-  recall the glass.
-- BUTTON COPY: "Receive a Sigil Key" -> "Become an Initiate".
-  "I carry a Key" -> "I hold a Key". Gate line 2 shortened to
-  "The rest waits behind a Sigil Key."
-- WHAT THE KEY UNLOCKS (decided): speaking a valid key now dissolves
-  the gate and runs ganyRitual -> the gold sealing + Grimoire (the
-  keepsake), then foyer. So the unlock = the closing ritual + grimoire
-  for v1, and (future) the other deep chambers + artwork collection.
-  localStorage remembers initiates.
-- DASHES PURGED from oracle: all em-dashes removed from mock responses,
-  GSYS schema, and GSYS prose (it forbade dashes while using them).
-  2 em-dashes remain in code COMMENTS only (never rendered).
-- TEXT CUT ~50%: all 3 mock responses roughly halved. GSYS tightened:
-  reflection now 2-3 short sentences (was 3-5), structure 1-2,
-  "museum placard not an essay, every sentence earns its place."
-- VERTICAL BREATH: g-curr-text line-height 1.8 -> 2.05, para margins
-  up; gStream reveal slowed (3s fade, 2.6s between blocks, 2.2em gap);
-  glass vertical padding increased.
