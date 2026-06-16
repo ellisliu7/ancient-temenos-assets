@@ -1,3 +1,32 @@
+## Session log — Jun 16 — GANYMEDE FLOW FIXES
+
+VERIFIED:
+- ganyKeyWelcome works live — glass reappears cleanly after typing 'remember' ✓
+- openGrimoire() already pulls from gHistory — Ganymede content works as-is ✓
+
+FIXES SHIPPED:
+- Candle click: options now fade out (0.6s opacity) before clearing,
+  thinking dots appear immediately — no more silent void after picking an option
+- ganyRitual() end: removed flashTo(foyer). Glass panel now reappears
+  after the closing ritual with "✦ Seal this into my Grimoire ✦" button
+  fading in. User seals the session, then navigates back themselves.
+
+SIDE SESSION:
+- Built founder council tool (5-agent AI artifact) for daily prioritization.
+  One API call, five perspectives, one synthesis. Lives in Claude chat,
+  not in the repo. Rebuild anytime: "Show me the Ancient Temenos founder council artifact"
+
+KNOWN OPEN:
+- Test full Ganymede flow: ?mock=ganymede&reset → pick option → dots appear?
+  → ritual plays → grimoire button appears?
+- ?skip=entry still hardcoded to Venus — Ganymede has no direct skip URL
+- Venus gate + key ritual not yet built
+
+NEXT: Verify Ganymede patch live. Then Venus gate — replicate
+ganyGate() + ganyKeyWelcome() pattern for Venus chamber.
+Start prompt: "Read CURRENT_STATE.md. Fetch live index.html.
+I want to build the Venus gate today."
+
 ## Session log — Jun 14 — GATE WAITLIST + KEY WELCOME + OPTIONS POLISH
 
 GATE FLOW:
@@ -123,7 +152,7 @@ KEY UNLOCK + temp-state unchanged from prior entry (G_GATE_PASS=
   modal. Box deleted. Gate now emerges from darkness: soft radial
   gather, words rise over 3.2s, borderless Cinzel buttons. If El wants
   a sigil video on UNLOCK later, supply a dedicated asset (Sigil.mp4
-  reads as Venus footage).
+  reads as Venus footage)
 - GATE FADES CONVERSATION FIRST: ganyGate now sinks the glass (clears
   the text bleed-through seen in screenshot) then raises the gate.
   Document click-handler guarded so clicks during the gate don't
