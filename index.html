@@ -104,14 +104,13 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 @keyframes spin{to{transform:rotate(360deg);}}
 
 /* ── VENUS ORACLE ── */
-#venusOracle{overflow-y:auto;justify-content:flex-start;background:transparent;}
-#venusOracle::-webkit-scrollbar{width:0;}
+/* venusOracle CSS removed */
 #venus-video-bg{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none;display:none;}
-#venusOracle #venus-video-bg{display:block;}
+
 #venus-video-bg video{width:100%;height:100%;object-fit:cover;filter:brightness(.72) saturate(.95);opacity:0;transition:opacity 2.5s ease;}
 #venus-video-bg::after{content:'';position:absolute;inset:0;background:rgba(4,2,1,0.28);}
 #venus-sculpture-wrap{position:fixed;inset:0;z-index:1;pointer-events:none;opacity:0;transition:opacity 2s ease 0.5s;display:none;}
-#venusOracle.active-screen #venus-sculpture-wrap{display:block;}
+
 #venus-sculpture-canvas{width:100%;height:100%;pointer-events:auto;}
 #venus-prompt{position:fixed;bottom:4rem;left:50%;transform:translateX(-50%);z-index:15;text-align:center;pointer-events:all;cursor:pointer;opacity:0;transition:opacity 1.5s ease;}
 #venus-prompt .vp-main{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:18px;color:rgba(238,220,168,0.75);letter-spacing:.06em;animation:pulse 3s ease-in-out infinite;}
@@ -487,178 +486,10 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 /* === VENUS ALTAR LAYER === */
 
     /* BG VIDEO */
-    #venusAltarLayer #va-bg { position:absolute;inset:0;z-index:0;overflow:hidden; }
-    #venusAltarLayer #va-bg video { opacity:0;transition:opacity 3s ease; }
-    #venusAltarLayer #va-bg::after { content:'';position:absolute;inset:0;background:linear-gradient(to bottom,rgba(4,2,1,0.08) 0%,transparent 35%,rgba(4,2,1,0.45) 100%);pointer-events:none;opacity:0;transition:opacity 2.5s ease; }
-    #venusAltarLayer #va-bg.va-bg-ready::after { opacity:1; }
-
-    /* SCULPTURE — center, fades in AFTER the drawing (the relic leads, the attendant follows) */
-    #venusAltarLayer #va-sculpture-wrap {
-      position:absolute;inset:0;z-index:2;pointer-events:none;
-      opacity:0;transition:opacity 3s ease 3.6s;
-    }
-    #venusAltarLayer #va-sculpture-wrap.show { opacity:1; }
-    #venusAltarLayer #va-sculpture-canvas { width:100%;height:100%;pointer-events:auto; }
-
-    /* GOLD DUST — drifts between the room and the seeker */
-    #venusAltarLayer #va-dust-canvas { position:absolute;inset:0;z-index:3;pointer-events:none;opacity:0;transition:opacity 3s ease; }
-
-    /* LAYOUT — absolute, wall-anchored. No flex row. Each element knows where it lives. */
-    #venusAltarLayer #va-content { position:absolute;inset:0;z-index:10;pointer-events:none; }
-
-    /* ARTWORK — mounted on left wall face (left wall sits ~2–26% from left edge) */
-    #venusAltarLayer #va-artwork-wrap {
-      position:absolute;
-      left:2%;
-      top:50%;transform:translateY(-50%) translateY(12px);
-      width:24vw;min-width:220px;max-width:340px;
-      display:flex;align-items:center;justify-content:flex-end;
-      pointer-events:none;
-      opacity:0;
-      transition:opacity 2.4s ease,transform 2.4s cubic-bezier(.22,.68,0,.98);
-    }
-    #venusAltarLayer #va-artwork-wrap.revealed {
-      opacity:1;transform:translateY(-50%) translateY(0);
-    }
-    #venusAltarLayer #va-artwork {
-      position:relative;width:100%;
-      /* Lean into left wall plane — perspective matched to room's vanishing point */
-      transform:perspective(900px) rotateY(4deg) rotateX(0.5deg);
-      transform-origin:left center;
-      will-change:transform;
-    }
-    #venusAltarLayer #va-artwork img {
-      width:100%;height:auto;display:block;
-      /* Wall-cast shadow — heavier on right/bottom, reads as mounted not floating */
-      box-shadow:
-        6px 12px 60px rgba(0,0,0,0.92),
-        2px 4px 18px rgba(0,0,0,0.85),
-        -2px 0 40px rgba(0,0,0,0.5),
-        0 0 80px rgba(196,158,72,0.06);
-      border:.5px solid rgba(196,158,72,0.18);
-      /* Warm the drawing with the room's amber — it was photographed in neutral light */
-      filter:sepia(0.18) saturate(0.92) brightness(0.96) contrast(1.02);
-      background:#0a0604;
-    }
-    /* Raking gold light — a slow candle-pass across the graphite and gold leaf */
-    #venusAltarLayer #va-artwork::before {
-      content:'';position:absolute;inset:0;z-index:2;pointer-events:none;
-      background:linear-gradient(105deg,transparent 38%,rgba(238,216,160,0.16) 50%,transparent 62%);
-      background-size:300% 100%;background-position:140% 0;
-      mix-blend-mode:soft-light;
-    }
-    /* Wall glow — warm ambient light bleeding from architecture onto painting surface */
-    #venusAltarLayer #va-artwork::after {
-      content:'';position:absolute;inset:-8px;z-index:-1;pointer-events:none;
-      background:radial-gradient(ellipse 85% 70% at 60% 50%, rgba(196,158,72,0.07) 0%, transparent 70%);
-    }
-    @keyframes vaRakingLight {
-      0%   { background-position:140% 0; }
-      22%  { background-position:-40% 0; }
-      100% { background-position:-40% 0; }
-    }
-    @media (prefers-reduced-motion: no-preference) {
-      #venusAltarLayer #va-artwork::before { animation:vaRakingLight 19s ease-in-out 6s infinite; }
-    }
-    #venusAltarLayer #va-artwork-credit {
-      position:absolute;bottom:-1.6rem;left:0;right:0;text-align:center;
-      font-family:'Cinzel',serif;font-size:6.5px;letter-spacing:.28em;
-      text-transform:uppercase;color:rgba(196,158,72,0.22);
-    }
-
-    /* SCULPTURE FLOOR SHADOW — grounds it to the marble */
-    #venusAltarLayer #va-sculpture-shadow {
-      position:absolute;
-      bottom:13%;left:50%;transform:translateX(-50%);
-      width:18vw;max-width:220px;height:3vh;
-      background:radial-gradient(ellipse 100% 100% at 50% 50%, rgba(0,0,0,0.65) 0%, transparent 70%);
-      z-index:1;pointer-events:none;
-      opacity:0;transition:opacity 2s ease 5s;
-    }
-    #venusAltarLayer #va-sculpture-shadow.show { opacity:1; }
-
-    /* RIGHT PANEL — timelapse + gate, anchored to right wall panel (~72–96% from left) */
-    #venusAltarLayer #va-right {
-      position:absolute;
-      right:1.5%;
-      top:50%;transform:translateY(-50%);
-      width:22vw;min-width:180px;max-width:300px;
-      display:flex;flex-direction:column;
-      align-items:flex-start;justify-content:center;gap:1.5rem;
-      pointer-events:all;
-    }
-
-    /* TIMELAPSE — framed relic on right wall, matches room warmth */
-    #venusAltarLayer #va-timelapse-wrap {
-      width:100%;
-      opacity:0;transform:translateY(10px);
-      transition:opacity 2.2s ease,transform 2.2s cubic-bezier(.22,.68,0,.98);
-    }
-    #venusAltarLayer #va-timelapse-label { font-family:'Cinzel',serif;font-size:6.5px;letter-spacing:.25em;text-transform:uppercase;color:rgba(196,158,72,0.28);opacity:0;transition:opacity 1.8s ease;margin-bottom:.5rem; }
-    #venusAltarLayer #va-timelapse {
-      width:100%;aspect-ratio:9/16;max-height:52vh;
-      overflow:hidden;position:relative;
-      /* Perspective lean into right wall — mirror of left artwork */
-      transform:perspective(900px) rotateY(-4deg) rotateX(0.5deg);
-      transform-origin:right center;
-      /* Wall-mount shadow — heavier on left/bottom */
-      box-shadow:
-        -6px 12px 60px rgba(0,0,0,0.88),
-        -2px 4px 18px rgba(0,0,0,0.8),
-        2px 0 40px rgba(0,0,0,0.45),
-        0 0 60px rgba(196,158,72,0.05);
-      border:.5px solid rgba(196,158,72,0.15);
-      /* Asleep: warm-tinted and dim, reads as architecture not screen */
-      opacity:.55;
-      filter:saturate(.45) brightness(.72) sepia(0.22);
-      cursor:pointer;
-      transition:opacity .9s ease,filter .9s ease;
-    }
-    #venusAltarLayer #va-timelapse.awake {
-      opacity:.92;
-      filter:sepia(0.08) saturate(0.88) brightness(0.94);
-    }
-    #venusAltarLayer #va-timelapse video { width:100%;height:100%;object-fit:cover; }
-    #venusAltarLayer #va-timelapse::after {
-      content:'';position:absolute;inset:0;
-      background:linear-gradient(to bottom,rgba(4,2,1,0.15) 0%,transparent 30%,transparent 60%,rgba(4,2,1,0.55) 100%);
-      pointer-events:none;
-    }
-
-    /* ORACLE GATE */
-    #venusAltarLayer #va-gate { display:flex;flex-direction:column;gap:.6rem;opacity:0;transform:translateY(8px);transition:opacity 2s ease,transform 2s cubic-bezier(.22,.68,0,.98); }
-    #venusAltarLayer #va-gate-line { width:100%;height:.5px;background:linear-gradient(to right,rgba(196,158,72,0.3),transparent); }
-    #venusAltarLayer #va-gate-text { font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:rgba(238,220,168,0.32);letter-spacing:.04em;line-height:1.6; }
-    #venusAltarLayer #va-gate-btn {
-      display:inline-flex;align-items:center;gap:.5rem;background:transparent;
-      border:.5px solid rgba(196,158,72,0.2);border-radius:2px;padding:.4rem .875rem;
-      cursor:pointer;transition:all .3s;width:fit-content;
-    }
-    #venusAltarLayer #va-gate-btn:hover { border-color:rgba(196,158,72,0.45);background:rgba(196,158,72,0.04); }
-    #venusAltarLayer #va-gate-btn span { font-family:'Cinzel',serif;font-size:7px;letter-spacing:.2em;text-transform:uppercase;color:rgba(196,158,72,0.4); }
-    #venusAltarLayer #va-gate-btn:hover span { color:rgba(196,158,72,0.7); }
-
-    /* WAITLIST */
-    #venusAltarLayer #va-waitlist { display:none;flex-direction:column;gap:.45rem;animation:vaFadeUp .4s ease both; }
-    #venusAltarLayer #va-waitlist.show { display:flex; }
-    @keyframes vaFadeUp { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:translateY(0)} }
-    #venusAltarLayer #va-waitlist-input {
-      background:rgba(196,158,72,0.04);border:.5px solid rgba(196,158,72,0.16);border-radius:2px;
-      padding:.4rem .75rem;font-family:'Cormorant Garamond',serif;font-style:italic;
-      font-size:12px;color:rgba(238,220,168,0.7);outline:none;width:min(11vw,140px);transition:border-color .3s;
-    }
-    #venusAltarLayer #va-waitlist-input::placeholder { color:rgba(196,158,72,0.2); }
-    #venusAltarLayer #va-waitlist-input:focus { border-color:rgba(196,158,72,0.35); }
-    #venusAltarLayer #va-waitlist-submit {
-      background:transparent;border:.5px solid rgba(196,158,72,0.18);border-radius:2px;
-      padding:.38rem .875rem;font-family:'Cinzel',serif;font-size:6.5px;letter-spacing:.16em;
-      text-transform:uppercase;color:rgba(196,158,72,0.38);cursor:pointer;width:fit-content;transition:all .3s;
-    }
-    #venusAltarLayer #va-waitlist-submit:hover { border-color:rgba(196,158,72,0.38);color:rgba(196,158,72,0.62); }
-    #venusAltarLayer #va-waitlist-confirm { font-family:'Cormorant Garamond',serif;font-style:italic;font-size:11px;color:rgba(196,158,72,0.38);display:none; }
+    /* venusAltarLayer room CSS removed */
 
     /* NAME */
-    #venusAltarLayer #va-name {
+    #venusApproach #va-name {
       position:absolute;bottom:1.5rem;left:0;right:0;text-align:center;z-index:11;
       font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.42em;
       text-transform:uppercase;color:rgba(196,158,72,0.14);pointer-events:none;
@@ -666,97 +497,97 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     }
 
     /* ORACLE OVERLAY — opens inside the room */
-    #venusAltarLayer #va-oracle-overlay {
+    #venusApproach #va-oracle-overlay {
       position:absolute;inset:0;z-index:20;
       background:rgba(4,2,1,0);
       display:flex;align-items:flex-end;justify-content:center;
       pointer-events:none;
       transition:background .8s ease;
     }
-    #venusAltarLayer #va-oracle-overlay.open {
+    #venusApproach #va-oracle-overlay.open {
       background:rgba(4,2,1,0.62);
       pointer-events:all;
     }
-    #venusAltarLayer #va-oracle-panel {
+    #venusApproach #va-oracle-panel {
       width:100%;max-width:560px;
       padding:0 1.5rem 2rem;
       opacity:0;transform:translateY(20px);
       transition:opacity .7s ease,transform .7s ease;
       max-height:80vh;overflow-y:auto;scrollbar-width:none;
     }
-    #venusAltarLayer #va-oracle-panel::-webkit-scrollbar { display:none; }
-    #venusAltarLayer #va-oracle-overlay.open #va-oracle-panel { opacity:1;transform:translateY(0); }
+    #venusApproach #va-oracle-panel::-webkit-scrollbar { display:none; }
+    #venusApproach #va-oracle-overlay.open #va-oracle-panel { opacity:1;transform:translateY(0); }
 
     /* oracle prompt */
-    #venusAltarLayer #va-oracle-prompt {
+    #venusApproach #va-oracle-prompt {
       text-align:center;padding:1.5rem 0 1.25rem;
       font-family:'Cormorant Garamond',serif;font-style:italic;
       font-size:18px;color:rgba(238,220,168,0.65);letter-spacing:.06em;
     }
 
     /* oracle thread */
-    #venusAltarLayer #va-thread { display:flex;flex-direction:column;gap:1.25rem;margin-bottom:1.25rem; }
-    #venusAltarLayer .va-msg-user { text-align:right; }
-    #venusAltarLayer .va-msg-user .va-bub {
+    #venusApproach #va-thread { display:flex;flex-direction:column;gap:1.25rem;margin-bottom:1.25rem; }
+    #venusApproach .va-msg-user { text-align:right; }
+    #venusApproach .va-msg-user .va-bub {
       display:inline-block;max-width:80%;
       background:rgba(196,158,72,0.07);border:.5px solid rgba(196,158,72,0.14);
       border-radius:10px 10px 3px 10px;padding:.65rem .875rem;
       font-size:14px;color:rgba(238,220,168,0.65);line-height:1.65;text-align:left;
     }
-    #venusAltarLayer .va-msg-venus .va-speaker {
+    #venusApproach .va-msg-venus .va-speaker {
       font-family:'Cinzel',serif;font-size:7px;letter-spacing:.2em;text-transform:uppercase;
       color:rgba(196,158,72,0.28);margin-bottom:.4rem;
     }
-    #venusAltarLayer .va-vcard {
+    #venusApproach .va-vcard {
       position:relative;padding:1.1rem 1.1rem .9rem;
       border:.5px solid rgba(196,158,72,0.12);background:rgba(4,2,1,0.45);
     }
-    #venusAltarLayer .va-corner { position:absolute;width:7px;height:7px;border-color:rgba(196,158,72,0.28);border-style:solid; }
-    #venusAltarLayer .va-tl{top:4px;left:4px;border-width:1px 0 0 1px}
-    #venusAltarLayer .va-tr{top:4px;right:4px;border-width:1px 1px 0 0}
-    #venusAltarLayer .va-bl{bottom:4px;left:4px;border-width:0 0 1px 1px}
-    #venusAltarLayer .va-br{bottom:4px;right:4px;border-width:0 1px 1px 0}
-    #venusAltarLayer .va-principle { font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,158,72,0.32);margin-bottom:.65rem; }
-    #venusAltarLayer .va-mirror { font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15.5px;color:rgba(238,220,168,0.82);line-height:1.85;margin-bottom:.75rem; }
-    #venusAltarLayer .va-kybalion { font-size:13px;font-style:italic;color:rgba(196,158,72,0.42);line-height:1.7;border-left:1px solid rgba(196,158,72,0.16);padding-left:.75rem;margin-bottom:.75rem; }
-    #venusAltarLayer .va-affirmation { font-size:16px;font-style:italic;color:rgba(238,220,168,0.88);line-height:1.75;padding:.7rem .875rem;border:.5px solid rgba(196,158,72,0.18);background:rgba(196,158,72,0.04);margin-bottom:.75rem; }
-    #venusAltarLayer .va-question { font-size:15px;font-style:italic;color:rgba(238,220,168,0.68);line-height:1.75; }
+    #venusApproach .va-corner { position:absolute;width:7px;height:7px;border-color:rgba(196,158,72,0.28);border-style:solid; }
+    #venusApproach .va-tl{top:4px;left:4px;border-width:1px 0 0 1px}
+    #venusApproach .va-tr{top:4px;right:4px;border-width:1px 1px 0 0}
+    #venusApproach .va-bl{bottom:4px;left:4px;border-width:0 0 1px 1px}
+    #venusApproach .va-br{bottom:4px;right:4px;border-width:0 1px 1px 0}
+    #venusApproach .va-principle { font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,158,72,0.32);margin-bottom:.65rem; }
+    #venusApproach .va-mirror { font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15.5px;color:rgba(238,220,168,0.82);line-height:1.85;margin-bottom:.75rem; }
+    #venusApproach .va-kybalion { font-size:13px;font-style:italic;color:rgba(196,158,72,0.42);line-height:1.7;border-left:1px solid rgba(196,158,72,0.16);padding-left:.75rem;margin-bottom:.75rem; }
+    #venusApproach .va-affirmation { font-size:16px;font-style:italic;color:rgba(238,220,168,0.88);line-height:1.75;padding:.7rem .875rem;border:.5px solid rgba(196,158,72,0.18);background:rgba(196,158,72,0.04);margin-bottom:.75rem; }
+    #venusApproach .va-question { font-size:15px;font-style:italic;color:rgba(238,220,168,0.68);line-height:1.75; }
 
     /* oracle input */
-    #venusAltarLayer #va-oracle-input-wrap {
+    #venusApproach #va-oracle-input-wrap {
       background:rgba(4,2,1,0.65);backdrop-filter:blur(12px);
       border:.5px solid rgba(196,158,72,0.16);border-radius:10px;
       display:flex;align-items:flex-end;gap:8px;padding:.6rem .6rem .6rem .95rem;
       transition:border-color .3s;
     }
-    #venusAltarLayer #va-oracle-input-wrap:focus-within { border-color:rgba(196,158,72,0.3); }
-    #venusAltarLayer #va-oracle-qi {
+    #venusApproach #va-oracle-input-wrap:focus-within { border-color:rgba(196,158,72,0.3); }
+    #venusApproach #va-oracle-qi {
       flex:1;background:transparent;border:none;outline:none;
       font-family:'Cormorant Garamond',serif;font-size:14.5px;
       color:rgba(238,220,168,0.85);resize:none;min-height:22px;max-height:90px;line-height:1.6;
     }
-    #venusAltarLayer #va-oracle-qi::placeholder { color:rgba(196,158,72,0.18);font-style:italic; }
-    #venusAltarLayer #va-oracle-send {
+    #venusApproach #va-oracle-qi::placeholder { color:rgba(196,158,72,0.18);font-style:italic; }
+    #venusApproach #va-oracle-send {
       flex-shrink:0;width:28px;height:28px;background:rgba(196,158,72,0.1);
       border:.5px solid rgba(196,158,72,0.2);border-radius:6px;cursor:pointer;
       display:flex;align-items:center;justify-content:center;color:rgba(196,158,72,0.4);
       transition:all .25s;font-size:13px;
     }
-    #venusAltarLayer #va-oracle-send:hover { background:rgba(196,158,72,0.18);color:rgba(196,158,72,0.75); }
-    #venusAltarLayer #va-oracle-send:disabled { opacity:.25;cursor:not-allowed; }
-    #venusAltarLayer #va-oracle-thinking { display:none;padding:.5rem 0;gap:5px;align-items:center; }
-    #venusAltarLayer #va-oracle-thinking.on { display:flex; }
-    #venusAltarLayer #va-oracle-thinking span { width:3px;height:3px;border-radius:50%;background:rgba(196,158,72,0.35);animation:vaPulse 1.4s ease-in-out infinite; }
-    #venusAltarLayer #va-oracle-thinking span:nth-child(2){animation-delay:.2s}
-    #venusAltarLayer #va-oracle-thinking span:nth-child(3){animation-delay:.4s}
+    #venusApproach #va-oracle-send:hover { background:rgba(196,158,72,0.18);color:rgba(196,158,72,0.75); }
+    #venusApproach #va-oracle-send:disabled { opacity:.25;cursor:not-allowed; }
+    #venusApproach #va-oracle-thinking { display:none;padding:.5rem 0;gap:5px;align-items:center; }
+    #venusApproach #va-oracle-thinking.on { display:flex; }
+    #venusApproach #va-oracle-thinking span { width:3px;height:3px;border-radius:50%;background:rgba(196,158,72,0.35);animation:vaPulse 1.4s ease-in-out infinite; }
+    #venusApproach #va-oracle-thinking span:nth-child(2){animation-delay:.2s}
+    #venusApproach #va-oracle-thinking span:nth-child(3){animation-delay:.4s}
     @keyframes vaPulse{0%,80%,100%{transform:scale(.7);opacity:.25}40%{transform:scale(1);opacity:.8}}
-    #venusAltarLayer #va-oracle-actions { display:flex;gap:8px;margin-top:.5rem;flex-wrap:wrap; }
-    #venusAltarLayer .va-act-btn {
+    #venusApproach #va-oracle-actions { display:flex;gap:8px;margin-top:.5rem;flex-wrap:wrap; }
+    #venusApproach .va-act-btn {
       background:transparent;border:.5px solid rgba(196,158,72,0.12);border-radius:20px;
       padding:3px 11px;font-family:'Cinzel',serif;font-size:6.5px;letter-spacing:.15em;
       text-transform:uppercase;color:rgba(196,158,72,0.28);cursor:pointer;transition:all .25s;
     }
-    #venusAltarLayer .va-act-btn:hover { color:rgba(196,158,72,0.6);border-color:rgba(196,158,72,0.28); }
+    #venusApproach .va-act-btn:hover { color:rgba(196,158,72,0.6);border-color:rgba(196,158,72,0.28); }
   
 </style>
 </head>
@@ -889,74 +720,15 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   </div>
   <div id="v-approach-haze"></div>
   <div id="v-scroll-hint"><span>She is near. Draw closer.</span><span class="v-hint-chev">⌄</span></div>
-</div>
 
-<!-- VENUS BREATH -->
-<!-- ══ VENUS ALTAR LAYER ══ -->
-<div class="screen" id="venusAltarLayer" style="overflow:hidden;background:#0a0604;">
-
-  <!-- BG VIDEO — simple loop -->
-  <div id="va-bg">
-    <video autoplay muted loop playsinline preload="auto" style="width:100%;height:100%;object-fit:cover;display:block;">
-      <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Altar.mp4" type="video/mp4">
-    </video>
-  </div>
-
-  <!-- SCULPTURE on pedestal -->
-  <div id="va-sculpture-wrap">
-    <canvas id="va-sculpture-canvas"></canvas>
-  </div>
-  <!-- Floor shadow — grounds sculpture to marble -->
-  <div id="va-sculpture-shadow"></div>
-
-  <!-- GOLD DUST — living atmosphere around the still relic -->
-  <canvas id="va-dust-canvas"></canvas>
-
-  <!-- ROOM ELEMENTS -->
-  <div id="va-content">
-    <div id="va-artwork-wrap">
-      <div id="va-artwork">
-        <img src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Artwork.jpg" alt="Venus — El Liu">
-        <div id="va-artwork-credit">Venus · El Liu</div>
-      </div>
-    </div>
-
-    <div id="va-right">
-      <div id="va-timelapse-wrap">
-        <div id="va-timelapse-label">How she was made</div>
-        <div id="va-timelapse">
-          <video id="va-timelapse-video" muted loop playsinline preload="metadata">
-            <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_timelapse.mp4" type="video/mp4">
-          </video>
-        </div>
-      </div>
-      <div id="va-gate">
-        <div id="va-gate-line"></div>
-        <div id="va-gate-text">The oracle requires initiation.</div>
-        <button id="va-gate-btn" onclick="vaToggleGate()">
-          <svg width="9" height="12" viewBox="0 0 10 13" fill="none">
-            <rect x=".5" y="5.5" width="9" height="7" rx="1" stroke="rgba(196,158,72,0.42)" stroke-width=".8"/>
-            <path d="M2.5 5.5V3.5a2.5 2.5 0 015 0v2" stroke="rgba(196,158,72,0.42)" stroke-width=".8" stroke-linecap="round"/>
-          </svg>
-          <span>Request your Sigil Key</span>
-        </button>
-        <div id="va-waitlist">
-          <input id="va-waitlist-input" type="email" placeholder="your@email.com"/>
-          <button id="va-waitlist-submit" onclick="vaSubmitWaitlist()">Join the waitlist</button>
-          <div id="va-waitlist-confirm">You will be among the first to receive your key.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ORACLE OVERLAY — lives inside the room -->
+  <!-- ORACLE OVERLAY — rises at arrival over the video -->
   <div id="va-oracle-overlay">
     <div id="va-oracle-panel">
       <div id="va-oracle-prompt">What's on your mind?</div>
       <div id="va-thread"></div>
       <div id="va-oracle-thinking"><span></span><span></span><span></span></div>
       <div id="va-oracle-input-wrap">
-        <textarea id="va-oracle-qi" rows="1" placeholder="Ask your question…"></textarea>
+        <textarea id="va-oracle-qi" rows="1" placeholder="Speak…"></textarea>
         <button id="va-oracle-send" onclick="vaSendOracle()">→</button>
       </div>
       <div id="va-oracle-actions">
@@ -967,77 +739,12 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   </div>
 
   <div id="va-name">Ancient Temenos · Venus</div>
-  <div id="v-room-hint"><span>Scroll to enter the chamber</span><span class="v-room-chev">⌄</span></div>
 </div>
 
+<!-- venusAltarLayer removed — oracle lives in venusApproach -->
 
-<div class="screen" id="venusBreath" style="background:transparent;">
-  <div style="text-align:center;padding:2rem;animation:fadeUp 1.5s ease forwards;">
-    <p style="font-family:'Cormorant',serif;font-style:italic;font-size:clamp(14px,2vw,20px);color:rgba(238,220,168,0.35);line-height:2.2;letter-spacing:.08em;">take a moment to set an intention<br>and just breathe</p>
-    <p style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.5em;color:rgba(196,158,72,0.15);text-transform:uppercase;margin-top:2rem;">she is waiting</p>
-  </div>
-</div>
 
-<!-- ══ VENUS ORACLE ══ -->
-<div class="screen" id="venusOracle" style="justify-content:flex-start;">
-  <div id="venus-video-bg">
-    <video id="venusAltarVideo" autoplay muted loop playsinline preload="auto">
-      <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Venus_Altar_Video.mp4" type="video/mp4">
-    </video>
-  </div>
-  <div id="venus-sculpture-wrap"><canvas id="venus-sculpture-canvas"></canvas></div>
-  <div id="venus-prompt" onclick="openVenusConversation()">
-    <p class="vp-main">You already know. Say it.</p>
-    <p class="vp-sub">touch to begin</p>
-  </div>
-  <div id="cupidWrap" onclick="toggleFrequency()">
-    <svg id="cupidSvg" width="56" height="76" viewBox="0 0 60 80" fill="none">
-      <g id="wingL"><path d="M30 32 Q14 22 10 12 Q18 18 28 28" stroke="rgba(196,158,72,0.5)" stroke-width=".8" fill="rgba(196,158,72,0.04)"/></g>
-      <g id="wingR"><path d="M30 32 Q46 22 50 12 Q42 18 32 28" stroke="rgba(196,158,72,0.5)" stroke-width=".8" fill="rgba(196,158,72,0.04)"/></g>
-      <ellipse cx="30" cy="44" rx="7" ry="9" stroke="rgba(196,158,72,0.55)" stroke-width=".8" fill="rgba(196,158,72,0.05)"/>
-      <circle cx="30" cy="30" r="7" stroke="rgba(196,158,72,0.6)" stroke-width=".8" fill="rgba(196,158,72,0.06)"/>
-      <g id="harpG">
-        <path d="M38 38 Q50 32 52 50 L40 54 Z" stroke="rgba(196,158,72,0.45)" stroke-width=".7" fill="rgba(196,158,72,0.03)"/>
-        <line x1="42" y1="38" x2="40" y2="53" stroke="rgba(196,158,72,0.3)" stroke-width=".5"/>
-        <line x1="45" y1="36" x2="43" y2="52" stroke="rgba(196,158,72,0.3)" stroke-width=".5"/>
-        <line x1="48" y1="35" x2="46" y2="51" stroke="rgba(196,158,72,0.3)" stroke-width=".5"/>
-      </g>
-      <circle id="cupidGlow" cx="30" cy="40" r="28" stroke="rgba(196,158,72,0)" stroke-width=".5" fill="none"/>
-    </svg>
-    <p id="cupidLabel">♪</p>
-  </div>
-  <div id="venus-conv">
-    <div style="text-align:center;padding:3rem 2rem 1rem;flex-shrink:0;">
-      <h2 class="o-title">You Already Know</h2>
-      <p class="o-sub">Speak. She is listening.</p>
-    </div>
-    <div class="thread" id="vthread"></div>
-    <div class="v-closing" id="vClosing">
-      <p class="vc-closing-label">She has seen you</p>
-      <p class="vc-closing-text" id="vClosingText">The channel is open. What was received here is yours to carry forward.</p>
-      <button class="vc-bridge-btn" onclick="bridgeToGanymede()"><span>Take me to the Ganymede cave</span></button>
-      <button class="vc-grimoire-btn" onclick="openGrimoire()">✦ Seal this into my Grimoire ✦</button>
-    </div>
-    <div class="well-prompt">
-      <div class="orn" style="margin-bottom:.6rem;width:140px;"><div class="orn-l"></div><div class="orn-d"></div><div class="orn-l"></div></div>
-      <button class="well-prompt-txt" onclick="openWell()">✦ Cast your intention into the well ✦</button>
-    </div>
-    <div class="inp-area">
-      <div style="position:relative;">
-        <div class="tablet-arch">
-          <div class="tablet-corner tl"></div><div class="tablet-corner tr"></div><div class="tablet-corner bl"></div><div class="tablet-corner br"></div>
-          <div class="inp-row">
-            <input class="q-i" id="qi" type="text" placeholder="Ask your question…" autocomplete="off" spellcheck="false"/>
-            <button class="q-b" id="qb" onclick="sendVenus()">
-              <svg viewBox="0 0 14 14" fill="none" stroke="rgba(196,158,72,0.8)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>
-            </button>
-          </div>
-        </div>
-      </div>
-      <p class="thinking" id="vthinking"></p>
-    </div>
-  </div>
-</div>
+<!-- venusBreath + venusOracle removed -->
 
 <!-- ══ GANYMEDE ══ -->
 <div class="screen" id="ganymedeScreen" style="justify-content:flex-start;overflow:hidden;">
@@ -1323,17 +1030,17 @@ function showScreen(id){
   currentScreen=id;
   inCave=(id==='ganymedeScreen');
   bgC.style.display='block';
-  const showReturn=['foyer','venusBreath','venusOracle','ganymedeScreen','persephoneScreen','venusAltarLayer','venusApproach'].includes(id);
-  const showTeachings=['venusOracle','ganymedeScreen','foyer','venusAltarLayer'].includes(id);
+  const showReturn=['foyer','ganymedeScreen','persephoneScreen','venusApproach'].includes(id);
+  const showTeachings=['ganymedeScreen','foyer','venusApproach'].includes(id);
   document.getElementById('returnBtn').style.display=showReturn?'flex':'none';
   document.getElementById('teachingsBtn').style.display=showTeachings?'flex':'none';
   if(id==='foyer')setTimeout(initFoyer,150);
 }
 
 function goReturn(){
-  const prev={foyer:'threshold',venusBreath:'foyer',venusOracle:'foyer',ganymedeScreen:'foyer',persephoneScreen:'foyer',venusAltarLayer:'foyer',venusApproach:'foyer'};
+  const prev={foyer:'threshold',ganymedeScreen:'foyer',persephoneScreen:'foyer',venusApproach:'foyer'};
   const target=prev[currentScreen]||'foyer';
-  if(currentScreen==='venusOracle'){hideCupid();resetVenusState();}
+  /* venusOracle guard removed */
   flashTo(()=>{
     showScreen(target);
     // Always fully reset council state when returning to foyer
@@ -1658,8 +1365,7 @@ let vHistory=[],venusOracleOpened=false,venusConvOpen=false;
 let lastPrinciple='The Principle of Cause and Effect',lastMirror='';
 
 function enterVenusAltar(){
-  showScreen('venusAltarLayer');
-  vaInitRoom();
+  /* deprecated — oracle now lives in venusApproach */
 }
 
 function vaToggleGate(){
@@ -1773,7 +1479,7 @@ function vaScrollOracle(){
 
 // Key shortcut
 document.addEventListener('keydown',function(e){
-  if((e.key==='v'||e.key==='V')&&typeof currentScreen!=='undefined'&&currentScreen==='venusAltarLayer'){
+  if((e.key==='v'||e.key==='V')&&typeof currentScreen!=='undefined'&&currentScreen==='venusApproach'){
     enterVenusOracle();
   }
 });
@@ -1791,7 +1497,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(_devp.get('skip')==='entry'){
     setTimeout(()=>{
       currentScreen='foyer';
-      showScreen('venusAltarLayer');
+      /* key unlock: oracle already visible in venusApproach */
       vaInitRoom();
     },300);
   }
@@ -1844,8 +1550,7 @@ function vaInitRoom(){
     const bgAfterHost=document.getElementById('va-bg');
     if(bgAfterHost) bgAfterHost.style.setProperty('--va-overlay-ready','1');
     // Trigger ::after fade by adding a class the CSS transitions on
-    const bgEl=document.querySelector('#venusAltarLayer #va-bg');
-    if(bgEl) bgEl.classList.add('va-bg-ready');
+    /* va-bg removed */
   }, 600);
 
   // === BEAT 3 — 1400ms: THE DRAWING emerges first from darkness ===
@@ -1896,7 +1601,7 @@ function vaInitRoom(){
 }
 
 function vaInitParallax(){
-  const wrap=document.getElementById('venusAltarLayer');
+  const wrap=document.getElementById('venusApproach');
   const stage=document.getElementById('va-stage');
   const art=document.getElementById('va-artwork');
   const right=document.getElementById('va-right');
@@ -1997,7 +1702,7 @@ function _buildVaSculpture(canvas,sw){
   const fillL=new THREE.PointLight(0xffe8c0,1.5,10);fillL.position.set(-4,2,3);scene.add(fillL);
   const fillR=new THREE.PointLight(0xffe8c0,1.5,10);fillR.position.set(4,2,3);scene.add(fillR);
   let mouseX=0,mouseY=0;
-  const wrap=document.getElementById('venusAltarLayer');
+  const wrap=document.getElementById('venusApproach');
   if(wrap){
     wrap.addEventListener('mousemove',e=>{mouseX=(e.clientX/window.innerWidth-.5)*2;mouseY=(e.clientY/window.innerHeight-.5)*2;});
     wrap.addEventListener('mouseleave',()=>{mouseX=0;mouseY=0;});
@@ -2160,7 +1865,7 @@ function maybeShowVClosing(){
     if(!c.classList.contains('visible')){
       try{const last=vHistory.filter(m=>m.role==='assistant').pop();if(last){const p=JSON.parse(last.content.replace(/```json|```/g,'').trim());if(p.mirror)document.getElementById('vClosingText').textContent=p.mirror.split('\n')[0];}}catch(e){}
       c.classList.add('visible');
-      const oracle=document.getElementById('venusOracle');setTimeout(()=>oracle.scrollTop=oracle.scrollHeight,300);
+      const oracle=document.getElementById('va-oracle-panel');setTimeout(()=>oracle.scrollTop=oracle.scrollHeight,300);
     }
   }
 }
@@ -2272,7 +1977,7 @@ function _buildVenusSculpture(canvas){
   const rim=new THREE.PointLight(0xffaa55,2,8);rim.position.set(2,2,-2);scene.add(rim);
 
   // Mouse parallax
-  const venusScreen=document.getElementById('venusOracle');
+  const venusScreen=document.getElementById('venusApproach');
   if(venusScreen){
     venusScreen.addEventListener('mousemove',e=>{
       mouseX=(e.clientX/window.innerWidth-0.5)*2;
@@ -2346,7 +2051,7 @@ function stopFrequency(){if(freqNodes.gain){freqNodes.gain.gain.linearRampToValu
 function toggleFrequency(){freqActive=!freqActive;const wrap=document.getElementById('cupidWrap'),label=document.getElementById('cupidLabel');if(freqActive){startFrequency(528);wrap.classList.add('active');label.textContent='528 hz';}else{stopFrequency();wrap.classList.remove('active');label.textContent='♪';}}
 function showCupid(){document.getElementById('cupidWrap').style.display='flex';}
 function hideCupid(){document.getElementById('cupidWrap').style.display='none';if(freqActive){freqActive=false;stopFrequency();document.getElementById('cupidWrap').classList.remove('active');}}
-document.getElementById('venusOracle').addEventListener('scroll',function(){const vid=this.querySelector('video');if(vid)vid.style.transform=`scale(1.05) translateY(${this.scrollTop*.3}px)`;});
+/* venusOracle scroll removed */
 
 // == GANYMEDE — Journey Polish ==
 const GSYS=`Today's date is ${new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'})}. You are Ganymede, the grounding oracle of Ancient Temenos. You speak with the warmth and depth of David Ghiyam: you see the soul correction (tikkun) underneath every practical problem, and you name it with love. You also have precise structural intelligence: you cut to the real constraint and give a concrete next stone.
@@ -2557,18 +2262,16 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&gScreenActive()&&gS
 /* == VENUS — scroll-scrub approach engine == */
 let vScrub={target:0,current:0,dur:5,raf:null,arrived:false,hinted:false};
 let vTouchY=null;
-let vRoomScroll={active:false,arrived:false,raf:null};
+/* vRoomScroll removed */
 function vApproachVid(){return document.getElementById('v-approach-video');}
 function vApproachActive(){const s=document.getElementById('venusApproach');return s&&s.classList.contains('active');}
-function vRoomActive(){const s=document.getElementById('venusAltarLayer');return s&&s.classList.contains('active');}
+function vRoomActive(){return vApproachActive();}
 
 function vOnWheel(e){
-  if(vApproachActive()&&!vScrub.arrived){e.preventDefault();vScrubBy(e.deltaY);return;}
-  if(vRoomActive()&&vRoomScroll.active&&!vRoomScroll.arrived){e.preventDefault();vRoomArrive();return;}
+  if(vApproachActive()&&!vScrub.arrived){e.preventDefault();vScrubBy(e.deltaY);}
 }
 function vOnTouchStart(e){
-  if(vApproachActive()&&!vScrub.arrived){vTouchY=e.touches[0].clientY;return;}
-  if(vRoomActive()&&vRoomScroll.active&&!vRoomScroll.arrived){vRoomArrive();return;}
+  if(vApproachActive()&&!vScrub.arrived){vTouchY=e.touches[0].clientY;}
 }
 function vOnTouchMove(e){
   if(!vApproachActive()||vScrub.arrived||vTouchY===null)return;
@@ -2578,7 +2281,7 @@ function vOnTouchMove(e){
   vTouchY=y;
 }
 function vScrubBy(px){
-  const k=vScrub.dur/3600;
+  const k=vScrub.dur/7200;
   vScrub.target=Math.max(0,Math.min(vScrub.dur,vScrub.target+px*k));
   if(!vScrub.hinted&&px>0){vScrub.hinted=true;}
   if(!vScrub.raf&&!vScrub.arrived&&vApproachActive())vScrub.raf=requestAnimationFrame(vScrubLoop);
@@ -2597,35 +2300,17 @@ function vScrubLoop(){
 }
 function vApproachArrive(){
   vScrub.arrived=true;vScrub.raf=null;
-  const v=vApproachVid();if(v){try{v.currentTime=Math.max(0,vScrub.dur-0.05);}catch(e){}}
+  const v=vApproachVid();
+  if(v){try{v.currentTime=Math.max(0,vScrub.dur-0.05);}catch(e){} v.loop=true; v.play();}
   const h=document.getElementById('v-scroll-hint');if(h)h.classList.add('gone');
-  // Soft dissolve: fade approach screen out, fade room in simultaneously
-  const approachEl=document.getElementById('venusApproach');
-  const roomEl=document.getElementById('venusAltarLayer');
-  if(approachEl)approachEl.style.transition='opacity 1.8s ease';
-  if(approachEl)approachEl.style.opacity='0';
-  // Activate room behind it
-  setTimeout(()=>{
-    enterVenusAltar();
-    // After room is visible, enable room scroll
-    setTimeout(()=>{
-      vRoomScroll.active=true;
-      const rh=document.getElementById('v-room-hint');
-      if(rh)rh.classList.add('show');
-    },2000);
-  },900);
+  // Oracle glass rises directly over the video — no screen transition
+  setTimeout(()=>enterVenusOracle(),800);
 }
-function vRoomArrive(){
-  vRoomScroll.arrived=true;
-  const rh=document.getElementById('v-room-hint');if(rh)rh.classList.add('gone');
-  // Reveal oracle overlay — same as enterVenusOracle()
-  enterVenusOracle();
-}
+/* vRoomArrive removed */
 
 function enterVenusApproach(){
-  vHistory=[];venusOracleOpened=false;venusConvOpen=false;vaRoomInit=false;_vaDustInit=false;
+  vHistory=[];venusOracleOpened=false;venusConvOpen=false;
   vScrub={target:0,current:0,dur:5,raf:null,arrived:false,hinted:false};
-  vRoomScroll={active:false,arrived:false,raf:null};
   vTouchY=null;
   showScreen('venusApproach');
   const bg=document.getElementById('v-approach-bg');
