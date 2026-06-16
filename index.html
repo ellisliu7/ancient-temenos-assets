@@ -978,6 +978,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 
 <script>
 const ORACLE_ENDPOINT='https://ancient-temenos-oracle.vercel.app/api/oracle';
+const ORACLE_MODEL='claude-sonnet-4-6';
 const CDN='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/';
 const CDN2='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/';
 const VENUS_GLB='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_sculpture.glb';
@@ -1427,7 +1428,7 @@ async function vaSendOracle(){
   }
 
   try{
-    const res=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,system:VSYS,messages:vHistory.map(m=>({role:m.role,content:m.content}))})});
+    const res=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:ORACLE_MODEL,max_tokens:700,system:VSYS,messages:vHistory.map(m=>({role:m.role,content:m.content}))})});
     const data=await res.json();
     const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
     let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p={principle:'Venus speaks',mirror:raw,kybalion:'',affirmation:'',question:'What would you see if you stopped looking away?',actions:[],check_in:false};}
@@ -1494,14 +1495,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   // DEV shortcuts
   const _devp=new URLSearchParams(window.location.search);
   if(_devp.get('key')==='1'){try{localStorage.setItem('temenos_sigil_key','1');}catch(e){}}
-  if(_devp.get('skip')==='entry'){
-    setTimeout(()=>{
-      currentScreen='foyer';
-      /* key unlock: oracle already visible in venusApproach */
-      vaInitRoom();
-    },300);
-  }
-  if(_devp.get('skip')==='ganymede'){
+if(_devp.get('skip')==='ganymede'){
     setTimeout(()=>{
       currentScreen='foyer';
       foyerEnter('ganymede');
@@ -1509,267 +1503,6 @@ document.addEventListener('DOMContentLoaded',()=>{
   }
 });
 
-let vaRoomInit=false;
-function vaInitRoom(){
-  if(vaRoomInit)return; vaRoomInit=true;
-
-  // === DEV SHORTCUT: ?skip=entry reveals everything instantly ===
-  const _skip=new URLSearchParams(window.location.search).get('skip')==='entry';
-  if(_skip){
-    vaInitSculpture();
-    vaInitParticles();
-    vaInitParallax();
-    const bgVid=document.querySelector('#va-bg video');
-    if(bgVid) bgVid.style.opacity='1';
-    document.getElementById('va-bg').classList.add('va-bg-ready');
-    // artwork-wrap uses .revealed class (preserves translateY(-50%) centering)
-    const artWrap=document.getElementById('va-artwork-wrap');
-    if(artWrap) artWrap.classList.add('revealed');
-    const ids=['va-timelapse-wrap','va-timelapse-label','va-gate','va-name','va-artwork-credit'];
-    ids.forEach(id=>{
-      const el=document.getElementById(id);
-      if(el){el.style.opacity='1';el.style.transform='translateY(0)';}
-    });
-    return;
-  }
-
-  // === BEAT 0: Start loading sculpture immediately (GLB fetch begins now) ===
-  vaInitSculpture();
-
-  // === BEAT 1 — 0ms: Room exhales from darkness ===
-  // Background video fades in first — pure architecture, warm shadow
-  const bgVid=document.querySelector('#va-bg video');
-  if(bgVid) bgVid.style.opacity='1';
-
-  // Particles begin drifting silently
-  vaInitParticles();
-
-  // === BEAT 2 — 600ms: Room vignette deepens ===
-  // The gradient overlay settles — darkness pools at floor and ceiling
-  setTimeout(()=>{
-    const bgAfterHost=document.getElementById('va-bg');
-    if(bgAfterHost) bgAfterHost.style.setProperty('--va-overlay-ready','1');
-    // Trigger ::after fade by adding a class the CSS transitions on
-    /* va-bg removed */
-  }, 600);
-
-  // === BEAT 3 — 1400ms: THE DRAWING emerges first from darkness ===
-  // The relic leads. Everything else in this room is attendant to her.
-  setTimeout(()=>{
-    const artWrap=document.getElementById('va-artwork-wrap');
-    if(artWrap) artWrap.classList.add('revealed');
-  }, 1400);
-
-  // === BEAT 4 — 4200ms: Artwork credit whispers in ===
-  setTimeout(()=>{
-    const credit=document.getElementById('va-artwork-credit');
-    if(credit){ credit.style.opacity='1'; }
-  }, 4200);
-
-  // === BEAT 5 — ~5s: Sculpture resolves in the center, after the drawing ===
-  // GLB's _buildVaSculpture fires sw.classList.add('show') on model load.
-  // Sculpture CSS now carries transition delay 3.6s — she can never precede the drawing.
-
-  // === BEAT 6 — 6800ms: The timelapse portal opens — dim, asleep, motionless ===
-  // The memory of its making waits to be attended to; it never competes with her.
-  setTimeout(()=>{
-    const tlWrap=document.getElementById('va-timelapse-wrap');
-    if(tlWrap){ tlWrap.style.opacity='1'; tlWrap.style.transform='translateY(0)'; }
-  }, 6800);
-
-  // === BEAT 8 — 7600ms: "How she was made" label surfaces ===
-  setTimeout(()=>{
-    const tlLabel=document.getElementById('va-timelapse-label');
-    if(tlLabel) tlLabel.style.opacity='1';
-  }, 7600);
-
-  // === BEAT 9 — 8800ms: The oracle gate offers itself ===
-  // Last to arrive — the invitation waits until the seeker has had time to be here
-  setTimeout(()=>{
-    const gate=document.getElementById('va-gate');
-    if(gate){ gate.style.opacity='1'; gate.style.transform='translateY(0)'; }
-  }, 8800);
-
-  // === BEAT 10 — 10500ms: Room inscription appears at the base ===
-  setTimeout(()=>{
-    const name=document.getElementById('va-name');
-    if(name) name.style.opacity='1';
-  }, 10500);
-
-  // === PARALLAX — wire after room is visible ===
-  setTimeout(()=>vaInitParallax(), 2000);
-}
-
-function vaInitParallax(){
-  const wrap=document.getElementById('venusApproach');
-  const stage=document.getElementById('va-stage');
-  const art=document.getElementById('va-artwork');
-  const right=document.getElementById('va-right');
-  const bgVid=document.querySelector('#va-bg video');
-  let tX=0,tY=0,curX=0,curY=0;
-  if(wrap){
-    wrap.addEventListener('mousemove',function(e){
-      if(document.getElementById('va-oracle-overlay').classList.contains('open'))return;
-      tX=(e.clientX/window.innerWidth-.5);
-      tY=(e.clientY/window.innerHeight-.5);
-    });
-    wrap.addEventListener('mouseleave',function(){tX=0;tY=0;});
-  }
-  (function loop(){
-    requestAnimationFrame(loop);
-    curX+=(tX-curX)*0.055; curY+=(tY-curY)*0.055;
-    if(stage) stage.style.transform=`rotateY(${curX*1.8}deg) rotateX(${-curY*0.9}deg)`;
-    if(art) art.style.transform=`translate(${curX*9}px,${curY*5}px)`;
-    if(right) right.style.transform=`translate(${curX*5}px,${curY*3}px)`;
-    if(bgVid) bgVid.style.transform=`scale(1.04) translate(${-curX*12}px,${-curY*7}px)`;
-  })();
-}
-
-// Gold dust motes — the room is alive, the relic is still.
-// NOTE: this function was previously called but never defined, which threw on
-// room entry and silently killed every reveal beat after it.
-let _vaDustInit=false;
-function vaInitParticles(){
-  if(_vaDustInit)return; _vaDustInit=true;
-  const c=document.getElementById('va-dust-canvas');
-  if(!c)return;
-  if(window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-  const ctx=c.getContext('2d');
-  let W,H;
-  function size(){W=c.width=window.innerWidth;H=c.height=window.innerHeight;}
-  size();window.addEventListener('resize',size);
-  const motes=[];
-  for(let i=0;i<42;i++){
-    motes.push({
-      x:Math.random(),y:Math.random(),
-      r:.4+Math.random()*1.1,
-      s:.00012+Math.random()*.00028,
-      ph:Math.random()*Math.PI*2,
-      a:.06+Math.random()*.2
-    });
-  }
-  (function dustLoop(t){
-    requestAnimationFrame(dustLoop);
-    ctx.clearRect(0,0,W,H);
-    for(const m of motes){
-      m.y-=m.s;
-      if(m.y<-0.02){m.y=1.02;m.x=Math.random();}
-      const sway=Math.sin((t||0)*.00045+m.ph)*.012;
-      const tw=.75+.25*Math.sin((t||0)*.001+m.ph*3);
-      ctx.beginPath();
-      ctx.arc((m.x+sway)*W,m.y*H,m.r,0,Math.PI*2);
-      ctx.fillStyle=`rgba(238,216,160,${(m.a*tw).toFixed(3)})`;
-      ctx.fill();
-    }
-  })(0);
-  c.style.opacity='1';
-}
-
-function vaInitSculpture(){
-  const sw=document.getElementById('va-sculpture-wrap');
-  const canvas=document.getElementById('va-sculpture-canvas');
-  if(!canvas)return;
-  canvas.width=window.innerWidth;canvas.height=window.innerHeight;
-  if(typeof THREE!=='undefined'){_buildVaSculpture(canvas,sw);}
-  else{
-    const s=document.createElement('script');
-    s.src='https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js';
-    s.onload=()=>_buildVaSculpture(canvas,sw);
-    document.head.appendChild(s);
-  }
-}
-
-function _buildVaSculpture(canvas,sw){
-  const renderer=new THREE.WebGLRenderer({canvas,alpha:true,antialias:true});
-  renderer.setSize(canvas.width,canvas.height);
-  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
-  renderer.setClearColor(0x000000,0);
-  renderer.shadowMap.enabled=false;
-  const scene=new THREE.Scene();
-  const camera=new THREE.PerspectiveCamera(36,canvas.width/canvas.height,0.1,100);
-  camera.position.set(0,1.8,7.0);camera.lookAt(0,0.5,0);
-  // Strong warm ambient so marble is always bright
-  scene.add(new THREE.AmbientLight(0xffeedd,2.8));
-  // Key front light — warm, strong
-  const key=new THREE.DirectionalLight(0xffd090,2.5);
-  key.position.set(0,4,6);scene.add(key);
-  // Rim light from behind — cool silver, separates figure
-  const rim1=new THREE.DirectionalLight(0xddeeff,1.2);
-  rim1.position.set(0,3,-5);scene.add(rim1);
-  // Gold fill from below front
-  const gold=new THREE.PointLight(0xffb84d,3,12);gold.position.set(0,0,4);scene.add(gold);
-  // Soft fill sides
-  const fillL=new THREE.PointLight(0xffe8c0,1.5,10);fillL.position.set(-4,2,3);scene.add(fillL);
-  const fillR=new THREE.PointLight(0xffe8c0,1.5,10);fillR.position.set(4,2,3);scene.add(fillR);
-  let mouseX=0,mouseY=0;
-  const wrap=document.getElementById('venusApproach');
-  if(wrap){
-    wrap.addEventListener('mousemove',e=>{mouseX=(e.clientX/window.innerWidth-.5)*2;mouseY=(e.clientY/window.innerHeight-.5)*2;});
-    wrap.addEventListener('mouseleave',()=>{mouseX=0;mouseY=0;});
-  }
-  const ls=document.createElement('script');
-  ls.src='https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js';
-  ls.onload=()=>{
-    const loader=new THREE.GLTFLoader();
-    loader.load(VENUS_GLB,gltf=>{
-      const model=gltf.scene;
-      const box=new THREE.Box3().setFromObject(model);
-      const size=box.getSize(new THREE.Vector3());
-      const center=box.getCenter(new THREE.Vector3());
-      // Scale to fit nicely in center — smaller so full figure visible
-      const scale=2.4/Math.max(size.x,size.y,size.z);
-      model.scale.setScalar(scale);
-      model.position.set(-center.x*scale,-center.y*scale-0.8,-center.z*scale);
-      model.traverse(c=>{
-        if(c.isMesh){
-          c.castShadow=true;c.receiveShadow=true;
-          if(c.material){
-            c.material.roughness=Math.min((c.material.roughness||0.8),0.55);
-            c.material.metalness=Math.max((c.material.metalness||0),0.08);
-          }
-        }
-      });
-      scene.add(model);
-      if(sw)sw.classList.add('show');
-      const shadow=document.getElementById('va-sculpture-shadow');
-      if(shadow)shadow.classList.add('show');
-      let t=0,smoothX=0,smoothY=0;
-      let spherical={theta:0,phi:Math.PI/2.05,radius:7.0};
-      let targetTheta=0;
-      function animate(){
-        requestAnimationFrame(animate);t+=0.004;
-        smoothX+=(mouseX-smoothX)*0.03;smoothY+=(mouseY-smoothY)*0.03;
-        targetTheta+=0.0012;
-        const mTheta=targetTheta+smoothX*0.1;
-        const mPhi=Math.PI/2.05+smoothY*0.04;
-        spherical.theta+=(mTheta-spherical.theta)*0.03;
-        spherical.phi+=(mPhi-spherical.phi)*0.03;
-        const x=spherical.radius*Math.sin(spherical.phi)*Math.sin(spherical.theta);
-        const y=spherical.radius*Math.cos(spherical.phi)+1.8;
-        const z=spherical.radius*Math.sin(spherical.phi)*Math.cos(spherical.theta);
-        camera.position.set(x,y,z);camera.lookAt(0,0.5,0);
-        key.intensity=7+Math.sin(t*0.8)*0.8;
-        gold.intensity=4+Math.sin(t*1.3)*0.6;
-        rim1.intensity=11+Math.sin(t*0.5)*1.0;
-        model.position.y=-center.y*scale-0.8+Math.sin(t*0.4)*0.018;
-        renderer.render(scene,camera);
-      }
-      animate();
-      window.addEventListener('resize',()=>{
-        camera.aspect=window.innerWidth/window.innerHeight;
-        camera.updateProjectionMatrix();
-        renderer.setSize(window.innerWidth,window.innerHeight);
-        canvas.width=window.innerWidth;canvas.height=window.innerHeight;
-      });
-    },undefined,err=>console.warn('Venus GLB error:',err));
-  };
-  document.head.appendChild(ls);
-}
-
-function enterVenusOracle_legacy(){
-  // Keep for any remaining references
-  enterVenusOracle();
-}
 
 function openVenusConversation(){ enterVenusOracle(); }
 
@@ -1837,7 +1570,7 @@ async function sendVenus(){
   }
 
   try{
-    const res=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,system:VSYS,messages:vHistory})});
+    const res=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:ORACLE_MODEL,max_tokens:700,system:VSYS,messages:vHistory})});
     const data=await res.json();if(data.error)throw new Error(data.error.message);
     const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
     th.textContent='';resetVBtn();
@@ -1898,7 +1631,7 @@ async function generateInvocation(vt,gt){
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-20250514',
+        model:ORACLE_MODEL,
         max_tokens:800,
         system:sys,
         messages:[{role:'user',content:`Generate a 90 Day Sprint based on this conversation.\n\nVenus (feelings, desires, what was received):\n${vt||'The person opened up.'}\n\nGanymede (vision, clarity, grounding):\n${gt||'The person found direction.'}`}]
@@ -2454,7 +2187,7 @@ async function sendGany(){
   gHistory.push({role:'user',content:q});
   brightenCave();
   try{
-    const res=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:1000,system:GSYS,messages:gHistory})});
+    const res=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:ORACLE_MODEL,max_tokens:1000,system:GSYS,messages:gHistory})});
     const data=await res.json();if(data.error)throw new Error(data.error.message);
     const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
     let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p={reflection:raw,options:[],question:'',check_in:false};}
@@ -2667,7 +2400,7 @@ async function askPool(){
   btn.classList.add('loading');btn.innerHTML=spinSvg('rgba(120,90,180,0.6)');th.textContent='The pool stirs...';
   document.getElementById('timelinesWrap').innerHTML='';document.getElementById('poolGanyQ').textContent='';
   try{
-    const res=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:800,system:PSYS,messages:[{role:'user',content:q}]})});
+    const res=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:ORACLE_MODEL,max_tokens:800,system:PSYS,messages:[{role:'user',content:q}]})});
     const data=await res.json();const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
     th.textContent='';btn.classList.remove('loading');btn.innerHTML=arrowSvg('rgba(120,90,180,0.8)');
     let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p={timelines:[{tone:'Expansion',vision:'The path opens.',lesson:'Trust.',principle:'Vibration'},{tone:'Depth',vision:'Inward first.',lesson:'Mastery.',principle:'Correspondence'},{tone:'Surrender',vision:'Release.',lesson:'Letting go is power.',principle:'Rhythm'}],closing_question:'Which one does your body already know?'};}
@@ -2687,7 +2420,7 @@ let sigilSeed=0;
 function buildSigil(intent){const clean=intent.toUpperCase().replace(/[^A-Z]/g,'');const seen=new Set();const letters=[];for(const c of clean){if(!seen.has(c)){seen.add(c);letters.push(c);}}sigilSeed=0;for(const c of intent)sigilSeed=(sigilSeed*31+c.charCodeAt(0))%999983;function rnd(){sigilSeed=(sigilSeed*16807+0)%2147483647;return(sigilSeed-1)/2147483646;}const sMap={A:[{t:'d'},{t:'h'}],B:[{t:'v'},{t:'c'}],C:[{t:'c'}],D:[{t:'v'},{t:'c'}],E:[{t:'v'},{t:'h'},{t:'h'}],F:[{t:'v'},{t:'h'}],G:[{t:'c'},{t:'h'}],H:[{t:'v'},{t:'v'},{t:'h'}],I:[{t:'v'},{t:'dot'}],J:[{t:'v'},{t:'c'}],K:[{t:'v'},{t:'d'},{t:'d'}],L:[{t:'v'},{t:'h'}],M:[{t:'v'},{t:'d'},{t:'d'},{t:'v'}],N:[{t:'v'},{t:'d'},{t:'v'}],O:[{t:'o'}],P:[{t:'v'},{t:'c'}],Q:[{t:'o'},{t:'d'}],R:[{t:'v'},{t:'c'},{t:'d'}],S:[{t:'c'},{t:'c'}],T:[{t:'v'},{t:'h'}],U:[{t:'c'}],V:[{t:'d'},{t:'d'}],W:[{t:'d'},{t:'d'},{t:'d'}],X:[{t:'d'},{t:'d'}],Y:[{t:'d'},{t:'d'},{t:'v'}],Z:[{t:'h'},{t:'d'},{t:'h'}]};const strokes=[];letters.slice(0,10).forEach(l=>{(sMap[l]||[{t:'dot'}]).forEach(p=>{strokes.push({...p,angle:rnd()*Math.PI*2,ox:(rnd()-.5)*.7,oy:(rnd()-.5)*.7,sc:.3+rnd()*.65});});});let border='circle';const pr=lastPrinciple.toLowerCase();if(pr.includes('rhythm')||pr.includes('polarity'))border='triangle';else if(pr.includes('vibration')||pr.includes('gender'))border='lemniscate';else if(pr.includes('cause'))border='hexagon';return{strokes,border,seed:sigilSeed};}
 function drawSigilFull(svgEl,sigil,size){const ns='http://www.w3.org/2000/svg';svgEl.setAttribute('viewBox',`0 0 ${size} ${size}`);svgEl.setAttribute('width',size);svgEl.setAttribute('height',size);const cx=size/2,cy=size/2,r=size*.38;const g=document.createElementNS(ns,'g');g.setAttribute('stroke','rgba(196,158,72,0.9)');g.setAttribute('stroke-width','1.2');g.setAttribute('fill','none');g.setAttribute('stroke-linecap','round');if(sigil.border==='circle'){const c=document.createElementNS(ns,'circle');c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',r);c.setAttribute('stroke','rgba(196,158,72,0.5)');c.setAttribute('stroke-width','.8');g.appendChild(c);}else if(sigil.border==='triangle'){const pts=[[cx,cy-r],[cx+r*.866,cy+r*.5],[cx-r*.866,cy+r*.5]].map(p=>p.join(',')).join(' ');const tri=document.createElementNS(ns,'polygon');tri.setAttribute('points',pts);tri.setAttribute('stroke','rgba(196,158,72,0.5)');tri.setAttribute('stroke-width','.8');g.appendChild(tri);}else if(sigil.border==='lemniscate'){const lw=r*.65;const lem=document.createElementNS(ns,'path');lem.setAttribute('d',`M ${cx} ${cy} C ${cx+lw} ${cy-lw*.4} ${cx+lw} ${cy+lw*.4} ${cx} ${cy} C ${cx-lw} ${cy-lw*.4} ${cx-lw} ${cy+lw*.4} ${cx} ${cy}`);lem.setAttribute('stroke','rgba(196,158,72,0.5)');lem.setAttribute('stroke-width','.8');g.appendChild(lem);}else{const hexPts=Array.from({length:6},(_,i)=>{const a=i*Math.PI/3-Math.PI/6;return[cx+Math.cos(a)*r,cy+Math.sin(a)*r].join(',');}).join(' ');const hex=document.createElementNS(ns,'polygon');hex.setAttribute('points',hexPts);hex.setAttribute('stroke','rgba(196,158,72,0.5)');hex.setAttribute('stroke-width','.8');g.appendChild(hex);}sigil.strokes.forEach(s=>{const sr2=r*.5*s.sc;const ox=cx+s.ox*r*.45,oy=cy+s.oy*r*.45;const el=document.createElementNS(ns,'g');el.setAttribute('transform',`rotate(${s.angle*180/Math.PI} ${ox} ${oy})`);let path='';if(s.t==='v')path=`M ${ox} ${oy-sr2} L ${ox} ${oy+sr2}`;else if(s.t==='h')path=`M ${ox-sr2} ${oy} L ${ox+sr2} ${oy}`;else if(s.t==='d')path=`M ${ox-sr2} ${oy-sr2} L ${ox+sr2} ${oy+sr2}`;else if(s.t==='o')path=`M ${ox+sr2} ${oy} A ${sr2} ${sr2} 0 1 0 ${ox+sr2-.001} ${oy}`;else if(s.t==='c')path=`M ${ox-sr2} ${oy} Q ${ox} ${oy-sr2} ${ox+sr2} ${oy}`;else if(s.t==='dot'){const dot=document.createElementNS(ns,'circle');dot.setAttribute('cx',ox);dot.setAttribute('cy',oy);dot.setAttribute('r','2.5');dot.setAttribute('fill','rgba(196,158,72,0.8)');dot.setAttribute('stroke','none');g.appendChild(dot);return;}if(path){const pe=document.createElementNS(ns,'path');pe.setAttribute('d',path);el.appendChild(pe);}g.appendChild(el);});const dot=document.createElementNS(ns,'circle');dot.setAttribute('cx',cx);dot.setAttribute('cy',cy);dot.setAttribute('r','2.5');dot.setAttribute('fill','rgba(196,158,72,0.85)');dot.setAttribute('stroke','none');g.appendChild(dot);svgEl.appendChild(g);}
 function revealSigil(intention,sigil){document.getElementById('srInt').textContent='"'+intention+'"';document.getElementById('srPrin').textContent=lastPrinciple;document.getElementById('srSum').textContent='✦';const wrap=document.getElementById('sigilWrap');wrap.innerHTML='';const ns='http://www.w3.org/2000/svg';const svg=document.createElementNS(ns,'svg');drawSigilFull(svg,sigil,200);svg.querySelectorAll('path,circle,polygon').forEach((el,i)=>{if(el.tagName==='circle'&&el.getAttribute('r')==='2.5')return;try{const len=el.getTotalLength?el.getTotalLength():100;el.style.strokeDasharray=len;el.style.strokeDashoffset=len;el.style.transition=`stroke-dashoffset ${.6+i*.08}s ease ${i*.06}s`;setTimeout(()=>el.style.strokeDashoffset='0',50);}catch(e){}});wrap.appendChild(svg);generateDistilledIntention(intention);}
-async function generateDistilledIntention(intention){const sumEl=document.getElementById('srSum');let context=`Raw intention: "${intention}"`;if(vHistory.length>2){const ex=vHistory.slice(-4).map(m=>{if(m.role==='user')return`Seeker: ${m.content}`;try{const p=JSON.parse(m.content.replace(/```json|```/g,'').trim());return`Venus: ${p.mirror||''}`;}catch(e){return '';}}).filter(Boolean).join('\n');context=`Raw intention: "${intention}"\n\nConversation:\n${ex}`;}try{const res=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:80,system:'Distill the seeker intention into one perfect sentence. Present tense, first person, poetic but grounded. No preamble. 10-20 words maximum.',messages:[{role:'user',content:context}]})});const data=await res.json();const text=data.content?.find(b=>b.type==='text')?.text||intention;sumEl.style.transition='opacity 1.2s ease';sumEl.style.opacity='0';setTimeout(()=>{sumEl.textContent=text.replace(/^["']|["']$/g,'');sumEl.style.opacity='1';},400);}catch(e){sumEl.textContent=intention;}}
+async function generateDistilledIntention(intention){const sumEl=document.getElementById('srSum');let context=`Raw intention: "${intention}"`;if(vHistory.length>2){const ex=vHistory.slice(-4).map(m=>{if(m.role==='user')return`Seeker: ${m.content}`;try{const p=JSON.parse(m.content.replace(/```json|```/g,'').trim());return`Venus: ${p.mirror||''}`;}catch(e){return '';}}).filter(Boolean).join('\n');context=`Raw intention: "${intention}"\n\nConversation:\n${ex}`;}try{const res=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:ORACLE_MODEL,max_tokens:80,system:'Distill the seeker intention into one perfect sentence. Present tense, first person, poetic but grounded. No preamble. 10-20 words maximum.',messages:[{role:'user',content:context}]})});const data=await res.json();const text=data.content?.find(b=>b.type==='text')?.text||intention;sumEl.style.transition='opacity 1.2s ease';sumEl.style.opacity='0';setTimeout(()=>{sumEl.textContent=text.replace(/^["']|["']$/g,'');sumEl.style.opacity='1';},400);}catch(e){sumEl.textContent=intention;}}
 function copyAddr(){navigator.clipboard.writeText('0x70F0082E7f47e3DC8cf62B2C7FA26100657297E9').then(()=>{const h=document.getElementById('copyHint');h.textContent='Copied ✦';h.classList.add('of-copied');setTimeout(()=>{h.textContent='Tap to copy address';h.classList.remove('of-copied');},2500);});}
 function saveSigil(){const wrap=document.getElementById('sigilWrap');const svg=wrap.querySelector('svg');if(!svg)return;const d=new XMLSerializer().serializeToString(svg);const b=new Blob([d],{type:'image/svg+xml'});const url=URL.createObjectURL(b);const a=document.createElement('a');a.href=url;a.download='ancient-temenos-sigil.svg';a.click();URL.revokeObjectURL(url);}
 
@@ -2971,7 +2704,7 @@ async function pSend(){
   pSetThinking(true);pScrollDown();
   if(pIsMock()){await pDelay(1400);pSetThinking(false);await pShowPaths(P_MOCK_PATHS);return;}
   try{
-    const r=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,system:P_SYSTEM_PATHS,messages:[{role:'user',content:text}]})});
+    const r=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:ORACLE_MODEL,max_tokens:700,system:P_SYSTEM_PATHS,messages:[{role:'user',content:text}]})});
     const d=await r.json();const raw=d.content?.[0]?.text||'';
     let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p=P_MOCK_PATHS;}
     pSetThinking(false);await pShowPaths(p);
@@ -3018,7 +2751,7 @@ async function pChoosePath(opt){
   if(pIsMock()){await pDelay(1100);pSetThinking(false);pShowDescent(P_MOCK_DESCENT);return;}
   const prompt=`Seeker described: "${pSessionData.seeker}"\nChosen: ${opt.label}\nPath: "${opt.text}"\nGo deep on this path only.`;
   try{
-    const r=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,system:P_SYSTEM_DESCENT,messages:[{role:'user',content:prompt}]})});
+    const r=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:ORACLE_MODEL,max_tokens:700,system:P_SYSTEM_DESCENT,messages:[{role:'user',content:prompt}]})});
     const d=await r.json();const raw=d.content?.[0]?.text||'';
     let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p=P_MOCK_DESCENT;}
     pSetThinking(false);pShowDescent(p);
@@ -3051,7 +2784,7 @@ async function pSealMirror(){
   const text=document.getElementById('p-mirror-inp').value.trim();if(!text)return;
   if(pIsMock()){await pDelay(700);const r=document.getElementById('p-mirror-ref');r.textContent=P_MOCK_MIRROR;r.style.display='block';return;}
   try{
-    const r=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:80,system:`You are Persephone. The seeker names a self they are ready to stop becoming. Reflect back what becomes possible. 1-2 sentences. Plain. No preamble.`,messages:[{role:'user',content:text}]})});
+    const r=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:ORACLE_MODEL,max_tokens:80,system:`You are Persephone. The seeker names a self they are ready to stop becoming. Reflect back what becomes possible. 1-2 sentences. Plain. No preamble.`,messages:[{role:'user',content:text}]})});
     const d=await r.json();const ref=document.getElementById('p-mirror-ref');
     ref.textContent=d.content?.[0]?.text||P_MOCK_MIRROR;ref.style.display='block';
   }catch(e){const ref=document.getElementById('p-mirror-ref');ref.textContent=P_MOCK_MIRROR;ref.style.display='block';}
@@ -3070,7 +2803,7 @@ async function pGenerateGrimoire(){
   if(pIsMock()){await pDelay(1100);pRenderGrimoire(P_MOCK_GRIMOIRE);return;}
   const ctx=`Seeker: "${pSessionData.seeker}"\nChosen: ${pSessionData.chosen.label}\nPath: "${pSessionData.chosen.text}"\nPattern: "${pSessionData.descent.pattern}"\nTikkun: "${pSessionData.descent.tikkun}"\nRitual: "${pSessionData.descent.ritual}"\nClosing: "${pSessionData.descent.closing}"\nFamiliar: "${pSessionData.paths.familiar}"\nUnchosen: "${pSessionData.paths.unchosen}"\nUnasked: "${pSessionData.paths.unasked}"`;
   try{
-    const r=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:700,system:`Create a Grimoire entry. Sacred record. Plain language. Persephone's voice. Return ONLY valid JSON:\n{"pattern_named":"","tikkun":"","the_familiar_path":"","the_unchosen_path":"","the_unasked_path":"","lessons":["3-4 truths under 12 words each"],"ritual_given":"","closing_truth":""}`,messages:[{role:'user',content:ctx}]})});
+    const r=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:ORACLE_MODEL,max_tokens:700,system:`Create a Grimoire entry. Sacred record. Plain language. Persephone's voice. Return ONLY valid JSON:\n{"pattern_named":"","tikkun":"","the_familiar_path":"","the_unchosen_path":"","the_unasked_path":"","lessons":["3-4 truths under 12 words each"],"ritual_given":"","closing_truth":""}`,messages:[{role:'user',content:ctx}]})});
     const d=await r.json();
     let g;try{g=JSON.parse(d.content?.[0]?.text.replace(/```json|```/g,'').trim());}catch(e){g=P_MOCK_GRIMOIRE;}
     pRenderGrimoire(g);
@@ -3369,7 +3102,7 @@ RECOMMENDS: [Venus/Persephone/Psyche/Ganymede]`;
     const res=await fetch(ORACLE_ENDPOINT,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:'claude-sonnet-4-20250514',max_tokens:200,system:sys,messages:[{role:'user',content:q}]})
+      body:JSON.stringify({model:ORACLE_MODEL,max_tokens:200,system:sys,messages:[{role:'user',content:q}]})
     });
     const data=await res.json();
     fullText=(data.content?.find(b=>b.type==='text')?.text||'').trim();
