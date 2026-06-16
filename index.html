@@ -609,7 +609,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 
 <!-- ══ THRESHOLD ══ -->
 <div class="screen active visible" id="threshold">
-  <div class="t-video-wrap"><video autoplay muted loop playsinline preload="auto">    <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Main_Page.mp4" type="video/mp4">
+  <div class="t-video-wrap"><video autoplay muted loop playsinline preload="none">    <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Main_Page.mp4" type="video/mp4">
 </video></div>
   <div class="t-vignette"></div>
   <div class="t-content">
@@ -1109,7 +1109,7 @@ function runEntry(){
     setTimeout(()=>{l3.style.transition='opacity 1.2s ease';l3.style.color='rgba(196,158,72,0.3)';},2000);
     setTimeout(()=>{
       ec.style.transition='opacity 2.5s ease';ec.style.opacity='0';
-      setTimeout(()=>{ec.style.display='none';th.style.transition='';th.style.opacity='1';showScreen('foyer');},2600);
+      setTimeout(()=>{ec.style.display='none';th.style.transition='';showScreen('foyer');},2600);
     },5000);
   },2000);
 }
@@ -1499,6 +1499,12 @@ if(_devp.get('skip')==='ganymede'){
     setTimeout(()=>{
       currentScreen='foyer';
       foyerEnter('ganymede');
+    },300);
+  }
+  if(_devp.get('skip')==='venus'){
+    setTimeout(()=>{
+      currentScreen='foyer';
+      foyerEnter('venus');
     },300);
   }
 });
@@ -2462,13 +2468,14 @@ function spinSvg(col){return`<svg viewBox="0 0 14 14" fill="none" stroke="${col}
 function arrowSvg(col){return`<svg viewBox="0 0 14 14" fill="none" stroke="${col}" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>`;}
 
 // == INIT ==
-window.addEventListener('load',()=>{
-  setTimeout(()=>{
-    const lo=document.getElementById('loadingOverlay');
+// Overlay hides immediately — DOM is ready, never wait for video assets
+(function(){
+  const lo=document.getElementById('loadingOverlay');
+  if(lo){
     lo.classList.add('hidden');
-    setTimeout(()=>lo.style.display='none',1000);
-  },800);
-});
+    setTimeout(()=>{ lo.style.display='none'; },1000);
+  }
+})();
 
 // == MAIN PAGE PARALLAX ==
 (function(){
