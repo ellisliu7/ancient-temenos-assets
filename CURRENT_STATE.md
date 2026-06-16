@@ -1,3 +1,47 @@
+## Session log — Jun 16 — VENUS SCROLL-SCRUB APPROACH ENGINE
+
+SHIPPED: Venus approach corridor — identical grammar to Ganymede.
+
+FLOW (locked):
+- Foyer → flash → venusApproach screen
+- Venus.mp4 scrubs forward on scroll (7200 divisor = half speed, more ceremonial)
+- Hint: "She is near. Draw closer." + breathing chevron
+- At end of video: video loops, oracle glass rises 800ms later over the video
+- No screen transition. No second room. One space, one arrival.
+
+DELETED THIS SESSION:
+- venusAltarLayer HTML + all room CSS (bg video, sculpture, artwork, timelapse, gate, waitlist)
+- venusBreath screen
+- venusOracle screen (old scroll-based oracle)
+- Venus_Altar.mp4 reference
+- Venus_Altar_Video.mp4 reference
+- Two-screen dissolve logic
+- vRoomScroll system
+- v-room-hint ("Scroll to enter the chamber" — wrong concept, removed)
+
+KNOWN OPEN:
+- Scrub speed may still feel short — Venus.mp4 is only 5s. If so: either lower
+  divisor below 7200 OR re-render Venus.mp4 at 8-10s (El to decide after testing)
+- Venus gate mechanic (waitlist / Sigil Key) was inside venusAltarLayer — now gone.
+  Needs a decision: does Venus oracle have a gate, and where does it live?
+- vaInitRoom, vaInitSculpture, vaInitParticles, vaInitParallax functions still exist
+  in JS — orphaned but harmless. Clean next session.
+
+DEV TEST URL (Venus):
+https://ellisliu7.github.io/ancient-temenos-assets/?skip=venus&key=1
+
+NEXT SESSION:
+1. Test Venus scrub speed live — report what you see
+2. Decide on gate mechanic for Venus oracle
+3. Clean orphaned vaInit* functions if gate decision is clear
+4. If scrub too short — re-render or adjust divisor
+
+Start prompt:
+"Read CURRENT_STATE.md. Fetch live index.html. Venus scrub is live —
+here's what I'm seeing: [describe]. What's the single next thing to fix or build?"
+
+---
+
 ## Session log — Jun 16 — ORACLE RESTORED + DEV SHORTCUTS + DATE FIX
 
 ROOT CAUSE FOUND: Anthropic deprecated `claude-sonnet-4-20250514`. All proxy
