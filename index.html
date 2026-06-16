@@ -374,6 +374,21 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #g-scroll-hint.show{opacity:1;animation:gHintBreathe 5s ease-in-out infinite;}
 #g-scroll-hint.gone{opacity:0!important;transition:opacity 1.4s ease;animation:none;}
 @keyframes gHintBreathe{0%,100%{opacity:1;}50%{opacity:.45;}}
+/* == VENUS — scroll-scrub approach engine == */
+#venusApproach{position:fixed;inset:0;background:#000;overflow:hidden;}
+#v-approach-bg{position:fixed;inset:0;opacity:0;transition:opacity 3.5s ease;}
+#v-approach-bg.reveal{opacity:1;}
+#v-approach-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
+#v-approach-haze{position:fixed;inset:0;pointer-events:none;z-index:1;background:radial-gradient(ellipse 100% 50% at 50% 0%,rgba(10,6,4,0.85) 0%,transparent 60%),linear-gradient(to bottom,rgba(6,3,2,0.6) 0%,transparent 30%,transparent 70%,rgba(6,3,2,0.92) 100%);}
+#v-scroll-hint{position:fixed;bottom:6%;left:50%;transform:translateX(-50%);z-index:8;display:flex;flex-direction:column;align-items:center;gap:.5rem;font-family:'Cinzel',serif;font-size:clamp(8px,.8vw,10px);letter-spacing:.5em;text-transform:uppercase;color:rgba(238,220,168,0.6);opacity:0;transition:opacity 2.4s ease;pointer-events:none;text-shadow:0 1px 14px rgba(0,0,0,.85);white-space:nowrap;}
+.v-hint-chev{font-size:18px;letter-spacing:0;line-height:.4;color:rgba(196,158,72,0.55);animation:gChevDrift 2.6s ease-in-out infinite;}
+#v-scroll-hint.show{opacity:1;animation:gHintBreathe 5s ease-in-out infinite;}
+#v-scroll-hint.gone{opacity:0!important;transition:opacity 1.4s ease;animation:none;}
+/* In-room scroll hint (after approach dissolve) */
+#v-room-hint{position:fixed;bottom:6%;left:50%;transform:translateX(-50%);z-index:20;display:flex;flex-direction:column;align-items:center;gap:.5rem;font-family:'Cinzel',serif;font-size:clamp(8px,.8vw,10px);letter-spacing:.5em;text-transform:uppercase;color:rgba(238,220,168,0.55);opacity:0;transition:opacity 2.4s ease;pointer-events:none;text-shadow:0 1px 14px rgba(0,0,0,.85);white-space:nowrap;}
+.v-room-chev{font-size:18px;letter-spacing:0;line-height:.4;color:rgba(196,158,72,0.5);animation:gChevDrift 2.6s ease-in-out infinite;}
+#v-room-hint.show{opacity:1;animation:gHintBreathe 5s ease-in-out infinite;}
+#v-room-hint.gone{opacity:0!important;transition:opacity 1.4s ease;animation:none;}
 #g-glass{position:fixed;bottom:5%;left:50%;transform:translateX(-50%) translateY(10px);width:min(520px,90vw);z-index:12;padding:2.4rem 2rem 1.5rem;background:linear-gradient(to bottom,rgba(30,20,8,0.20),rgba(14,9,3,0.30));backdrop-filter:blur(16px) saturate(1.15);-webkit-backdrop-filter:blur(16px) saturate(1.15);border:.5px solid rgba(196,158,72,0.08);border-radius:9px;box-shadow:0 18px 55px rgba(0,0,0,0.38);opacity:0;transition:opacity 2.2s ease,transform 2.2s ease;pointer-events:none;}
 #g-glass.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:all;}
 #g-glass.show.sunk{opacity:0;transform:translateX(-50%) translateY(46px);pointer-events:none;transition:opacity 1.4s ease,transform 1.4s ease;}
@@ -865,6 +880,17 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   </div>
 </div>
 
+<!-- ══ VENUS APPROACH — scroll-scrub corridor ══ -->
+<div class="screen" id="venusApproach" style="justify-content:flex-start;overflow:hidden;">
+  <div id="v-approach-bg">
+    <video id="v-approach-video" muted playsinline preload="auto">
+      <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div id="v-approach-haze"></div>
+  <div id="v-scroll-hint"><span>She is near. Draw closer.</span><span class="v-hint-chev">⌄</span></div>
+</div>
+
 <!-- VENUS BREATH -->
 <!-- ══ VENUS ALTAR LAYER ══ -->
 <div class="screen" id="venusAltarLayer" style="overflow:hidden;background:#0a0604;">
@@ -941,6 +967,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   </div>
 
   <div id="va-name">Ancient Temenos · Venus</div>
+  <div id="v-room-hint"><span>Scroll to enter the chamber</span><span class="v-room-chev">⌄</span></div>
 </div>
 
 
@@ -1296,7 +1323,7 @@ function showScreen(id){
   currentScreen=id;
   inCave=(id==='ganymedeScreen');
   bgC.style.display='block';
-  const showReturn=['foyer','venusBreath','venusOracle','ganymedeScreen','persephoneScreen','venusAltarLayer'].includes(id);
+  const showReturn=['foyer','venusBreath','venusOracle','ganymedeScreen','persephoneScreen','venusAltarLayer','venusApproach'].includes(id);
   const showTeachings=['venusOracle','ganymedeScreen','foyer','venusAltarLayer'].includes(id);
   document.getElementById('returnBtn').style.display=showReturn?'flex':'none';
   document.getElementById('teachingsBtn').style.display=showTeachings?'flex':'none';
@@ -1304,7 +1331,7 @@ function showScreen(id){
 }
 
 function goReturn(){
-  const prev={foyer:'threshold',venusBreath:'foyer',venusOracle:'foyer',ganymedeScreen:'foyer',persephoneScreen:'foyer',venusAltarLayer:'foyer'};
+  const prev={foyer:'threshold',venusBreath:'foyer',venusOracle:'foyer',ganymedeScreen:'foyer',persephoneScreen:'foyer',venusAltarLayer:'foyer',venusApproach:'foyer'};
   const target=prev[currentScreen]||'foyer';
   if(currentScreen==='venusOracle'){hideCupid();resetVenusState();}
   flashTo(()=>{
@@ -1617,7 +1644,7 @@ function foyerEnter(side){
   if(currentScreen!=='foyer')return;
   foyerActive=false;
   flashTo(()=>{
-    if(side==='venus')enterVenusAltar();
+    if(side==='venus')enterVenusApproach();
     else if(side==='persephone')enterPersephone();
     else enterGanymede();
   });
@@ -2526,6 +2553,102 @@ document.addEventListener('click',e=>{
   if(gScrub.arrived&&!e.target.closest('#g-glass'))gGlassSink();
 });
 document.addEventListener('keydown',e=>{if(e.key==='Escape'&&gScreenActive()&&gScrub.arrived)gGlassSink();});
+
+/* == VENUS — scroll-scrub approach engine == */
+let vScrub={target:0,current:0,dur:5,raf:null,arrived:false,hinted:false};
+let vTouchY=null;
+let vRoomScroll={active:false,arrived:false,raf:null};
+function vApproachVid(){return document.getElementById('v-approach-video');}
+function vApproachActive(){const s=document.getElementById('venusApproach');return s&&s.classList.contains('active');}
+function vRoomActive(){const s=document.getElementById('venusAltarLayer');return s&&s.classList.contains('active');}
+
+function vOnWheel(e){
+  if(vApproachActive()&&!vScrub.arrived){e.preventDefault();vScrubBy(e.deltaY);return;}
+  if(vRoomActive()&&vRoomScroll.active&&!vRoomScroll.arrived){e.preventDefault();vRoomArrive();return;}
+}
+function vOnTouchStart(e){
+  if(vApproachActive()&&!vScrub.arrived){vTouchY=e.touches[0].clientY;return;}
+  if(vRoomActive()&&vRoomScroll.active&&!vRoomScroll.arrived){vRoomArrive();return;}
+}
+function vOnTouchMove(e){
+  if(!vApproachActive()||vScrub.arrived||vTouchY===null)return;
+  e.preventDefault();
+  const y=e.touches[0].clientY;
+  vScrubBy((vTouchY-y)*2.4);
+  vTouchY=y;
+}
+function vScrubBy(px){
+  const k=vScrub.dur/3600;
+  vScrub.target=Math.max(0,Math.min(vScrub.dur,vScrub.target+px*k));
+  if(!vScrub.hinted&&px>0){vScrub.hinted=true;}
+  if(!vScrub.raf&&!vScrub.arrived&&vApproachActive())vScrub.raf=requestAnimationFrame(vScrubLoop);
+}
+function vScrubLoop(){
+  if(!vApproachActive()){vScrub.raf=null;return;}
+  if(!vScrub.arrived){
+    const v=vApproachVid();
+    if(v&&v.readyState>=2){
+      const next=vScrub.current+(vScrub.target-vScrub.current)*0.08;
+      if(Math.abs(next-vScrub.current)>0.0008){vScrub.current=next;try{v.currentTime=next;}catch(e){}}
+      if(vScrub.current>=vScrub.dur-0.08&&vScrub.target>=vScrub.dur-0.02){vApproachArrive();return;}
+    }
+  }
+  vScrub.raf=requestAnimationFrame(vScrubLoop);
+}
+function vApproachArrive(){
+  vScrub.arrived=true;vScrub.raf=null;
+  const v=vApproachVid();if(v){try{v.currentTime=Math.max(0,vScrub.dur-0.05);}catch(e){}}
+  const h=document.getElementById('v-scroll-hint');if(h)h.classList.add('gone');
+  // Soft dissolve: fade approach screen out, fade room in simultaneously
+  const approachEl=document.getElementById('venusApproach');
+  const roomEl=document.getElementById('venusAltarLayer');
+  if(approachEl)approachEl.style.transition='opacity 1.8s ease';
+  if(approachEl)approachEl.style.opacity='0';
+  // Activate room behind it
+  setTimeout(()=>{
+    enterVenusAltar();
+    // After room is visible, enable room scroll
+    setTimeout(()=>{
+      vRoomScroll.active=true;
+      const rh=document.getElementById('v-room-hint');
+      if(rh)rh.classList.add('show');
+    },2000);
+  },900);
+}
+function vRoomArrive(){
+  vRoomScroll.arrived=true;
+  const rh=document.getElementById('v-room-hint');if(rh)rh.classList.add('gone');
+  // Reveal oracle overlay — same as enterVenusOracle()
+  enterVenusOracle();
+}
+
+function enterVenusApproach(){
+  vHistory=[];venusOracleOpened=false;venusConvOpen=false;vaRoomInit=false;_vaDustInit=false;
+  vScrub={target:0,current:0,dur:5,raf:null,arrived:false,hinted:false};
+  vRoomScroll={active:false,arrived:false,raf:null};
+  vTouchY=null;
+  showScreen('venusApproach');
+  const bg=document.getElementById('v-approach-bg');
+  const vid=vApproachVid();
+  if(vid){
+    vid.pause();
+    const setDur=()=>{if(vid.duration&&isFinite(vid.duration))vScrub.dur=vid.duration;};
+    if(vid.readyState>=1)setDur();else vid.addEventListener('loadedmetadata',setDur,{once:true});
+    try{vid.currentTime=0;}catch(e){}
+  }
+  setTimeout(()=>{if(bg)bg.classList.add('reveal');},300);
+  const hint=document.getElementById('v-scroll-hint');
+  setTimeout(()=>{if(hint&&!vScrub.hinted&&!vScrub.arrived)hint.classList.add('show');},2600);
+  setTimeout(()=>{if(!vScrub.raf&&!vScrub.arrived)vScrub.raf=requestAnimationFrame(vScrubLoop);},600);
+  // Dev skip
+  if(new URLSearchParams(window.location.search).get('skip')==='venus'){
+    setTimeout(()=>{if(!vScrub.arrived){vScrub.target=vScrub.dur;vScrub.current=vScrub.dur;vApproachArrive();}},900);
+  }
+}
+
+window.addEventListener('wheel',vOnWheel,{passive:false});
+window.addEventListener('touchstart',vOnTouchStart,{passive:true});
+window.addEventListener('touchmove',vOnTouchMove,{passive:false});
 
 function enterGanymede(){
   const ov=document.getElementById('c-overlay');if(ov)ov.classList.remove('on');
