@@ -1032,7 +1032,7 @@ function showScreen(id){
   const showTeachings=['ganymedeScreen','foyer','venusApproach'].includes(id);
   document.getElementById('returnBtn').style.display=showReturn?'flex':'none';
   document.getElementById('teachingsBtn').style.display=showTeachings?'flex':'none';
-  if(id==='foyer'){setTimeout(initFoyer,150);setTimeout(()=>{const _c=document.getElementById('foyer-council');if(_c)_c.classList.add('visible');},2000);}
+  if(id==='foyer'){setTimeout(initFoyer,150);setTimeout(()=>{const _c=document.getElementById('foyer-council');if(_c)_c.classList.add('visible');},100);}
 }
 
 function goReturn(){
@@ -2553,19 +2553,18 @@ function arrowSvg(col){return`<svg viewBox="0 0 14 14" fill="none" stroke="${col
   }, { passive: true });
 
   function applyScrollZoom(progress){
-    const p = progress / 100; // 0 to 1
+    const p = progress / 100;
+    const wrap = threshold.querySelector('.t-video-wrap');
     const vid = threshold.querySelector('.t-video-wrap video');
     const title = threshold.querySelector('.t-main-title');
     const sub = threshold.querySelector('.t-main-sub');
     const btn = threshold.querySelector('.t-enter-btn');
 
-    // Video zooms in toward the light
-    const scale = 1.08 + p * 0.35;
+    // Zoom on wrapper — parallax acts on video element so they don't conflict
+    const scale = 1 + p * 0.35;
     const brightness = 0.62 + p * 0.45;
-    if(vid){
-      vid.style.transform = `scale(${scale})`;
-      vid.style.filter = `brightness(${brightness}) saturate(${0.88 + p * 0.3})`;
-    }
+    if(wrap) wrap.style.transform = `scale(${scale})`;
+    if(vid) vid.style.filter = `brightness(${brightness}) saturate(${0.88 + p * 0.3})`;
 
     // Title and subtitle fade out as we zoom in
     const textOpacity = Math.max(0, 1 - p * 2.5);
@@ -2575,24 +2574,17 @@ function arrowSvg(col){return`<svg viewBox="0 0 14 14" fill="none" stroke="${col
   }
 
   function enterFromScroll(){
-    // Flash white/gold then transition to foyer
+    const wrap = threshold.querySelector('.t-video-wrap');
     const vid = threshold.querySelector('.t-video-wrap video');
-    if(vid){
-      vid.style.transition = 'transform 0.8s ease-in, filter 0.8s ease-in';
-      vid.style.transform = 'scale(1.6)';
-      vid.style.filter = 'brightness(2.5) saturate(0.5)';
-    }
+    if(wrap){wrap.style.transition='transform 0.8s ease-in';wrap.style.transform='scale(1.5)';}
+    if(vid){vid.style.transition='filter 0.8s ease-in';vid.style.filter='brightness(2.5) saturate(0.5)';}
     setTimeout(()=>{
       flashTo(()=>{
         showScreen('foyer');
-        // Reset for next time
         scrollY = 0;
         entering = false;
-        if(vid){
-          vid.style.transition = '';
-          vid.style.transform = 'scale(1.08)';
-          vid.style.filter = 'brightness(.62) saturate(.88)';
-        }
+        if(wrap){wrap.style.transition='';wrap.style.transform='';}
+        if(vid){vid.style.transition='';vid.style.filter='brightness(.62) saturate(.88)';}
         const title = threshold.querySelector('.t-main-title');
         const sub = threshold.querySelector('.t-main-sub');
         const btn = threshold.querySelector('.t-enter-btn');
