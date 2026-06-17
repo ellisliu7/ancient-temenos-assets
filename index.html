@@ -120,7 +120,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .thread{width:100%;max-width:600px;margin:0 auto;padding:1.2rem 1.5rem 1rem;position:relative;z-index:1;}
 .msg{margin-bottom:2rem;animation:fadeUp .8s ease forwards;}
 .msg-user{display:flex;flex-direction:column;align-items:flex-end;}
-.msg-user .bub{background:rgba(196,158,72,0.06);backdrop-filter:blur(8px);border:.5px solid rgba(196,158,72,0.14);border-radius:12px 12px 2px 12px;padding:.85rem 1.2rem;max-width:82%;font-family:'Cormorant Garamond',serif;font-size:17px;color:rgba(238,220,168,0.75);line-height:1.65;}
+.msg-user .bub{background:rgba(196,158,72,0.06);backdrop-filter:blur(8px);border:.5px solid rgba(196,158,72,0.14);border-radius:12px 12px 2px 12px;padding:.85rem 1.2rem;max-width:82%;font-family:'Cormorant Garamond',serif;font-size:17px;color:rgba(238,220,168,0.95);line-height:1.65;}
 .msg-user .who{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.35em;color:rgba(196,158,72,0.3);text-transform:uppercase;margin-top:.4rem;}
 .msg-v{display:flex;flex-direction:column;align-items:flex-start;max-width:92%;}
 .msg-v .who{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.35em;color:rgba(196,158,72,0.6);text-transform:uppercase;margin-bottom:.6rem;}
@@ -373,6 +373,16 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 @keyframes gHintBreathe{0%,100%{opacity:1;}50%{opacity:.45;}}
 /* == VENUS — scroll-scrub approach engine == */
 #venusApproach{position:fixed;inset:0;background:#000;overflow:hidden;}
+#va-corridor-bg{position:absolute;inset:0;z-index:0;}
+#va-corridor-bg video{width:100%;height:100%;object-fit:cover;display:block;}
+#va-haze{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 80% 80% at 50% 50%,transparent 60%,rgba(2,1,1,0.18) 100%),linear-gradient(to bottom,rgba(2,1,1,0.12) 0%,transparent 15%,transparent 80%,rgba(2,1,1,0.28) 100%);}
+#va-scroll-hint{position:absolute;bottom:7%;left:50%;transform:translateX(-50%);z-index:10;text-align:center;pointer-events:none;transition:opacity 1.2s ease;}
+#va-scroll-hint span{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(12px,1.2vw,15px);color:rgba(238,220,168,0.35);letter-spacing:.12em;}
+.va-hint-chev{animation:vaBreathe 2.2s ease-in-out infinite;display:block;margin-top:.4rem;}
+@keyframes vaBreathe{0%,100%{opacity:.2;transform:translateY(0);}50%{opacity:.5;transform:translateY(4px);}}
+#va-scroll-hint.gone{opacity:0;}
+#va-oracle-glass{position:absolute;inset:0;z-index:8;background:rgba(3,2,1,0);pointer-events:none;transition:background 1.8s ease;}
+#va-oracle-glass.risen{background:rgba(3,2,1,0.72);}
 #v-approach-bg{position:fixed;inset:0;opacity:0;transition:opacity 1s ease;}
 #v-approach-bg.reveal{opacity:1;}
 #v-approach-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
@@ -499,7 +509,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 <!-- ══ FOYER (REBUILT) ══ -->
 <div class="screen" id="foyer">
   <video id="foyer-hall-video" muted playsinline preload="auto" loop>
-    <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Foyer.mp4" type="video/mp4">
+    <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Foyer_Current.mp4" type="video/mp4">
   </video>
   <canvas id="foyer-hall-canvas"></canvas>
   <div id="foyer-vignette"></div>
@@ -574,6 +584,18 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 </div>
 
 <!-- VENUS BREATH -->
+<!-- ══ VENUS APPROACH ══ -->
+<div class="screen" id="venusApproach" style="justify-content:flex-start;overflow:hidden;">
+  <div id="va-corridor-bg">
+    <video id="va-video" muted playsinline preload="auto">
+      <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div id="va-haze"></div>
+  <div id="va-scroll-hint"><span>She is near. Draw closer.</span><span class="va-hint-chev">⌄</span></div>
+  <div id="va-oracle-glass"></div>
+</div>
+
 <div class="screen" id="venusBreath" style="background:transparent;">
   <div style="text-align:center;padding:2rem;animation:fadeUp 1.5s ease forwards;">
     <p style="font-family:'Cormorant',serif;font-style:italic;font-size:clamp(14px,2vw,20px);color:rgba(238,220,168,0.35);line-height:2.2;letter-spacing:.08em;">take a moment to set an intention<br>and just breathe</p>
@@ -837,7 +859,7 @@ function showScreen(id){
   currentScreen=id;
   inCave=(id==='ganymedeScreen');
   bgC.style.display='block';
-  const showReturn=['foyer','venusBreath','venusOracle','ganymedeScreen'].includes(id);
+  const showReturn=['foyer','venusApproach','venusBreath','venusOracle','ganymedeScreen'].includes(id);
   const showTeachings=['venusOracle','ganymedeScreen','foyer'].includes(id);
   document.getElementById('returnBtn').style.display=showReturn?'flex':'none';
   document.getElementById('teachingsBtn').style.display=showTeachings?'flex':'none';
@@ -845,9 +867,10 @@ function showScreen(id){
 }
 
 function goReturn(){
-  const prev={foyer:'threshold',venusBreath:'foyer',venusOracle:'foyer',ganymedeScreen:'foyer'};
+  const prev={foyer:'threshold',venusApproach:'foyer',venusBreath:'foyer',venusOracle:'foyer',ganymedeScreen:'foyer'};
   const target=prev[currentScreen]||'foyer';
   if(currentScreen==='venusOracle'){hideCupid();resetVenusState();}
+  if(target==='foyer'){councilReset();}
   flashTo(()=>showScreen(target));
   if(target==='threshold'){document.getElementById('returnBtn').style.display='none';document.getElementById('teachingsBtn').style.display='none';}
 }
@@ -1131,7 +1154,7 @@ function foyerEnter(side){
   if(currentScreen!=='foyer')return;
   foyerActive=false;
   flashTo(()=>{
-    if(side==='venus')enterVenusAltar();
+    if(side==='venus')enterVenusApproach();
     else enterGanymede();
   });
 }
@@ -1142,6 +1165,71 @@ document.getElementById('foyer').addEventListener('touchstart',initFoyerAudio,{o
 // == VENUS ==
 let vHistory=[],venusOracleOpened=false,venusConvOpen=false;
 let lastPrinciple='The Principle of Cause and Effect',lastMirror='';
+
+
+// ══ VENUS APPROACH — scroll-scrub corridor (same grammar as Ganymede) ══
+let vaScrub={target:0,current:0,dur:0,raf:null,arrived:false};
+let vaTouchY=null;
+
+function vaVid(){return document.getElementById('va-video');}
+function vaScreenActive(){const s=document.getElementById('venusApproach');return s&&s.classList.contains('active');}
+
+function vaOnWheel(e){if(!vaScreenActive()||vaScrub.arrived)return;e.preventDefault();vaScrubBy(e.deltaY);}
+function vaOnTouchStart(e){if(!vaScreenActive()||vaScrub.arrived)return;vaTouchY=e.touches[0].clientY;}
+function vaOnTouchMove(e){if(!vaScreenActive()||vaScrub.arrived||vaTouchY===null)return;e.preventDefault();const y=e.touches[0].clientY;vaScrubBy((vaTouchY-y)*2.4);vaTouchY=y;}
+
+function vaScrubBy(px){
+  const k=vaScrub.dur>0?vaScrub.dur/3600:0.006;
+  vaScrub.target=Math.max(0,Math.min(vaScrub.dur,vaScrub.target+px*k));
+  if(!vaScrub.raf&&!vaScrub.arrived&&vaScreenActive())vaScrub.raf=requestAnimationFrame(vaScrubLoop);
+}
+function vaScrubLoop(){
+  if(!vaScreenActive()){vaScrub.raf=null;return;}
+  if(!vaScrub.arrived){
+    const v=vaVid();
+    if(v&&v.readyState>=2){
+      const next=vaScrub.current+(vaScrub.target-vaScrub.current)*0.08;
+      if(Math.abs(next-vaScrub.current)>0.0008){vaScrub.current=next;try{v.currentTime=next;}catch(e){};}
+      if(vaScrub.dur>0&&vaScrub.current>=vaScrub.dur-0.08&&vaScrub.target>=vaScrub.dur-0.02){vaArrive();return;}
+    }
+  }
+  vaScrub.raf=requestAnimationFrame(vaScrubLoop);
+}
+function vaArrive(){
+  vaScrub.arrived=true;vaScrub.raf=null;
+  const v=vaVid();if(v){try{v.currentTime=Math.max(0,vaScrub.dur-0.05);}catch(e){};}
+  const h=document.getElementById('va-scroll-hint');if(h)h.classList.add('gone');
+  const gl=document.getElementById('va-oracle-glass');
+  setTimeout(()=>{if(gl)gl.classList.add('risen');},800);
+  // After glass rises, flash into oracle room
+  setTimeout(()=>{flashTo(()=>enterVenusOracle());},2600);
+}
+
+window.addEventListener('wheel',vaOnWheel,{passive:false});
+window.addEventListener('touchstart',vaOnTouchStart,{passive:true});
+window.addEventListener('touchmove',vaOnTouchMove,{passive:false});
+
+function enterVenusApproach(){
+  showScreen('venusApproach');
+  foyerActive=false;
+  vaScrub={target:0,current:0,dur:0,raf:null,arrived:false};
+  vaTouchY=null;
+  const v=vaVid();
+  if(v){
+    v.currentTime=0;
+    const setDur=()=>{
+      if(v.duration&&isFinite(v.duration)){
+        vaScrub.dur=v.duration;
+      } else {
+        vaScrub.dur=8; // fallback
+      }
+    };
+    if(v.readyState>=1){setDur();}else{v.addEventListener('loadedmetadata',setDur,{once:true});}
+    v.play().catch(()=>{});
+  }
+  const h=document.getElementById('va-scroll-hint');if(h)h.classList.remove('gone');
+  const gl=document.getElementById('va-oracle-glass');if(gl)gl.classList.remove('risen');
+}
 
 function enterVenusAltar(){enterVenusOracle();}
 
@@ -1780,6 +1868,9 @@ function showCandles(options,context){
       wrap.style.transition='opacity 0.6s ease';wrap.style.opacity='0';
       setTimeout(()=>{wrap.innerHTML='';wrap.style.opacity='';wrap.style.transition='';},600);
       const dots=document.getElementById('g-thinking-dots');if(dots)dots.classList.add('show');
+      // Scroll glass panel into view so reply appears without manual scroll
+      const gl=document.getElementById('g-glass');
+      if(gl)gl.scrollIntoView({behavior:'smooth',block:'end'});
       gBusy=false;
       const gi=document.getElementById('gi');if(gi){gi.value=opt.text||'';sendGany();}
     });
@@ -2330,7 +2421,7 @@ const _mock=new URLSearchParams(window.location.search).get('mock');
     if(isLive){
       await new Promise(r=>setTimeout(r,2200));
       overlay.classList.remove('on');
-      if(mockRec.toLowerCase()==='venus')flashTo(()=>enterVenusAltar());
+      if(mockRec.toLowerCase()==='venus')flashTo(()=>enterVenusApproach());
       else if(mockRec.toLowerCase()==='ganymede')flashTo(()=>enterGanymede());
     }else{
       recSoon.style.display='block';
@@ -2441,7 +2532,7 @@ RECOMMENDS: Venus`;
     // auto-enter after 2.2s — council has spoken, no button needed
     await new Promise(r=>setTimeout(r,2200));
     overlay.classList.remove('on');
-    if(recommended.toLowerCase()==='venus')flashTo(()=>enterVenusAltar());
+    if(recommended.toLowerCase()==='venus')flashTo(()=>enterVenusApproach());
     else if(recommended.toLowerCase()==='ganymede')flashTo(()=>enterGanymede());
   }else{
     recSoon.style.display='block';
