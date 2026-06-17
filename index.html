@@ -372,7 +372,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 @keyframes gHintBreathe{0%,100%{opacity:1;}50%{opacity:.45;}}
 /* == VENUS — scroll-scrub approach engine == */
 #venusApproach{position:fixed;inset:0;background:#000;overflow:hidden;}
-#v-approach-bg{position:fixed;inset:0;opacity:0;transition:opacity 3.5s ease;}
+#v-approach-bg{position:fixed;inset:0;opacity:0;transition:opacity 1s ease;}
 #v-approach-bg.reveal{opacity:1;}
 #v-approach-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
 #v-approach-haze{position:fixed;inset:0;pointer-events:none;z-index:1;background:radial-gradient(ellipse 100% 50% at 50% 0%,rgba(10,6,4,0.85) 0%,transparent 60%),linear-gradient(to bottom,rgba(6,3,2,0.6) 0%,transparent 30%,transparent 70%,rgba(6,3,2,0.92) 100%);}
@@ -1032,7 +1032,7 @@ function showScreen(id){
   const showTeachings=['ganymedeScreen','foyer','venusApproach'].includes(id);
   document.getElementById('returnBtn').style.display=showReturn?'flex':'none';
   document.getElementById('teachingsBtn').style.display=showTeachings?'flex':'none';
-  if(id==='foyer')setTimeout(initFoyer,150);
+  if(id==='foyer'){setTimeout(initFoyer,150);setTimeout(()=>{const _c=document.getElementById('foyer-council');if(_c)_c.classList.add('visible');},2000);}
 }
 
 function goReturn(){
@@ -1287,17 +1287,15 @@ function foyerHover(side){
   const other=document.getElementById(isV?'gany-artwork':'venus-artwork');
   const glow=document.getElementById(isV?'venus-glow-layer':'gany-glow-layer');
   const poem=document.getElementById(isV?'venus-poem':'gany-poem');
-  img.style.filter='brightness(1.05) saturate(1.1)';
-  img.style.transform='scale(1.02)';
-  other.style.filter='brightness(.35) saturate(.4)';
-  other.style.transform='scale(.99)';
+  if(img){img.style.filter='brightness(1.05) saturate(1.1)';img.style.transform='scale(1.02)';}
+  if(other){other.style.filter='brightness(.35) saturate(.4)';other.style.transform='scale(.99)';}
   // dim center figures too
   ['persephone','psyche'].forEach(k=>{
     const ca=document.getElementById(k+'-artwork');
     if(ca)ca.style.filter='brightness(.25) saturate(.3)';
   });
-  glow.style.opacity='1';
-  poem.style.opacity='1';
+  if(glow)glow.style.opacity='1';
+  if(poem)poem.style.opacity='1';
   // name glow
   const nameEl=document.getElementById(isV?'venus-artwork':'gany-artwork');
   const labelName=document.querySelector('#altar-'+(isV?'venus':'ganymede')+' .al-name');
@@ -1318,18 +1316,17 @@ function foyerLeave(side){
   foyerActiveAltar=null;
   ['venus-artwork','gany-artwork'].forEach(id=>{
     const el=document.getElementById(id);
-    el.style.filter='brightness(.78) saturate(.88)';
-    el.style.transform='scale(1)';
+    if(el){el.style.filter='brightness(.78) saturate(.88)';el.style.transform='scale(1)';}
   });
   // restore center figures
   const pa=document.getElementById('persephone-artwork');
   const qa=document.getElementById('psyche-artwork');
   if(pa)pa.style.filter='brightness(.42) saturate(.55)';
   if(qa)qa.style.filter='brightness(.42) saturate(.5)';
-  document.getElementById('venus-glow-layer').style.opacity='0';
-  document.getElementById('gany-glow-layer').style.opacity='0';
-  document.getElementById('venus-poem').style.opacity='0';
-  document.getElementById('gany-poem').style.opacity='0';
+  const vgl=document.getElementById('venus-glow-layer');if(vgl)vgl.style.opacity='0';
+  const ggl=document.getElementById('gany-glow-layer');if(ggl)ggl.style.opacity='0';
+  const vpm=document.getElementById('venus-poem');if(vpm)vpm.style.opacity='0';
+  const gpm=document.getElementById('gany-poem');if(gpm)gpm.style.opacity='0';
   // reset name glow
   ['venus','ganymede'].forEach(s=>{
     const n=document.querySelector('#altar-'+s+' .al-name');
@@ -2530,7 +2527,7 @@ function arrowSvg(col){return`<svg viewBox="0 0 14 14" fill="none" stroke="${col
     if(!threshold.classList.contains('active')) return;
 
     e.preventDefault();
-    scrollY += e.deltaY * 0.4;
+    scrollY += e.deltaY * 3.0;
     scrollY = Math.max(0, Math.min(scrollY, 100));
 
     applyScrollZoom(scrollY);
@@ -2960,7 +2957,7 @@ document.addEventListener('DOMContentLoaded',()=>{
   if(inp)inp.addEventListener('keydown',e=>{if(e.key==='Enter')sendCouncil();});
 });
 
-const LIVE_CHAMBERS={venus:true,persephone:true,psyche:false,ganymede:true};
+const LIVE_CHAMBERS={venus:true,persephone:false,psyche:false,ganymede:true};
 const SPEAKER_CLASS={Venus:'venus',Persephone:'persephone',Psyche:'psyche',Ganymede:'ganymede'};
 let cBusy=false;
 
@@ -3027,7 +3024,7 @@ window.sendCouncil=async function(){
     if(isLive){
       await new Promise(r=>setTimeout(r,5000));
       overlay.classList.remove('on');
-      if(mockRec.toLowerCase()==='venus')flashTo(()=>enterVenusAltar());
+      if(mockRec.toLowerCase()==='venus')flashTo(()=>enterVenusApproach());
       else if(mockRec.toLowerCase()==='persephone')flashTo(()=>enterPersephone());
       else if(mockRec.toLowerCase()==='ganymede')flashTo(()=>enterGanymede());
     }else{
@@ -3174,7 +3171,7 @@ RECOMMENDS: ${fb}`;
     recSoon.style.display='none';
     await new Promise(r=>setTimeout(r,5000));
     overlay.classList.remove('on');
-    if(recommended.toLowerCase()==='venus')flashTo(()=>enterVenusAltar());
+    if(recommended.toLowerCase()==='venus')flashTo(()=>enterVenusApproach());
     else if(recommended.toLowerCase()==='ganymede')flashTo(()=>enterGanymede());
   }else{
     recSoon.style.display='block';
