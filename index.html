@@ -20,7 +20,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .screen.visible{opacity:1;}
 
 /* ── NAV ── */
-.nav-btn{position:fixed;z-index:100;display:none;background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:8px;font-weight:300;letter-spacing:.38em;color:rgba(196,158,72,0.35);text-transform:uppercase;transition:color .4s;align-items:center;gap:.5rem;}
+.nav-btn{position:fixed;z-index:100;display:none;background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:8px;font-weight:300;letter-spacing:.38em;color:rgba(196,158,72,0.55);text-transform:uppercase;transition:color .4s;align-items:center;gap:.5rem;}
 .nav-btn:hover{color:rgba(196,158,72,0.85);}
 #returnBtn{top:1.6rem;left:1.8rem;}
 #returnBtn svg{width:11px;height:11px;transition:transform .3s;}
@@ -377,7 +377,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #va-corridor-bg video{width:100%;height:100%;object-fit:cover;object-position:center 0%;display:block;} /* shifted up to hide bottom watermark */
 #va-haze{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 80% 80% at 50% 50%,transparent 60%,rgba(2,1,1,0.18) 100%),linear-gradient(to bottom,rgba(2,1,1,0.18) 0%,transparent 15%,transparent 72%,rgba(2,1,1,0.92) 100%);} /* bottom fade covers watermark */
 #va-scroll-hint{position:absolute;bottom:16%;left:50%;transform:translateX(-50%);z-index:10;text-align:center;pointer-events:none;transition:opacity 1.2s ease;}
-#va-scroll-hint span{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.3vw,16px);color:rgba(238,220,168,0.65);letter-spacing:.14em;text-shadow:0 0 18px rgba(2,1,1,0.8);}
+#va-scroll-hint span{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(15px,1.5vw,18px);color:rgba(238,220,168,0.78);letter-spacing:.18em;text-shadow:0 2px 24px rgba(0,0,0,0.9);}
 .va-hint-chev{animation:vaBreathe 2.2s ease-in-out infinite;display:block;margin-top:.4rem;}
 @keyframes vaBreathe{0%,100%{opacity:.2;transform:translateY(0);}50%{opacity:.5;transform:translateY(4px);}}
 #va-scroll-hint.gone{opacity:0;}
@@ -394,6 +394,9 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #va-vthread .vc-k{border-left:none;padding:.2rem 0;color:rgba(238,220,168,0.28);font-size:13px;margin-bottom:.6rem;}
 #va-vthread .vc-m{font-size:clamp(17px,1.7vw,20px);color:rgba(238,220,168,0.88);line-height:1.85;margin-bottom:.6rem;}
 #va-vthread .vc-q{font-size:clamp(15px,1.5vw,18px);color:rgba(238,220,168,0.52);line-height:1.75;font-style:italic;}
+.va-mirror{font-family:'Cormorant Garamond',serif;font-size:clamp(17px,1.7vw,20px);color:rgba(238,220,168,0.88);line-height:1.9;white-space:pre-line;}
+.va-kybalion{font-family:'Cormorant',serif;font-style:italic;font-size:13px;color:rgba(238,220,168,0.28);line-height:1.6;letter-spacing:.03em;}
+.va-question{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(15px,1.5vw,18px);color:rgba(238,220,168,0.52);line-height:1.8;}
 #va-vthread .msg-v .who{font-size:7px;letter-spacing:.4em;color:rgba(196,158,72,0.22);margin-bottom:.6rem;}
 #va-vthread .msg-user .bub{background:transparent;border:none;backdrop-filter:none;color:rgba(238,220,168,0.45);font-style:italic;padding:.2rem 0;border-radius:0;}
 #va-vthread .msg-user .who{color:rgba(196,158,72,0.18);}
@@ -409,6 +412,9 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #va-input-wrap input::placeholder{color:rgba(196,158,72,0.28);font-style:italic;}
 #va-input-wrap button{background:transparent;border:.5px solid rgba(196,158,72,0.22);border-radius:50%;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .3s;}
 #va-input-wrap button:hover{border-color:rgba(196,158,72,0.5);}
+@keyframes vaCtaBreath{0%,100%{opacity:.38;text-shadow:0 0 0px rgba(196,158,72,0);}50%{opacity:.72;text-shadow:0 0 12px rgba(196,158,72,0.28);}}
+.va-cta-btn{animation:vaCtaBreath 3.2s ease-in-out infinite;}
+.va-cta-btn:hover{animation:none;opacity:1 !important;color:rgba(196,158,72,0.9) !important;text-shadow:0 0 16px rgba(196,158,72,0.4);}
 #v-approach-bg{position:fixed;inset:0;opacity:0;transition:opacity 1s ease;}
 #v-approach-bg.reveal{opacity:1;}
 #v-approach-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
@@ -618,7 +624,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     </video>
   </div>
   <div id="va-haze"></div>
-  <div id="va-scroll-hint"><span>She is near. Draw closer.</span><span class="va-hint-chev">⌄</span></div>
+  <div id="va-scroll-hint"><span>Come closer.</span><span class="va-hint-chev">⌄</span></div>
   <div id="va-oracle-glass"></div>
   <!-- Venus conversation glass — rises within the corridor at arrival -->
   <div id="va-glass">
@@ -631,9 +637,9 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
       <div id="va-closing-new">
         <p id="va-closing-line" style="font-family:'Cormorant',serif;font-style:italic;font-size:clamp(18px,1.8vw,22px);color:rgba(238,220,168,0.72);line-height:1.9;text-align:center;margin:0 0 2.4rem;letter-spacing:.03em;opacity:0;transition:opacity 2s ease;">You already know what to do with this.</p>
         <div id="va-closing-actions" style="display:flex;gap:2.4rem;justify-content:center;align-items:center;opacity:0;transition:opacity 1.6s ease;">
-          <button onclick="openGrimoire()" style="background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.4em;color:rgba(196,158,72,0.45);text-transform:uppercase;transition:color .4s;padding:.4rem 0;">✦ Seal this</button>
+          <button class="va-cta-btn" onclick="openGrimoire()" style="background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.4em;color:rgba(196,158,72,0.45);text-transform:uppercase;transition:color .4s,text-shadow .4s;padding:.4rem 0;">✦ Seal this</button>
           <span style="color:rgba(196,158,72,0.18);font-size:10px;">·</span>
-          <button onclick="flashTo(()=>{showScreen('foyer');councilReset();})" style="background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.4em;color:rgba(196,158,72,0.32);text-transform:uppercase;transition:color .4s;padding:.4rem 0;">Return</button>
+          <button class="va-cta-btn" onclick="flashTo(()=>{showScreen('foyer');councilReset();})" style="background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.4em;color:rgba(196,158,72,0.32);text-transform:uppercase;transition:color .4s,text-shadow .4s;padding:.4rem 0;animation-delay:.8s;">Return</button>
         </div>
       </div>
       <div id="va-input-wrap">
@@ -1307,7 +1313,7 @@ function vaOpenConversation(){
       principle:'You have arrived.',
       mirror:"She has been waiting — not with impatience. She exists outside of time. She simply knew you would come when you were ready.\n\nShe does not ask what is wrong. She asks what is ready to be seen.",
       kybalion:'"The mirror does not judge what it reflects."',
-      question:'What have you been carrying that you have not yet allowed yourself to fully feel?',
+      question:'What brought you here today?',
       actions:[]
     });
     setTimeout(()=>{
@@ -1322,10 +1328,23 @@ function vaRenderCard(data){
   const d=document.createElement('div');d.className='msg msg-v';
   const who=document.createElement('span');who.className='who';who.textContent='Venus';
   const card=document.createElement('div');card.className='vcard';
-  card.innerHTML=`<div class="vc-corner vc-tl"></div><div class="vc-corner vc-tr"></div><div class="vc-corner vc-bl"></div><div class="vc-corner vc-br"></div><div class="vc-p">${data.principle||''}</div><div class="vc-m"></div><div class="vc-k">${data.kybalion||''}</div>${data.affirmation?`<div style="font-family:'Cormorant',serif;font-style:italic;font-size:18px;color:rgba(238,220,168,0.85);line-height:1.75;padding:.8rem 1rem;border:.5px solid rgba(196,158,72,0.22);background:rgba(196,158,72,0.05);margin-bottom:.8rem;">${data.affirmation}</div>`:''}<div class="vc-q"></div>`;
+  // Clean mirror text — strip leading dashes/bullets from any line
+  const cleanText=(s)=>(s||'').replace(/^[\s\-–—•]+/gm,'').trim();
+  const mirrorText=cleanText(data.mirror||'');
+  const questionText=cleanText(data.question||'');
+  const kybalionText=cleanText(data.kybalion||'');
+  // Build as plain paragraphs — no corners, no principle label, no separators
+  card.innerHTML=`<div class="va-mirror" style="opacity:0;transition:opacity 1.8s ease;"></div>${kybalionText?`<div class="va-kybalion" style="opacity:0;transition:opacity 1.4s ease;margin-top:.6rem;">${kybalionText}</div>`:''}<div class="va-question" style="opacity:0;transition:opacity 1.4s ease;margin-top:.9rem;"></div>`;
+  card.querySelector('.va-mirror').textContent=mirrorText;
+  if(questionText)card.querySelector('.va-question').textContent=questionText;
   d.appendChild(who);d.appendChild(card);t.appendChild(d);
-  streamText(card.querySelector('.vc-m'),data.mirror||'',()=>streamText(card.querySelector('.vc-q'),data.question||'',null));
-  const vg=document.getElementById('va-glass');if(vg)setTimeout(()=>vg.scrollTop=vg.scrollHeight,300);
+  // Paragraph fade: mirror first, then kybalion, then question
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    card.querySelector('.va-mirror').style.opacity='1';
+    setTimeout(()=>{const k=card.querySelector('.va-kybalion');if(k)k.style.opacity='1';},1600);
+    setTimeout(()=>{const q=card.querySelector('.va-question');if(q)q.style.opacity='1';},2600);
+    setTimeout(()=>{const vg=document.getElementById('va-glass');if(vg)vg.scrollTop=vg.scrollHeight;},2800);
+  }));
 }
 
 function vaAddUserMsg(text){
@@ -1530,7 +1549,7 @@ async function generateInvocation(vt,gt){
   if(loading)loading.style.display='none';
   if(actions)actions.style.display='flex';
 }
-function closeGrimoire(){document.getElementById('grimoireScreen').style.display='none';}
+function closeGrimoire(){document.getElementById('grimoireScreen').style.display='none';if(currentScreen==='venusApproach'||currentScreen==='venusOracle'){flashTo(()=>{showScreen('foyer');councilReset();});}else if(currentScreen==='ganymedeScreen'){/* stays in cave */}}
 function copyGrimoire(){const inv=document.getElementById('grInvocationSection');const text=`ANCIENT TEMENOS · 90 DAY SPRINT\n${document.getElementById('grDate').textContent}\n\n${inv?inv.innerText.replace(/\n{3,}/g,'\n\n'):''}\n\nancienttemenos.com`;navigator.clipboard.writeText(text).then(()=>{const h=document.getElementById('grCopyHint');h.style.color='rgba(196,158,72,0.65)';setTimeout(()=>h.style.color='rgba(196,158,72,0)',2500);});}
 function sharePortal(){navigator.clipboard.writeText('https://ellisliu7.github.io/ancient-temenos-assets/').then(()=>{const h=document.getElementById('grShareHint');h.style.color='rgba(196,158,72,0.65)';setTimeout(()=>h.style.color='rgba(196,158,72,0)',2500);});}
 
