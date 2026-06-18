@@ -1,8 +1,8 @@
 # Milestone: Friday Demo Build
 
 **Date:** 2026-06-19
-**Status:** planned  → flip to `sealed` once frozen
-**Commit SHA:** ________  ← freeze this the moment the demo build looks right; do not touch after
+**Status:** sealed  → flip to `sealed` once frozen
+**Commit SHA:** 3014ed632ec04aa67c0e6812f63503a2fd7928a4  ← freeze this the moment the demo build looks right; do not touch after
 **Live URL at seal:** https://ellisliu7.github.io/ancient-temenos-assets/
 **Restore URL:** https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/<SHA>/index.html
 
