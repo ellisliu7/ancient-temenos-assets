@@ -78,6 +78,10 @@ not confused. Nothing breaks the spell. The temple feels finished even though it
 - Clean transitions — no overlay bleed, no stuck state, no black screens.
 - Both chambers share scroll-scrub grammar. They must feel like one temple, not two apps.
 
+## Post-seal improvements
+- Recommendation breath added before chamber transition (Kenneth/Louisa build). SHA: `c769bde044deda4464a8ce2184fafa0dc9e9fbff`
+- Restore URL: https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/c769bde044deda4464a8ce2184fafa0dc9e9fbff/index.html
+
 ## Known issues
 - Persephone not integrated; Psyche not built. Never demo these as live.
 - Venus scroll cue may not be obvious enough for a first-time visitor — identified as next fix.
