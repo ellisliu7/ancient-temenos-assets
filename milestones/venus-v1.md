@@ -2,9 +2,9 @@
 
 **Date:** 2026-06-18
 **Status:** sealed
-**Commit SHA:** 3014ed632ec04aa67c0e6812f63503a2fd7928a4 ← copy from GitHub Desktop History for the commit that shipped the corridor
+**Commit SHA:** ________  ← copy from GitHub Desktop History for the commit that shipped the corridor
 **Live URL at seal:** https://ellisliu7.github.io/ancient-temenos-assets/
-**Restore URL:** https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/3014ed632ec04aa67c0e6812f63503a2fd7928a4/index.html
+**Restore URL:** https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/<SHA>/index.html
 
 ---
 
@@ -54,6 +54,15 @@ like walking into a private sanctuary after a bath — soft, protected, quietly 
   `vaToggleGate`, `vaSubmitWaitlist`. Dead, not wired to any HTML. Acceptable at V1; slated
   for deletion in a later, isolated pass.
 - `Venus Wishing Well_1.mp4` is 404 in repo — irrelevant to this flow, the well is not in V1.
+
+## Dependencies
+The Venus chamber experience is self-contained. However, the *arrival* experience — correct
+routing, clean state handoff, and transition without bleed — depends on **Council V1**
+(SHA `52f600565b49210050a52ceab7525db5aef719e4`). Venus owns what happens inside the corridor.
+The council owns who arrives, and how cleanly.
+
+If restoring Venus in isolation, also verify the council is at V1 or later. `?skip=venus&key=1`
+bypasses the council entirely and is the correct way to test Venus alone.
 
 ## Restore notes
 Fetch the Restore URL above. To restore only Venus, extract the `#venusApproach` block and

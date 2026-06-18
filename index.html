@@ -380,7 +380,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #va-scroll-hint{position:absolute;bottom:16%;left:50%;transform:translateX(-50%);z-index:10;text-align:center;pointer-events:none;transition:opacity 1.2s ease;}
 #va-scroll-hint span{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(15px,1.5vw,18px);color:rgba(238,220,168,0.78);letter-spacing:.18em;text-shadow:0 2px 24px rgba(0,0,0,0.9);animation:vaTextPulse 3.8s ease-in-out infinite;}
 .va-hint-chev{animation:vaBreathe 2.2s ease-in-out infinite;display:block;margin-top:.4rem;}
-@keyframes vaBreathe{0%,100%{opacity:.25;transform:translateY(0);}50%{opacity:.6;transform:translateY(5px);}}
+@keyframes vaBreathe{0%,100%{opacity:.5;transform:translateY(0);}50%{opacity:1;transform:translateY(6px);}}
 @keyframes vaTextPulse{0%,100%{opacity:.65;}60%{opacity:.92;}}
 #va-scroll-hint.gone{opacity:0;}
 #va-oracle-glass{position:absolute;inset:0;z-index:8;background:rgba(3,2,1,0);pointer-events:none;transition:background 1.8s ease;}
@@ -628,7 +628,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     </video>
   </div>
   <div id="va-haze"></div>
-  <div id="va-scroll-hint"><span>Come closer.</span><span id="va-hint-secondary" style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.5em;text-transform:uppercase;color:rgba(238,220,168,0.32);display:block;margin-top:.5rem;opacity:0;transition:opacity 2s ease;">scroll to approach</span><span class="va-hint-chev">⌄</span></div>
+  <div id="va-scroll-hint"><span>Come closer.</span><span id="va-hint-secondary" style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.5em;text-transform:uppercase;color:rgba(238,220,168,0.5);display:block;margin-top:.5rem;opacity:1;transition:opacity 2s ease;">scroll to approach</span><span class="va-hint-chev">⌄</span></div>
   <div id="va-oracle-glass"></div>
   <!-- Venus conversation glass — rises within the corridor at arrival -->
   <div id="va-glass">
