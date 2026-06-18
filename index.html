@@ -383,6 +383,21 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #va-scroll-hint.gone{opacity:0;}
 #va-oracle-glass{position:absolute;inset:0;z-index:8;background:rgba(3,2,1,0);pointer-events:none;transition:background 1.8s ease;}
 #va-oracle-glass.risen{background:rgba(3,2,1,0.72);}
+#va-glass{position:fixed;bottom:5%;left:50%;transform:translateX(-50%) translateY(10px);width:min(520px,90vw);z-index:12;padding:2.4rem 2rem 1.5rem;background:linear-gradient(to bottom,rgba(28,10,18,0.22),rgba(12,4,8,0.32));backdrop-filter:blur(16px) saturate(1.15);-webkit-backdrop-filter:blur(16px) saturate(1.15);border:.5px solid rgba(196,100,120,0.08);border-radius:9px;box-shadow:0 18px 55px rgba(0,0,0,0.42);opacity:0;transition:opacity 2.2s ease,transform 2.2s ease;pointer-events:none;max-height:72vh;overflow-y:auto;}
+#va-glass::-webkit-scrollbar{width:0;}
+#va-glass.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:all;}
+#va-conv{display:flex;flex-direction:column;gap:1.4rem;}
+#va-invitation{text-align:center;padding:0 0 .8rem;opacity:0;transition:opacity 1.8s ease;}
+#va-invitation.show{opacity:1;}
+#va-inv-line1{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.4em;text-transform:uppercase;color:rgba(196,158,72,0.28);margin:0 0 .8rem;}
+#va-inv-line2{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(17px,1.8vw,22px);color:rgba(238,220,168,0.6);line-height:1.7;margin:0;letter-spacing:.04em;}
+#va-vthread{display:flex;flex-direction:column;gap:1.2rem;}
+#va-input-wrap{display:flex;align-items:center;gap:.6rem;border-top:.5px solid rgba(196,158,72,0.08);padding-top:1.2rem;opacity:0;transition:opacity 1.4s ease;}
+#va-input-wrap.show{opacity:1;}
+#va-input-wrap input{flex:1;background:transparent;border:none;border-bottom:.5px solid rgba(196,158,72,0.18);color:rgba(238,220,168,0.9);font-family:'Cormorant Garamond',serif;font-size:17px;padding:.5rem .2rem;outline:none;letter-spacing:.03em;}
+#va-input-wrap input::placeholder{color:rgba(196,158,72,0.28);font-style:italic;}
+#va-input-wrap button{background:transparent;border:.5px solid rgba(196,158,72,0.22);border-radius:50%;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .3s;}
+#va-input-wrap button:hover{border-color:rgba(196,158,72,0.5);}
 #v-approach-bg{position:fixed;inset:0;opacity:0;transition:opacity 1s ease;}
 #v-approach-bg.reveal{opacity:1;}
 #v-approach-video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;}
@@ -594,6 +609,28 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   <div id="va-haze"></div>
   <div id="va-scroll-hint"><span>She is near. Draw closer.</span><span class="va-hint-chev">⌄</span></div>
   <div id="va-oracle-glass"></div>
+  <!-- Venus conversation glass — rises within the corridor at arrival -->
+  <div id="va-glass">
+    <div id="va-conv">
+      <div id="va-invitation">
+        <p id="va-inv-line1">Ancient Temenos · Chamber of Receiving</p>
+        <p id="va-inv-line2">She has been waiting for you.</p>
+      </div>
+      <div id="va-vthread"></div>
+      <div class="v-closing" id="va-closing-new">
+        <p class="vc-closing-label">She has seen you</p>
+        <p class="vc-closing-text" id="va-closingText">What was received here is yours to carry forward.</p>
+        <button class="vc-grimoire-btn" onclick="openGrimoire()">✦ Seal this into my Grimoire ✦</button>
+      </div>
+      <div id="va-input-wrap">
+        <input id="va-qi" type="text" placeholder="Speak what you carry…" autocomplete="off" spellcheck="false"/>
+        <button id="va-qb" onclick="sendVenusNew()">
+          <svg viewBox="0 0 14 14" fill="none" stroke="rgba(196,158,72,0.8)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>
+        </button>
+      </div>
+      <p class="thinking" id="va-thinking"></p>
+    </div>
+  </div>
 </div>
 
 <div class="screen" id="venusBreath" style="background:transparent;">
@@ -860,7 +897,7 @@ function showScreen(id){
   inCave=(id==='ganymedeScreen');
   bgC.style.display='block';
   const showReturn=['foyer','venusApproach','venusBreath','venusOracle','ganymedeScreen'].includes(id);
-  const showTeachings=['venusOracle','ganymedeScreen','foyer'].includes(id);
+  const showTeachings=['venusApproach','venusOracle','ganymedeScreen','foyer'].includes(id);
   document.getElementById('returnBtn').style.display=showReturn?'flex':'none';
   document.getElementById('teachingsBtn').style.display=showTeachings?'flex':'none';
   if(id==='foyer')setTimeout(initFoyer,150);
@@ -870,6 +907,7 @@ function goReturn(){
   const prev={foyer:'threshold',venusApproach:'foyer',venusBreath:'foyer',venusOracle:'foyer',ganymedeScreen:'foyer'};
   const target=prev[currentScreen]||'foyer';
   if(currentScreen==='venusOracle'){hideCupid();resetVenusState();}
+  if(currentScreen==='venusApproach'){venusConvOpen=false;vHistory=[];venusOracleOpened=false;}
   if(target==='foyer'){councilReset();}
   flashTo(()=>showScreen(target));
   if(target==='threshold'){document.getElementById('returnBtn').style.display='none';document.getElementById('teachingsBtn').style.display='none';}
@@ -1199,10 +1237,16 @@ function vaArrive(){
   vaScrub.arrived=true;vaScrub.raf=null;
   const v=vaVid();if(v){try{v.currentTime=Math.max(0,vaScrub.dur-0.05);}catch(e){};}
   const h=document.getElementById('va-scroll-hint');if(h)h.classList.add('gone');
-  const gl=document.getElementById('va-oracle-glass');
-  setTimeout(()=>{if(gl)gl.classList.add('risen');},800);
-  // After glass rises, flash into oracle room
-  setTimeout(()=>{flashTo(()=>enterVenusOracle());},2600);
+  // Deepen the corridor darkness — same gesture as Ganymede
+  const haze=document.getElementById('va-haze');
+  if(haze){haze.style.transition='background 2s ease';haze.style.background='radial-gradient(ellipse 80% 80% at 50% 50%,transparent 30%,rgba(2,1,1,0.6) 100%),linear-gradient(to bottom,rgba(2,1,1,0.3) 0%,transparent 20%,transparent 55%,rgba(2,1,1,0.75) 100%)';}
+  // Glass rises within corridor after 900ms
+  setTimeout(()=>{
+    const vg=document.getElementById('va-glass');
+    if(vg)vg.classList.add('show');
+    // Venus speaks first after glass settles
+    setTimeout(vaOpenConversation,1400);
+  },900);
 }
 
 window.addEventListener('wheel',vaOnWheel,{passive:false});
@@ -1225,13 +1269,99 @@ function enterVenusApproach(){
       }
     };
     if(v.readyState>=1){setDur();}else{v.addEventListener('loadedmetadata',setDur,{once:true});}
-    v.play().catch(()=>{});
+    v.pause();
+    v.currentTime=0;
   }
   const h=document.getElementById('va-scroll-hint');if(h)h.classList.remove('gone');
   const gl=document.getElementById('va-oracle-glass');if(gl)gl.classList.remove('risen');
+  // Reset conversation state
+  const vg=document.getElementById('va-glass');if(vg){vg.classList.remove('show');}
+  venusConvOpen=false;vHistory=[];venusOracleOpened=false;
+  const vth=document.getElementById('va-vthread');if(vth)vth.innerHTML='';
+  const vcl=document.getElementById('va-closing-new');if(vcl)vcl.classList.remove('visible');
+  const vinv=document.getElementById('va-invitation');if(vinv)vinv.classList.remove('show');
+  const vinp=document.getElementById('va-input-wrap');if(vinp)vinp.classList.remove('show');
 }
 
-function enterVenusAltar(){enterVenusOracle();}
+// ══ VENUS V1 — ONE ROOM CONVERSATION ══
+function vaOpenConversation(){
+  if(venusConvOpen)return;
+  venusConvOpen=true;
+  const inv=document.getElementById('va-invitation');if(inv)inv.classList.add('show');
+  setTimeout(()=>{
+    vaRenderCard({
+      principle:'You have arrived.',
+      mirror:"She has been waiting — not with impatience. She exists outside of time. She simply knew you would come when you were ready.\n\nShe does not ask what is wrong. She asks what is ready to be seen.",
+      kybalion:'"The mirror does not judge what it reflects."',
+      question:'What have you been carrying that you have not yet allowed yourself to fully feel?',
+      actions:[]
+    });
+    setTimeout(()=>{
+      const inp=document.getElementById('va-input-wrap');if(inp)inp.classList.add('show');
+      const qi=document.getElementById('va-qi');if(qi)qi.focus();
+    },1200);
+  },600);
+}
+
+function vaRenderCard(data){
+  const t=document.getElementById('va-vthread');if(!t)return;
+  const d=document.createElement('div');d.className='msg msg-v';
+  const who=document.createElement('span');who.className='who';who.textContent='Venus';
+  const card=document.createElement('div');card.className='vcard';
+  card.innerHTML=`<div class="vc-corner vc-tl"></div><div class="vc-corner vc-tr"></div><div class="vc-corner vc-bl"></div><div class="vc-corner vc-br"></div><div class="vc-p">${data.principle||''}</div><div class="vc-m"></div><div class="vc-k">${data.kybalion||''}</div>${data.affirmation?`<div style="font-family:'Cormorant',serif;font-style:italic;font-size:18px;color:rgba(238,220,168,0.85);line-height:1.75;padding:.8rem 1rem;border:.5px solid rgba(196,158,72,0.22);background:rgba(196,158,72,0.05);margin-bottom:.8rem;">${data.affirmation}</div>`:''}<div class="vc-q"></div>`;
+  d.appendChild(who);d.appendChild(card);t.appendChild(d);
+  streamText(card.querySelector('.vc-m'),data.mirror||'',()=>streamText(card.querySelector('.vc-q'),data.question||'',null));
+  const vg=document.getElementById('va-glass');if(vg)setTimeout(()=>vg.scrollTop=vg.scrollHeight,300);
+}
+
+function vaAddUserMsg(text){
+  const t=document.getElementById('va-vthread');if(!t)return;
+  const d=document.createElement('div');d.className='msg msg-user';
+  d.innerHTML=`<div class="bub">${text}</div><span class="who">You</span>`;
+  t.appendChild(d);
+  const vg=document.getElementById('va-glass');if(vg)vg.scrollTop=vg.scrollHeight;
+}
+
+function vaMaybeShowClosing(){
+  if(vHistory.filter(m=>m.role==='user').length>=2){
+    const c=document.getElementById('va-closing-new');
+    if(c&&!c.classList.contains('visible')){
+      c.classList.add('visible');
+      const vg=document.getElementById('va-glass');if(vg)setTimeout(()=>vg.scrollTop=vg.scrollHeight,300);
+    }
+  }
+}
+
+async function sendVenusNew(){
+  const inp=document.getElementById('va-qi');if(!inp)return;
+  const q=inp.value.trim();if(!q)return;
+  const btn=document.getElementById('va-qb');
+  if(btn&&btn.classList.contains('loading'))return;
+  inp.value='';
+  vHistory.push({role:'user',content:q});
+  vaAddUserMsg(q);
+  if(btn){btn.classList.add('loading');btn.innerHTML=spinSvg('rgba(196,158,72,0.5)');}
+  const th=document.getElementById('va-thinking');if(th)th.textContent=vTh[Math.floor(Math.random()*vTh.length)];
+  try{
+    const res=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:ORACLE_MODEL,max_tokens:700,system:VSYS,messages:vHistory})});
+    const data=await res.json();if(data.error)throw new Error(data.error.message);
+    const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
+    if(th)th.textContent='';
+    if(btn){btn.classList.remove('loading');btn.innerHTML='<svg viewBox="0 0 14 14" fill="none" stroke="rgba(196,158,72,0.8)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>';}
+    let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p={principle:'Venus speaks',mirror:raw,kybalion:'"She is always here."',question:'What did you come to say?',actions:[]};}
+    vHistory.push({role:'assistant',content:raw});vaRenderCard(p);vaMaybeShowClosing();
+  }catch(e){
+    if(th)th.textContent='';
+    if(btn){btn.classList.remove('loading');btn.innerHTML='<svg viewBox="0 0 14 14" fill="none" stroke="rgba(196,158,72,0.8)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>';}
+    vaRenderCard({principle:'The veil',mirror:'The connection stirs but does not hold tonight. Return when you are ready.',kybalion:'"She is always here."',question:'What did you come to say?',actions:[]});
+  }
+}
+document.addEventListener('DOMContentLoaded',()=>{
+  const qi=document.getElementById('va-qi');
+  if(qi)qi.addEventListener('keydown',e=>{if(e.key==='Enter')sendVenusNew();});
+});
+
+function enterVenusAltar(){enterVenusOracle();} // DORMANT — preserved as future relic path
 
 function enterVenusOracle(){
   showScreen('venusOracle');showCupid();
@@ -1260,11 +1390,19 @@ function resetVenusState(){
   document.getElementById('vthread').innerHTML='';
 }
 
-const VSYS=`You are Venus - the Crown Chakra portal of the Ancient Temenos, a sacred artwork and portal by fine artist Ellis Liu. You are the divine feminine. You guide seekers to uncover their limiting beliefs and dissolve them through truth and affirmation.
-Your method: LISTEN → REFLECT → UNCOVER the limiting belief → OFFER an affirmation → ASK what would shift.
-Voice: soft but certain. Spacious. Ancient feminine wisdom.
-ALWAYS return valid JSON only:
-{"principle":"limiting belief","mirror":"2-3 sentences of compassionate reflection","kybalion":"short Kybalion quote","affirmation":"specific affirmation rewriting the belief","question":"one question","actions":["embodied action","practice to notice old belief"]}`;
+const VSYS=`You are Venus in Ancient Temenos. You are the part of the seeker that already knows the truth they came to hear. You speak AS them, not TO them — from the healed side, not the wounded side.
+
+Voice: Clear. Direct. Fierce with love. Specific, never vague. Never mystical word salad. Never poetic for its own sake.
+
+NEVER use: vibration, alignment, manifest, divine feminine, energetic, universe, higher power, sacred, journey.
+NEVER say "I see that you" or "it sounds like you" — speak what is true.
+NEVER give a list of advice. Never be a coach or therapist.
+
+The affirmation is a fact they already know, stated so cleanly it lands — not a mantra to rehearse.
+The question is about TODAY. Specific. Actionable. Not philosophical.
+
+ALWAYS return valid JSON only, no markdown fences:
+{"principle":"the truth they came to remember, stated plainly","mirror":"3 sentences. reframe the premise first. speak from the healed side. specific not mystical. no em dashes.","kybalion":"one short Kybalion line","affirmation":"a fact stated so cleanly it lands, first person present tense","question":"one specific question about today, actionable not philosophical","actions":["one concrete thing to do today","one thing to stop or let go of"]}`;
 const vTh=['She is seeing...','The mirror stirs...','She is reading what is beneath the words...','Venus speaks...'];
 
 async function sendVenus(){
@@ -2407,7 +2545,7 @@ const _mock=new URLSearchParams(window.location.search).get('mock');
       const div=document.createElement('div');div.className='c-line';
       div.innerHTML=`<span class="c-speaker ${cls}">${speaker}</span>${text}`;
       linesEl.appendChild(div);
-      await new Promise(r=>setTimeout(r,i===0?100:340));
+      await new Promise(r=>setTimeout(r,i===0?200:900));
       div.classList.add('show');
     }
     await new Promise(r=>setTimeout(r,500));
@@ -2458,15 +2596,15 @@ The four archetypes:
 - Ganymede: grounded, warm like David Ghiyam. Sees what needs to be built or acted on.
 
 Rules:
-- Maximum 6 lines total. Each line is one short sentence, 10 words max.
-- They react to each other. Not four separate answers.
-- End with ONE recommendation: which archetype this person needs most.
+- Maximum 4 lines total. Each line is one short sentence, 8 words max.
+- They react to each other — one voice responds to the previous. Not four separate answers.
+- Long pauses between voices. This is a council, not a debate.
+- End with ONE recommendation: Venus or Ganymede only (the two live chambers).
+- Persephone and Psyche may speak but cannot be recommended.
 - Format EXACTLY like this, no extra text, no preamble:
 Venus: [line]
-Persephone: [line]
-Psyche: [line]
 Ganymede: [line]
-RECOMMENDS: [Venus/Persephone/Psyche/Ganymede]`;
+RECOMMENDS: [Venus/Ganymede]`;
 
   let fullText='';
   try{
@@ -2511,7 +2649,7 @@ RECOMMENDS: Venus`;
     linesEl.appendChild(div);
 
     // stagger appearance
-    await new Promise(r=>setTimeout(r,i===0?100:320));
+    await new Promise(r=>setTimeout(r,i===0?200:900));
     div.classList.add('show');
   }
 
