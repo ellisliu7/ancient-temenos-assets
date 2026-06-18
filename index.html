@@ -2730,11 +2730,17 @@ RECOMMENDS: Venus`;
 
   if(isLive){
     recSoon.style.display='none';
-    // auto-enter after 2.2s — council has spoken, no button needed
-    await new Promise(r=>setTimeout(r,2200));
-    overlay.classList.remove('on');
-    if(recommended.toLowerCase()==='venus')flashTo(()=>enterVenusApproach());
-    else if(recommended.toLowerCase()==='ganymede')flashTo(()=>enterGanymede());
+    const enterBtn=document.getElementById('c-rec-enter');
+    if(enterBtn){
+      enterBtn.textContent='Enter '+recommended.charAt(0).toUpperCase()+recommended.slice(1).toLowerCase();
+      enterBtn.style.display='block';
+      enterBtn.onclick=()=>{
+        // reset ALL council state BEFORE the flash so nothing bleeds into the room
+        councilReset();
+        if(recommended.toLowerCase()==='venus')flashTo(()=>enterVenusApproach());
+        else if(recommended.toLowerCase()==='ganymede')flashTo(()=>enterGanymede());
+      };
+    }
   }else{
     recSoon.style.display='block';
     document.getElementById('c-again').style.display='block';
@@ -2744,7 +2750,16 @@ RECOMMENDS: Venus`;
 window.councilReset=function(){
   document.getElementById('c-overlay').classList.remove('on');
   document.getElementById('c-debate').classList.remove('on');
-  document.getElementById('c-recommendation').classList.remove('on');
+  const recEl=document.getElementById('c-recommendation');
+  recEl.classList.remove('on');recEl.style.display='none';
+  const enterBtn=document.getElementById('c-rec-enter');
+  if(enterBtn){enterBtn.style.display='none';enterBtn.onclick=null;enterBtn.textContent='enter';}
+  const recSoon=document.getElementById('c-rec-soon');
+  if(recSoon)recSoon.style.display='none';
+  const againBtn=document.getElementById('c-again');
+  if(againBtn)againBtn.style.display='none';
+  const linesEl=document.getElementById('c-lines');
+  if(linesEl)linesEl.innerHTML='';
   const cw=document.getElementById('foyer-council');
   if(cw){const inp=document.getElementById('fc-inp');if(inp)inp.value='';cw.style.transition='opacity .8s';cw.style.opacity='1';cw.style.pointerEvents='all';}
   cBusy=false;
