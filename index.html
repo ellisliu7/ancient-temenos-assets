@@ -343,7 +343,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 50%{opacity:1;}}
 
 /* coming-soon label */
-.altar-soon-label{position:absolute;bottom:22%;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:7px;letter-spacing:.4em;color:rgba(196,158,72,0.4);text-transform:uppercase;opacity:0;transition:opacity 1s ease;pointer-events:none;white-space:nowrap;z-index:6;}
+.altar-soon-label{position:absolute;bottom:22%;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:6px;letter-spacing:.45em;color:rgba(196,158,72,0.25);text-transform:uppercase;opacity:0;transition:opacity 1.4s ease;pointer-events:none;white-space:nowrap;z-index:6;}
 .al-soon{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.4em;color:rgba(196,158,72,0.22);text-transform:uppercase;margin-top:.25rem;}
 
 @media(max-width:768px){
@@ -379,7 +379,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #va-haze{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 80% 80% at 50% 50%,transparent 60%,rgba(2,1,1,0.18) 100%),linear-gradient(to bottom,rgba(2,1,1,0.18) 0%,transparent 15%,transparent 72%,rgba(2,1,1,0.92) 100%);} /* bottom fade covers watermark */
 #va-scroll-hint{position:absolute;bottom:16%;left:50%;transform:translateX(-50%);z-index:10;text-align:center;pointer-events:none;transition:opacity 1.2s ease;}
 #va-scroll-hint span{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(15px,1.5vw,18px);color:rgba(238,220,168,0.78);letter-spacing:.18em;text-shadow:0 2px 24px rgba(0,0,0,0.9);animation:vaTextPulse 3.8s ease-in-out infinite;}
-.va-hint-chev{animation:vaBreathe 2.2s ease-in-out infinite;display:block;margin-top:.6rem;font-size:28px;color:rgba(196,158,72,0.9);}
+.va-hint-chev{animation:vaBreathe 2.2s ease-in-out infinite;display:block;margin-top:.6rem;font-size:28px;color:rgba(196,158,72,0.88);letter-spacing:0;}
 @keyframes vaBreathe{0%,100%{opacity:.55;transform:translateY(0);}50%{opacity:1;transform:translateY(8px);}}
 @keyframes vaTextPulse{0%,100%{opacity:.65;}60%{opacity:.92;}}
 #va-scroll-hint.gone{opacity:0;}
@@ -574,7 +574,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 
   <!-- Center altars: Persephone + Psyche (coming soon) -->
   <div class="foyer-altar" id="altar-persephone"
-    onmouseenter="document.getElementById('ps-soon').style.opacity='1'" onmouseleave="document.getElementById('ps-soon').style.opacity='0'"
+    onmouseenter="document.getElementById('ps-soon').style.opacity='0.28'" onmouseleave="document.getElementById('ps-soon').style.opacity='0'"
     onclick="foyerComingSoon('Persephone')">
     <div class="altar-glow-layer" id="persephone-glow-layer"></div>
     <div class="altar-label" id="persephone-label" style="opacity:0;transition:opacity 1.5s ease;">
@@ -585,7 +585,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   </div>
 
   <div class="foyer-altar" id="altar-psyche"
-    onmouseenter="document.getElementById('py-soon').style.opacity='1'" onmouseleave="document.getElementById('py-soon').style.opacity='0'"
+    onmouseenter="document.getElementById('py-soon').style.opacity='0.28'" onmouseleave="document.getElementById('py-soon').style.opacity='0'"
     onclick="foyerComingSoon('Psyche')">
     <div class="altar-glow-layer" id="psyche-glow-layer"></div>
     <div class="altar-label" id="psyche-label" style="opacity:0;transition:opacity 1.5s ease;">
@@ -628,7 +628,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     </video>
   </div>
   <div id="va-haze"></div>
-  <div id="va-scroll-hint"><span>Come closer.</span><span id="va-hint-secondary" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:rgba(238,220,168,0.82);display:block;margin-top:.6rem;opacity:1;transition:opacity 2s ease;">scroll to approach</span><span class="va-hint-chev">⌄</span></div>
+  <div id="va-scroll-hint"><span>Come closer.</span><span id="va-hint-secondary" style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.5em;text-transform:uppercase;color:rgba(238,220,168,0.82);display:block;margin-top:.6rem;opacity:1;font-size:9px;transition:opacity 2s ease;">scroll to approach</span><span class="va-hint-chev">⌄</span></div>
   <div id="va-oracle-glass"></div>
   <!-- Venus conversation glass — rises within the corridor at arrival -->
   <div id="va-glass">
@@ -649,7 +649,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
       </div>
       <div id="va-input-wrap">
         <input id="va-qi" type="text" placeholder="Speak what you carry…" autocomplete="off" spellcheck="false"/>
-        <button id="va-qb" onclick="sendVenusNew()" style="background:transparent;border:none;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:rgba(196,158,72,0.55);font-size:18px;transition:color .4s ease,text-shadow .4s ease;" onmouseover="this.style.color='rgba(196,158,72,0.95)';this.style.textShadow='0 0 12px rgba(196,158,72,0.4)'" onmouseout="this.style.color='rgba(196,158,72,0.55)';this.style.textShadow='none'">✦</button>
+        <button id="va-qb" onclick="sendVenusNew()" style="background:transparent;border:none;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:rgba(196,158,72,0.5);font-size:17px;transition:color .5s ease,text-shadow .5s ease;" onmouseover="this.style.color='rgba(196,158,72,0.9)';this.style.textShadow='0 0 14px rgba(196,158,72,0.35)'" onmouseout="this.style.color='rgba(196,158,72,0.5)';this.style.textShadow='none'">✦</button>
       </div>
       <p class="thinking" id="va-thinking"></p>
     </div>
