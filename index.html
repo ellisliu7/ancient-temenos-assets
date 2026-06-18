@@ -374,23 +374,34 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 /* == VENUS — scroll-scrub approach engine == */
 #venusApproach{position:fixed;inset:0;background:#000;overflow:hidden;}
 #va-corridor-bg{position:absolute;inset:0;z-index:0;}
-#va-corridor-bg video{width:100%;height:100%;object-fit:cover;display:block;}
-#va-haze{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 80% 80% at 50% 50%,transparent 60%,rgba(2,1,1,0.18) 100%),linear-gradient(to bottom,rgba(2,1,1,0.12) 0%,transparent 15%,transparent 80%,rgba(2,1,1,0.28) 100%);}
-#va-scroll-hint{position:absolute;bottom:7%;left:50%;transform:translateX(-50%);z-index:10;text-align:center;pointer-events:none;transition:opacity 1.2s ease;}
-#va-scroll-hint span{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(12px,1.2vw,15px);color:rgba(238,220,168,0.35);letter-spacing:.12em;}
+#va-corridor-bg video{width:100%;height:100%;object-fit:cover;object-position:center 0%;display:block;} /* shifted up to hide bottom watermark */
+#va-haze{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 80% 80% at 50% 50%,transparent 60%,rgba(2,1,1,0.18) 100%),linear-gradient(to bottom,rgba(2,1,1,0.18) 0%,transparent 15%,transparent 72%,rgba(2,1,1,0.92) 100%);} /* bottom fade covers watermark */
+#va-scroll-hint{position:absolute;bottom:16%;left:50%;transform:translateX(-50%);z-index:10;text-align:center;pointer-events:none;transition:opacity 1.2s ease;}
+#va-scroll-hint span{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.3vw,16px);color:rgba(238,220,168,0.65);letter-spacing:.14em;text-shadow:0 0 18px rgba(2,1,1,0.8);}
 .va-hint-chev{animation:vaBreathe 2.2s ease-in-out infinite;display:block;margin-top:.4rem;}
 @keyframes vaBreathe{0%,100%{opacity:.2;transform:translateY(0);}50%{opacity:.5;transform:translateY(4px);}}
 #va-scroll-hint.gone{opacity:0;}
 #va-oracle-glass{position:absolute;inset:0;z-index:8;background:rgba(3,2,1,0);pointer-events:none;transition:background 1.8s ease;}
 #va-oracle-glass.risen{background:rgba(3,2,1,0.72);}
-#va-glass{position:fixed;bottom:5%;left:50%;transform:translateX(-50%) translateY(10px);width:min(520px,90vw);z-index:12;padding:2.4rem 2rem 1.5rem;background:linear-gradient(to bottom,rgba(28,10,18,0.22),rgba(12,4,8,0.32));backdrop-filter:blur(16px) saturate(1.15);-webkit-backdrop-filter:blur(16px) saturate(1.15);border:.5px solid rgba(196,100,120,0.08);border-radius:9px;box-shadow:0 18px 55px rgba(0,0,0,0.42);opacity:0;transition:opacity 2.2s ease,transform 2.2s ease;pointer-events:none;max-height:72vh;overflow-y:auto;}
+#va-glass{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(6px);width:min(560px,92vw);z-index:12;padding:2rem 2rem 3rem;background:linear-gradient(to bottom,transparent,rgba(2,1,1,0.82) 28%,rgba(2,1,1,0.92) 100%);backdrop-filter:none;border:none;border-radius:0;box-shadow:none;opacity:0;transition:opacity 2.4s ease,transform 2.4s ease;pointer-events:none;max-height:80vh;overflow-y:auto;}
 #va-glass::-webkit-scrollbar{width:0;}
 #va-glass.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:all;}
+/* Inside Venus corridor, cards are plain type — no box, no borders */
+#va-vthread .vcard{background:none;backdrop-filter:none;border:none;border-radius:0;padding:.2rem 0;box-shadow:none;}
+#va-vthread .vcard::after{display:none;}
+#va-vthread .vcard .vc-corner{display:none;}
+#va-vthread .vc-p{display:none;} /* hide principle label — feels like a category */
+#va-vthread .vc-k{border-left:none;padding:.2rem 0;color:rgba(238,220,168,0.28);font-size:13px;margin-bottom:.6rem;}
+#va-vthread .vc-m{font-size:clamp(17px,1.7vw,20px);color:rgba(238,220,168,0.88);line-height:1.85;margin-bottom:.6rem;}
+#va-vthread .vc-q{font-size:clamp(15px,1.5vw,18px);color:rgba(238,220,168,0.52);line-height:1.75;font-style:italic;}
+#va-vthread .msg-v .who{font-size:7px;letter-spacing:.4em;color:rgba(196,158,72,0.22);margin-bottom:.6rem;}
+#va-vthread .msg-user .bub{background:transparent;border:none;backdrop-filter:none;color:rgba(238,220,168,0.45);font-style:italic;padding:.2rem 0;border-radius:0;}
+#va-vthread .msg-user .who{color:rgba(196,158,72,0.18);}
 #va-conv{display:flex;flex-direction:column;gap:1.4rem;}
 #va-invitation{text-align:center;padding:0 0 .8rem;opacity:0;transition:opacity 1.8s ease;}
 #va-invitation.show{opacity:1;}
 #va-inv-line1{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.4em;text-transform:uppercase;color:rgba(196,158,72,0.28);margin:0 0 .8rem;}
-#va-inv-line2{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(17px,1.8vw,22px);color:rgba(238,220,168,0.6);line-height:1.7;margin:0;letter-spacing:.04em;}
+#va-inv-line2{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,1.9vw,24px);color:rgba(238,220,168,0.72);line-height:1.7;margin:0;letter-spacing:.04em;}
 #va-vthread{display:flex;flex-direction:column;gap:1.2rem;}
 #va-input-wrap{display:flex;align-items:center;gap:.6rem;border-top:.5px solid rgba(196,158,72,0.08);padding-top:1.2rem;opacity:0;transition:opacity 1.4s ease;}
 #va-input-wrap.show{opacity:1;}
@@ -617,10 +628,13 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
         <p id="va-inv-line2">She has been waiting for you.</p>
       </div>
       <div id="va-vthread"></div>
-      <div class="v-closing" id="va-closing-new">
-        <p class="vc-closing-label">She has seen you</p>
-        <p class="vc-closing-text" id="va-closingText">What was received here is yours to carry forward.</p>
-        <button class="vc-grimoire-btn" onclick="openGrimoire()">✦ Seal this into my Grimoire ✦</button>
+      <div id="va-closing-new">
+        <p id="va-closing-line" style="font-family:'Cormorant',serif;font-style:italic;font-size:clamp(18px,1.8vw,22px);color:rgba(238,220,168,0.72);line-height:1.9;text-align:center;margin:0 0 2.4rem;letter-spacing:.03em;opacity:0;transition:opacity 2s ease;">You already know what to do with this.</p>
+        <div id="va-closing-actions" style="display:flex;gap:2.4rem;justify-content:center;align-items:center;opacity:0;transition:opacity 1.6s ease;">
+          <button onclick="openGrimoire()" style="background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.4em;color:rgba(196,158,72,0.45);text-transform:uppercase;transition:color .4s;padding:.4rem 0;">✦ Seal this</button>
+          <span style="color:rgba(196,158,72,0.18);font-size:10px;">·</span>
+          <button onclick="flashTo(()=>{showScreen('foyer');councilReset();})" style="background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.4em;color:rgba(196,158,72,0.32);text-transform:uppercase;transition:color .4s;padding:.4rem 0;">Return</button>
+        </div>
       </div>
       <div id="va-input-wrap">
         <input id="va-qi" type="text" placeholder="Speak what you carry…" autocomplete="off" spellcheck="false"/>
@@ -1217,7 +1231,7 @@ function vaOnTouchStart(e){if(!vaScreenActive()||vaScrub.arrived)return;vaTouchY
 function vaOnTouchMove(e){if(!vaScreenActive()||vaScrub.arrived||vaTouchY===null)return;e.preventDefault();const y=e.touches[0].clientY;vaScrubBy((vaTouchY-y)*2.4);vaTouchY=y;}
 
 function vaScrubBy(px){
-  const k=vaScrub.dur>0?vaScrub.dur/3600:0.006;
+  const k=vaScrub.dur>0?vaScrub.dur/1800:0.003; // slower scroll = longer ceremony
   vaScrub.target=Math.max(0,Math.min(vaScrub.dur,vaScrub.target+px*k));
   if(!vaScrub.raf&&!vaScrub.arrived&&vaScreenActive())vaScrub.raf=requestAnimationFrame(vaScrubLoop);
 }
@@ -1278,7 +1292,7 @@ function enterVenusApproach(){
   const vg=document.getElementById('va-glass');if(vg){vg.classList.remove('show');}
   venusConvOpen=false;vHistory=[];venusOracleOpened=false;
   const vth=document.getElementById('va-vthread');if(vth)vth.innerHTML='';
-  const vcl=document.getElementById('va-closing-new');if(vcl)vcl.classList.remove('visible');
+  const vcl=document.getElementById('va-closing-new');if(vcl){vcl.style.display='none';const cl=document.getElementById('va-closing-line');if(cl)cl.style.opacity='0';const ca=document.getElementById('va-closing-actions');if(ca)ca.style.opacity='0';}
   const vinv=document.getElementById('va-invitation');if(vinv)vinv.classList.remove('show');
   const vinp=document.getElementById('va-input-wrap');if(vinp)vinp.classList.remove('show');
 }
@@ -1325,9 +1339,15 @@ function vaAddUserMsg(text){
 function vaMaybeShowClosing(){
   if(vHistory.filter(m=>m.role==='user').length>=2){
     const c=document.getElementById('va-closing-new');
-    if(c&&!c.classList.contains('visible')){
-      c.classList.add('visible');
-      const vg=document.getElementById('va-glass');if(vg)setTimeout(()=>vg.scrollTop=vg.scrollHeight,300);
+    if(c&&c.style.display!=='block'){
+      c.style.display='block';
+      const vg=document.getElementById('va-glass');if(vg)setTimeout(()=>vg.scrollTop=vg.scrollHeight,400);
+      // Closing line fades in after a breath
+      const line=document.getElementById('va-closing-line');
+      const acts=document.getElementById('va-closing-actions');
+      setTimeout(()=>{if(line)line.style.opacity='1';},800);
+      // Actions appear after the line has settled
+      setTimeout(()=>{if(acts)acts.style.opacity='1';},3200);
     }
   }
 }
