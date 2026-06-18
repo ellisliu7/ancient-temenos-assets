@@ -2650,24 +2650,33 @@ const _mock=new URLSearchParams(window.location.search).get('mock');
   document.getElementById('c-again').style.display='none';
 
   // single API call - debate + recommendation
-  const sys=`You are writing a short, sharp debate between four archetypes in Ancient Temenos. They are deciding which chamber this person needs most.
+  const sys=`You are writing a real-time debate between four archetypes in Ancient Temenos. They are deciding which chamber this person needs most right now.
 
 The four archetypes:
-- Venus: poetic, warm, Paulo Coelho register. Sees love and beauty and what the heart needs.
-- Persephone: magnetic, mysterious. Sees what is hidden and what needs to transform.
-- Psyche: light, playful. Sees what has been forgotten or needs to feel lighter.
-- Ganymede: grounded, warm like David Ghiyam. Sees what needs to be built or acted on.
+- Venus: poetic, warm. Sees love, beauty, receiving, self-worth, softness, the heart.
+- Persephone: magnetic, precise. Sees what is hidden, what needs to end, what is underneath.
+- Psyche: light, wondering. Sees what has been forgotten, what needs to feel lighter.
+- Ganymede: grounded, warm. Sees what needs to be built, decided, or acted on.
 
 Rules:
-- Maximum 4 lines total. Each line is one short sentence, 8 words max.
-- They react to each other — one voice responds to the previous. Not four separate answers.
-- Long pauses between voices. This is a council, not a debate.
-- End with ONE recommendation: Venus or Ganymede only (the two live chambers).
+- Exactly 4 lines. All four voices must speak, one line each, 8 words max per line.
+- They react to each other — each voice responds to the previous speaker.
+- Format each line as: Speaker: [line]
+- End with RECOMMENDS: Venus or Ganymede (the two live chambers).
 - Persephone and Psyche may speak but cannot be recommended.
-- Format EXACTLY like this, no extra text, no preamble:
+- No preamble, no extra text, no punctuation after the speaker name except a colon.
+
+ROUTING GUIDE — use this to choose:
+Recommend VENUS when the person speaks of: love, receiving, self-worth, beauty, softness, rest, identity, body, feeling seen, permission, surrender, relationships, longing, self-abandonment, grief, femininity, creativity, desire, heartbreak.
+Recommend GANYMEDE when the person speaks of: building, action, a project, a decision, structure, execution, next steps, momentum, discipline, work, career, a goal, what to do next, making something real.
+When in doubt, ask: does this person need to FEEL something or DO something? Feel → Venus. Do → Ganymede.
+
+Format EXACTLY — no extra text, no preamble:
 Venus: [line]
+Persephone: [line]
+Psyche: [line]
 Ganymede: [line]
-RECOMMENDS: [Venus/Ganymede]`;
+RECOMMENDS: [Venus or Ganymede]`;
 
   let fullText='';
   try{
@@ -2730,17 +2739,12 @@ RECOMMENDS: Venus`;
 
   if(isLive){
     recSoon.style.display='none';
-    const enterBtn=document.getElementById('c-rec-enter');
-    if(enterBtn){
-      enterBtn.textContent='Enter '+recommended.charAt(0).toUpperCase()+recommended.slice(1).toLowerCase();
-      enterBtn.style.display='block';
-      enterBtn.onclick=()=>{
-        // reset ALL council state BEFORE the flash so nothing bleeds into the room
-        councilReset();
-        if(recommended.toLowerCase()==='venus')flashTo(()=>enterVenusApproach());
-        else if(recommended.toLowerCase()==='ganymede')flashTo(()=>enterGanymede());
-      };
-    }
+    // recommendation lands for 2.8s, then council fully resets BEFORE the flash
+    await new Promise(r=>setTimeout(r,2800));
+    councilReset();
+    await new Promise(r=>setTimeout(r,120));
+    if(recommended.toLowerCase()==='venus')flashTo(()=>enterVenusApproach());
+    else if(recommended.toLowerCase()==='ganymede')flashTo(()=>enterGanymede());
   }else{
     recSoon.style.display='block';
     document.getElementById('c-again').style.display='block';
@@ -2758,7 +2762,7 @@ window.councilReset=function(){
   if(recSoon)recSoon.style.display='none';
   const againBtn=document.getElementById('c-again');
   if(againBtn)againBtn.style.display='none';
-  const linesEl=document.getElementById('c-lines');
+  const linesEl=document.getElementById('c-debate-lines');
   if(linesEl)linesEl.innerHTML='';
   const cw=document.getElementById('foyer-council');
   if(cw){const inp=document.getElementById('fc-inp');if(inp)inp.value='';cw.style.transition='opacity .8s';cw.style.opacity='1';cw.style.pointerEvents='all';}
