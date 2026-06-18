@@ -261,7 +261,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .gr-divider{display:flex;align-items:center;gap:12px;}
 .gr-div-l{flex:1;height:.5px;background:rgba(196,158,72,0.12);}
 .gr-div-g{width:5px;height:5px;background:rgba(196,158,72,0.3);transform:rotate(45deg);}
-.gr-section-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.45em;color:rgba(196,158,72,0.38);text-transform:uppercase;margin-bottom:.9rem;}
+.gr-section-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.45em;color:rgba(196,158,72,0.55);text-transform:uppercase;margin-bottom:.9rem;}
 .gr-section-body{font-family:'Cormorant Garamond',serif;font-size:17px;color:rgba(238,220,168,0.65);line-height:1.85;white-space:pre-line;}
 .gr-invocation{font-family:'Cormorant',serif;font-style:italic;font-size:19px;color:rgba(196,158,72,0.6);line-height:1.9;text-align:center;padding:1.5rem;border:.5px solid rgba(196,158,72,0.12);background:rgba(196,158,72,0.02);}
 .gr-loading{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:rgba(196,158,72,0.3);text-align:center;padding:2rem 0;}
@@ -343,6 +343,8 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 50%{opacity:1;}}
 
 /* coming-soon label */
+#altar-persephone::after,#altar-psyche::after{content:'Not yet opened';position:absolute;bottom:22%;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:7px;letter-spacing:.4em;color:rgba(196,158,72,0.32);text-transform:uppercase;opacity:0;transition:opacity 1s ease;pointer-events:none;white-space:nowrap;}
+#altar-persephone:hover::after,#altar-psyche:hover::after{opacity:1;}
 .al-soon{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.4em;color:rgba(196,158,72,0.22);text-transform:uppercase;margin-top:.25rem;}
 
 @media(max-width:768px){
@@ -377,13 +379,14 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #va-corridor-bg video{width:100%;height:100%;object-fit:cover;object-position:center 0%;display:block;} /* shifted up to hide bottom watermark */
 #va-haze{position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse 80% 80% at 50% 50%,transparent 60%,rgba(2,1,1,0.18) 100%),linear-gradient(to bottom,rgba(2,1,1,0.18) 0%,transparent 15%,transparent 72%,rgba(2,1,1,0.92) 100%);} /* bottom fade covers watermark */
 #va-scroll-hint{position:absolute;bottom:16%;left:50%;transform:translateX(-50%);z-index:10;text-align:center;pointer-events:none;transition:opacity 1.2s ease;}
-#va-scroll-hint span{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(15px,1.5vw,18px);color:rgba(238,220,168,0.78);letter-spacing:.18em;text-shadow:0 2px 24px rgba(0,0,0,0.9);}
+#va-scroll-hint span{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(15px,1.5vw,18px);color:rgba(238,220,168,0.78);letter-spacing:.18em;text-shadow:0 2px 24px rgba(0,0,0,0.9);animation:vaTextPulse 3.8s ease-in-out infinite;}
 .va-hint-chev{animation:vaBreathe 2.2s ease-in-out infinite;display:block;margin-top:.4rem;}
-@keyframes vaBreathe{0%,100%{opacity:.2;transform:translateY(0);}50%{opacity:.5;transform:translateY(4px);}}
+@keyframes vaBreathe{0%,100%{opacity:.25;transform:translateY(0);}50%{opacity:.6;transform:translateY(5px);}}
+@keyframes vaTextPulse{0%,100%{opacity:.65;}60%{opacity:.92;}}
 #va-scroll-hint.gone{opacity:0;}
 #va-oracle-glass{position:absolute;inset:0;z-index:8;background:rgba(3,2,1,0);pointer-events:none;transition:background 1.8s ease;}
 #va-oracle-glass.risen{background:rgba(3,2,1,0.72);}
-#va-glass{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(6px);width:min(560px,92vw);z-index:12;padding:2rem 2rem 3rem;background:linear-gradient(to bottom,transparent,rgba(2,1,1,0.82) 28%,rgba(2,1,1,0.92) 100%);backdrop-filter:none;border:none;border-radius:0;box-shadow:none;opacity:0;transition:opacity 2.4s ease,transform 2.4s ease;pointer-events:none;max-height:80vh;overflow-y:auto;}
+#va-glass{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(6px);width:min(560px,92vw);z-index:12;padding:2rem 2rem 3rem;background:linear-gradient(to bottom,transparent,rgba(8,4,2,0.65) 22%,rgba(6,3,1,0.80) 100%);backdrop-filter:none;border:none;border-radius:0;box-shadow:none;opacity:0;transition:opacity 2.4s ease,transform 2.4s ease;pointer-events:none;max-height:80vh;overflow-y:auto;}
 #va-glass::-webkit-scrollbar{width:0;}
 #va-glass.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:all;}
 /* Inside Venus corridor, cards are plain type — no box, no borders */
@@ -394,7 +397,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #va-vthread .vc-k{border-left:none;padding:.2rem 0;color:rgba(238,220,168,0.28);font-size:13px;margin-bottom:.6rem;}
 #va-vthread .vc-m{font-size:clamp(17px,1.7vw,20px);color:rgba(238,220,168,0.88);line-height:1.85;margin-bottom:.6rem;}
 #va-vthread .vc-q{font-size:clamp(15px,1.5vw,18px);color:rgba(238,220,168,0.52);line-height:1.75;font-style:italic;}
-.va-mirror{font-family:'Cormorant Garamond',serif;font-size:clamp(17px,1.7vw,20px);color:rgba(238,220,168,0.88);line-height:1.9;white-space:pre-line;}
+.va-mirror{font-family:'Cormorant Garamond',serif;font-size:clamp(17px,1.7vw,20px);color:rgba(238,220,168,0.88);line-height:1.9;}
 .va-kybalion{font-family:'Cormorant',serif;font-style:italic;font-size:13px;color:rgba(238,220,168,0.28);line-height:1.6;letter-spacing:.03em;}
 .va-question{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(15px,1.5vw,18px);color:rgba(238,220,168,0.52);line-height:1.8;}
 #va-vthread .msg-v .who{font-size:7px;letter-spacing:.4em;color:rgba(196,158,72,0.22);margin-bottom:.6rem;}
@@ -412,7 +415,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #va-input-wrap input::placeholder{color:rgba(196,158,72,0.28);font-style:italic;}
 #va-input-wrap button{background:transparent;border:.5px solid rgba(196,158,72,0.22);border-radius:50%;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .3s;}
 #va-input-wrap button:hover{border-color:rgba(196,158,72,0.5);}
-@keyframes vaCtaBreath{0%,100%{opacity:.38;text-shadow:0 0 0px rgba(196,158,72,0);}50%{opacity:.72;text-shadow:0 0 12px rgba(196,158,72,0.28);}}
+@keyframes vaCtaBreath{0%,100%{opacity:.55;text-shadow:0 0 4px rgba(196,158,72,0.1);}50%{opacity:.9;text-shadow:0 0 14px rgba(196,158,72,0.35);}}
 .va-cta-btn{animation:vaCtaBreath 3.2s ease-in-out infinite;}
 .va-cta-btn:hover{animation:none;opacity:1 !important;color:rgba(196,158,72,0.9) !important;text-shadow:0 0 16px rgba(196,158,72,0.4);}
 #v-approach-bg{position:fixed;inset:0;opacity:0;transition:opacity 1s ease;}
@@ -631,11 +634,12 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     <div id="va-conv">
       <div id="va-invitation">
         <p id="va-inv-line1">Ancient Temenos · Chamber of Receiving</p>
-        <p id="va-inv-line2">She has been waiting for you.</p>
+        <p id="va-inv-line2">She knew you would come.</p>
       </div>
       <div id="va-vthread"></div>
       <div id="va-closing-new">
         <p id="va-closing-line" style="font-family:'Cormorant',serif;font-style:italic;font-size:clamp(18px,1.8vw,22px);color:rgba(238,220,168,0.72);line-height:1.9;text-align:center;margin:0 0 2.4rem;letter-spacing:.03em;opacity:0;transition:opacity 2s ease;">You already know what to do with this.</p>
+        <div id="va-closing-sep" style="width:40px;height:.5px;background:rgba(196,158,72,0.22);margin:0 auto 1rem;opacity:0;transition:opacity 1.6s ease;"></div>
         <div id="va-closing-actions" style="display:flex;gap:2.4rem;justify-content:center;align-items:center;opacity:0;transition:opacity 1.6s ease;">
           <button class="va-cta-btn" onclick="openGrimoire()" style="background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.4em;color:rgba(196,158,72,0.45);text-transform:uppercase;transition:color .4s,text-shadow .4s;padding:.4rem 0;">✦ Seal this</button>
           <span style="color:rgba(196,158,72,0.18);font-size:10px;">·</span>
@@ -835,7 +839,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   <div class="gr-content">
     <div style="text-align:center;">
       <p class="gr-eyebrow">Ancient Temenos · Sacred Record</p>
-      <p class="gr-title">My 90 Day Sprint</p>
+      <p class="gr-title">What Was Revealed</p>
       <p class="gr-date" id="grDate"></p>
     </div>
     <div class="gr-divider"><div class="gr-div-l"></div><div class="gr-div-g"></div><div class="gr-div-l"></div></div>
@@ -844,7 +848,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     <div id="grInvocationSection" style="display:none;"><p class="gr-section-label">Your Closing Invocation</p><p class="gr-invocation" id="grInvocation"></p></div>
     <p class="gr-loading" id="grLoading">The Grimoire is being sealed…</p>
     <div class="gr-actions" id="grActions" style="display:none;">
-      <button class="gr-dl-btn" onclick="copyGrimoire()">Save my 90 Day Sprint</button>
+      <button class="gr-dl-btn" onclick="copyGrimoire()">Keep this</button>
       <p id="grCopyHint" style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.3em;color:rgba(196,158,72,0);transition:color .4s;">Copied to clipboard</p>
 
     </div>
@@ -1159,7 +1163,7 @@ function foyerHover(side){
     if(ca)ca.style.filter='brightness(.25) saturate(.3)';
   });
   glow.style.opacity='1';
-  poem.style.opacity='1';
+  // poem deliberately hidden — artwork speaks without labels
   // name glow
   const nameEl=document.getElementById(isV?'venus-artwork':'gany-artwork');if(!nameEl){}
   const labelName=document.querySelector('#altar-'+(isV?'venus':'ganymede')+' .al-name');
@@ -1191,8 +1195,7 @@ function foyerLeave(side){
   if(qa)qa.style.filter='brightness(.42) saturate(.5)';
   document.getElementById('venus-glow-layer').style.opacity='0';
   document.getElementById('gany-glow-layer').style.opacity='0';
-  document.getElementById('venus-poem').style.opacity='0';
-  document.getElementById('gany-poem').style.opacity='0';
+  // poems remain hidden
   // reset name glow
   ['venus','ganymede'].forEach(s=>{
     const n=document.querySelector('#altar-'+s+' .al-name');
@@ -1311,7 +1314,7 @@ function vaOpenConversation(){
   setTimeout(()=>{
     vaRenderCard({
       principle:'You have arrived.',
-      mirror:"She has been waiting — not with impatience. She exists outside of time. She simply knew you would come when you were ready.\n\nShe does not ask what is wrong. She asks what is ready to be seen.",
+      mirror:"She knew you would come when you were ready.\n\nShe does not ask what is wrong. She asks what is ready to be seen.",
       kybalion:'"The mirror does not judge what it reflects."',
       question:'What brought you here today?',
       actions:[]
@@ -1335,16 +1338,32 @@ function vaRenderCard(data){
   const kybalionText=cleanText(data.kybalion||'');
   // Build as plain paragraphs — no corners, no principle label, no separators
   card.innerHTML=`<div class="va-mirror" style="opacity:0;transition:opacity 1.8s ease;"></div>${kybalionText?`<div class="va-kybalion" style="opacity:0;transition:opacity 1.4s ease;margin-top:.6rem;">${kybalionText}</div>`:''}<div class="va-question" style="opacity:0;transition:opacity 1.4s ease;margin-top:.9rem;"></div>`;
-  card.querySelector('.va-mirror').textContent=mirrorText;
+  const mirrorEl=card.querySelector('.va-mirror');
   if(questionText)card.querySelector('.va-question').textContent=questionText;
   d.appendChild(who);d.appendChild(card);t.appendChild(d);
-  // Paragraph fade: mirror first, then kybalion, then question
-  requestAnimationFrame(()=>requestAnimationFrame(()=>{
-    card.querySelector('.va-mirror').style.opacity='1';
-    setTimeout(()=>{const k=card.querySelector('.va-kybalion');if(k)k.style.opacity='1';},1600);
-    setTimeout(()=>{const q=card.querySelector('.va-question');if(q)q.style.opacity='1';},2600);
-    setTimeout(()=>{const vg=document.getElementById('va-glass');if(vg)vg.scrollTop=vg.scrollHeight;},2800);
-  }));
+  const paras=mirrorText.split(/\n\n+/).filter(p=>p.trim());
+  if(paras.length<=1){
+    mirrorEl.textContent=mirrorText;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      mirrorEl.style.opacity='1';
+      setTimeout(()=>{const k=card.querySelector('.va-kybalion');if(k)k.style.opacity='1';},1400);
+      setTimeout(()=>{const q=card.querySelector('.va-question');if(q)q.style.opacity='1';},2200);
+      setTimeout(()=>{const vg=document.getElementById('va-glass');if(vg)vg.scrollTop=vg.scrollHeight;},2400);
+    }));
+  }else{
+    mirrorEl.style.opacity='1';
+    paras.forEach((para,i)=>{
+      const sp=document.createElement('p');
+      sp.style.cssText='opacity:0;transition:opacity 1.6s ease;margin:0 0 .9rem;';
+      sp.textContent=para;
+      mirrorEl.appendChild(sp);
+      setTimeout(()=>{sp.style.opacity='1';},i*1100);
+    });
+    const total=paras.length*1100+400;
+    setTimeout(()=>{const k=card.querySelector('.va-kybalion');if(k)k.style.opacity='1';},total);
+    setTimeout(()=>{const q=card.querySelector('.va-question');if(q)q.style.opacity='1';},total+800);
+    setTimeout(()=>{const vg=document.getElementById('va-glass');if(vg)vg.scrollTop=vg.scrollHeight;},total+1000);
+  }
 }
 
 function vaAddUserMsg(text){
@@ -1366,7 +1385,7 @@ function vaMaybeShowClosing(){
       const acts=document.getElementById('va-closing-actions');
       setTimeout(()=>{if(line)line.style.opacity='1';},800);
       // Actions appear after the line has settled
-      setTimeout(()=>{if(acts)acts.style.opacity='1';},3200);
+      setTimeout(()=>{if(acts)acts.style.opacity='1';const sep=document.getElementById('va-closing-sep');if(sep)sep.style.opacity='1';},3200);
     }
   }
 }
@@ -1526,7 +1545,7 @@ async function generateInvocation(vt,gt){
       inv.innerHTML=`
         <div style="text-align:center;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:.5px solid rgba(201,168,76,0.12);">
           <p style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:.55em;color:rgba(201,168,76,0.4);text-transform:uppercase;margin-bottom:.5rem;">Your</p>
-          <p style="font-family:'Cinzel',serif;font-size:clamp(18px,2.2vw,28px);font-weight:300;letter-spacing:.25em;color:rgba(235,220,190,0.88);text-transform:uppercase;">90 Day Sprint</p>
+          <p style="font-family:'Cinzel',serif;font-size:clamp(18px,2.2vw,28px);font-weight:300;letter-spacing:.25em;color:rgba(235,220,190,0.88);text-transform:uppercase;">Your Path Forward</p>
         </div>
         <p class="gr-section-label">My Goal</p>
         <p class="gr-section-body" style="margin-bottom:2rem;font-size:19px;color:rgba(235,220,190,0.85);font-style:italic;">${clean(p.goal)}</p>
