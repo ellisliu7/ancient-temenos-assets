@@ -2,9 +2,9 @@
 
 **Date:** 2026-06-18
 **Status:** sealed
-**Commit SHA:** ________
+**Commit SHA:** 3014ed632ec04aa67c0e6812f63503a2fd7928a4
 **Live URL at seal:** https://ellisliu7.github.io/ancient-temenos-assets/
-**Restore URL:** https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/<SHA>/index.html
+**Restore URL:** https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/3014ed632ec04aa67c0e6812f63503a2fd7928a4/index.html
 
 ---
 
