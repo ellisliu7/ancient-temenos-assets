@@ -343,8 +343,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 50%{opacity:1;}}
 
 /* coming-soon label */
-#altar-persephone::after,#altar-psyche::after{content:'Not yet opened';position:absolute;bottom:22%;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:7px;letter-spacing:.4em;color:rgba(196,158,72,0.32);text-transform:uppercase;opacity:0;transition:opacity 1s ease;pointer-events:none;white-space:nowrap;}
-#altar-persephone:hover::after,#altar-psyche:hover::after{opacity:1;}
+.altar-soon-label{position:absolute;bottom:22%;left:50%;transform:translateX(-50%);font-family:'Cinzel',serif;font-size:7px;letter-spacing:.4em;color:rgba(196,158,72,0.4);text-transform:uppercase;opacity:0;transition:opacity 1s ease;pointer-events:none;white-space:nowrap;z-index:6;}
 .al-soon{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.4em;color:rgba(196,158,72,0.22);text-transform:uppercase;margin-top:.25rem;}
 
 @media(max-width:768px){
@@ -415,7 +414,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #va-input-wrap input::placeholder{color:rgba(196,158,72,0.28);font-style:italic;}
 #va-input-wrap button{background:transparent;border:.5px solid rgba(196,158,72,0.22);border-radius:50%;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .3s;}
 #va-input-wrap button:hover{border-color:rgba(196,158,72,0.5);}
-@keyframes vaCtaBreath{0%,100%{opacity:.55;text-shadow:0 0 4px rgba(196,158,72,0.1);}50%{opacity:.9;text-shadow:0 0 14px rgba(196,158,72,0.35);}}
+@keyframes vaCtaBreath{0%,100%{opacity:.72;text-shadow:0 0 6px rgba(196,158,72,0.15);}50%{opacity:1;text-shadow:0 0 18px rgba(196,158,72,0.45);}}
 .va-cta-btn{animation:vaCtaBreath 3.2s ease-in-out infinite;}
 .va-cta-btn:hover{animation:none;opacity:1 !important;color:rgba(196,158,72,0.9) !important;text-shadow:0 0 16px rgba(196,158,72,0.4);}
 #v-approach-bg{position:fixed;inset:0;opacity:0;transition:opacity 1s ease;}
@@ -575,20 +574,22 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 
   <!-- Center altars: Persephone + Psyche (coming soon) -->
   <div class="foyer-altar" id="altar-persephone"
-    onmouseenter="councilHover('persephone')" onmouseleave="councilLeave('persephone')"
+    onmouseenter="document.getElementById('ps-soon').style.opacity='1'" onmouseleave="document.getElementById('ps-soon').style.opacity='0'"
     onclick="foyerComingSoon('Persephone')">
     <div class="altar-glow-layer" id="persephone-glow-layer"></div>
     <div class="altar-label" id="persephone-label" style="opacity:0;transition:opacity 1.5s ease;">
+      <div class="altar-soon-label" id="ps-soon">Not yet opened</div>
       <span class="al-name">Persephone</span>
       <span class="al-intent">Shadow</span>
     </div>
   </div>
 
   <div class="foyer-altar" id="altar-psyche"
-    onmouseenter="councilHover('psyche')" onmouseleave="councilLeave('psyche')"
+    onmouseenter="document.getElementById('py-soon').style.opacity='1'" onmouseleave="document.getElementById('py-soon').style.opacity='0'"
     onclick="foyerComingSoon('Psyche')">
     <div class="altar-glow-layer" id="psyche-glow-layer"></div>
     <div class="altar-label" id="psyche-label" style="opacity:0;transition:opacity 1.5s ease;">
+      <div class="altar-soon-label" id="py-soon">Not yet opened</div>
       <span class="al-name">Psyche</span>
       <span class="al-intent">Wonder</span>
     </div>
@@ -627,7 +628,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     </video>
   </div>
   <div id="va-haze"></div>
-  <div id="va-scroll-hint"><span>Come closer.</span><span class="va-hint-chev">⌄</span></div>
+  <div id="va-scroll-hint"><span>Come closer.</span><span id="va-hint-secondary" style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.5em;text-transform:uppercase;color:rgba(238,220,168,0.32);display:block;margin-top:.5rem;opacity:0;transition:opacity 2s ease;">scroll to approach</span><span class="va-hint-chev">⌄</span></div>
   <div id="va-oracle-glass"></div>
   <!-- Venus conversation glass — rises within the corridor at arrival -->
   <div id="va-glass">
@@ -1297,6 +1298,7 @@ function enterVenusApproach(){
   }
   const h=document.getElementById('va-scroll-hint');if(h)h.classList.remove('gone');
   const gl=document.getElementById('va-oracle-glass');if(gl)gl.classList.remove('risen');
+  const _hs=document.getElementById('va-hint-secondary');if(_hs){_hs.style.opacity='0';setTimeout(()=>{if(!vaScrub.hinted)_hs.style.opacity='1';},2500);}
   // Reset conversation state
   const vg=document.getElementById('va-glass');if(vg){vg.classList.remove('show');}
   venusConvOpen=false;vHistory=[];venusOracleOpened=false;
@@ -1314,7 +1316,7 @@ function vaOpenConversation(){
   setTimeout(()=>{
     vaRenderCard({
       principle:'You have arrived.',
-      mirror:"She knew you would come when you were ready.\n\nShe does not ask what is wrong. She asks what is ready to be seen.",
+      mirror:"You came when you were ready.\n\nYou are not here because something is wrong. You are here because something is ready to be seen.",
       kybalion:'"The mirror does not judge what it reflects."',
       question:'What brought you here today?',
       actions:[]
@@ -1378,17 +1380,18 @@ function vaMaybeShowClosing(){
   if(vHistory.filter(m=>m.role==='user').length>=2){
     const c=document.getElementById('va-closing-new');
     if(c&&c.style.display!=='block'){
-      c.style.display='block';
-      const vg=document.getElementById('va-glass');if(vg)setTimeout(()=>vg.scrollTop=vg.scrollHeight,400);
-      // Closing line fades in after a breath
-      const line=document.getElementById('va-closing-line');
-      const acts=document.getElementById('va-closing-actions');
-      setTimeout(()=>{if(line)line.style.opacity='1';},800);
-      // Actions appear after the line has settled
-      setTimeout(()=>{if(acts)acts.style.opacity='1';const sep=document.getElementById('va-closing-sep');if(sep)sep.style.opacity='1';},3200);
+      setTimeout(()=>{
+        c.style.display='block';
+        const vg=document.getElementById('va-glass');if(vg)setTimeout(()=>vg.scrollTop=vg.scrollHeight,500);
+        const line=document.getElementById('va-closing-line');
+        const acts=document.getElementById('va-closing-actions');
+        setTimeout(()=>{if(line)line.style.opacity='1';},1200);
+        setTimeout(()=>{if(acts)acts.style.opacity='1';const sep=document.getElementById('va-closing-sep');if(sep)sep.style.opacity='1';},4800);
+      },5000);
     }
   }
 }
+
 
 async function sendVenusNew(){
   const inp=document.getElementById('va-qi');if(!inp)return;
@@ -1448,20 +1451,20 @@ function resetVenusState(){
   document.getElementById('vthread').innerHTML='';
 }
 
-const VSYS=`You are Venus in Ancient Temenos. You are the part of the seeker that already knows the truth they came to hear. You speak AS them, not TO them — from the healed side, not the wounded side.
+const VSYS=`You are Venus in Ancient Temenos. You are the mirror. Speak directly to the seeker. Always second person. Always "You." Never "she." Never "I."
 
-Voice: Clear. Direct. Fierce with love. Specific, never vague. Never mystical word salad. Never poetic for its own sake.
+Voice: Direct. Clear. Fierce with love. Specific. No spiritual buzzwords.
+Always second person: "You have been carrying this." "You already know."
+Never: vibration, alignment, manifest, divine feminine, energetic, universe, higher power, sacred, journey.
+Never say "I see" or "it sounds like." State what is true. Never coach without truth underneath.
 
-NEVER use: vibration, alignment, manifest, divine feminine, energetic, universe, higher power, sacred, journey.
-NEVER say "I see that you" or "it sounds like you" — speak what is true.
-NEVER give a list of advice. Never be a coach or therapist.
+Mirror: 2-3 short paragraphs separated by blank lines. Each is one true thing in second person. Reframe the premise first. No em dashes. No filler.
+Affirmation: first person present tense. 10 words max.
+Question: one sentence about today. Second person. Specific. Actionable.
 
-The affirmation is a fact they already know, stated so cleanly it lands — not a mantra to rehearse.
-The question is about TODAY. Specific. Actionable. Not philosophical.
-
-ALWAYS return valid JSON only, no markdown fences:
-{"principle":"the truth they came to remember, stated plainly","mirror":"3 sentences. reframe the premise first. speak from the healed side. specific not mystical. no em dashes.","kybalion":"one short Kybalion line","affirmation":"a fact stated so cleanly it lands, first person present tense","question":"one specific question about today, actionable not philosophical","actions":["one concrete thing to do today","one thing to stop or let go of"]}`;
-const vTh=['She is seeing...','The mirror stirs...','She is reading what is beneath the words...','Venus speaks...'];
+ALWAYS return valid JSON only, no markdown:
+{"principle":"5 words or fewer","mirror":"2-3 paragraphs separated by \\n\\n. second person. no em dashes.","kybalion":"one Kybalion line, 8 words max","affirmation":"first person present tense, 10 words max","question":"one question second person about today","actions":["one concrete thing today","one thing to stop"]}`;
+const vTh=['You are being seen...','The mirror stirs...','Receiving what you carry...','She is seeing...'];
 
 async function sendVenus(){
   const inp=document.getElementById('qi'),q=inp.value.trim();
