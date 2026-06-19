@@ -2631,6 +2631,69 @@ window.sendCouncil=async function(){
   const _devp=new URLSearchParams(window.location.search);
 if(_devp.get('key')==='1'){try{localStorage.setItem('temenos_sigil_key','1');}catch(e){}}
 if(_devp.get('skip')==='ganymede'){document.addEventListener('DOMContentLoaded',()=>{setTimeout(()=>{flashTo(()=>enterGanymede());},500);});}
+// debug=ganymede — instant Ganymede UI test: skips scrub, key, API, gate
+// Use: ?debug=ganymede
+// Tests: option clicking, scroll, soft-close. No credits, no full flow.
+if(_devp.get('debug')==='ganymede'){
+  try{localStorage.setItem('temenos_sigil_key','1');}catch(e){}
+  document.addEventListener('DOMContentLoaded',()=>{
+    setTimeout(()=>{
+      flashTo(()=>{
+        showScreen('ganymedeScreen');
+        foyerActive=false;
+        gHistory=[];gExchangeCount=2;gDustParticles=[];
+        gScrub={target:8,current:8,dur:8,raf:null,arrived:true,hinted:true};
+        // Skip video scrub — go straight to arrived state
+        const gl=document.getElementById('g-glass');
+        const inv=document.getElementById('g-invitation');
+        const inpw=document.getElementById('g-input-wrap');
+        const exch=document.getElementById('g-exchange');
+        const curr=document.getElementById('g-curr-text');
+        const prev=document.getElementById('g-prev-text');
+        const opts=document.getElementById('g-options');
+        const hint=document.getElementById('g-scroll-hint');
+        const bg=document.getElementById('g-cave-bg');
+        if(bg)bg.classList.add('reveal');
+        if(hint)hint.classList.add('gone');
+        if(gl){gl.classList.remove('sunk');gl.classList.add('show');}
+        if(inv){inv.classList.add('show');inv.style.opacity='0';}
+        if(inpw)inpw.classList.add('show');
+        if(exch)exch.style.display='block';
+        // Inject a sample seeker exchange
+        if(prev){prev.style.opacity='1';prev.textContent='I keep starting things and never finishing them.';}
+        // Inject sample Ganymede response text
+        const sampleText="You are not someone who cannot finish things. You are someone who loses faith in the thing before it can prove itself to you.
+
+The gap between beginning and completion is where doubt lives. Most people fill that gap with distraction. You fill it with a new beginning.
+
+The practice is simple, which does not mean it is easy. Finish something small this week. Not the right thing. Not the important thing. Something that can be done.";
+        if(curr){
+          curr.textContent='';
+          const lines=sampleText.split('\n\n');
+          lines.forEach((line,i)=>{
+            const d=document.createElement('div');
+            d.style.cssText='opacity:0;transform:translateY(7px);transition:opacity 0.4s ease,transform 0.4s ease;margin-bottom:1.1em;';
+            d.textContent=line;
+            curr.appendChild(d);
+            setTimeout(()=>{d.style.opacity='1';d.style.transform='translateY(0)';if(gl)gl.scrollTop=gl.scrollHeight;},100+i*150);
+          });
+        }
+        // Inject sample options immediately after
+        const sampleOpts=[
+          {text:'Finish the thing closest to done'},
+          {text:'Understand why I keep abandoning'},
+          {text:'Build a structure that holds me'}
+        ];
+        setTimeout(()=>{
+          if(opts)showCandles(sampleOpts,'Choose the stone you are ready to place');
+        },600);
+        // Seed history so gExchangeCount gate works correctly
+        gHistory.push({role:'user',content:'I keep starting things and never finishing them.'});
+        gHistory.push({role:'assistant',content:JSON.stringify({reflection:sampleText,structure:'',step:'',options:sampleOpts,question:'',check_in:false})});
+      });
+    },400);
+  });
+}
 const _mock=new URLSearchParams(window.location.search).get('mock');
   if(_mock){
     if(cBusy)return;
