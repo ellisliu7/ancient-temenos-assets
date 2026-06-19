@@ -2108,8 +2108,7 @@ function showCandles(options,context){
       setTimeout(()=>{wrap.innerHTML='';wrap.style.opacity='';wrap.style.transition='';},600);
       const dots=document.getElementById('g-thinking-dots');if(dots)dots.classList.add('show');
       // Scroll glass panel into view so reply appears without manual scroll
-      const gl=document.getElementById('g-glass');
-      if(gl)setTimeout(()=>{gl.scrollTop=gl.scrollHeight;},650);
+      // scroll handled by gStream as each paragraph appears
       gBusy=false;
       const gi=document.getElementById('gi');if(gi){gi.value=opt.text||'';sendGany();}
     });
@@ -2253,7 +2252,11 @@ function gStream(el,text){
       d.textContent=ln;
       d.style.cssText='opacity:0;transform:translateY(7px);transition:opacity 3s ease,transform 3s ease;'+(i<lines.length-1?'margin-bottom:2.2em;':'');
       el.appendChild(d);
-      setTimeout(()=>{d.style.opacity='1';d.style.transform='translateY(0)';if(i===lines.length-1)setTimeout(res,3200);},600+i*2600);
+      setTimeout(()=>{
+        d.style.opacity='1';d.style.transform='translateY(0)';
+        const gl=document.getElementById('g-glass');if(gl)gl.scrollTop=gl.scrollHeight;
+        if(i===lines.length-1)setTimeout(res,3200);
+      },600+i*2600);
     });
   });
 }
