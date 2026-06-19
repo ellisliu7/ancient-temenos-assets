@@ -918,8 +918,8 @@ function showScreen(id){
   currentScreen=id;
   inCave=(id==='ganymedeScreen');
   bgC.style.display='block';
-  const showReturn=['foyer','venusApproach','venusBreath','venusOracle','ganymedeScreen'].includes(id);
-  const showTeachings=['venusApproach','venusOracle','ganymedeScreen','foyer'].includes(id);
+  const showReturn=['venusApproach','venusBreath','venusOracle','ganymedeScreen'].includes(id);
+  const showTeachings=false;
   document.getElementById('returnBtn').style.display=showReturn?'flex':'none';
   document.getElementById('teachingsBtn').style.display=showTeachings?'flex':'none';
   if(id==='foyer')setTimeout(initFoyer,150);
