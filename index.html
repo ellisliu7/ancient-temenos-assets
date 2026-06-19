@@ -2233,7 +2233,19 @@ function ganyRitual(){
       grimBtn.style.cssText='display:block;margin:2rem auto 0;opacity:0;transition:opacity 1.8s ease;';
       grimBtn.onclick=openGrimoire;
       opts.appendChild(grimBtn);
-      setTimeout(()=>grimBtn.style.opacity='1',400);
+      // Soft continue option — visitor can go deeper rather than seal
+      const contBtn=document.createElement('button');
+      contBtn.textContent='I want to go deeper';
+      contBtn.style.cssText='display:block;margin:.8rem auto 0;background:transparent;border:none;cursor:pointer;font-family:\'Cinzel\',serif;font-size:7px;letter-spacing:.4em;color:rgba(196,158,72,0.22);text-transform:uppercase;transition:color .4s ease;padding:.4rem 0;opacity:0;transition:opacity 1.8s ease,color .4s ease;';
+      contBtn.onmouseover=()=>contBtn.style.color='rgba(196,158,72,0.55)';
+      contBtn.onmouseout=()=>contBtn.style.color='rgba(196,158,72,0.22)';
+      contBtn.onclick=()=>{
+        opts.innerHTML='';
+        const gi=document.getElementById('gi');const gb=document.getElementById('gb');
+        if(gi){gi.disabled=false;gi.focus();}if(gb)gb.disabled=false;
+      };
+      opts.appendChild(contBtn);
+      setTimeout(()=>{grimBtn.style.opacity='1';contBtn.style.opacity='1';},400);
     }
     if(glass)glass.classList.remove('sunk');
     const gi=document.getElementById('gi');const gb=document.getElementById('gb');
