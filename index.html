@@ -865,6 +865,8 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 
 <script>
 const ORACLE_ENDPOINT='https://ancient-temenos-oracle.vercel.app/api/oracle';
+// Strip em-dashes from AI output — replace with comma+space or just space
+const stripDash=(s)=>(s||'').replace(/—\s*/g,', ').replace(/\s*—/g,',').replace(/,,+/g,',').trim();
 const ORACLE_MODEL='claude-sonnet-4-6';
 const CDN='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/';
 const CDN2='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/';
@@ -1331,7 +1333,7 @@ function vaRenderCard(data){
   const who=document.createElement('span');who.className='who';who.textContent='Venus';
   const card=document.createElement('div');card.className='vcard';
   // Clean mirror text — strip leading dashes/bullets from any line
-  const cleanText=(s)=>(s||'').replace(/^[\s\-–—•]+/gm,'').trim();
+  const cleanText=(s)=>stripDash((s||'').replace(/^[\s\-–—•]+/gm,'').trim());
   const mirrorText=cleanText(data.mirror||'');
   const questionText=cleanText(data.question||'');
   const kybalionText=cleanText(data.kybalion||'');
@@ -1510,9 +1512,11 @@ function openGrimoire(){
   if(vc){document.getElementById('grVenusBody').textContent=vc.trim();document.getElementById('grVenusSection').style.display='block';}
   let gc='';gHistory.filter(m=>m.role==='assistant').forEach(m=>{try{const p=JSON.parse(m.content.replace(/```json|```/g,'').trim());if(p.reflection)gc+=p.reflection+'\n\n';}catch(e){}});
   if(gc){document.getElementById('grGanyBody').textContent=gc.trim();document.getElementById('grGanySection').style.display='block';}
-  generateInvocation(vc,gc);
+  // Detect seal context: ganymede > venus > council
+  const mode=gc?'ganymede':vc?'venus':'council';
+  generateInvocation(vc,gc,mode);
 }
-async function generateInvocation(vt,gt){
+async function generateInvocation(vt,gt,mode){
   const loading=document.getElementById('grLoading');
   const inv=document.getElementById('grInvocationSection');
   const actions=document.getElementById('grActions');
@@ -1520,11 +1524,63 @@ async function generateInvocation(vt,gt){
   if(inv)inv.style.display='none';
   if(actions)actions.style.display='none';
 
-  const clean=(s)=>(s||'').replace(/^[\s\-\u2013\u2014\u2022]+/gm,'').replace(/[\-\u2013\u2014]\s/g,' ').trim();
+  const clean=(s)=>stripDash((s||'').replace(/^[\s\-\u2013\u2014\u2022]+/gm,'').trim());
 
-  const sys=`You are generating a 90 Day Sprint for someone based on their conversation. Inspired by David Ghiyam. Personal, specific, actionable. Return ONLY valid JSON. No dashes, no bullet points, plain sentences only.
+  const SYSTEMS={
+    council:`You are sealing a brief council encounter in Ancient Temenos into a Grimoire record.
+The visitor spoke once. Four archetypes listened and responded. This is not a planning document. It is a reflection — what the visitor brought, what the council named, and one truth to carry.
+Tone: sacred, quiet, clear. No action plans. No goals. No productivity language. Plain sentences. No dashes, no bullet points, no em dashes.
+Return ONLY valid JSON, no markdown, no fences:
+{"what_was_brought":"One sentence. What the seeker arrived carrying — their question, tension, or state. Honest, not poetic.","what_the_council_saw":"2-3 sentences. What the four archetypes collectively named. Reflect the texture of their disagreement and what they converged on. Not a summary — a witnessing.","truth_to_carry":"One sentence. The single clearest truth from this encounter. Something the visitor can return to later. Not advice. A fact."}`,
 
-{"goal":"Their 90 day goal - what they are building in the next 90 days. One clear sentence. Specific. First person.","belief_to_release":"The one limiting belief or pattern that needs to be released. One honest sentence.","physical_action":"The most important concrete action they commit to. Real and doable. One sentence.","inner_practice":"The inner work or mindset shift they commit to. Specific to what emerged. One sentence.","prayer":"A short personal prayer in their voice - what they are asking for or declaring. 2-3 sentences. Warm, first person, based on what they shared."}`;
+    venus:`You are sealing a Venus oracle session in Ancient Temenos into a Grimoire record.
+The visitor received something. This seal preserves what was true in the session as a memory to return to — not a plan, not advice, not a goal. Remembrance.
+Tone: contemplative, intimate, precise. The warmth of something received and kept. No action language. No dashes, no bullet points, no em dashes.
+Return ONLY valid JSON, no markdown, no fences:
+{"what_was_carried_in":"One sentence. What the seeker arrived carrying. Honest, specific, not poetic.","what_was_reflected":"2-3 sentences. What Venus showed them. Speak from the healed side. The insight, not the instruction.","truth_to_carry":"One sentence. A received truth. Not what to do — what is true. Something they can return to."}`,
+
+    ganymede:`You are sealing a Ganymede oracle session in Ancient Temenos into a Grimoire record.
+The visitor came to build something. This seal preserves what was seen, what stands in the way, and what is being asked. It is a record of intention, not a project plan. Sacred commitment, not a task list.
+Tone: grounded, honest, structural. No motivational language. No dashes, no bullet points, no em dashes.
+Return ONLY valid JSON, no markdown, no fences:
+{"what_was_carried_in":"One sentence. What the seeker arrived carrying — the vision, the question, the thing not yet built.","what_wants_to_be_built":"1-2 sentences. The form trying to emerge. Specific to what was discussed.","what_stands_in_the_way":"1-2 sentences. The real obstacle named plainly. Pattern, belief, or constraint.","what_is_being_asked":"1-2 sentences. What this moment requires of the seeker. Not a task. A soul-level ask.","truth_to_carry":"One sentence. What remains true regardless of what happens next."}`
+  };
+
+  const INPUTS={
+    council:`Seal this council encounter.\n\nWhat the seeker brought: ${lastCouncilInput||'An open question.'}\n\nWhat the council saw:\n${document.getElementById('c-debate-lines')?.innerText||'The council listened.'}`,
+    venus:`Seal this Venus session.\n\nWhat was shared:\n${vt||'The visitor opened up.'}`,
+    ganymede:`Seal this Ganymede session.\n\nWhat was explored:\n${gt||'The visitor found direction.'}`
+  };
+
+  const RENDERS={
+    council:(p)=>`
+      <p class="gr-section-label">What You Brought</p>
+      <p class="gr-section-body" style="margin-bottom:2rem;">${clean(p.what_was_brought)}</p>
+      <p class="gr-section-label">What the Council Saw</p>
+      <p class="gr-section-body" style="margin-bottom:2rem;">${clean(p.what_the_council_saw)}</p>
+      <p class="gr-section-label">What Remains</p>
+      <p class="gr-invocation" style="text-align:left;">${clean(p.truth_to_carry)}</p>`,
+
+    venus:(p)=>`
+      <p class="gr-section-label">What Was Carried In</p>
+      <p class="gr-section-body" style="margin-bottom:2rem;">${clean(p.what_was_carried_in)}</p>
+      <p class="gr-section-label">What Was Reflected</p>
+      <p class="gr-section-body" style="margin-bottom:2rem;">${clean(p.what_was_reflected)}</p>
+      <p class="gr-section-label">A Truth to Carry</p>
+      <p class="gr-invocation" style="text-align:left;">${clean(p.truth_to_carry)}</p>`,
+
+    ganymede:(p)=>`
+      <p class="gr-section-label">What Was Carried In</p>
+      <p class="gr-section-body" style="margin-bottom:2rem;">${clean(p.what_was_carried_in)}</p>
+      <p class="gr-section-label">What Wants to Be Built</p>
+      <p class="gr-section-body" style="margin-bottom:2rem;">${clean(p.what_wants_to_be_built)}</p>
+      <p class="gr-section-label">What Stands in the Way</p>
+      <p class="gr-section-body" style="margin-bottom:2rem;">${clean(p.what_stands_in_the_way)}</p>
+      <p class="gr-section-label">What Is Being Asked</p>
+      <p class="gr-section-body" style="margin-bottom:2rem;">${clean(p.what_is_being_asked)}</p>
+      <p class="gr-section-label">What Remains</p>
+      <p class="gr-invocation" style="text-align:left;">${clean(p.truth_to_carry)}</p>`
+  };
 
   try{
     const res=await fetch(ORACLE_ENDPOINT,{
@@ -1532,44 +1588,29 @@ async function generateInvocation(vt,gt){
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
         model:ORACLE_MODEL,
-        max_tokens:800,
-        system:sys,
-        messages:[{role:'user',content:`Generate a 90 Day Sprint based on this conversation.\n\nVenus (feelings, desires, what was received):\n${vt||'The person opened up.'}\n\nGanymede (vision, clarity, grounding):\n${gt||'The person found direction.'}`}]
+        max_tokens:600,
+        system:SYSTEMS[mode]||SYSTEMS.council,
+        messages:[{role:'user',content:INPUTS[mode]||INPUTS.council}]
       })
     });
     const data=await res.json();
     const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
-    let p;try{p=JSON.parse(raw.replace(/\`\`\`json|\`\`\`/g,'').trim());}catch(e){p=null;}
-
-    if(p&&p.goal){
-      inv.innerHTML=`
-        <div style="text-align:center;margin-bottom:2rem;padding-bottom:1.5rem;border-bottom:.5px solid rgba(201,168,76,0.12);">
-          <p style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:.55em;color:rgba(201,168,76,0.4);text-transform:uppercase;margin-bottom:.5rem;">Your</p>
-          <p style="font-family:'Cinzel',serif;font-size:clamp(18px,2.2vw,28px);font-weight:300;letter-spacing:.25em;color:rgba(235,220,190,0.88);text-transform:uppercase;">Your Path Forward</p>
-        </div>
-        <p class="gr-section-label">My Goal</p>
-        <p class="gr-section-body" style="margin-bottom:2rem;font-size:19px;color:rgba(235,220,190,0.85);font-style:italic;">${clean(p.goal)}</p>
-        <p class="gr-section-label">The Belief I Am Releasing</p>
-        <p class="gr-section-body" style="margin-bottom:2rem;">${clean(p.belief_to_release)}</p>
-        <p class="gr-section-label">My Physical Commitment</p>
-        <p class="gr-section-body" style="margin-bottom:2rem;">${clean(p.physical_action)}</p>
-        <p class="gr-section-label">My Inner Practice</p>
-        <p class="gr-section-body" style="margin-bottom:2rem;">${clean(p.inner_practice)}</p>
-        <p class="gr-section-label">My Prayer</p>
-        <p class="gr-invocation" style="text-align:left;">${clean(p.prayer)}</p>`;
+    let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p=null;}
+    if(p&&Object.keys(p).length>0){
+      inv.innerHTML=RENDERS[mode]?.(p)||'<p class="gr-section-body">The session is still settling.</p>';
       inv.style.display='block';
-    } else {
-      inv.innerHTML='<p class="gr-section-label">Your Sprint</p><p class="gr-section-body">The conversation is still settling. Come back to it.</p>';
+    }else{
+      inv.innerHTML='<p class="gr-section-body">The session is still settling. Come back to it.</p>';
       inv.style.display='block';
     }
   }catch(e){
-    if(inv){inv.innerHTML='<p class="gr-section-label">Your Sprint</p><p class="gr-section-body">The conversation is still settling. Come back to it.</p>';inv.style.display='block';}
+    if(inv){inv.innerHTML='<p class="gr-section-body">The session is still settling. Come back to it.</p>';inv.style.display='block';}
   }
   if(loading)loading.style.display='none';
   if(actions)actions.style.display='flex';
 }
 function closeGrimoire(){document.getElementById('grimoireScreen').style.display='none';if(currentScreen==='venusApproach'||currentScreen==='venusOracle'){flashTo(()=>{showScreen('foyer');councilReset();});}else if(currentScreen==='ganymedeScreen'){/* stays in cave */}}
-function copyGrimoire(){const inv=document.getElementById('grInvocationSection');const text=`ANCIENT TEMENOS · 90 DAY SPRINT\n${document.getElementById('grDate').textContent}\n\n${inv?inv.innerText.replace(/\n{3,}/g,'\n\n'):''}\n\nancienttemenos.com`;navigator.clipboard.writeText(text).then(()=>{const h=document.getElementById('grCopyHint');h.style.color='rgba(196,158,72,0.65)';setTimeout(()=>h.style.color='rgba(196,158,72,0)',2500);});}
+function copyGrimoire(){const inv=document.getElementById('grInvocationSection');const text=`ANCIENT TEMENOS · Grimoire\n${document.getElementById('grDate').textContent}\n\n${inv?inv.innerText.replace(/\n{3,}/g,'\n\n'):''}\n\nancienttemenos.com`;navigator.clipboard.writeText(text).then(()=>{const h=document.getElementById('grCopyHint');h.style.color='rgba(196,158,72,0.65)';setTimeout(()=>h.style.color='rgba(196,158,72,0)',2500);});}
 function sharePortal(){navigator.clipboard.writeText('https://ellisliu7.github.io/ancient-temenos-assets/').then(()=>{const h=document.getElementById('grShareHint');h.style.color='rgba(196,158,72,0.65)';setTimeout(()=>h.style.color='rgba(196,158,72,0)',2500);});}
 
 // == VENUS SCULPTURE ==
@@ -2567,6 +2608,7 @@ document.addEventListener('DOMContentLoaded',()=>{
 const LIVE_CHAMBERS={venus:true,persephone:false,psyche:false,ganymede:true};
 const SPEAKER_CLASS={Venus:'venus',Persephone:'persephone',Psyche:'psyche',Ganymede:'ganymede'};
 let cBusy=false;
+let lastCouncilInput='';
 
 window.sendCouncil=async function(){
   // ── MOCK MODE: add ?mock=1 to URL to bypass API ──
@@ -2634,6 +2676,7 @@ const _mock=new URLSearchParams(window.location.search).get('mock');
   const q=inp.value.trim();
   if(!q)return;
   cBusy=true;
+  lastCouncilInput=q;
 
   // hide input, show overlay
   const cw=document.getElementById('foyer-council');
@@ -2709,7 +2752,7 @@ RECOMMENDS: Venus`;
     const colon=raw.indexOf(':');
     if(colon<0)continue;
     const speaker=raw.slice(0,colon).trim();
-    const text=raw.slice(colon+1).trim();
+    const text=stripDash(raw.slice(colon+1).trim());
     const cls=SPEAKER_CLASS[speaker]||'venus';
 
     const div=document.createElement('div');
