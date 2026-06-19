@@ -2109,7 +2109,7 @@ function showCandles(options,context){
       const dots=document.getElementById('g-thinking-dots');if(dots)dots.classList.add('show');
       // Scroll glass panel into view so reply appears without manual scroll
       const gl=document.getElementById('g-glass');
-      if(gl)gl.scrollIntoView({behavior:'smooth',block:'end'});
+      if(gl)setTimeout(()=>{gl.scrollTop=gl.scrollHeight;},650);
       gBusy=false;
       const gi=document.getElementById('gi');if(gi){gi.value=opt.text||'';sendGany();}
     });
@@ -2810,6 +2810,8 @@ window.councilReset=function(){
   document.getElementById('c-debate').classList.remove('on');
   const recEl=document.getElementById('c-recommendation');
   recEl.classList.remove('on');recEl.style.display='none';
+  // Remove any dynamically appended invitation lines from prior session
+  Array.from(recEl.children).forEach(ch=>{if(ch.id!=='c-rec-name'&&ch.id!=='c-rec-soon')ch.remove();});
   const enterBtn=document.getElementById('c-rec-enter');
   if(enterBtn){enterBtn.style.display='none';enterBtn.onclick=null;enterBtn.textContent='enter';}
   const recSoon=document.getElementById('c-rec-soon');
