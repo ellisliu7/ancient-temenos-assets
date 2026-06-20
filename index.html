@@ -46,7 +46,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .t-content{position:absolute;top:0;left:0;right:0;bottom:0;z-index:3;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:5vh;transition:transform 0.12s ease-out;will-change:transform;}
 .t-main-title{font-family:'Cinzel',serif;font-size:clamp(20px,4vw,56px);font-weight:300;letter-spacing:0.22em;color:rgba(240,228,200,0.92);text-align:center;text-transform:uppercase;text-shadow:0 0 60px rgba(201,168,76,0.18),0 2px 30px rgba(0,0,0,0.95);}
 .t-main-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(11px,1.2vw,16px);letter-spacing:0.22em;color:rgba(201,168,76,0.42);margin-top:1rem;text-align:center;}
-.t-enter-btn{position:absolute;bottom:9vh;left:50%;transform:translateX(-50%);background:transparent;border:.5px solid rgba(201,168,76,0.45);cursor:pointer;padding:1rem 3.2rem;font-family:'Cinzel',serif;font-size:clamp(8px,.9vw,11px);letter-spacing:0.6em;color:rgba(201,168,76,0.72);text-transform:uppercase;white-space:nowrap;z-index:4;transition:all 0.6s ease;}
+.t-enter-btn{position:absolute;bottom:9vh;left:50%;transform:translateX(-50%);background:transparent;border:.5px solid rgba(201,168,76,0.45);cursor:pointer;padding:1rem 3.2rem;font-family:'Cinzel',serif;font-size:clamp(8px,.9vw,11px);letter-spacing:0.6em;color:rgba(201,168,76,0.72);text-transform:uppercase;white-space:nowrap;z-index:4;transition:opacity 1.2s ease,border-color 0.6s ease,color 0.6s ease,background 0.6s ease,letter-spacing 0.6s ease;opacity:0;pointer-events:none;}
 .t-enter-btn:hover{border-color:rgba(201,168,76,0.85);color:rgba(240,228,200,0.95);background:rgba(201,168,76,0.04);letter-spacing:0.7em;}
 
 /* ── ENTRY CONGRAT ── */
@@ -524,10 +524,10 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     <p class="t-main-sub">A sanctuary of art, myth, memory and divinity</p>
   </div>
   <button class="t-enter-btn" onclick="enterSanctuary()">Enter the Sanctuary</button>
-  <div id="scroll-hint" style="position:absolute;bottom:3vh;left:50%;transform:translateX(-50%);z-index:4;display:flex;flex-direction:column;align-items:center;gap:.4rem;opacity:0;animation:fadeUp 3s ease 2.5s forwards;pointer-events:none;">
-    <p style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.5em;color:rgba(201,168,76,0.28);text-transform:uppercase;">or scroll</p>
+  <div id="scroll-hint" style="position:absolute;bottom:3vh;left:50%;transform:translateX(-50%);z-index:4;display:flex;flex-direction:column;align-items:center;gap:.4rem;opacity:0;animation:fadeUp 1.2s ease 0.2s forwards;pointer-events:none;">
+    <p style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.5em;color:rgba(201,168,76,0.62);text-transform:uppercase;">or scroll</p>
     <svg width="14" height="18" viewBox="0 0 14 18" fill="none" style="animation:promptBob 2.5s ease-in-out infinite;">
-      <path d="M7 2 L7 16 M2 11 L7 16 L12 11" stroke="rgba(201,168,76,0.28)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M7 2 L7 16 M2 11 L7 16 L12 11" stroke="rgba(201,168,76,0.62)" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"/>
     </svg>
   </div>
 </div>
@@ -2409,6 +2409,12 @@ window.addEventListener('load',()=>{
 
   // Start when veil is gone
   setTimeout(()=>{ animate(); }, 1200);
+
+  // Reveal button after scroll ritual has had its window
+  setTimeout(()=>{
+    const b=document.querySelector('.t-enter-btn');
+    if(b){b.style.opacity='1';b.style.pointerEvents='auto';}
+  }, 4000);
 })();
 
 
@@ -2426,7 +2432,7 @@ window.addEventListener('load',()=>{
     if(!threshold.classList.contains('active')) return;
 
     e.preventDefault();
-    scrollY += e.deltaY * 0.4;
+    scrollY += Math.abs(e.deltaY) * 0.4;
     scrollY = Math.max(0, Math.min(scrollY, 100));
 
     applyScrollZoom(scrollY);
