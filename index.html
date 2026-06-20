@@ -2823,29 +2823,7 @@ window.sendCouncil=async function(){
   const _devp=new URLSearchParams(window.location.search);
 if(_devp.get('key')==='1'){try{localStorage.setItem('temenos_sigil_key','1');}catch(e){}}
 
-// ── DEV: Key reveal shortcut ─────────────────────────────────────────────────
-// Active only on localhost OR ?testKey=1. No-op in production.
-(function(){
-  const _isDev=location.hostname==='localhost'||location.hostname==='127.0.0.1'||new URLSearchParams(location.search).get('testKey')==='1';
-  if(!_isDev)return;
-  // Inject mock session data and open the overlay
-  window.testKeyReveal=function(line){
-    // Override session line for this test
-    if(!window.vHistory)window.vHistory=[];
-    const mockAff=line||'I am allowed to receive what is already mine.';
-    // Push a mock assistant message so _venusSessionLine() finds an affirmation
-    const mockMsg=JSON.stringify({principle:'The Principle of Correspondence',mirror:'',kybalion:'',affirmation:mockAff,question:'',actions:[]});
-    window.vHistory=[{role:'user',content:'Testing.'},{role:'assistant',content:mockMsg}];
-    openKeyReveal();
-  };
-  // ?testKey=1 auto-fires after DOM ready
-  if(new URLSearchParams(location.search).get('testKey')==='1'){
-    document.addEventListener('DOMContentLoaded',()=>setTimeout(window.testKeyReveal,800));
-  }
-  console.info('[Temenos dev] Key shortcut ready. Run: testKeyReveal() — or pass a custom line: testKeyReveal("Your truth here.")');
-})();
-// ─────────────────────────────────────────────────────────────────────────────
-if(_devp.get('skip')==='ganymede'){document.addEventListener('DOMContentLoaded',()=>{setTimeout(()=>{flashTo(()=>enterGanymede());},500);});}
+// [dev shortcut: moved to bottom of body — see below]
 const _mock=new URLSearchParams(window.location.search).get('mock');
   if(_mock){
     if(cBusy)return;
@@ -3116,16 +3094,89 @@ initFoyer=function(){
 };
 
 </script>
-<div id="dev-key-btn" style="position:fixed;bottom:1.4rem;right:1.4rem;z-index:999;display:none;">
-  <button onclick="if(window.testKeyReveal){window.testKeyReveal();}else{alert('testKeyReveal not ready yet — wait a moment and try again.');}" style="background:rgba(20,14,6,0.92);border:.5px solid rgba(196,158,72,0.5);color:rgba(196,158,72,0.85);font-family:'Cinzel',serif;font-size:9px;letter-spacing:.35em;text-transform:uppercase;padding:.6rem 1.2rem;cursor:pointer;">✦ Test Key</button>
-</div>
+</script>
+<!-- ══ DEV: Key reveal test button — production no-op ══════════════════════════ -->
 <script>
 (function(){
-  var isDev=location.hostname==='localhost'||location.hostname==='127.0.0.1'||new URLSearchParams(location.search).get('testKey')==='1';
-  if(!isDev)return;
-  var btn=document.getElementById('dev-key-btn');
-  if(btn)btn.style.display='block';
+  var _p   = new URLSearchParams(location.search);
+  var _dev = location.hostname === 'localhost'   ||
+             location.hostname === '127.0.0.1'  ||
+             _p.get('testKey') === '1';
+  if (!_dev) return;
+
+  /* mock data per spec */
+  var MOCK = {
+    id          : 'SIGIL-TEST-001',
+    chamber     : 'venus',
+    date        : new Date().toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric'}),
+    line        : 'I am allowed to receive what is already mine.',
+    collectedAt : new Date().toISOString()
+  };
+
+  /* ── window.testKeyReveal: always works, no timing dependency ── */
+  window.testKeyReveal = function () {
+
+    /* 1. overlay must exist */
+    var ov = document.getElementById('keyReveal');
+    if (!ov) {
+      console.error('[Temenos dev] #keyReveal not found. Has the patch been pushed?');
+      return;
+    }
+
+    /* 2. seed vHistory so _venusSessionLine() resolves correctly */
+    if (!window.vHistory) window.vHistory = [];
+    window.vHistory = [
+      { role: 'user',      content: 'I want to understand what I carry.' },
+      { role: 'assistant', content: JSON.stringify({
+          principle   : 'The Principle of Correspondence',
+          mirror      : 'You have been carrying something that was never yours to carry.',
+          kybalion    : 'As within, so without.',
+          affirmation : MOCK.line,
+          question    : 'What would change today if you let it be received?',
+          actions     : ['Rest before you plan.', 'Put down one thing you picked up for someone else.']
+        })
+      }
+    ];
+
+    /* 3. open — identical path to real production flow */
+    openKeyReveal();
+  };
+
+  /* ── inject button (created in JS, no hidden HTML in production) ── */
+  var wrap = document.createElement('div');
+  wrap.style.cssText = 'position:fixed;bottom:1.4rem;right:1.4rem;z-index:9999;';
+
+  var btn = document.createElement('button');
+  btn.textContent = '✦ Test Key';
+  btn.style.cssText = [
+    'background:rgba(12,8,3,0.94)',
+    'border:.5px solid rgba(196,158,72,0.55)',
+    'color:rgba(196,158,72,0.88)',
+    'font-family:"Cinzel",serif',
+    'font-size:9px',
+    'letter-spacing:.38em',
+    'text-transform:uppercase',
+    'padding:.65rem 1.3rem',
+    'cursor:pointer',
+    'transition:border-color .4s,color .4s'
+  ].join(';');
+  btn.onmouseover = function () {
+    this.style.borderColor = 'rgba(214,178,104,0.85)';
+    this.style.color = '#fff';
+  };
+  btn.onmouseout = function () {
+    this.style.borderColor = 'rgba(196,158,72,0.55)';
+    this.style.color = 'rgba(196,158,72,0.88)';
+  };
+  btn.onclick = window.testKeyReveal;
+
+  wrap.appendChild(btn);
+  document.body.appendChild(wrap);
+
+  console.info('[Temenos dev] ✦ testKeyReveal() ready. Click button or call in console.');
 })();
 </script>
+<!-- ════════════════════════════════════════════════════════════════════════════ -->
 </body>
+</html>
 </html>
