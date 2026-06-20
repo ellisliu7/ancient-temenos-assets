@@ -3116,5 +3116,16 @@ initFoyer=function(){
 };
 
 </script>
+<div id="dev-key-btn" style="position:fixed;bottom:1.4rem;right:1.4rem;z-index:999;display:none;">
+  <button onclick="if(window.testKeyReveal){window.testKeyReveal();}else{alert('testKeyReveal not ready yet — wait a moment and try again.');}" style="background:rgba(20,14,6,0.92);border:.5px solid rgba(196,158,72,0.5);color:rgba(196,158,72,0.85);font-family:'Cinzel',serif;font-size:9px;letter-spacing:.35em;text-transform:uppercase;padding:.6rem 1.2rem;cursor:pointer;">✦ Test Key</button>
+</div>
+<script>
+(function(){
+  var isDev=location.hostname==='localhost'||location.hostname==='127.0.0.1'||new URLSearchParams(location.search).get('testKey')==='1';
+  if(!isDev)return;
+  var btn=document.getElementById('dev-key-btn');
+  if(btn)btn.style.display='block';
+})();
+</script>
 </body>
 </html>
