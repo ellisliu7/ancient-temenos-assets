@@ -641,6 +641,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
       <div id="va-closing-new">
         <p id="va-closing-line" style="font-family:'Cormorant',serif;font-style:italic;font-size:clamp(18px,1.8vw,22px);color:rgba(238,220,168,0.72);line-height:1.9;text-align:center;margin:0 0 2.4rem;letter-spacing:.03em;opacity:0;transition:opacity 2s ease;">You already know what to do with this.</p>
         <div id="va-closing-sep" style="width:40px;height:.5px;background:rgba(196,158,72,0.22);margin:0 auto 1rem;opacity:0;transition:opacity 1.6s ease;"></div>
+        <button id="va-key-cta" onclick="openKeyReveal()" style="display:block;margin:0 auto 1.8rem;background:transparent;border:.5px solid rgba(196,158,72,0.4);cursor:pointer;font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.42em;color:rgba(238,220,168,0.92);text-transform:uppercase;padding:.8rem 2.2rem;transition:all .6s ease;" onmouseover="this.style.borderColor='rgba(214,178,104,0.85)';this.style.color='#fff';this.style.textShadow='0 0 18px rgba(214,178,104,0.5)'" onmouseout="this.style.borderColor='rgba(196,158,72,0.4)';this.style.color='rgba(238,220,168,0.92)';this.style.textShadow='none'">✦ Receive your First Key ✦</button>
         <div id="va-closing-actions" style="display:flex;gap:2.4rem;justify-content:center;align-items:center;opacity:0;transition:opacity 1.6s ease;">
           <button class="va-cta-btn" onclick="openGrimoire()" style="background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:.38em;color:rgba(196,158,72,0.78);text-transform:uppercase;transition:color .4s,text-shadow .4s;padding:.6rem 0;">✦ Seal this into the Grimoire</button>
           <span style="color:rgba(196,158,72,0.18);font-size:10px;">·</span>
@@ -851,6 +852,69 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
       <p id="grCopyHint" style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.3em;color:rgba(196,158,72,0);transition:color .4s;">Copied to clipboard</p>
 
     </div>
+  </div>
+</div>
+
+<!-- ANCIENT TEMENOS KEY (local collectible) -->
+<div id="keyReveal">
+  <style>
+    #keyReveal{position:fixed;inset:0;z-index:95;display:none;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(ellipse 62% 52% at 50% 38%,rgba(24,16,6,0.96),rgba(3,2,1,0.986));opacity:0;transition:opacity 1.1s ease;overflow-y:auto;padding:2.4rem 1.2rem;}
+    #keyReveal.show{opacity:1;}
+    #kr-video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:transparent;z-index:0;}
+    #kr-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,rgba(3,2,1,0.45) 0%,rgba(3,2,1,0.04) 30%,rgba(3,2,1,0.10) 55%,rgba(3,2,1,0.62) 80%,rgba(3,2,1,0.93) 100%);}
+    #kr-video-fallback{position:absolute;inset:0;z-index:0;display:none;align-items:center;justify-content:center;}
+    #kr-video-fallback span{font-size:110px;color:rgba(214,178,104,0.85);text-shadow:0 0 50px rgba(214,178,104,0.65);animation:krFloat 5.5s ease-in-out infinite, krGlow 4.2s ease-in-out infinite;}
+    #keyReveal{justify-content:flex-end;padding-bottom:clamp(2.6rem,8vh,5rem);}
+    #keyReveal>.kr-eyebrow,#keyReveal>#kr-headline,#keyReveal>#kr-collect,#keyReveal>#kr-inscription,#keyReveal>#kr-after,#keyReveal>#kr-offer{position:relative;z-index:2;}
+    #kr-key-wrap{position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:1.6rem;min-height:clamp(170px,30vh,290px);}
+    #kr-key-img{width:clamp(150px,28vh,260px);height:auto;filter:drop-shadow(0 0 26px rgba(214,178,104,0.45)) drop-shadow(0 0 60px rgba(196,158,72,0.22));animation:krFloat 5.5s ease-in-out infinite, krGlow 4.2s ease-in-out infinite;will-change:transform,filter;}
+    #kr-key-img.pulse{animation:krFloat 5.5s ease-in-out infinite, krPulse 1.5s ease-out;}
+    @keyframes krFloat{0%,100%{transform:translateY(0) rotate(-1.4deg);}50%{transform:translateY(-16px) rotate(1.4deg);}}
+    @keyframes krGlow{0%,100%{filter:drop-shadow(0 0 22px rgba(214,178,104,0.35)) drop-shadow(0 0 50px rgba(196,158,72,0.2));}50%{filter:drop-shadow(0 0 34px rgba(214,178,104,0.6)) drop-shadow(0 0 82px rgba(196,158,72,0.34));}}
+    @keyframes krPulse{0%{filter:drop-shadow(0 0 22px rgba(214,178,104,0.4));}28%{filter:drop-shadow(0 0 62px rgba(255,236,190,0.92)) drop-shadow(0 0 130px rgba(214,178,104,0.72));}100%{filter:drop-shadow(0 0 26px rgba(214,178,104,0.45)) drop-shadow(0 0 60px rgba(196,158,72,0.25));}}
+    #kr-key-fallback{display:none;font-size:96px;color:rgba(214,178,104,0.85);text-shadow:0 0 44px rgba(214,178,104,0.6);animation:krFloat 5.5s ease-in-out infinite, krGlow 4.2s ease-in-out infinite;}
+    .kr-eyebrow{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:rgba(196,158,72,0.55);margin:0 0 1.2rem;}
+    #kr-headline{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,2.4vw,28px);color:rgba(238,220,168,0.9);line-height:1.7;text-align:center;margin:0 0 1.8rem;max-width:30ch;transition:opacity 1.2s ease;}
+    #kr-collect{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.42em;text-transform:uppercase;color:rgba(238,220,168,0.92);background:transparent;border:.5px solid rgba(196,158,72,0.4);padding:.85rem 2.4rem;cursor:pointer;transition:all .6s ease;}
+    #kr-collect:hover{border-color:rgba(214,178,104,0.85);color:#fff;text-shadow:0 0 18px rgba(214,178,104,0.5);letter-spacing:.48em;}
+    #kr-inscription{opacity:0;transition:opacity 1.6s ease;text-align:center;margin-top:.4rem;max-width:34ch;}
+    #kr-insc-line{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(17px,1.9vw,21px);color:rgba(238,220,168,0.82);line-height:1.7;margin:0 0 1.1rem;}
+    .kr-insc-meta{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.4em;text-transform:uppercase;color:rgba(196,158,72,0.6);margin:.25rem 0;}
+    #kr-insc-id{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.38em;text-transform:uppercase;color:rgba(196,158,72,0.4);margin-top:.7rem;}
+    #kr-after{display:none;flex-direction:column;align-items:center;gap:1rem;margin-top:2.1rem;}
+    .kr-btn{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.4em;text-transform:uppercase;background:transparent;border:none;cursor:pointer;transition:all .5s ease;padding:.5rem 0;}
+    .kr-btn.primary{color:rgba(238,220,168,0.85);border-bottom:.5px solid rgba(196,158,72,0.3);}
+    .kr-btn.primary:hover{color:#fff;text-shadow:0 0 14px rgba(214,178,104,0.4);}
+    .kr-btn.ghost{color:rgba(196,158,72,0.45);}
+    .kr-btn.ghost:hover{color:rgba(238,220,168,0.8);}
+    #kr-offer{display:none;flex-direction:column;align-items:center;gap:.5rem;margin-top:2.4rem;padding-top:1.8rem;border-top:.5px solid rgba(196,158,72,0.1);max-width:32ch;}
+    .kr-offer-line{font-family:'Cormorant',serif;font-style:italic;font-size:14px;color:rgba(196,158,72,0.5);text-align:center;line-height:1.7;margin:0 0 .6rem;}
+    #kr-eth{font-family:'Cormorant Garamond',serif;font-size:11px;color:rgba(238,220,168,0.6);word-break:break-all;cursor:pointer;text-align:center;line-height:1.5;padding:.45rem .7rem;border:.5px solid rgba(196,158,72,0.1);transition:background .3s;}
+    #kr-eth:hover{background:rgba(196,158,72,0.06);}
+    #kr-eth-hint{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.3em;text-transform:uppercase;color:rgba(196,158,72,0.3);margin-top:.4rem;}
+  </style>
+  <p class="kr-eyebrow">Ancient Temenos</p>
+  <video id="kr-video" autoplay muted loop playsinline preload="auto" crossorigin="anonymous" onerror="this.style.display='none';document.getElementById('kr-video-fallback').style.display='flex';">
+    <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Sigil_Key.mp4" type="video/mp4">
+  </video>
+  <div id="kr-scrim"></div>
+  <div id="kr-video-fallback"><span>✦</span></div>
+  <p id="kr-headline">The temple offers you its first Key.</p>
+  <button id="kr-collect" onclick="collectKey()">✦ Collect this Key</button>
+  <div id="kr-inscription">
+    <p id="kr-insc-line"></p>
+    <p class="kr-insc-meta" id="kr-insc-chamber"></p>
+    <p class="kr-insc-meta" id="kr-insc-date"></p>
+    <p id="kr-insc-id"></p>
+  </div>
+  <div id="kr-after">
+    <button class="kr-btn primary" onclick="keepKey()">Keep your Key</button>
+    <button class="kr-btn ghost" onclick="document.getElementById('keyReveal').style.display='none';flashTo(()=>{showScreen('foyer');councilReset();})">Return to the temple</button>
+  </div>
+  <div id="kr-offer">
+    <p class="kr-offer-line">This Key was given freely.<br>If the temple moved you, you may sustain it.</p>
+    <div id="kr-eth" onclick="(function(){try{navigator.clipboard.writeText('0x70F0082E7f47e3DC8cf62B2C7FA26100657297E9');document.getElementById('kr-eth-hint').textContent='Copied to clipboard';}catch(e){}})()">0x70F0082E7f47e3DC8cf62B2C7FA26100657297E9</div>
+    <p id="kr-eth-hint">Ethereum · tap to copy</p>
   </div>
 </div>
 
@@ -2306,6 +2370,110 @@ async function askPool(){
 // == WELL ==
 function openWell(){document.getElementById('wellOverlay').style.display='flex';showWS(1);}
 function closeWell(){document.getElementById('wellOverlay').style.display='none';}
+// ══ ANCIENT TEMENOS KEY — local collectible (Venus, tonight; no backend) ══
+const KEY_ASSET='https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Sigil_Key_Luminous.png';
+let _keyCurrent=null;
+function _keyDateStamp(){return new Date().toISOString().slice(0,10).replace(/-/g,'');}
+function _keyPrettyDate(){return new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});}
+function _keyShortRand(){return Math.random().toString(36).slice(2,6).toUpperCase();}
+function _venusSessionLine(){
+  try{
+    for(let i=vHistory.length-1;i>=0;i--){
+      const m=vHistory[i];
+      if(m.role==='assistant'){
+        try{const p=JSON.parse(m.content.replace(/```json|```/g,'').trim());
+          if(p.affirmation&&p.affirmation.trim())return stripDash(p.affirmation.trim());
+          if(p.principle&&p.principle.trim())return stripDash(p.principle.trim());
+        }catch(e){}
+      }
+    }
+  }catch(e){}
+  return 'You already know what to do with this.';
+}
+function _getVenusKey(){try{const a=JSON.parse(localStorage.getItem('temenos_keys')||'[]');return a.find(k=>k.chamber==='venus')||null;}catch(e){return null;}}
+function _saveVenusKey(k){try{const a=JSON.parse(localStorage.getItem('temenos_keys')||'[]');a.push(k);localStorage.setItem('temenos_keys',JSON.stringify(a));}catch(e){}}
+function _renderInscription(k){
+  const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+  set('kr-insc-line','\u201c'+k.line+'\u201d');
+  set('kr-insc-chamber','Venus \u00b7 Chamber of Receiving');
+  set('kr-insc-date',k.date);
+  set('kr-insc-id','Key '+k.id);
+}
+function openKeyReveal(){
+  const ov=document.getElementById('keyReveal');if(!ov)return;
+  const existing=_getVenusKey();
+  const collect=document.getElementById('kr-collect');
+  const after=document.getElementById('kr-after');
+  const insc=document.getElementById('kr-inscription');
+  const offer=document.getElementById('kr-offer');
+  const head=document.getElementById('kr-headline');
+  if(existing){
+    _keyCurrent=existing;_renderInscription(existing);
+    if(collect)collect.style.display='none';
+    if(after)after.style.display='flex';
+    if(insc)insc.style.opacity='1';
+    if(offer)offer.style.display='flex';
+    if(head)head.textContent='You hold this Key.';
+  }else{
+    _keyCurrent=null;
+    if(collect)collect.style.display='inline-block';
+    if(after)after.style.display='none';
+    if(insc)insc.style.opacity='0';
+    if(offer)offer.style.display='none';
+    if(head)head.textContent='The temple offers you its first Key.';
+  }
+  ov.style.display='flex';
+  const _kv=document.getElementById('kr-video');if(_kv){try{_kv.muted=true;_kv.currentTime=0;const _pp=_kv.play();if(_pp&&_pp.catch)_pp.catch(()=>{});}catch(e){}}
+  requestAnimationFrame(()=>ov.classList.add('show'));
+  if(window.trackTempleEvent)trackTempleEvent('key_reveal_opened',{chamber:'venus'});
+}
+function closeKeyReveal(){const ov=document.getElementById('keyReveal');if(!ov)return;ov.classList.remove('show');setTimeout(()=>{ov.style.display='none';},900);}
+function collectKey(){
+  if(_getVenusKey())return;
+  const k={id:'VEN-'+_keyDateStamp()+'-'+_keyShortRand(),chamber:'venus',date:_keyPrettyDate(),line:_venusSessionLine(),collectedAt:new Date().toISOString()};
+  _saveVenusKey(k);_keyCurrent=k;
+  if(window.trackTempleEvent)trackTempleEvent('key_collected',{chamber:'venus',id:k.id});
+  const img=document.getElementById('kr-key-img');if(img){img.classList.remove('pulse');void img.offsetWidth;img.classList.add('pulse');}
+  const collect=document.getElementById('kr-collect');if(collect)collect.style.display='none';
+  const head=document.getElementById('kr-headline');if(head)head.textContent='The Key is yours. It remembers this moment.';
+  _renderInscription(k);
+  setTimeout(()=>{const insc=document.getElementById('kr-inscription');if(insc)insc.style.opacity='1';},400);
+  setTimeout(()=>{const after=document.getElementById('kr-after');if(after)after.style.display='flex';},1700);
+  setTimeout(()=>{const offer=document.getElementById('kr-offer');if(offer)offer.style.display='flex';},2700);
+}
+function _krWrap(ctx,text,x,y,maxW,lh){const words=text.split(' ');let line='';let yy=y;for(let n=0;n<words.length;n++){const test=line+words[n]+' ';if(ctx.measureText(test).width>maxW&&n>0){ctx.fillText(line.trim(),x,yy);line=words[n]+' ';yy+=lh;}else{line=test;}}ctx.fillText(line.trim(),x,yy);return yy;}
+async function keepKey(){
+  const k=_keyCurrent||_getVenusKey();if(!k)return;
+  if(window.trackTempleEvent)trackTempleEvent('key_downloaded',{chamber:'venus',id:k.id});
+  const vid=document.getElementById('kr-video');
+  const draw=(withFrame)=>{
+    const W=900,H=1400;const cv=document.createElement('canvas');cv.width=W;cv.height=H;const ctx=cv.getContext('2d');
+    ctx.fillStyle='#0a0705';ctx.fillRect(0,0,W,H);
+    if(withFrame&&vid&&vid.readyState>=2&&vid.videoWidth){
+      const th=H*0.60,vw=vid.videoWidth,vh=vid.videoHeight;
+      const scale=Math.max(W/vw,th/vh),dw=vw*scale,dh=vh*scale;
+      ctx.save();ctx.beginPath();ctx.rect(0,0,W,th);ctx.clip();
+      ctx.drawImage(vid,(W-dw)/2,(th-dh)/2,dw,dh);ctx.restore();
+      const fg=ctx.createLinearGradient(0,th*0.55,0,th);fg.addColorStop(0,'rgba(10,7,5,0)');fg.addColorStop(1,'rgba(10,7,5,1)');ctx.fillStyle=fg;ctx.fillRect(0,th*0.55,W,th*0.45);
+    }
+    ctx.textAlign='center';
+    ctx.fillStyle='rgba(196,158,72,0.82)';ctx.font='26px Cinzel, serif';ctx.fillText('ANCIENT TEMENOS',W/2,H*0.66);
+    ctx.fillStyle='rgba(238,220,168,0.92)';ctx.font='italic 38px "Cormorant Garamond", serif';
+    _krWrap(ctx,'“'+k.line+'”',W/2,H*0.72,W*0.72,46);
+    ctx.fillStyle='rgba(196,158,72,0.7)';ctx.font='20px Cinzel, serif';
+    ctx.fillText('VENUS · CHAMBER OF RECEIVING',W/2,H*0.85);
+    ctx.fillText(k.date.toUpperCase(),W/2,H*0.885);
+    ctx.fillStyle='rgba(196,158,72,0.45)';ctx.font='16px Cinzel, serif';ctx.fillText('KEY '+k.id,W/2,H*0.92);
+    return cv;
+  };
+  let cv=draw(true);
+  cv.toBlob(b=>{
+    if(b)return _krDownload(b,k);
+    const cv2=draw(false);cv2.toBlob(b2=>{if(b2)_krDownload(b2,k);},'image/png');
+  },'image/png');
+}
+function _krDownload(b,k){const url=URL.createObjectURL(b);const a=document.createElement('a');a.href=url;a.download='AncientTemenos_Key_'+k.id+'.png';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),2500);}
+
 function showWS(n){document.querySelectorAll('.well-stage').forEach(s=>s.classList.remove('active'));document.getElementById('ws'+n).classList.add('active');}
 function castCoin(){const i=document.getElementById('intentionInp').value.trim();if(!i)return;showWS(3);revealSigil(i,buildSigil(i));}
 let sigilSeed=0;
@@ -2654,6 +2822,29 @@ window.sendCouncil=async function(){
   // ── MOCK MODE: add ?mock=1 to URL to bypass API ──
   const _devp=new URLSearchParams(window.location.search);
 if(_devp.get('key')==='1'){try{localStorage.setItem('temenos_sigil_key','1');}catch(e){}}
+
+// ── DEV: Key reveal shortcut ─────────────────────────────────────────────────
+// Active only on localhost OR ?testKey=1. No-op in production.
+(function(){
+  const _isDev=location.hostname==='localhost'||location.hostname==='127.0.0.1'||new URLSearchParams(location.search).get('testKey')==='1';
+  if(!_isDev)return;
+  // Inject mock session data and open the overlay
+  window.testKeyReveal=function(line){
+    // Override session line for this test
+    if(!window.vHistory)window.vHistory=[];
+    const mockAff=line||'I am allowed to receive what is already mine.';
+    // Push a mock assistant message so _venusSessionLine() finds an affirmation
+    const mockMsg=JSON.stringify({principle:'The Principle of Correspondence',mirror:'',kybalion:'',affirmation:mockAff,question:'',actions:[]});
+    window.vHistory=[{role:'user',content:'Testing.'},{role:'assistant',content:mockMsg}];
+    openKeyReveal();
+  };
+  // ?testKey=1 auto-fires after DOM ready
+  if(new URLSearchParams(location.search).get('testKey')==='1'){
+    document.addEventListener('DOMContentLoaded',()=>setTimeout(window.testKeyReveal,800));
+  }
+  console.info('[Temenos dev] Key shortcut ready. Run: testKeyReveal() — or pass a custom line: testKeyReveal("Your truth here.")');
+})();
+// ─────────────────────────────────────────────────────────────────────────────
 if(_devp.get('skip')==='ganymede'){document.addEventListener('DOMContentLoaded',()=>{setTimeout(()=>{flashTo(()=>enterGanymede());},500);});}
 const _mock=new URLSearchParams(window.location.search).get('mock');
   if(_mock){
