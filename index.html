@@ -851,6 +851,21 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
       <button class="gr-dl-btn" onclick="copyGrimoire()">Keep this</button>
       <p id="grCopyHint" style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.3em;color:rgba(196,158,72,0);transition:color .4s;">Copied to clipboard</p>
 
+      <!-- ── OFFERING ─────────────────────────────────────────────────── -->
+      <div id="gr-offering" style="width:100%;border-top:.5px solid rgba(196,158,72,0.08);margin-top:1.4rem;padding-top:2rem;display:flex;flex-direction:column;align-items:center;gap:0;">
+        <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(15px,1.5vw,18px);color:rgba(196,158,72,0.55);line-height:1.85;text-align:center;margin:0 0 1.6rem;max-width:34ch;">Places like this exist because someone, once,<br>decided they were worth keeping.</p>
+        <a href="https://buy.stripe.com/dRmfZhegNawC60V5IT5kk00" target="_blank" rel="noopener" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:.42em;text-transform:uppercase;color:rgba(238,220,168,0.7);text-decoration:none;border-bottom:.5px solid rgba(196,158,72,0.25);padding-bottom:.25rem;transition:all .5s ease;" onmouseover="this.style.color='rgba(238,220,168,0.95)';this.style.borderBottomColor='rgba(196,158,72,0.6)'" onmouseout="this.style.color='rgba(238,220,168,0.7)';this.style.borderBottomColor='rgba(196,158,72,0.25)'">Sustain the temple →</a>
+        <div id="gr-guestbook" style="margin-top:2.4rem;display:flex;flex-direction:column;align-items:center;gap:.9rem;width:100%;">
+          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:rgba(196,158,72,0.38);letter-spacing:.04em;margin:0;text-align:center;">Or leave your name. The temple will remember you.</p>
+          <div style="display:flex;gap:.7rem;align-items:center;justify-content:center;flex-wrap:wrap;">
+            <input id="gr-email" type="email" placeholder="your@email.com" autocomplete="off" spellcheck="false" style="background:rgba(20,14,6,0.4);border:.5px solid rgba(196,158,72,0.18);padding:.55rem .9rem;font-family:'Cormorant Garamond',serif;font-size:15px;color:rgba(232,216,186,0.9);outline:none;width:min(220px,52vw);text-align:center;letter-spacing:.03em;transition:border-color .6s ease;" onfocus="this.style.borderColor='rgba(196,158,72,0.45)'" onblur="this.style.borderColor='rgba(196,158,72,0.18)'" onkeydown="if(event.key==='Enter')grRemember()"/>
+            <button onclick="grRemember()" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:.38em;text-transform:uppercase;background:transparent;border:.5px solid rgba(196,158,72,0.22);color:rgba(196,158,72,0.6);padding:.55rem 1.1rem;cursor:pointer;transition:all .5s ease;white-space:nowrap;" onmouseover="this.style.borderColor='rgba(196,158,72,0.55)';this.style.color='rgba(238,220,168,0.85)'" onmouseout="this.style.borderColor='rgba(196,158,72,0.22)';this.style.color='rgba(196,158,72,0.6)'">Remember me</button>
+          </div>
+          <p id="gr-remembered" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:rgba(196,158,72,0.65);display:none;margin:0;">You are remembered.</p>
+        </div>
+      </div>
+      <!-- ── /OFFERING ──────────────────────────────────────────────────── -->
+
     </div>
   </div>
 </div>
@@ -1677,6 +1692,50 @@ Return ONLY valid JSON, no markdown, no fences:
   if(loading)loading.style.display='none';
   if(actions)actions.style.display='flex';
 }
+// ── GRIMOIRE REMEMBRANCE ────────────────────────────────────────────────────
+function _grUUID(){
+  try{
+    const ex=document.cookie.split(';').find(c=>c.trim().startsWith('temenos_id='));
+    if(ex)return ex.split('=')[1].trim();
+  }catch(e){}
+  const id='xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{
+    const r=Math.random()*16|0;return(c==='x'?r:(r&0x3|0x8)).toString(16);
+  });
+  try{document.cookie='temenos_id='+id+';max-age=31536000;path=/;SameSite=Lax';}catch(e){}
+  return id;
+}
+async function grRemember(){
+  const emailEl=document.getElementById('gr-email');
+  const btn=emailEl?emailEl.nextElementSibling:null;
+  const confirmed=document.getElementById('gr-remembered');
+  if(!emailEl)return;
+  const email=emailEl.value.trim();
+  if(!email||!/^[^@]+@[^@]+\.[^@]+$/.test(email)){
+    emailEl.style.borderColor='rgba(180,80,80,0.5)';
+    setTimeout(()=>emailEl.style.borderColor='rgba(196,158,72,0.18)',1800);
+    return;
+  }
+  if(btn)btn.disabled=true;
+  const token=_grUUID();
+  const summary={
+    date:document.getElementById('grDate')?.textContent||'',
+    chamber:currentScreen||'',
+    invocation:document.getElementById('grInvocation')?.textContent?.slice(0,300)||''
+  };
+  try{
+    await fetch('/api/remember',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({email,token,sessionSummary:summary})
+    });
+  }catch(e){/* fail silently */}
+  if(window.trackTempleEvent)trackTempleEvent('guestbook_submitted',{chamber:currentScreen});
+  emailEl.style.display='none';
+  if(btn)btn.style.display='none';
+  if(confirmed)confirmed.style.display='block';
+}
+// ── /GRIMOIRE REMEMBRANCE ────────────────────────────────────────────────────
+
 function closeGrimoire(){document.getElementById('grimoireScreen').style.display='none';if(currentScreen==='venusApproach'||currentScreen==='venusOracle'){flashTo(()=>{showScreen('foyer');councilReset();});}else if(currentScreen==='ganymedeScreen'){/* stays in cave */}}
 function copyGrimoire(){const inv=document.getElementById('grInvocationSection');const text=`ANCIENT TEMENOS · Grimoire\n${document.getElementById('grDate').textContent}\n\n${inv?inv.innerText.replace(/\n{3,}/g,'\n\n'):''}\n\nancienttemenos.com`;navigator.clipboard.writeText(text).then(()=>{const h=document.getElementById('grCopyHint');h.style.color='rgba(196,158,72,0.65)';setTimeout(()=>h.style.color='rgba(196,158,72,0)',2500);});}
 function sharePortal(){navigator.clipboard.writeText('https://ellisliu7.github.io/ancient-temenos-assets/').then(()=>{const h=document.getElementById('grShareHint');h.style.color='rgba(196,158,72,0.65)';setTimeout(()=>h.style.color='rgba(196,158,72,0)',2500);});}
@@ -2822,6 +2881,44 @@ window.sendCouncil=async function(){
   // ── MOCK MODE: add ?mock=1 to URL to bypass API ──
   const _devp=new URLSearchParams(window.location.search);
 if(_devp.get('key')==='1'){try{localStorage.setItem('temenos_sigil_key','1');}catch(e){}}
+// ── DEV: ?testGrimoire=1 — open grimoire with mock Venus data ───────────────
+(function(){
+  if(_devp.get('testGrimoire')!=='1')return;
+  window.testGrimoireOpen=function(){
+    // seed Venus session so generateInvocation has real content
+    if(!window.vHistory)window.vHistory=[];
+    window.vHistory=[
+      {role:'user',content:'I keep giving everything to people who don\u2019t ask for it and then feeling empty.'},
+      {role:'assistant',content:JSON.stringify({
+        principle:'The Principle of Polarity',
+        mirror:'You have not lost the ability to receive. You have been so committed to giving that receiving began to feel unsafe.',
+        kybalion:'Everything is dual; everything has poles.',
+        affirmation:'I am allowed to receive what is already mine.',
+        question:'What would you let yourself want today if no one was watching?',
+        actions:['Rest before you plan.','Name one thing you need that you have not asked for.']
+      })}
+    ];
+    // set venusChat so grimoire knows the mode
+    window.venusChat=window.vHistory.map(m=>m.content).join('\n');
+    // open grimoire in Venus mode
+    currentScreen='venusApproach';
+    openGrimoire();
+  };
+  document.addEventListener('DOMContentLoaded',()=>{
+    // button bottom-left (distinct from testKey button bottom-right)
+    const w=document.createElement('div');
+    w.style.cssText='position:fixed;bottom:1.4rem;left:1.4rem;z-index:9999;';
+    const b=document.createElement('button');
+    b.textContent='\u2726 Test Grimoire';
+    b.style.cssText='background:rgba(12,8,3,0.94);border:.5px solid rgba(196,158,72,0.55);color:rgba(196,158,72,0.88);font-family:"Cinzel",serif;font-size:9px;letter-spacing:.38em;text-transform:uppercase;padding:.65rem 1.3rem;cursor:pointer;transition:all .4s;';
+    b.onmouseover=function(){this.style.borderColor='rgba(214,178,104,0.85)';this.style.color='#fff';};
+    b.onmouseout=function(){this.style.borderColor='rgba(196,158,72,0.55)';this.style.color='rgba(196,158,72,0.88)';};
+    b.onclick=function(){if(window.testGrimoireOpen)window.testGrimoireOpen();else console.error('[Temenos dev] testGrimoireOpen not ready');};
+    w.appendChild(b);document.body.appendChild(w);
+    console.info('[Temenos dev] \u2726 testGrimoireOpen() ready.');
+  });
+})();
+// ── /DEV testGrimoire ────────────────────────────────────────────────────────
 
 // [dev shortcut: moved to bottom of body — see below]
 const _mock=new URLSearchParams(window.location.search).get('mock');
