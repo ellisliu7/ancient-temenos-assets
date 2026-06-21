@@ -1490,7 +1490,7 @@ async function sendVenusNew(){
     const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
     if(th)th.textContent='';
     if(btn){btn.classList.remove('loading');btn.innerHTML='<svg viewBox="0 0 14 14" fill="none" stroke="rgba(196,158,72,0.8)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>';}
-    let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p={principle:'Venus speaks',mirror:raw,kybalion:'"She is always here."',question:'What did you come to say?',actions:[]};}
+    let p;try{const start=raw.indexOf('{'),end=raw.lastIndexOf('}');const clean=start>-1&&end>start?raw.slice(start,end+1):raw;p=JSON.parse(clean);}catch(e){p={principle:'Venus speaks',mirror:raw.replace(/\{[\s\S]*\}/,'').trim()||raw,kybalion:'"She is always here."',question:'What did you come to say?',actions:[]};}
     vHistory.push({role:'assistant',content:raw});vaRenderCard(p);vaMaybeShowClosing();
   }catch(e){
     if(th)th.textContent='';
@@ -1558,7 +1558,7 @@ async function sendVenus(){
     const data=await res.json();if(data.error)throw new Error(data.error.message);
     const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
     th.textContent='';resetVBtn();
-    let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p={principle:'Venus speaks',mirror:raw,kybalion:'"The fracture is not the wound. It is the door."',question:'What would you see if you stopped looking away?',actions:[]};}
+    let p;try{const start=raw.indexOf('{'),end=raw.lastIndexOf('}');const clean=start>-1&&end>start?raw.slice(start,end+1):raw;p=JSON.parse(clean);}catch(e){p={principle:'Venus speaks',mirror:raw.replace(/\{[\s\S]*\}/,'').trim()||raw,kybalion:'"The fracture is not the wound. It is the door."',question:'What would you see if you stopped looking away?',actions:[]};}
     lastPrinciple=p.principle||lastPrinciple;lastMirror=p.mirror||lastMirror;
     vHistory.push({role:'assistant',content:raw});renderVCard(p);maybeShowVClosing();
   }catch(e){th.textContent='';resetVBtn();renderVCard({principle:'The veil',mirror:'The connection stirs but does not hold tonight. Return when you are ready.',kybalion:'"She is always here."',question:'What did you come to say?',actions:[]});}
@@ -1665,8 +1665,10 @@ Return ONLY valid JSON, no markdown, no fences:
       <p class="gr-invocation" style="text-align:left;">${clean(p.truth_to_carry)}</p>`
   };
 
+  // 25s timeout — prevents grimoire hanging indefinitely if proxy stalls
+  const _grTimeout=new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),25000));
   try{
-    const res=await fetch(ORACLE_ENDPOINT,{
+    const res=await Promise.race([fetch(ORACLE_ENDPOINT,{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
@@ -1675,10 +1677,10 @@ Return ONLY valid JSON, no markdown, no fences:
         system:SYSTEMS[mode]||SYSTEMS.council,
         messages:[{role:'user',content:INPUTS[mode]||INPUTS.council}]
       })
-    });
+    }),_grTimeout]);
     const data=await res.json();
     const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
-    let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p=null;}
+    let p;try{const s=raw.indexOf('{'),e=raw.lastIndexOf('}');const c=s>-1&&e>s?raw.slice(s,e+1):raw;p=JSON.parse(c);}catch(e){p=null;}
     if(p&&Object.keys(p).length>0){
       inv.innerHTML=RENDERS[mode]?.(p)||'<p class="gr-section-body">The session is still settling.</p>';
       inv.style.display='block';
@@ -1689,6 +1691,7 @@ Return ONLY valid JSON, no markdown, no fences:
   }catch(e){
     if(inv){inv.innerHTML='<p class="gr-section-body">The session is still settling. Come back to it.</p>';inv.style.display='block';}
   }
+  // Always reveal — grActions must show even if invocation fails
   if(loading)loading.style.display='none';
   if(actions)actions.style.display='flex';
 }
