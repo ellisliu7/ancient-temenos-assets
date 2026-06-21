@@ -1629,8 +1629,11 @@ Return ONLY valid JSON, no markdown, no fences:
 {"what_was_carried_in":"One sentence. What the seeker arrived carrying — the vision, the question, the thing not yet built.","what_wants_to_be_built":"1-2 sentences. The form trying to emerge. Specific to what was discussed.","what_stands_in_the_way":"1-2 sentences. The real obstacle named plainly. Pattern, belief, or constraint.","what_is_being_asked":"1-2 sentences. What this moment requires of the seeker. Not a task. A soul-level ask.","truth_to_carry":"One sentence. What remains true regardless of what happens next."}`
   };
 
+  // INPUTS: lazy functions so council template only evaluates when mode==='council'
+  // Prevents ReferenceError if lastCouncilInput is undefined in stale cache or edge cases
+  const _lci=(typeof lastCouncilInput!=='undefined')?lastCouncilInput:'';
   const INPUTS={
-    council:`Seal this council encounter.\n\nWhat the seeker brought: ${lastCouncilInput||'An open question.'}\n\nWhat the council saw:\n${document.getElementById('c-debate-lines')?.innerText||'The council listened.'}`,
+    council:`Seal this council encounter.\n\nWhat the seeker brought: ${_lci||'An open question.'}\n\nWhat the council saw:\n${document.getElementById('c-debate-lines')?.innerText||'The council listened.'}`,
     venus:`Seal this Venus session.\n\nWhat was shared:\n${vt||'The visitor opened up.'}`,
     ganymede:`Seal this Ganymede session.\n\nWhat was explored:\n${gt||'The visitor found direction.'}`
   };
