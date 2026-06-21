@@ -381,7 +381,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #va-scroll-hint span{display:block;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(15px,1.5vw,18px);color:rgba(238,220,168,0.78);letter-spacing:.18em;text-shadow:0 2px 24px rgba(0,0,0,0.9);animation:vaTextPulse 3.8s ease-in-out infinite;}
 .va-hint-chev{animation:vaBreathe 2.2s ease-in-out infinite;display:block;margin-top:.6rem;font-size:28px;color:rgba(196,158,72,0.88);letter-spacing:0;}
 @keyframes vaBreathe{0%,100%{opacity:.55;transform:translateY(0);}50%{opacity:1;transform:translateY(8px);}}
-@keyframes vaTextPulse{0%,100%{opacity:.65;}60%{opacity:.92;}}@keyframes vaCorridorBreathe{0%,100%{opacity:.82;}50%{opacity:1;transform:scale(1.018);}}
+@keyframes vaTextPulse{0%,100%{opacity:.65;}60%{opacity:.92;}}@keyframes vaCorridorBreathe{0%,100%{opacity:.88;}50%{opacity:1;}}
 #va-scroll-hint.gone{opacity:0;}
 #va-oracle-glass{position:absolute;inset:0;z-index:8;background:rgba(3,2,1,0);pointer-events:none;transition:background 1.8s ease;}
 #va-oracle-glass.risen{background:rgba(3,2,1,0.72);}
@@ -498,6 +498,9 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #g-ritual-line1{font-family:'Cinzel',serif;font-size:clamp(7px,.75vw,9px);letter-spacing:.65em;text-transform:uppercase;color:rgba(196,158,72,0.45);display:block;margin-bottom:2.2rem;}
 #g-ritual-line2{font-family:'Cormorant Garamond',serif;font-style:oblique 8deg;font-size:clamp(26px,3.2vw,44px);color:rgba(238,220,168,0.92);display:block;text-shadow:0 0 60px rgba(196,158,72,0.3);}
 @keyframes candleFlicker{0%{transform:scaleX(1) scaleY(1) rotate(-.5deg);}30%{transform:scaleX(.93) scaleY(1.07) rotate(.8deg);}60%{transform:scaleX(1.04) scaleY(.95) rotate(-.4deg);}80%{transform:scaleX(.97) scaleY(1.04) rotate(.3deg);}100%{transform:scaleX(1) scaleY(1) rotate(0deg);}}
+/* ── RIPPLE (dev: ?ripple=1) ─────────────────────────────────────────────── */
+#temenos-ripple{position:fixed;pointer-events:none;z-index:9999;border-radius:50%;width:100px;height:100px;margin-left:-50px;margin-top:-50px;border:.5px solid rgba(196,158,72,0.22);opacity:0;transform:scale(0);transition:none;}
+#temenos-ripple.spreading{transition:transform 1.3s cubic-bezier(0.2,0.6,0.4,1),opacity 1.3s cubic-bezier(0.2,0.6,0.4,1);transform:scale(1);opacity:0;}
 </style>
 </head>
 <body>
@@ -649,7 +652,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
         </div>
       </div>
       <div id="va-input-wrap">
-        <input id="va-qi" type="text" placeholder="What brought you here today…" autocomplete="off" spellcheck="false"/>
+        <input id="va-qi" type="text" placeholder="You are safe to speak here…" autocomplete="off" spellcheck="false"/>
         <button id="va-qb" onclick="sendVenusNew()" style="background:transparent;border:none;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:rgba(196,158,72,0.5);font-size:17px;transition:color .5s ease,text-shadow .5s ease;" onmouseover="this.style.color='rgba(196,158,72,0.9)';this.style.textShadow='0 0 14px rgba(196,158,72,0.35)'" onmouseout="this.style.color='rgba(196,158,72,0.5)';this.style.textShadow='none'">✦</button>
       </div>
       <p class="thinking" id="va-thinking"></p>
@@ -715,7 +718,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
           <div class="inp-row">
             <input class="q-i" id="qi" type="text" placeholder="Ask your question…" autocomplete="off" spellcheck="false"/>
             <button class="q-b" id="qb" onclick="sendVenus()">
-              <svg viewBox="0 0 14 14" fill="none" stroke="rgba(196,158,72,0.8)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>
+              ✦
             </button>
           </div>
         </div>
@@ -1465,28 +1468,27 @@ function vaRenderCard(data){
   const questionText=cleanText(data.question||'');
   const kybalionText=cleanText(data.kybalion||'');
   card.innerHTML='<div class="va-mirror"></div>';
-  if(kybalionText){const k=document.createElement('div');k.className='va-kybalion';k.style.cssText='opacity:0;transform:translateY(7px);transition:opacity 2.8s ease,transform 2.8s ease;margin-top:1.4rem;';k.textContent=kybalionText;card.appendChild(k);}
-  if(questionText){const q=document.createElement('div');q.className='va-question';q.style.cssText='opacity:0;transform:translateY(7px);transition:opacity 2.8s ease,transform 2.8s ease;margin-top:1.6rem;';q.textContent=questionText;card.appendChild(q);}
+  if(kybalionText){const k=document.createElement('div');k.className='va-kybalion';k.style.cssText='opacity:0;transition:opacity 3s ease;margin-top:1.6rem;';k.textContent=kybalionText;card.appendChild(k);}
+  if(questionText){const q=document.createElement('div');q.className='va-question';q.style.cssText='opacity:0;transition:opacity 3s ease;margin-top:1.8rem;';q.textContent=questionText;card.appendChild(q);}
+  // Scroll glass to bottom ONCE before revealing — so text fades in where it lives
+  const vg=document.getElementById('va-glass');
   d.appendChild(who);d.appendChild(card);t.appendChild(d);
+  if(vg)vg.scrollTop=vg.scrollHeight;
   const mirrorEl=card.querySelector('.va-mirror');
   const paras=mirrorText.split(/\n\n+/).filter(p=>p.trim());
-  // Each paragraph rises and fades — same cadence as gStream
+  // Pure opacity — no movement. Venus arrives, she does not shift.
   paras.forEach((para,i)=>{
     const sp=document.createElement('p');
-    sp.style.cssText='opacity:0;transform:translateY(7px);transition:opacity 2.8s ease,transform 2.8s ease;'+(i<paras.length-1?'margin:0 0 1.4em;':'margin:0;');
+    sp.style.cssText='opacity:0;transition:opacity 3s ease;'+(i<paras.length-1?'margin:0 0 1.6em;':'margin:0;');
     sp.textContent=para;
     mirrorEl.appendChild(sp);
-    setTimeout(()=>{sp.style.opacity='1';sp.style.transform='translateY(0)';
-      const vg=document.getElementById('va-glass');if(vg)vg.scrollTop=vg.scrollHeight;
-    },500+i*2400);
+    setTimeout(()=>{sp.style.opacity='1';},400+i*2600);
   });
-  const total=500+Math.max(0,paras.length-1)*2400+2800;
-  // Kybalion arrives after mirror settles
+  const total=400+Math.max(0,paras.length-1)*2600+3000;
   const k=card.querySelector('.va-kybalion');
-  if(k)setTimeout(()=>{k.style.opacity='1';k.style.transform='translateY(0)';const vg=document.getElementById('va-glass');if(vg)vg.scrollTop=vg.scrollHeight;},total+600);
-  // Question arrives last with room to breathe
+  if(k)setTimeout(()=>{k.style.opacity='1';},total+800);
   const q=card.querySelector('.va-question');
-  if(q)setTimeout(()=>{q.style.opacity='1';q.style.transform='translateY(0)';const vg=document.getElementById('va-glass');if(vg)vg.scrollTop=vg.scrollHeight;},total+(k?2400:600));
+  if(q)setTimeout(()=>{q.style.opacity='1';if(vg)vg.scrollTop=vg.scrollHeight;},total+(k?2800:800));
 }
 
 function vaAddUserMsg(text){
@@ -1529,17 +1531,32 @@ async function sendVenusNew(){
   vaAddUserMsg(q);
   if(btn){btn.classList.add('loading');btn.innerHTML=spinSvg('rgba(196,158,72,0.5)');}
   const th=document.getElementById('va-thinking');if(th)th.textContent=vTh[Math.floor(Math.random()*vTh.length)];
+  // ── MOCK MODE ──
+  if(['venus','all'].includes(new URLSearchParams(window.location.search).get('mock'))){
+    const mockCards=[
+      {principle:'You are allowed to want what you want.',mirror:"You have been asking everyone else's question.\n\nThe one you are actually carrying is simpler and more frightening. You already know what you want. You have known for a while. You keep waiting for it to become more reasonable before you let yourself have it.\n\nIt is already reasonable. You are allowed.",kybalion:'"What you seek is also seeking you."',question:'If no one else would be affected, what would you choose right now?',actions:['Say the true thing out loud, even just to yourself','Stop translating your need into something more acceptable']},
+      {principle:'Receiving is not weakness.',mirror:"You give easily. You receive with difficulty.\n\nThis is not generosity. It is a way of staying in control, staying above the exchange, never being in someone's debt.\n\nSoftness would ask you to let something land. To let someone see that it landed.",kybalion:'"The measure you give is the measure you allow yourself to receive."',question:'What is one thing you have been offered recently that you did not fully let in?',actions:['Let one compliment or gift land today without deflecting','Notice what tightens when you try to simply receive']},
+      {principle:'You are not behind.',mirror:"The urgency you feel is real. The timeline it is attached to is invented.\n\nSomething in you decided what the right pace looks like. Then measured every year against it. The measurement is the wound, not the reality.\n\nYou are exactly where someone who has lived your life would be.",kybalion:'"Nothing is wasted in the economy of the soul."',question:'Whose timeline have you been running on?',actions:['Write down the story of what "should have happened by now"','Ask whether you wrote that story or inherited it']}
+    ];
+    await new Promise(r=>setTimeout(r,1100));
+    if(th)th.textContent='';
+    if(btn){btn.classList.remove('loading');btn.innerHTML='✦';}
+    const idx=Math.min(vHistory.filter(m=>m.role==='user').length-1,mockCards.length-1);
+    const p=mockCards[idx];
+    vHistory.push({role:'assistant',content:JSON.stringify(p)});vaRenderCard(p);vaMaybeShowClosing();
+    return;
+  }
   try{
     const res=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:ORACLE_MODEL,max_tokens:700,system:VSYS,messages:vHistory})});
     const data=await res.json();if(data.error)throw new Error(data.error.message);
     const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
     if(th)th.textContent='';
-    if(btn){btn.classList.remove('loading');btn.innerHTML='<svg viewBox="0 0 14 14" fill="none" stroke="rgba(196,158,72,0.8)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>';}
+    if(btn){btn.classList.remove('loading');btn.innerHTML='✦';}
     let p;try{const start=raw.indexOf('{'),end=raw.lastIndexOf('}');const clean=start>-1&&end>start?raw.slice(start,end+1):raw;p=JSON.parse(clean);}catch(e){p={principle:'Venus speaks',mirror:raw.replace(/\{[\s\S]*\}/,'').trim()||raw,kybalion:'"She is always here."',question:'What did you come to say?',actions:[]};}
     vHistory.push({role:'assistant',content:raw});vaRenderCard(p);vaMaybeShowClosing();
   }catch(e){
     if(th)th.textContent='';
-    if(btn){btn.classList.remove('loading');btn.innerHTML='<svg viewBox="0 0 14 14" fill="none" stroke="rgba(196,158,72,0.8)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>';}
+    if(btn){btn.classList.remove('loading');btn.innerHTML='✦';}
     vaRenderCard({principle:'The veil',mirror:'The connection stirs but does not hold tonight. Return when you are ready.',kybalion:'"She is always here."',question:'What did you come to say?',actions:[]});
   }
 }
@@ -3554,6 +3571,31 @@ initFoyer=function(){
 
 })();
 // ── /THE ROOM THAT REMEMBERS ─────────────────────────────────────────────────
+</script>
+<!-- ── RIPPLE ─────────────────────────────────────────────────────────────── -->
+<div id="temenos-ripple"></div>
+<script>
+(function(){
+  if(!new URLSearchParams(window.location.search).has('ripple'))return;
+  if(window.matchMedia('(hover:none)').matches)return; // desktop only
+  const r=document.getElementById('temenos-ripple');
+  if(!r)return;
+  let active=false;
+  document.addEventListener('click',function(e){
+    // Skip clicks on inputs, buttons, links
+    const tag=e.target.tagName;
+    if(tag==='INPUT'||tag==='BUTTON'||tag==='A'||tag==='TEXTAREA')return;
+    r.style.transition='none';
+    r.style.transform='scale(0)';
+    r.style.opacity='0.22';
+    r.style.left=e.clientX+'px';
+    r.style.top=e.clientY+'px';
+    r.classList.remove('spreading');
+    // Force reflow so transition fires fresh
+    void r.offsetWidth;
+    r.classList.add('spreading');
+  });
+})();
 </script>
 <!-- ════════════════════════════════════════════════════════════════════════════ -->
 </body>
