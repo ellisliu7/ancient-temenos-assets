@@ -1,6 +1,6 @@
 # Ancient Temenos — Current State
-**Date:** 21 June 2026  
-**Source of truth:** `https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/index.html`  
+**Date:** 21 June 2026
+**Source of truth:** `https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/index.html`
 **Live URL:** `https://ellisliu7.github.io/ancient-temenos-assets/`
 
 ---
@@ -15,6 +15,23 @@
 - One surgical change per session. One bug, one fix, verify before shipping.
 - Never make three attempts at the same thing — diagnose before retrying.
 - At session end, output the FULL updated `CURRENT_STATE.md` alongside `index.html`.
+
+---
+
+## Session log
+
+### 21 June 2026 — The Memory session
+- Shipped `#roomScreen` overlay (V1) behind `?room=1` dev param — 26 seed traces, localStorage, one trace per visitor, persists on refresh
+- Explored and named **The Memory** concept — canonical doc now lives in `MEMORY.md`
+- Decided: The Memory is not a chamber. It is the living memory of the temple.
+- Decided: traces are signals, not messages. No text. Pure light, position, intensity, rhythm. (V1 text traces are placeholder only.)
+- Decided: the foyer spinning sigil is the future portal to The Memory (not yet wired)
+- Decided: name is **The Memory** (not The Reservoir, not The Room, not The Field)
+- Key references documented: Journey (presence without language), Japanese zen garden (response to attention not action)
+- Three concept natures explored: Field · Weather System · Living Organism — all documented in MEMORY.md, none chosen as final
+- No further builds this session — ended with documentation and clarity
+
+---
 
 ---
 
@@ -121,6 +138,19 @@
 - `?testKey=1` → ✦ Test Key button bottom-right → `testKeyReveal()` → Key reveal overlay
 - `?testGrimoire=1` → ✦ Test Grimoire button bottom-left → `testGrimoireOpen()` → grimoire with mock Venus data
 
+
+
+### The Memory (`#roomScreen`) — DEV ONLY
+- Overlay exists in `index.html`, `display:none` by default
+- Accessible via `?room=1` URL param — dev button appears bottom-left
+- 26 seed traces (text motes — placeholder, direction moving toward pure light)
+- localStorage key: `temenos_room`
+- One trace per visitor, persists on refresh
+- `openRoom()` / `closeRoom()` / `roomLeaveTrace()` exposed globally
+- `trackTempleEvent('room_trace_left')` wired
+- **Not linked from foyer or any live user path**
+- Full concept documented in `MEMORY.md`
+
 ---
 
 ## Confirmed broken / not yet confirmed
@@ -190,6 +220,7 @@ currentScreen='venusApproach'; vHistory=[{role:'user',content:'I keep giving eve
 
 ## Decisions on hold (explored, not approved)
 
+- **The Memory** — V1 overlay shipped (`?room=1`); V2 (pure light, breath, stillness response) deferred until Venus journey verified; full concept in `MEMORY.md`
 - Living relics / evolving artifacts / provenance of becoming
 - Founding Keeper covenant and architecture
 - Archive overlay (four chamber relics, Keeper slots)
@@ -215,12 +246,14 @@ currentScreen='venusApproach'; vHistory=[{role:'user',content:'I keep giving eve
 
 ## Recommended next steps (in priority order)
 
-1. **Push `index.html`** (today's bug fixes) and confirm deployment via GitHub Actions tab
+1. **Push `index.html`** (The Memory V1 + all earlier bug fixes) and confirm deployment via GitHub Actions tab
 2. **Verify grimoire offering** — run console test, confirm offering block appears after seal
 3. **Push `Sigil_Key.mp4`** to repo root — makes Key reveal cinematic instead of fallback
-4. **Create Resend account + deploy `remember.js`** to oracle repo — makes guestbook actually deliver emails
-5. **Check Formspree dashboard** — `xkoakgkk` may already have Sigil Key waitlist emails sitting there
-6. **Share with first real visitors** — watch `temenosSession()` for behavioral data before building more
+4. **Run the five-stage Venus journey checklist** — verify end-to-end before any new features
+5. **Create Resend account + deploy `remember.js`** to oracle repo — makes guestbook actually deliver emails
+6. **Check Formspree dashboard** — `xkoakgkk` may already have Sigil Key waitlist emails sitting there
+7. **Share with first real visitors** — watch `temenosSession()` for behavioral data before building more
+8. **The Memory V2** (pure light traces, ambient breath, stillness response) — only after Venus journey verified and first visitors observed
 
 ---
 
@@ -229,7 +262,7 @@ currentScreen='venusApproach'; vHistory=[{role:'user',content:'I keep giving eve
 - `index.html` → `ellisliu7/ancient-temenos-assets` repo (GitHub Pages)
 - `api/oracle.js` → `ellisliu7/ancient-temenos-oracle` repo (Vercel, private)
 - `api/remember.js` → needs to go in `ellisliu7/ancient-temenos-oracle` repo (not yet pushed)
-- `CURRENT_STATE.md`, `BIBLE.md`, `CHARACTERS.md`, `DECISIONS.md` → `ellisliu7/ancient-temenos-assets` repo
+- `CURRENT_STATE.md`, `BIBLE.md`, `CHARACTERS.md`, `DECISIONS.md`, `MEMORY.md` → `ellisliu7/ancient-temenos-assets` repo
 
 **Raw fetch pattern for new sessions:**
 ```bash
