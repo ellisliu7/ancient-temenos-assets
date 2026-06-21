@@ -628,7 +628,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     </video>
   </div>
   <div id="va-haze"></div>
-  <div id="va-scroll-hint"><span>Come closer.</span><span id="va-hint-secondary" style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.5em;text-transform:uppercase;color:rgba(238,220,168,0.82);display:block;margin-top:.6rem;opacity:1;font-size:9px;transition:opacity 2s ease;">scroll to approach</span><span class="va-hint-chev">⌄</span></div>
+  <div id="va-scroll-hint"><span>Come closer.</span><span id="va-hint-secondary" style="font-family:'Cinzel',serif;font-size:11px;letter-spacing:.5em;text-transform:uppercase;color:rgba(238,220,168,0.88);display:block;margin-top:.6rem;opacity:1;transition:opacity 2s ease;">scroll to approach</span><span class="va-hint-chev">⌄</span></div>
   <div id="va-oracle-glass"></div>
   <!-- Venus conversation glass — rises within the corridor at arrival -->
   <div id="va-glass">
@@ -649,7 +649,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
         </div>
       </div>
       <div id="va-input-wrap">
-        <input id="va-qi" type="text" placeholder="Speak what you carry…" autocomplete="off" spellcheck="false"/>
+        <input id="va-qi" type="text" placeholder="What brought you here today…" autocomplete="off" spellcheck="false"/>
         <button id="va-qb" onclick="sendVenusNew()" style="background:transparent;border:none;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:rgba(196,158,72,0.5);font-size:17px;transition:color .5s ease,text-shadow .5s ease;" onmouseover="this.style.color='rgba(196,158,72,0.9)';this.style.textShadow='0 0 14px rgba(196,158,72,0.35)'" onmouseout="this.style.color='rgba(196,158,72,0.5)';this.style.textShadow='none'">✦</button>
       </div>
       <p class="thinking" id="va-thinking"></p>
@@ -1447,19 +1447,11 @@ function vaOpenConversation(){
   if(venusConvOpen)return;
   venusConvOpen=true;
   const inv=document.getElementById('va-invitation');if(inv)inv.classList.add('show');
+  // Show input immediately after invitation fades in — no preamble card
   setTimeout(()=>{
-    vaRenderCard({
-      principle:'You have arrived.',
-      mirror:"You came when you were ready.\n\nYou are not here because something is wrong. You are here because something is ready to be seen.",
-      kybalion:'"The mirror does not judge what it reflects."',
-      question:'What brought you here today?',
-      actions:[]
-    });
-    setTimeout(()=>{
-      const inp=document.getElementById('va-input-wrap');if(inp)inp.classList.add('show');
-      const qi=document.getElementById('va-qi');if(qi)qi.focus();
-    },1200);
-  },600);
+    const inp=document.getElementById('va-input-wrap');if(inp)inp.classList.add('show');
+    const qi=document.getElementById('va-qi');if(qi)qi.focus();
+  },1000);
 }
 
 function vaRenderCard(data){
@@ -1796,7 +1788,7 @@ async function grRemember(){
 }
 // ── /GRIMOIRE REMEMBRANCE ────────────────────────────────────────────────────
 
-function closeGrimoire(){document.getElementById('grimoireScreen').style.display='none';if(currentScreen==='venusApproach'||currentScreen==='venusOracle'){flashTo(()=>{showScreen('foyer');councilReset();});}else if(currentScreen==='ganymedeScreen'){/* stays in cave */}}
+function closeGrimoire(){document.getElementById('grimoireScreen').style.display='none';if(currentScreen==='ganymedeScreen'){/* stays in cave */}/* Venus: stays in venusApproach — conversation remains open */}
 function copyGrimoire(){const inv=document.getElementById('grInvocationSection');const text=`ANCIENT TEMENOS · Grimoire\n${document.getElementById('grDate').textContent}\n\n${inv?inv.innerText.replace(/\n{3,}/g,'\n\n'):''}\n\nancienttemenos.com`;navigator.clipboard.writeText(text).then(()=>{const h=document.getElementById('grCopyHint');h.style.color='rgba(196,158,72,0.65)';setTimeout(()=>h.style.color='rgba(196,158,72,0)',2500);});}
 function sharePortal(){navigator.clipboard.writeText('https://ellisliu7.github.io/ancient-temenos-assets/').then(()=>{const h=document.getElementById('grShareHint');h.style.color='rgba(196,158,72,0.65)';setTimeout(()=>h.style.color='rgba(196,158,72,0)',2500);});}
 
