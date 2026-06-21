@@ -1,5 +1,5 @@
 # Ancient Temenos — Current State
-**Date:** 21 June 2026
+**Date:** 22 June 2026
 **Source of truth:** `https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/index.html`
 **Live URL:** `https://ellisliu7.github.io/ancient-temenos-assets/`
 
@@ -20,6 +20,30 @@
 
 ## Session log
 
+### 22 June 2026 — Venus Polish + Ripple session
+
+**Venus journey tested end-to-end by El. Confirmed working.** 
+
+Shipped (all in current output `index.html`):
+
+1. **Scroll hint visibility** — `scroll to approach` text: `font-size 7px → 11px`, opacity `0.82 → 0.88`, removed duplicate inline override
+2. **Opening stripped** — removed long preamble card. Glass rises → "She knew you would come." fades in → "What brought you here today?" whispers in beneath it → input appears at 2.6s. No preamble card, no long mirror.
+3. **Grimoire return path fixed** — `closeGrimoire()` no longer flashes to foyer from `venusApproach`. Grimoire closes, Venus conversation remains open and intact.
+4. **Placeholder** — `"Speak what you carry…"` → `"You are safe to speak here…"`
+5. **Corridor breathing** — `vaCorridorBreathe` keyframe added. Pure opacity only (`0.88 → 1`), no `scale()` transform (scale caused jitter on video element). El noted animation is subtle/not visible — deprioritized, not removed.
+6. **Response reveal — pure opacity** — removed all `translateY` from `vaRenderCard`. Text fades in where it lives. Glass scrolls once before reveal, not after each paragraph. `3s ease` transitions, `2600ms` stagger between paragraphs. Kybalion and question arrive last with breathing room.
+7. **Submit button consistency** — both success and error paths in `sendVenusNew` now restore `btn.innerHTML = '✦'`. Star throughout entire conversation.
+8. **Venus mock mode** — `?mock=venus` bypasses oracle API. 3 hardcoded response cards cycling through exchanges (1st, 2nd, 3rd+), 1100ms simulated delay, full reveal flow. Use for UX iteration without burning credits.
+9. **Ripple experiment** — `?ripple=1` dev param. CSS + 15-line JS. `100px` gold-border circle, `0.5px solid rgba(196,158,72,0.22)`, expands `scale(0→1)` and fades `opacity(0.22→0)` over `1.3s cubic-bezier`. Skips inputs/buttons/links. Desktop only. Reuses single element — no stacking. El has not tested live yet (possible cache/deployment delay).
+
+**El's observations from Venus test:**
+- Response still feels slightly abrupt — "appears then moves upward" (translateY removed in this session; verify on next live push)
+- Corridor animation: subtle, deprioritized
+- Placeholder: confirmed correct — "You are safe to speak here."
+- Ripple: not yet confirmed on live site
+
+---
+
 ### 21 June 2026 — The Memory session
 - Shipped `#roomScreen` overlay (V1) behind `?room=1` dev param — 26 seed traces, localStorage, one trace per visitor, persists on refresh
 - Explored and named **The Memory** concept — canonical doc now lives in `MEMORY.md`
@@ -33,15 +57,13 @@
 
 ---
 
----
-
 ## Architecture
 
-**Single file:** `index.html` (~3,292 lines) on GitHub Pages (`ellisliu7.github.io/ancient-temenos-assets`)  
-**Deployment:** GitHub Desktop → push to `main` → GitHub Pages auto-deploys  
-**Oracle proxy:** Vercel (`ancient-temenos-oracle.vercel.app/api/oracle`) — private repo, API key in Vercel env vars only  
-**Oracle model:** `claude-sonnet-4-6`  
-**Assets:** GitHub CDN via jsDelivr (`cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/`)  
+**Single file:** `index.html` (~3,580 lines) on GitHub Pages (`ellisliu7.github.io/ancient-temenos-assets`)
+**Deployment:** GitHub Desktop → push to `main` → GitHub Pages auto-deploys
+**Oracle proxy:** Vercel (`ancient-temenos-oracle.vercel.app/api/oracle`) — private repo, API key in Vercel env vars only
+**Oracle model:** `claude-sonnet-4-6`
+**Assets:** GitHub CDN via jsDelivr (`cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/`)
 **No database. No auth. No build step.**
 
 ---
@@ -65,19 +87,33 @@
 - Altar poems visible at rest (opacity 0.22), brighten on hover
 - Council instruction line opacity raised to 0.55
 
-### Venus chamber (`venusApproach`)
-- Scroll-scrubbed corridor (`Venus.mp4`)
+### Venus chamber (`venusApproach`) — CURRENT CANONICAL STATE
+- Scroll-scrubbed corridor (`Venus.mp4`) with gentle opacity breathing (`vaCorridorBreathe`, 5.5s)
 - Oracle glass rises at scroll end
+- **Opening sequence:** "She knew you would come." → "What brought you here today?" (whispers in after 1.4s) → input at 2.6s
+- **Placeholder:** "You are safe to speak here…"
+- **Submit button:** ✦ throughout (no arrow reversion)
+- **Mock mode:** `?mock=venus` — 3 hardcoded cards, no API
 - Oracle: JSON-structured (`principle`, `mirror`, `kybalion`, `affirmation`, `question`, `actions`)
-- **Robust JSON extraction:** extracts from first `{` to last `}` before parsing — handles model preamble text
-- Closing screen: "✦ Receive your First Key ✦" (primary), Seal to Grimoire, Return
+- **Response reveal:** pure opacity fade, no translateY. Glass scrolls once before reveal. 3s transitions, 2600ms paragraph stagger.
+- Closing screen: "You already know what to do with this." → separator → "✦ Receive your First Key ✦" → Seal to Grimoire / Return (all staggered in gracefully)
+- Grimoire: `closeGrimoire()` returns to Venus conversation, not foyer
 - Wishing Well: intention → ripple canvas → sigil reveal → ETH offering → save sigil → CTA
-- Grimoire: seals session
+
+### Sigil Key reveal (`#keyReveal`) — NEEDS NEXT SPRINT
+- Triggered from Venus closing "✦ Receive your First Key ✦"
+- Shows `Sigil_Key.mp4` full-screen (**asset not yet in repo** — shows ✦ fallback)
+- "✦ Collect this Key" → inscription writes (date, chamber, one line from session) → persists to `localStorage` under `temenos_keys`
+- After collecting: "Keep your Key" (downloads PNG certificate) + "Return to the temple" (flashes to foyer — **should return to Venus conversation**)
+- ETH-only offering (`0x70F0082E7f47e3DC8cf62B2C7FA26100657297E9`, tap to copy) — no Stripe
+- Copy: "This Key was given freely. If the temple moved you, you may sustain it." — needs rethinking
+- **"Keep your Key"** = downloads PNG image — doesn't feel like the final form
+- **No close/back button** that returns to Venus conversation
 
 ### Ganymede chamber (`ganymedeScreen`)
-- Reverse-scrubbed cave video (`Ganymede_Dolly_final.mp4` or `Ganymede Cave_1.mp4`)
+- Reverse-scrubbed cave video
 - **Sigil Key gate** mid-scroll — blocks deeper oracle access
-  - "Request a Sigil Key" → email captured via **Formspree** (`xkoakgkk`) → your inbox
+  - "Request a Sigil Key" → email captured via **Formspree** (`xkoakgkk`) → El's inbox
   - "I hold a Key" → key input field → localStorage token
   - Dev bypass: `?skip=ganymede&key=1`
 - Oracle: tikkun framework, JSON-structured, option paths
@@ -91,65 +127,17 @@
   - *"Places like this exist because someone, once, decided they were worth keeping."*
   - "Sustain the temple →" → Stripe Payment Link
   - Guestbook email field → "Remember me" → POSTs to `/api/remember` (not yet deployed) → "You are remembered."
-- `_grUUID()`: generates/retrieves UUID cookie (`temenos_id`, 1-year) — future Privy wallet ID slot
-- `grRemember()`: validates email, captures UUID, POSTs to Vercel function (see Integrations)
+- `_grUUID()`: generates/retrieves UUID cookie (`temenos_id`, 1-year)
+- `grRemember()`: validates email, captures UUID, POSTs to Vercel function
 
 ### Key reveal overlay (`#keyReveal`)
-- Triggered from Venus closing "✦ Receive your First Key ✦"
-- Shows `Sigil_Key.mp4` full-screen (asset must be pushed to repo root)
-- Fallback: glowing ✦ if MP4 missing
-- Collect → light pulse → inscription writes (date, chamber, one line from session)
-- Persists to `localStorage` under `temenos_keys`
-- Download: captures video frame + inscription as PNG certificate
-- Optional ETH offering appears after key is collected (never gated)
+- See "Sigil Key reveal" above — needs next sprint
 
 ### Session tracking
 - `trackTempleEvent(name, payload)` module — localStorage, capped at 100 events
-- Debug: `temenosSession()`, `temenosClearSession()` in console
 - **8 events wired:** `foyer_loaded`, `council_input_focused`, `council_question_submitted`, `chamber_entered_venus`, `chamber_entered_ganymede`, `oracle_question_submitted`, `grimoire_opened`, `sigil_key_requested`
-- New event: `guestbook_submitted` (fires on grRemember success)
-- Swap line marked for Plausible/PostHog/Supabase — not yet wired
-
----
-
-## What was shipped today (21 June 2026)
-
-1. **Grimoire offering block** — Option B copy, Stripe link, guestbook email field, "You are remembered." confirmation
-2. **`grRemember()` + `_grUUID()`** — email validation, UUID cookie generation, POST to `/api/remember`, graceful fail-silent
-3. **`testGrimoire=1` dev shortcut** — bottom-left button, `testGrimoireOpen()` console function, seeds mock Venus vHistory, opens real grimoire flow
-4. **`readyState` guard on test button** — fires immediately if DOM already ready (fixed DOMContentLoaded timing bug)
-5. **Robust JSON extraction** — `raw.indexOf('{')` / `raw.lastIndexOf('}')` extraction before parse in both `sendVenusNew` and `sendVenus` — fixes raw JSON display bug
-6. **25-second timeout on `generateInvocation`** — `Promise.race` prevents grimoire hanging permanently; `grActions` always reveals
-7. **`lastCouncilInput` guard** — `typeof` check into `_lci` before INPUTS object creation — fixes ReferenceError crash during Venus grimoire
-
----
-
-## Confirmed working
-
-- Venus oracle receives question, parses JSON, renders formatted mirror/affirmation/question
-- "What Venus Revealed" renders correctly in grimoire
-- Grimoire opens and seals
-- `generateInvocation` completes or times out gracefully — `grActions` always reveals
-- Offering block HTML present in `grActions`
-- Stripe Payment Link live: `https://buy.stripe.com/dRmfZhegNawC60V5IT5kk00`
-- Stripe custom confirmation: *"Thank you. The temple has received your offering. What was found here will remain for the next traveller."*
-- Sigil Key waitlist (Ganymede gate) → Formspree → email to El's inbox (check formspree.io dashboard)
-- Session tracking fires events to localStorage
-- `?testKey=1` → ✦ Test Key button bottom-right → `testKeyReveal()` → Key reveal overlay
-- `?testGrimoire=1` → ✦ Test Grimoire button bottom-left → `testGrimoireOpen()` → grimoire with mock Venus data
-
-
-
-### The Memory (`#roomScreen`) — DEV ONLY
-- Overlay exists in `index.html`, `display:none` by default
-- Accessible via `?room=1` URL param — dev button appears bottom-left
-- 26 seed traces (text motes — placeholder, direction moving toward pure light)
-- localStorage key: `temenos_room`
-- One trace per visitor, persists on refresh
-- `openRoom()` / `closeRoom()` / `roomLeaveTrace()` exposed globally
-- `trackTempleEvent('room_trace_left')` wired
-- **Not linked from foyer or any live user path**
-- Full concept documented in `MEMORY.md`
+- New: `key_reveal_opened`, `key_collected`, `key_downloaded`
+- Swap line marked for Plausible/PostHog — not yet wired
 
 ---
 
@@ -157,12 +145,12 @@
 
 | Item | Status | Notes |
 |---|---|---|
-| `Sigil_Key.mp4` | **Not pushed** | Key reveal shows ✦ fallback until pushed |
-| `/api/remember` | **404 — not deployed** | `remember.js` written but not in oracle repo; `grRemember()` fails silently, visitor sees "You are remembered." |
+| `Sigil_Key.mp4` | **Not pushed to repo** | Key reveal shows ✦ fallback until pushed |
+| `/api/remember` | **404 — not deployed** | `remember.js` written but not in oracle repo; fails silently, visitor sees "You are remembered." |
 | Resend account | **Not created** | Needed before `remember.js` can send emails |
-| Grimoire offering visual test | **Not confirmed** | Offering block is in code; visual appearance not yet seen by El |
-| `?testGrimoire=1` button | **Unconfirmed on live** | GitHub Pages cache may still be stale from earlier in session |
 | Formspree submissions | **Unknown count** | Log in to formspree.io → form `xkoakgkk` to see Sigil Key waitlist emails |
+| Ripple experiment | **Unconfirmed on live** | `?ripple=1` — El couldn't see it yet, possible cache/deployment delay |
+| Venus response "moves upward" | **Partially addressed** | `translateY` removed from `vaRenderCard`; needs live verification after push |
 
 ---
 
@@ -172,7 +160,7 @@
 |---|---|---|---|
 | **Vercel oracle proxy** | Anthropic API calls | Live | `ancient-temenos-oracle.vercel.app/api/oracle` |
 | **Stripe Payment Link** | Grimoire offering | Live | `buy.stripe.com/dRmfZhegNawC60V5IT5kk00` |
-| **Formspree `xkoakgkk`** | Sigil Key waitlist email | Live (unverified) | Ganymede gate → El's inbox |
+| **Formspree `xkoakgkk`** | Sigil Key waitlist email | Live (unverified count) | Ganymede gate → El's inbox |
 | **`/api/remember`** | Grimoire guestbook | **Not deployed** | `remember.js` written, needs oracle repo |
 | **Resend** | Email delivery for `/api/remember` | **Not created** | Free tier, 10 min setup |
 | **GitHub Pages** | Hosting | Live | Auto-deploys on push to `main` |
@@ -185,87 +173,80 @@
 | Param | Effect |
 |---|---|
 | `?mock=1` | Bypass oracle API, use mock council response |
-| `?mock=venus` | Route council to Venus with mock |
+| `?mock=venus` | Bypass oracle in Venus — 3 hardcoded cards, full reveal flow |
 | `?mock=ganymede` | Route council to Ganymede with mock |
 | `?skip=ganymede&key=1` | Enter Ganymede, bypass Sigil Key gate |
 | `?key=1` | Grant Sigil Key via localStorage |
 | `?testKey=1` | Show ✦ Test Key button (bottom-right) |
 | `?testGrimoire=1` | Show ✦ Test Grimoire button (bottom-left) |
+| `?ripple=1` | Enable click ripple atmospheric experiment (desktop only) |
+| `?room=1` | Open The Memory dev overlay |
 
 **Console functions (dev only):**
 - `testKeyReveal()` — open Key reveal with mock Venus data
-- `testGrimoireOpen()` — open grimoire with mock Venus data (requires `?testGrimoire=1` in URL)
+- `testGrimoireOpen()` — open grimoire with mock Venus data
 - `temenosSession()` — return session event array
 - `temenosClearSession()` — clear session log
-
-**Quickest grimoire test (no URL param needed):**
-```javascript
-currentScreen='venusApproach'; vHistory=[{role:'user',content:'I keep giving everything away.'},{role:'assistant',content:JSON.stringify({principle:'Receiving is not weakness',mirror:'You have not lost the ability to receive.\n\nYou have been so committed to giving that receiving began to feel unsafe.\n\nYou are allowed to be on the receiving end. Not eventually. Now.',kybalion:'"As above, so below."',affirmation:'I am allowed to receive what is already mine.',question:'What would you let yourself want today if no one was watching?',actions:['Rest before you plan.','Name one thing you need.']})}]; openGrimoire();
-```
+- `openRoom()` / `closeRoom()` / `roomLeaveTrace()` — The Memory overlay
 
 ---
 
-## Known open bugs (as of end of session)
-
-1. ~~**`lastCouncilInput` ReferenceError**~~ **FIXED in this session** — `typeof` guard added
-2. ~~**Grimoire never completes**~~ **FIXED** — 25s timeout + always-reveal `grActions`
-3. ~~**Venus raw JSON display**~~ **FIXED** — robust `{...}` extraction before parse
-4. **`Sigil_Key.mp4` missing** — key reveal shows ✦ fallback
-5. **`/api/remember` 404** — guestbook silently fails, visitor sees confirmation but no email sent
-6. **GitHub Pages cache lag** — after push, wait for Actions tab green before testing
-7. **Ganymede option click may eject from panel** on some devices — untested since earlier session
-8. **Post-council auto-transition is 2s** — flagged as too fast, not yet extended
+## The Memory (`#roomScreen`) — DEV ONLY
+- Overlay exists in `index.html`, `display:none` by default
+- Accessible via `?room=1` URL param
+- 26 seed traces (text motes — placeholder, direction moving toward pure light)
+- localStorage key: `temenos_room`
+- One trace per visitor, persists on refresh
+- **Not linked from foyer or any live user path**
+- Full concept documented in `MEMORY.md`
 
 ---
 
-## Decisions on hold (explored, not approved)
+## Next sprint: Sigil Key refinement
 
-- **The Memory** — V1 overlay shipped (`?room=1`); V2 (pure light, breath, stillness response) deferred until Venus journey verified; full concept in `MEMORY.md`
-- Living relics / evolving artifacts / provenance of becoming
-- Founding Keeper covenant and architecture
-- Archive overlay (four chamber relics, Keeper slots)
-- On-chain / NFT surface
-- Persephone integration into `index.html` (prototype complete as standalone `persephone-oracle.html`)
-- PostHog/Plausible swap (infrastructure ready, one line change)
-- Next.js migration (deliberate future sprint, not imminent)
-- Privy wallet-as-identity (direction confirmed, nothing built)
-- Sequential Key numbering (Vercel counter — deferred)
-- Bespoke sigil relic Gumroad listing
-- Early patron invitation page
-- Commissioned temple engagements
+### What the current Sigil Key flow does (audited 22 June 2026)
+
+**Entry:** Venus closing → "✦ Receive your First Key ✦" → `openKeyReveal()`
+**Screen:** Full-screen overlay, `Sigil_Key.mp4` video background (currently ✦ fallback), floating key image
+**Collect:** "✦ Collect this Key" → key object saved to localStorage → inscription writes (date, chamber, session line)
+**After collect:**
+  - "Keep your Key" → `keepKey()` → canvas render → PNG download (900×1400px certificate)
+  - "Return to the temple" → `flashTo(foyer)` — **wrong: should return to Venus**
+**Offering (separate block below):** "This Key was given freely. If the temple moved you, you may sustain it." + ETH address to copy
+
+### What needs to change
+
+| Issue | Fix |
+|---|---|
+| "Return to the temple" flashes to foyer | Change to `closeKeyReveal()` — returns to Venus conversation |
+| No close/X button | Add `✕ Close` top-right, calls `closeKeyReveal()` |
+| Offering copy feels tacked on | Rewrite — should feel like a natural closing, not a tip jar |
+| ETH-only | Add Stripe Payment Link alongside ETH; Stripe primary, ETH secondary |
+| "Keep your Key" → PNG download | Interim: keep download but reframe copy. Long-term: Privy wallet, key as identity |
+| Offering placement | After inscription, before "Return" — not a separate block below the buttons |
+
+### Smallest sprint to ship
+
+1. Add `✕ Close` button → `closeKeyReveal()` (returns to Venus, not foyer) — **2 lines**
+2. Fix "Return to the temple" → `closeKeyReveal()` instead of `flashTo(foyer)` — **1 line**
+3. Rewrite offering copy and add Stripe link — **HTML change only, no new JS**
+4. Reorder: inscription → offering (Stripe + ETH) → "Keep your Key" → Close
+
+### Architectural notes for Sigil Key (preserve these decisions)
+- **Privy wallet** is the planned long-term identity layer — key becomes wallet-linked, not localStorage
+- **The Memory / Collective Memory** — after collecting a key, visitor may eventually "leave a trace" in The Memory. The key is the credential for that action. Not built yet.
+- **Collection question** (locked): "What part of yourself are you finally learning to stop carrying alone?" — this should appear before or during key collection, not after. Not building yet.
+- **"Keep your Key"** copy is wrong even for the PNG — "Download your certificate" is more honest; "Keep your Key" implies persistence that doesn't exist yet in localStorage-only mode
+- Do not build wallet, NFT, or Privy integration until real visitor demand is proven
 
 ---
 
-## Copy decisions (approved, not yet implemented in gate)
+## Architectural decisions made this session (do not re-litigate)
 
-- **Sigil Key gate:** Version A voice — *"something in you already knows / You've felt this before. / The moment just before something changes. / This is that moment. / Leave your name · I've been here before"*
-- **Grimoire offering:** Option B — *"Places like this exist because someone, once, decided they were worth keeping."*
-- **Voice direction:** Brit Marling register for all new copy — mystery is the visitor, not the temple. Intimacy, memory, identity, transformation. No mythology, fantasy, or grand spiritual language.
-
----
-
-## Recommended next steps (in priority order)
-
-1. **Push `index.html`** (The Memory V1 + all earlier bug fixes) and confirm deployment via GitHub Actions tab
-2. **Verify grimoire offering** — run console test, confirm offering block appears after seal
-3. **Push `Sigil_Key.mp4`** to repo root — makes Key reveal cinematic instead of fallback
-4. **Run the five-stage Venus journey checklist** — verify end-to-end before any new features
-5. **Create Resend account + deploy `remember.js`** to oracle repo — makes guestbook actually deliver emails
-6. **Check Formspree dashboard** — `xkoakgkk` may already have Sigil Key waitlist emails sitting there
-7. **Share with first real visitors** — watch `temenosSession()` for behavioral data before building more
-8. **The Memory V2** (pure light traces, ambient breath, stillness response) — only after Venus journey verified and first visitors observed
-
----
-
-## File locations
-
-- `index.html` → `ellisliu7/ancient-temenos-assets` repo (GitHub Pages)
-- `api/oracle.js` → `ellisliu7/ancient-temenos-oracle` repo (Vercel, private)
-- `api/remember.js` → needs to go in `ellisliu7/ancient-temenos-oracle` repo (not yet pushed)
-- `CURRENT_STATE.md`, `BIBLE.md`, `CHARACTERS.md`, `DECISIONS.md`, `MEMORY.md` → `ellisliu7/ancient-temenos-assets` repo
-
-**Raw fetch pattern for new sessions:**
-```bash
-curl -s "https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/index.html" -o /tmp/index.html
-curl -s "https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/CURRENT_STATE.md" -o /tmp/CURRENT_STATE.md
-```
+- **Grimoire closes to Venus, not foyer** — visitor stays in their conversation
+- **Venus opening is two lines only** — "She knew you would come." + "What brought you here today?" — no preamble card, no mirror, no kybalion in opening
+- **Response reveal: pure opacity, no translateY** — Venus arrives, she does not shift
+- **"You are safe to speak here…"** is the correct placeholder — not directive, lowers threshold
+- **Corridor breathing deprioritized** — animation exists but is subtle; do not keep tuning background when flow is working
+- **Ripple stays behind `?ripple=1`** — evaluate feeling before deciding whether it belongs in the temple permanently
+- **Mock modes are permanent dev infrastructure** — `?mock=venus`, `?mock=ganymede` stay in codebase
