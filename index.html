@@ -933,6 +933,60 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   </div>
 </div>
 
+<!-- ROOM THAT REMEMBERS -->
+<div id="roomScreen">
+<style>
+  #roomScreen{position:fixed;inset:0;z-index:97;display:none;flex-direction:column;align-items:center;justify-content:center;background:radial-gradient(ellipse 80% 70% at 50% 60%,rgba(6,5,12,0.97),rgba(2,2,6,0.995));opacity:0;transition:opacity 1.4s ease;overflow:hidden;}
+  #roomScreen.show{opacity:1;}
+  #room-close{position:absolute;top:1.6rem;right:1.8rem;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.44em;text-transform:uppercase;color:rgba(196,158,72,0.32);background:transparent;border:none;cursor:pointer;transition:color .5s;z-index:2;}
+  #room-close:hover{color:rgba(196,158,72,0.7);}
+  #room-surface{position:absolute;inset:0;z-index:0;pointer-events:none;background:radial-gradient(ellipse 90% 60% at 50% 78%,rgba(14,10,28,0.0),rgba(6,4,14,0.85) 55%,rgba(2,2,8,0.98) 100%),linear-gradient(to bottom,rgba(2,2,8,0.98) 0%,rgba(8,6,18,0.55) 38%,rgba(10,7,22,0.65) 65%,rgba(4,3,12,0.98) 100%);}
+  #room-sheen{position:absolute;left:50%;bottom:28%;transform:translateX(-50%);width:72%;height:1px;background:linear-gradient(to right,transparent,rgba(140,120,200,0.06) 30%,rgba(180,160,230,0.13) 50%,rgba(140,120,200,0.06) 70%,transparent);pointer-events:none;z-index:1;}
+  #room-field{position:absolute;inset:0;z-index:1;pointer-events:none;}
+  .room-mote{position:absolute;border-radius:50%;pointer-events:auto;cursor:default;transition:transform .3s ease;}
+  .room-mote .mote-dot{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle,rgba(var(--mc),0.78) 0%,rgba(var(--mc),0.18) 55%,transparent 100%);box-shadow:0 0 6px 2px rgba(var(--mc),0.22);transition:transform .4s ease,box-shadow .4s ease;}
+  .room-mote:hover .mote-dot{transform:translate(-50%,-50%) scale(1.9);box-shadow:0 0 14px 4px rgba(var(--mc),0.42);}
+  .room-mote .mote-text{position:absolute;top:50%;left:50%;transform:translate(-50%,-140%);font-family:'Cormorant Garamond',serif;font-style:italic;font-size:12px;color:rgba(238,220,168,0.0);white-space:nowrap;pointer-events:none;letter-spacing:.04em;line-height:1;transition:color .5s ease,opacity .5s ease;text-shadow:0 0 16px rgba(196,158,72,0.4);}
+  .room-mote:hover .mote-text{color:rgba(238,220,168,0.72);}
+  .room-mote.is-mine .mote-dot{background:radial-gradient(circle,rgba(214,178,104,0.9) 0%,rgba(196,158,72,0.22) 55%,transparent 100%);box-shadow:0 0 10px 3px rgba(196,158,72,0.35);}
+  .room-mote.is-mine .mote-text{color:rgba(238,220,168,0.55);}
+  .room-mote.is-mine:hover .mote-text{color:rgba(238,220,168,0.9);}
+  @keyframes moteDrift{0%{transform:translate(0,0);}33%{transform:translate(var(--dx1),var(--dy1));}66%{transform:translate(var(--dx2),var(--dy2));}100%{transform:translate(0,0);}}
+  @keyframes moteBloom{0%{transform:translate(-50%,-50%) scale(0.1);opacity:0;}60%{transform:translate(-50%,-50%) scale(2.4);opacity:1;}100%{transform:translate(-50%,-50%) scale(1);opacity:1;}}
+  @keyframes roomRipple{0%{transform:translate(-50%,-50%) scale(0);opacity:0.55;}100%{transform:translate(-50%,-50%) scale(1);opacity:0;}}
+  #room-copy-wrap{position:relative;z-index:2;text-align:center;max-width:36ch;display:flex;flex-direction:column;align-items:center;gap:0;}
+  #room-eyebrow{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.55em;text-transform:uppercase;color:rgba(196,158,72,0.38);margin:0 0 2.2rem;}
+  #room-intro{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(16px,1.9vw,20px);color:rgba(238,220,168,0.62);line-height:1.85;margin:0 0 2.8rem;opacity:0;transition:opacity 1.8s ease 0.6s;}
+  #room-intro.show{opacity:1;}
+  #room-form{display:flex;flex-direction:column;align-items:center;gap:.9rem;opacity:0;transition:opacity 1.6s ease 1.6s;}
+  #room-form.show{opacity:1;}
+  #room-label{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.48em;text-transform:uppercase;color:rgba(196,158,72,0.42);margin:0;}
+  #room-input{background:transparent;border:none;border-bottom:.5px solid rgba(196,158,72,0.2);width:28ch;max-width:86vw;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:16px;color:rgba(238,220,168,0.82);padding:.5rem .2rem .6rem;text-align:center;outline:none;transition:border-color .5s;}
+  #room-input:focus{border-bottom-color:rgba(196,158,72,0.5);}
+  #room-input::placeholder{color:rgba(196,158,72,0.22);font-style:italic;}
+  #room-submit{font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:.44em;text-transform:uppercase;color:rgba(238,220,168,0.6);background:transparent;border:.5px solid rgba(196,158,72,0.22);padding:.7rem 2rem;cursor:pointer;transition:all .5s ease;margin-top:.4rem;}
+  #room-submit:hover:not(:disabled){border-color:rgba(196,158,72,0.7);color:rgba(238,220,168,0.95);}
+  #room-submit:disabled{opacity:.35;cursor:default;}
+  #room-confirm{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:14px;color:rgba(196,158,72,0.0);line-height:1.7;margin:.8rem 0 0;transition:color 1.6s ease;text-align:center;}
+  #room-confirm.show{color:rgba(196,158,72,0.6);}
+</style>
+<button id="room-close" onclick="closeRoom()">✕ Close</button>
+<div id="room-surface"></div>
+<div id="room-sheen"></div>
+<div id="room-field"></div>
+<div id="room-copy-wrap">
+  <p id="room-eyebrow">The Room That Remembers</p>
+  <p id="room-intro">Others have stood where you are standing.<br>They did not leave their names.<br>Only what they were carrying.</p>
+  <div id="room-form">
+    <p id="room-label">Leave what followed you here.</p>
+    <input id="room-input" type="text" maxlength="80" placeholder="a word, a worry, a kind of weather" autocomplete="off" spellcheck="false">
+    <button id="room-submit" onclick="roomLeaveTrace()">Leave it</button>
+    <p id="room-confirm">It is here now. Something of you stays in the room.</p>
+  </div>
+</div>
+</div>
+<!-- /ROOM THAT REMEMBERS -->
+
 <!-- TEACHINGS -->
 <div id="teachings">
   <button class="t-close" onclick="closeTeachings()">✕ Close</button>
@@ -3284,6 +3338,231 @@ initFoyer=function(){
 
   console.info('[Temenos dev] ✦ testKeyReveal() ready. Click button or call in console.');
 })();
+</script>
+<script>
+// ── THE ROOM THAT REMEMBERS ──────────────────────────────────────────────────
+(function(){
+  'use strict';
+
+  var STORAGE_KEY = 'temenos_room';
+
+  var SEEDS = [
+    'the sound of my mother\'s car in the driveway',
+    'a job I didn\'t take',
+    'the stove, for years',
+    'the word almost',
+    'someone I keep not calling',
+    'rain that won\'t start',
+    'the version of me from 2019',
+    'a door I check is locked',
+    'Sunday afternoons',
+    'what I didn\'t say at the funeral',
+    'my own handwriting',
+    'a city I left in a hurry',
+    'the question he never answered',
+    'being the one who stays',
+    'a name I stopped using',
+    'the smell of the old apartment',
+    'waiting to feel ready',
+    'the friend I outgrew',
+    'my father\'s silence',
+    'a plan I keep rewriting',
+    'the last good photo',
+    'how quiet it got after',
+    'wanting to be chosen',
+    'the thing I almost forgave',
+    'a key that fits nothing now',
+    'the year I don\'t talk about'
+  ];
+
+  var PALETTES = [
+    '140,120,190','110,100,175','160,140,210','90,80,155',
+    '170,150,200','130,110,185','100,90,170','150,130,195'
+  ];
+
+  function _rand(min,max){return min+Math.random()*(max-min);}
+  function _uid(){return Math.random().toString(36).slice(2,9);}
+
+  function loadTraces(){
+    try{
+      var raw=localStorage.getItem(STORAGE_KEY);
+      if(raw){var arr=JSON.parse(raw);if(Array.isArray(arr)&&arr.length)return arr;}
+    }catch(e){}
+    var seeds=SEEDS.map(function(text,i){
+      return {
+        id:_uid(),text:text,
+        x:_rand(6,88),y:_rand(12,82),
+        dx1:_rand(-12,12),dy1:_rand(-8,8),
+        dx2:_rand(-8,8),dy2:_rand(-12,12),
+        dur:_rand(22,44),
+        mc:PALETTES[i%PALETTES.length],
+        size:_rand(5,10),
+        seed:true
+      };
+    });
+    saveTraces(seeds);
+    return seeds;
+  }
+
+  function saveTraces(traces){
+    try{localStorage.setItem(STORAGE_KEY,JSON.stringify(traces));}catch(e){}
+  }
+
+  function renderMote(trace,field,bloom){
+    var wrap=document.createElement('div');
+    wrap.className='room-mote'+(trace.seed===false?' is-mine':'');
+    wrap.style.left=trace.x+'%';
+    wrap.style.top=trace.y+'%';
+    wrap.style.width=(trace.size+8)+'px';
+    wrap.style.height=(trace.size+8)+'px';
+    wrap.style.animation='moteDrift '+trace.dur+'s ease-in-out infinite';
+    wrap.style.setProperty('--dx1',trace.dx1+'px');
+    wrap.style.setProperty('--dy1',trace.dy1+'px');
+    wrap.style.setProperty('--dx2',trace.dx2+'px');
+    wrap.style.setProperty('--dy2',trace.dy2+'px');
+    wrap.style.animationDelay=(-_rand(0,trace.dur))+'s';
+
+    var dot=document.createElement('div');
+    dot.className='mote-dot';
+    dot.style.width=trace.size+'px';
+    dot.style.height=trace.size+'px';
+    dot.style.setProperty('--mc',trace.mc);
+
+    var txt=document.createElement('div');
+    txt.className='mote-text';
+    txt.textContent=trace.text;
+
+    wrap.appendChild(dot);
+    wrap.appendChild(txt);
+    field.appendChild(wrap);
+
+    if(bloom){
+      dot.style.animation='moteBloom 1.2s cubic-bezier(0.22,1,0.36,1) forwards';
+      var rip=document.createElement('div');
+      rip.style.cssText='position:absolute;top:'+trace.y+'%;left:'+trace.x+'%;width:160px;height:160px;margin-top:-80px;margin-left:-80px;border-radius:50%;border:.5px solid rgba(196,158,72,0.28);animation:roomRipple 2.2s ease-out forwards;pointer-events:none;z-index:3;';
+      field.appendChild(rip);
+      setTimeout(function(){if(rip.parentNode)rip.parentNode.removeChild(rip);},2400);
+    }
+  }
+
+  function renderAll(traces){
+    var field=document.getElementById('room-field');
+    if(!field)return;
+    field.innerHTML='';
+    traces.forEach(function(t){renderMote(t,field,false);});
+  }
+
+  window.roomLeaveTrace=function(){
+    var inp=document.getElementById('room-input');
+    var btn=document.getElementById('room-submit');
+    var conf=document.getElementById('room-confirm');
+    if(!inp)return;
+    var text=inp.value.trim();
+    if(!text)return;
+
+    var traces=loadTraces();
+    var alreadyLeft=traces.some(function(t){return t.seed===false;});
+    if(alreadyLeft)return;
+
+    var newTrace={
+      id:_uid(),text:text,
+      x:_rand(8,86),y:_rand(15,80),
+      dx1:_rand(-10,10),dy1:_rand(-7,7),
+      dx2:_rand(-8,8),dy2:_rand(-10,10),
+      dur:_rand(24,40),
+      mc:'214,178,104',
+      size:_rand(7,11),
+      seed:false
+    };
+    traces.push(newTrace);
+    saveTraces(traces);
+
+    var field=document.getElementById('room-field');
+    if(field)renderMote(newTrace,field,true);
+
+    inp.value='';
+    inp.disabled=true;
+    if(btn){btn.disabled=true;}
+    if(conf){setTimeout(function(){conf.classList.add('show');},600);}
+
+    if(typeof trackTempleEvent==='function')trackTempleEvent('room_trace_left',{chars:text.length});
+  };
+
+  window.openRoom=function(){
+    var el=document.getElementById('roomScreen');
+    if(!el)return;
+    el.style.display='flex';
+    requestAnimationFrame(function(){
+      requestAnimationFrame(function(){
+        el.classList.add('show');
+        var intro=document.getElementById('room-intro');
+        var form=document.getElementById('room-form');
+        if(intro)setTimeout(function(){intro.classList.add('show');},100);
+        if(form)setTimeout(function(){form.classList.add('show');},100);
+
+        var traces=loadTraces();
+        renderAll(traces);
+
+        var alreadyLeft=traces.some(function(t){return t.seed===false;});
+        var inp=document.getElementById('room-input');
+        var btn=document.getElementById('room-submit');
+        var conf=document.getElementById('room-confirm');
+        if(alreadyLeft){
+          if(inp)inp.disabled=true;
+          if(btn)btn.disabled=true;
+          if(conf)conf.classList.add('show');
+        }
+      });
+    });
+  };
+
+  window.closeRoom=function(){
+    var el=document.getElementById('roomScreen');
+    if(!el)return;
+    el.classList.remove('show');
+    setTimeout(function(){
+      el.style.display='none';
+      var intro=document.getElementById('room-intro');
+      var form=document.getElementById('room-form');
+      var field=document.getElementById('room-field');
+      if(intro)intro.classList.remove('show');
+      if(form)form.classList.remove('show');
+      if(field)field.innerHTML='';
+    },1500);
+  };
+
+  var _rp=new URLSearchParams(window.location.search);
+  if(_rp.get('room')==='1'){
+    function _mountRoomBtn(){
+      var wrap=document.createElement('div');
+      wrap.style.cssText=[
+        'position:fixed','bottom:3.4rem','left:1rem','z-index:9999',
+        'display:flex','flex-direction:column','align-items:center','gap:4px'
+      ].join(';');
+      var btn=document.createElement('button');
+      btn.textContent='\u2736 Open Room';
+      btn.style.cssText=[
+        "font-family:'Cinzel',serif","font-size:8px","letter-spacing:.38em",
+        "text-transform:uppercase","background:transparent",
+        "border:.5px solid rgba(196,158,72,0.55)","color:rgba(196,158,72,0.88)",
+        "padding:.55rem 1.1rem","cursor:pointer","transition:border-color .4s,color .4s"
+      ].join(';');
+      btn.onmouseover=function(){this.style.borderColor='rgba(214,178,104,0.85)';this.style.color='#fff';};
+      btn.onmouseout=function(){this.style.borderColor='rgba(196,158,72,0.55)';this.style.color='rgba(196,158,72,0.88)';};
+      btn.onclick=window.openRoom;
+      wrap.appendChild(btn);
+      document.body.appendChild(wrap);
+      console.info('[Temenos dev] \u2736 openRoom() ready. Click button or call in console.');
+    }
+    if(document.readyState==='loading'){
+      document.addEventListener('DOMContentLoaded',_mountRoomBtn);
+    }else{
+      _mountRoomBtn();
+    }
+  }
+
+})();
+// ── /THE ROOM THAT REMEMBERS ─────────────────────────────────────────────────
 </script>
 <!-- ════════════════════════════════════════════════════════════════════════════ -->
 </body>
