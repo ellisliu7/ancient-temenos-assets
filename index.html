@@ -2904,19 +2904,25 @@ if(_devp.get('key')==='1'){try{localStorage.setItem('temenos_sigil_key','1');}ca
     currentScreen='venusApproach';
     openGrimoire();
   };
-  document.addEventListener('DOMContentLoaded',()=>{
-    // button bottom-left (distinct from testKey button bottom-right)
+  // readyState guard: DOMContentLoaded may have already fired when this script runs mid-parse
+  function _attachGrimoireBtn(){
     const w=document.createElement('div');
     w.style.cssText='position:fixed;bottom:1.4rem;left:1.4rem;z-index:9999;';
     const b=document.createElement('button');
-    b.textContent='\u2726 Test Grimoire';
+    b.textContent='✦ Test Grimoire';
     b.style.cssText='background:rgba(12,8,3,0.94);border:.5px solid rgba(196,158,72,0.55);color:rgba(196,158,72,0.88);font-family:"Cinzel",serif;font-size:9px;letter-spacing:.38em;text-transform:uppercase;padding:.65rem 1.3rem;cursor:pointer;transition:all .4s;';
     b.onmouseover=function(){this.style.borderColor='rgba(214,178,104,0.85)';this.style.color='#fff';};
     b.onmouseout=function(){this.style.borderColor='rgba(196,158,72,0.55)';this.style.color='rgba(196,158,72,0.88)';};
-    b.onclick=function(){if(window.testGrimoireOpen)window.testGrimoireOpen();else console.error('[Temenos dev] testGrimoireOpen not ready');};
+    b.onclick=window.testGrimoireOpen;
     w.appendChild(b);document.body.appendChild(w);
-    console.info('[Temenos dev] \u2726 testGrimoireOpen() ready.');
-  });
+    console.info('[Temenos dev] ✦ testGrimoireOpen() ready. Also callable in console.');
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',_attachGrimoireBtn);
+  }else{
+    // DOM already ready — fire immediately
+    _attachGrimoireBtn();
+  }
 })();
 // ── /DEV testGrimoire ────────────────────────────────────────────────────────
 
