@@ -905,11 +905,13 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     .kr-btn.primary:hover{color:#fff;text-shadow:0 0 14px rgba(214,178,104,0.4);}
     .kr-btn.ghost{color:rgba(196,158,72,0.45);}
     .kr-btn.ghost:hover{color:rgba(238,220,168,0.8);}
-    #kr-offer{display:none;flex-direction:column;align-items:center;gap:.5rem;margin-top:2.4rem;padding-top:1.8rem;border-top:.5px solid rgba(196,158,72,0.1);max-width:32ch;}
-    .kr-offer-line{font-family:'Cormorant',serif;font-style:italic;font-size:14px;color:rgba(196,158,72,0.5);text-align:center;line-height:1.7;margin:0 0 .6rem;}
-    #kr-eth{font-family:'Cormorant Garamond',serif;font-size:11px;color:rgba(238,220,168,0.6);word-break:break-all;cursor:pointer;text-align:center;line-height:1.5;padding:.45rem .7rem;border:.5px solid rgba(196,158,72,0.1);transition:background .3s;}
-    #kr-eth:hover{background:rgba(196,158,72,0.06);}
-    #kr-eth-hint{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.3em;text-transform:uppercase;color:rgba(196,158,72,0.3);margin-top:.4rem;}
+    #kr-offer{display:none;flex-direction:column;align-items:center;gap:.7rem;margin-top:2rem;padding-top:1.6rem;border-top:.5px solid rgba(196,158,72,0.1);max-width:36ch;}
+    .kr-offer-line{font-family:'Cormorant',serif;font-style:italic;font-size:14px;color:rgba(196,158,72,0.5);text-align:center;line-height:1.8;margin:0 0 .4rem;}
+    #kr-stripe{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.42em;text-transform:uppercase;color:rgba(238,220,168,0.82);text-decoration:none;border-bottom:.5px solid rgba(196,158,72,0.3);padding-bottom:.2rem;transition:color .4s,border-color .4s;}
+    #kr-stripe:hover{color:#fff;border-color:rgba(214,178,104,0.7);}
+    #kr-eth{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:rgba(196,158,72,0.32);word-break:break-all;cursor:pointer;text-align:center;line-height:1.7;padding:.3rem 0;transition:color .3s;}
+    #kr-eth:hover{color:rgba(196,158,72,0.6);}
+    #kr-eth-hint{font-family:'Cinzel',serif;font-size:6.5px;letter-spacing:.3em;text-transform:uppercase;color:rgba(196,158,72,0.22);margin-top:-.2rem;transition:color .3s;}
   </style>
   <p class="kr-eyebrow">Ancient Temenos</p>
   <video id="kr-video" autoplay muted loop playsinline preload="auto" crossorigin="anonymous" onerror="this.style.display='none';document.getElementById('kr-video-fallback').style.display='flex';">
@@ -917,6 +919,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   </video>
   <div id="kr-scrim"></div>
   <div id="kr-video-fallback"><span>✦</span></div>
+  <button id="kr-close" onclick="closeKeyReveal()" style="position:absolute;top:1.4rem;right:1.8rem;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.44em;text-transform:uppercase;color:rgba(196,158,72,0.3);background:transparent;border:none;cursor:pointer;transition:color .5s;z-index:3;" onmouseover="this.style.color='rgba(196,158,72,0.7)'" onmouseout="this.style.color='rgba(196,158,72,0.3)'">✕ Close</button>
   <p id="kr-headline">The temple offers you its first Key.</p>
   <button id="kr-collect" onclick="collectKey()">✦ Collect this Key</button>
   <div id="kr-inscription">
@@ -925,14 +928,15 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     <p class="kr-insc-meta" id="kr-insc-date"></p>
     <p id="kr-insc-id"></p>
   </div>
-  <div id="kr-after">
-    <button class="kr-btn primary" onclick="keepKey()">Keep your Key</button>
-    <button class="kr-btn ghost" onclick="document.getElementById('keyReveal').style.display='none';flashTo(()=>{showScreen('foyer');councilReset();})">Return to the temple</button>
-  </div>
   <div id="kr-offer">
-    <p class="kr-offer-line">This Key was given freely.<br>If the temple moved you, you may sustain it.</p>
-    <div id="kr-eth" onclick="(function(){try{navigator.clipboard.writeText('0x70F0082E7f47e3DC8cf62B2C7FA26100657297E9');document.getElementById('kr-eth-hint').textContent='Copied to clipboard';}catch(e){}})()">0x70F0082E7f47e3DC8cf62B2C7FA26100657297E9</div>
-    <p id="kr-eth-hint">Ethereum · tap to copy</p>
+    <p class="kr-offer-line">This was always yours to receive.<br>If you wish, you may leave something behind.</p>
+    <a id="kr-stripe" href="https://buy.stripe.com/dRmfZhegNawC60V5IT5kk00" target="_blank" rel="noopener">Offer to the temple →</a>
+    <div id="kr-eth" onclick="(function(){try{navigator.clipboard.writeText('0x70F0082E7f47e3DC8cf62B2C7FA26100657297E9');document.getElementById('kr-eth-hint').textContent='Copied';}catch(e){}})()">Ethereum · 0x70F0082E7f47e3DC8cf62B2C7FA26100657297E9</div>
+    <p id="kr-eth-hint">tap to copy</p>
+  </div>
+  <div id="kr-after">
+    <button class="kr-btn primary" onclick="keepKey()">Save your Key</button>
+    <button class="kr-btn ghost" onclick="closeKeyReveal()">Close</button>
   </div>
 </div>
 
@@ -2517,6 +2521,7 @@ function _venusSessionLine(){
   }catch(e){}
   return 'You already know what to do with this.';
 }
+function _keyNextNumber(){try{const a=JSON.parse(localStorage.getItem('temenos_keys')||'[]');return a.length+1;}catch(e){return 1;}}
 function _getVenusKey(){try{const a=JSON.parse(localStorage.getItem('temenos_keys')||'[]');return a.find(k=>k.chamber==='venus')||null;}catch(e){return null;}}
 function _saveVenusKey(k){try{const a=JSON.parse(localStorage.getItem('temenos_keys')||'[]');a.push(k);localStorage.setItem('temenos_keys',JSON.stringify(a));}catch(e){}}
 function _renderInscription(k){
@@ -2524,7 +2529,7 @@ function _renderInscription(k){
   set('kr-insc-line','\u201c'+k.line+'\u201d');
   set('kr-insc-chamber','Venus \u00b7 Chamber of Receiving');
   set('kr-insc-date',k.date);
-  set('kr-insc-id','Key '+k.id);
+  set('kr-insc-id',k.number?'Venus Key No.\u2002'+k.number:'');
 }
 function openKeyReveal(){
   const ov=document.getElementById('keyReveal');if(!ov)return;
@@ -2557,7 +2562,7 @@ function openKeyReveal(){
 function closeKeyReveal(){const ov=document.getElementById('keyReveal');if(!ov)return;ov.classList.remove('show');setTimeout(()=>{ov.style.display='none';},900);}
 function collectKey(){
   if(_getVenusKey())return;
-  const k={id:'VEN-'+_keyDateStamp()+'-'+_keyShortRand(),chamber:'venus',date:_keyPrettyDate(),line:_venusSessionLine(),collectedAt:new Date().toISOString()};
+  const k={id:'VEN-'+_keyDateStamp()+'-'+_keyShortRand(),number:_keyNextNumber(),chamber:'venus',date:_keyPrettyDate(),line:_venusSessionLine(),collectedAt:new Date().toISOString()};
   _saveVenusKey(k);_keyCurrent=k;
   if(window.trackTempleEvent)trackTempleEvent('key_collected',{chamber:'venus',id:k.id});
   const img=document.getElementById('kr-key-img');if(img){img.classList.remove('pulse');void img.offsetWidth;img.classList.add('pulse');}
@@ -2565,8 +2570,8 @@ function collectKey(){
   const head=document.getElementById('kr-headline');if(head)head.textContent='The Key is yours. It remembers this moment.';
   _renderInscription(k);
   setTimeout(()=>{const insc=document.getElementById('kr-inscription');if(insc)insc.style.opacity='1';},400);
-  setTimeout(()=>{const after=document.getElementById('kr-after');if(after)after.style.display='flex';},1700);
-  setTimeout(()=>{const offer=document.getElementById('kr-offer');if(offer)offer.style.display='flex';},2700);
+  setTimeout(()=>{const offer=document.getElementById('kr-offer');if(offer)offer.style.display='flex';},1600);
+  setTimeout(()=>{const after=document.getElementById('kr-after');if(after)after.style.display='flex';},2800);
 }
 function _krWrap(ctx,text,x,y,maxW,lh){const words=text.split(' ');let line='';let yy=y;for(let n=0;n<words.length;n++){const test=line+words[n]+' ';if(ctx.measureText(test).width>maxW&&n>0){ctx.fillText(line.trim(),x,yy);line=words[n]+' ';yy+=lh;}else{line=test;}}ctx.fillText(line.trim(),x,yy);return yy;}
 async function keepKey(){
@@ -3270,6 +3275,26 @@ initFoyer=function(){
 <script>
 (function(){
   var _p   = new URLSearchParams(location.search);
+
+  /* ── ?sigil=1 — open Key reveal directly, no DevTools needed ── */
+  if(_p.get('sigil')==='1'){
+    window.addEventListener('load',function(){
+      if(!window.vHistory)window.vHistory=[];
+      window.vHistory=[
+        {role:'user',content:'I keep shrinking myself around people I love.'},
+        {role:'assistant',content:JSON.stringify({
+          principle:'You are allowed to take up space.',
+          mirror:'You have been confusing love with disappearance. They are not the same thing. The people who matter will not leave when you become more visible.',
+          kybalion:'As within, so without.',
+          affirmation:'I am allowed to be fully here.',
+          question:'What would you say today if you knew you would still be loved afterward?',
+          actions:['Say one true thing you have been softening','Stop apologising for having a preference']
+        })}
+      ];
+      setTimeout(function(){if(typeof openKeyReveal==='function')openKeyReveal();},400);
+    });
+  }
+
   var _dev = location.hostname === 'localhost'   ||
              location.hostname === '127.0.0.1'  ||
              _p.get('testKey') === '1';
@@ -3278,6 +3303,7 @@ initFoyer=function(){
   /* mock data per spec */
   var MOCK = {
     id          : 'SIGIL-TEST-001',
+    number      : 1,
     chamber     : 'venus',
     date        : new Date().toLocaleDateString('en-GB', {day:'numeric', month:'long', year:'numeric'}),
     line        : 'I am allowed to receive what is already mine.',
