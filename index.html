@@ -2965,6 +2965,7 @@ window.sendCouncil=async function(){
 if(_devp.get('key')==='1'){try{localStorage.setItem('temenos_sigil_key','1');}catch(e){}}
 // ── DEV: ?testGrimoire=1 — open grimoire with mock Venus data ───────────────
 (function(){
+  const _devp=new URLSearchParams(window.location.search);
   if(_devp.get('testGrimoire')!=='1')return;
   window.testGrimoireOpen=function(){
     // seed Venus session so generateInvocation has real content
