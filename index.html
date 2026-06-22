@@ -867,6 +867,13 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
           <p id="gr-remembered" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:rgba(196,158,72,0.65);display:none;margin:0;">You are remembered.</p>
         </div>
       </div>
+      <!-- ── ARTWORK ENQUIRY ─────────────────────────────────────────────── -->
+      <div id="gr-artwork-enquiry" style="opacity:0;transition:opacity 1.8s ease;width:100%;display:flex;flex-direction:column;align-items:center;gap:0.6rem;margin-top:2.4rem;padding-top:2rem;border-top:.5px solid rgba(196,158,72,0.06);">
+        <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.3vw,15px);color:rgba(196,158,72,0.38);line-height:1.95;text-align:center;margin:0 0 0.6rem;max-width:36ch;">The artwork you passed through exists as a singular object.<br>A limited edition of 22 prints also exists.</p>
+        <a href="mailto:ellisliu91@gmail.com?subject=Venus%20Chamber%20%E2%80%94%20Artwork%20Enquiry&body=I%20completed%20a%20Venus%20session%20in%20Ancient%20Temenos%20and%20would%20like%20to%20enquire%20about%20the%20artwork.%0A%0AI%20am%20interested%20in%3A%20%5Bthe%20original%20%2F%20a%20print%20from%20the%20edition%5D%0A%0AMy%20name%3A%20%0AAnything%20else%3A" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:.44em;text-transform:uppercase;color:rgba(238,220,168,0.48);text-decoration:none;border-bottom:.5px solid rgba(196,158,72,0.18);padding-bottom:.22rem;transition:all .5s ease;" onmouseover="this.style.color='rgba(238,220,168,0.82)';this.style.borderBottomColor='rgba(196,158,72,0.5)'" onmouseout="this.style.color='rgba(238,220,168,0.48)';this.style.borderBottomColor='rgba(196,158,72,0.18)'">→ Enquire</a>
+      </div>
+      <!-- ── /ARTWORK ENQUIRY ────────────────────────────────────────────────── -->
+
       <!-- ── /OFFERING ──────────────────────────────────────────────────── -->
 
     </div>
@@ -1763,6 +1770,8 @@ Return ONLY valid JSON, no markdown, no fences:
   // Always reveal — grActions must show even if invocation fails
   if(loading)loading.style.display='none';
   if(actions)actions.style.display='flex';
+  // Artwork enquiry fades in after existing actions settle
+  setTimeout(()=>{const enq=document.getElementById('gr-artwork-enquiry');if(enq)enq.style.opacity='1';},2800);
 }
 // ── GRIMOIRE REMEMBRANCE ────────────────────────────────────────────────────
 function _grUUID(){

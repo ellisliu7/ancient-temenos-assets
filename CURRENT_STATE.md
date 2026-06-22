@@ -20,6 +20,41 @@
 
 ## Session log
 
+### 22 June 2026 — Collector experiment v1 shipped
+
+**Status: complete. Collector experiment live.**
+
+**Shipped:**
+
+1. **Artwork enquiry block** — `#gr-artwork-enquiry` added to Grimoire closing screen, inside `#gr-offering`, after guestbook. Fades in at opacity 0 → 1 over 1.8s, triggered by `setTimeout` at 2800ms after `grActions` reveals.
+2. **Staged reveal** — enquiry appears ~2.8s after existing Grimoire actions settle. Visitor sees: copy button → Stripe offering → guestbook → [pause] → artwork enquiry.
+3. **mailto: link** — `ellisliu91@gmail.com`, subject pre-filled `Venus Chamber — Artwork Enquiry`, body pre-fills interest, name, and open field.
+
+**Copy locked:**
+> *The artwork you passed through exists as a singular object.*
+> *A limited edition of 22 prints also exists.*
+> *→ Enquire*
+
+**Decisions made this session (locked):**
+
+- **Guestbook left intact** — `/api/remember` is 404 but visitor-facing experience completes correctly. Two different intentions: collector enquiry (active, immediate) vs. Remember Me (passive, future). Not competing. Not removed.
+- **Collector experiment scope is complete** — no further collector infrastructure until a real enquiry arrives.
+- **Artwork is the collectible, not the Key** — the Key may become part of the journey but is not the thing people ultimately take home. This is the defining insight of the collector positioning sprint.
+
+**What to watch:**
+- Does an email arrive at `ellisliu91@gmail.com` from a real visitor?
+- Success = one genuine enquiry in four weeks.
+- No analytics required. Inbox is the instrument.
+
+**Not built, deferred until signal:**
+- Collector page
+- Print production
+- Edition certificates
+- Artist attribution / discovery layer
+- Collective Memory / Remember Me deployment
+
+---
+
 ### 22 June 2026 — Sigil Key sprint + handoff
 
 **Status: partial sprint. Some changes shipped. Offering section unresolved. Next sprint scoped.**
