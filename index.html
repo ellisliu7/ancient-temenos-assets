@@ -250,6 +250,29 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .of-save{background:transparent;border:.5px solid rgba(196,158,72,0.4);color:rgba(196,158,72,0.7);font-family:'Cinzel',serif;font-size:8px;letter-spacing:.3em;text-transform:uppercase;padding:.55rem 1.6rem;cursor:pointer;transition:all .4s;margin-top:.8rem;}
 
 /* ── GRIMOIRE ── */
+#gr-artwork-card{width:100%;max-width:520px;display:none;flex-direction:column;align-items:center;gap:1.6rem;margin:0 auto 2.4rem;padding:2rem 1.8rem 2.2rem;border:.5px solid rgba(196,158,72,0.14);background:rgba(196,158,72,0.025);}
+#gr-artwork-card img{width:100%;max-width:320px;height:auto;display:block;object-fit:cover;filter:sepia(0.18) brightness(0.92);border:.5px solid rgba(196,158,72,0.1);}
+#gr-artwork-card .grac-label{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.5em;text-transform:uppercase;color:rgba(196,158,72,0.38);margin:0;}
+#gr-artwork-card .grac-body{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,1.4vw,16px);color:rgba(232,216,186,0.6);line-height:1.95;text-align:center;margin:0;max-width:38ch;}
+#gr-artwork-card .grac-cta{font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:.44em;text-transform:uppercase;color:rgba(238,220,168,0.75);background:transparent;border:.5px solid rgba(196,158,72,0.32);padding:.7rem 1.8rem;cursor:pointer;transition:all .5s ease;margin-top:.4rem;}
+#gr-artwork-card .grac-cta:hover{color:rgba(255,245,220,1);border-color:rgba(196,158,72,0.75);background:rgba(196,158,72,0.06);}
+#gr-enquiry-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;background:rgba(4,3,2,0.88);backdrop-filter:blur(6px);}
+#gr-enquiry-modal.open{display:flex;}
+#gr-enquiry-inner{width:min(480px,90vw);background:rgba(8,6,3,0.97);border:.5px solid rgba(196,158,72,0.18);padding:2.8rem 2.4rem 2.6rem;display:flex;flex-direction:column;gap:1.4rem;position:relative;}
+#gr-enquiry-inner .geq-eyebrow{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.52em;text-transform:uppercase;color:rgba(196,158,72,0.4);margin:0;text-align:center;}
+#gr-enquiry-inner .geq-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,2vw,24px);color:rgba(238,220,168,0.85);margin:0;text-align:center;line-height:1.4;}
+#gr-enquiry-inner .geq-sub{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:rgba(196,158,72,0.42);margin:-.4rem 0 .4rem;text-align:center;line-height:1.7;}
+.geq-field{display:flex;flex-direction:column;gap:.45rem;}
+.geq-field label{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.38em;text-transform:uppercase;color:rgba(196,158,72,0.45);}
+.geq-field input,.geq-field textarea{background:rgba(20,14,6,0.5);border:.5px solid rgba(196,158,72,0.16);color:rgba(232,216,186,0.9);font-family:'Cormorant Garamond',serif;font-size:15px;padding:.6rem .9rem;outline:none;width:100%;box-sizing:border-box;resize:none;transition:border-color .5s;}
+.geq-field input:focus,.geq-field textarea:focus{border-color:rgba(196,158,72,0.42);}
+.geq-field textarea{min-height:90px;line-height:1.6;}
+#geq-submit{font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:.44em;text-transform:uppercase;background:transparent;border:.5px solid rgba(196,158,72,0.38);color:rgba(238,220,168,0.8);padding:.8rem 2rem;cursor:pointer;transition:all .5s ease;align-self:center;margin-top:.4rem;}
+#geq-submit:hover{background:rgba(196,158,72,0.07);border-color:rgba(196,158,72,0.7);color:rgba(255,245,220,1);}
+#geq-close{position:absolute;top:1rem;right:1.2rem;background:none;border:none;color:rgba(196,158,72,0.4);font-family:'Cinzel',serif;font-size:10px;letter-spacing:.2em;cursor:pointer;transition:color .3s;}
+#geq-close:hover{color:rgba(196,158,72,0.9);}
+#geq-sent{display:none;text-align:center;}
+#geq-sent p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:rgba(196,158,72,0.7);line-height:1.85;}
 #grimoireScreen{position:fixed;inset:0;z-index:95;background:rgba(4,3,2,0.98);display:none;flex-direction:column;align-items:center;overflow-y:auto;}
 #grimoireScreen::-webkit-scrollbar{width:0;}
 .gr-close{position:fixed;top:1.6rem;right:1.8rem;background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.38em;color:rgba(196,158,72,0.3);text-transform:uppercase;z-index:96;transition:color .3s;}
@@ -846,6 +869,14 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
       <p class="gr-date" id="grDate"></p>
     </div>
     <div class="gr-divider"><div class="gr-div-l"></div><div class="gr-div-g"></div><div class="gr-div-l"></div></div>
+    <!-- ── ARTWORK CARD ──────────────────────────────────────────────── -->
+    <div id="gr-artwork-card">
+      <p class="grac-label">Venus · Original Work</p>
+      <img src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Artwork.jpg" alt="Venus — graphite, charcoal and gold on paper" loading="lazy" onerror="this.style.display='none'"/>
+      <p class="grac-body">You passed through an artwork that exists beyond this chamber.<br>Original work and limited editions are available for private collection.</p>
+      <button class="grac-cta" onclick="openArtworkEnquiry()">Enquire about the artwork</button>
+    </div>
+    <!-- ── /ARTWORK CARD ─────────────────────────────────────────────── -->
     <div id="grVenusSection" style="display:none;"><p class="gr-section-label">What Venus Revealed</p><p class="gr-section-body" id="grVenusBody"></p></div>
     <div id="grGanySection" style="display:none;"><p class="gr-section-label">What We Explored Together</p><p class="gr-section-body" id="grGanyBody"></p></div>
     <div id="grInvocationSection" style="display:none;"><p class="gr-section-label">Your Closing Invocation</p><p class="gr-invocation" id="grInvocation"></p></div>
@@ -870,7 +901,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
       <!-- ── ARTWORK ENQUIRY ─────────────────────────────────────────────── -->
       <div id="gr-artwork-enquiry" style="opacity:0;transition:opacity 1.8s ease;width:100%;display:flex;flex-direction:column;align-items:center;gap:0.6rem;margin-top:2.4rem;padding-top:2rem;border-top:.5px solid rgba(196,158,72,0.06);">
         <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.3vw,15px);color:rgba(196,158,72,0.38);line-height:1.95;text-align:center;margin:0 0 0.6rem;max-width:36ch;">The artwork you passed through exists as a singular object.<br>A limited edition of 22 prints also exists.</p>
-        <a href="mailto:ellisliu91@gmail.com?subject=Venus%20Chamber%20%E2%80%94%20Artwork%20Enquiry&body=I%20completed%20a%20Venus%20session%20in%20Ancient%20Temenos%20and%20would%20like%20to%20enquire%20about%20the%20artwork.%0A%0AI%20am%20interested%20in%3A%20%5Bthe%20original%20%2F%20a%20print%20from%20the%20edition%5D%0A%0AMy%20name%3A%20%0AAnything%20else%3A" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:.44em;text-transform:uppercase;color:rgba(238,220,168,0.48);text-decoration:none;border-bottom:.5px solid rgba(196,158,72,0.18);padding-bottom:.22rem;transition:all .5s ease;" onmouseover="this.style.color='rgba(238,220,168,0.82)';this.style.borderBottomColor='rgba(196,158,72,0.5)'" onmouseout="this.style.color='rgba(238,220,168,0.48)';this.style.borderBottomColor='rgba(196,158,72,0.18)'">→ Enquire</a>
+        <button onclick="openArtworkEnquiry()" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:.44em;text-transform:uppercase;color:rgba(238,220,168,0.38);background:transparent;border:none;border-bottom:.5px solid rgba(196,158,72,0.14);padding-bottom:.22rem;cursor:pointer;transition:all .5s ease;" onmouseover="this.style.color='rgba(238,220,168,0.72)';this.style.borderBottomColor='rgba(196,158,72,0.42)'" onmouseout="this.style.color='rgba(238,220,168,0.38)';this.style.borderBottomColor='rgba(196,158,72,0.14)'">→ Enquire</button>
       </div>
       <!-- ── /ARTWORK ENQUIRY ────────────────────────────────────────────────── -->
 
@@ -1770,6 +1801,9 @@ Return ONLY valid JSON, no markdown, no fences:
   // Always reveal — grActions must show even if invocation fails
   if(loading)loading.style.display='none';
   if(actions)actions.style.display='flex';
+  // Show artwork card for Venus sessions only
+  var _ac=document.getElementById('gr-artwork-card');
+  if(_ac&&mode==='venus'){_ac.style.display='flex';}
   // Artwork enquiry fades in after existing actions settle
   setTimeout(()=>{const enq=document.getElementById('gr-artwork-enquiry');if(enq)enq.style.opacity='1';},2800);
 }
@@ -3711,6 +3745,51 @@ initFoyer=function(){
 })();
 </script>
 <!-- ── /DEV testGrimoire nuclear fallback ─────────────────────────────────────── -->
+
+<!-- ── ARTWORK ENQUIRY MODAL ─────────────────────────────────────────────── -->
+<div id="gr-enquiry-modal" role="dialog" aria-modal="true">
+  <div id="gr-enquiry-inner">
+    <button id="geq-close" onclick="closeArtworkEnquiry()">✕ Close</button>
+    <p class="geq-eyebrow">Private Collection</p>
+    <p class="geq-title">Enquire about the artwork</p>
+    <p class="geq-sub">Venus — graphite, charcoal &amp; gold on paper<br>38.5 × 56.5 cm · 2026 · Original + edition of 22</p>
+    <div id="geq-form-fields" style="display:flex;flex-direction:column;gap:1.4rem;">
+      <div class="geq-field"><label for="geq-name">Your name</label><input id="geq-name" type="text" placeholder="How you wish to be known" autocomplete="off"/></div>
+      <div class="geq-field"><label for="geq-email">Email address</label><input id="geq-email" type="email" placeholder="your@email.com" autocomplete="off"/></div>
+      <div class="geq-field"><label for="geq-msg">Your enquiry</label><textarea id="geq-msg" placeholder="I am interested in the original / a print from the edition of 22…"></textarea></div>
+      <button id="geq-submit" onclick="submitArtworkEnquiry()">Send enquiry →</button>
+    </div>
+    <div id="geq-sent"><p>Your enquiry is on its way.<br>El will be in touch.</p></div>
+  </div>
+</div>
+<script>
+function openArtworkEnquiry(){
+  var m=document.getElementById('gr-enquiry-modal');
+  if(!m)return;
+  document.getElementById('geq-form-fields').style.display='flex';
+  document.getElementById('geq-sent').style.display='none';
+  m.classList.add('open');
+  setTimeout(function(){var n=document.getElementById('geq-name');if(n)n.focus();},120);
+}
+function closeArtworkEnquiry(){
+  var m=document.getElementById('gr-enquiry-modal');
+  if(m)m.classList.remove('open');
+}
+function submitArtworkEnquiry(){
+  var name=(document.getElementById('geq-name').value||'').trim();
+  var email=(document.getElementById('geq-email').value||'').trim();
+  var msg=(document.getElementById('geq-msg').value||'').trim();
+  if(!email){document.getElementById('geq-email').focus();return;}
+  var sub=encodeURIComponent('Venus Chamber — Artwork Enquiry');
+  var body=encodeURIComponent('Name: '+(name||'(not given)')+'\nEmail: '+email+'\n\n'+(msg||'I would like to enquire about the Venus artwork.'));
+  window.location.href='mailto:ellisliu91@gmail.com?subject='+sub+'&body='+body;
+  document.getElementById('geq-form-fields').style.display='none';
+  document.getElementById('geq-sent').style.display='block';
+}
+document.getElementById('gr-enquiry-modal').addEventListener('click',function(e){if(e.target===this)closeArtworkEnquiry();});
+document.addEventListener('keydown',function(e){if(e.key==='Escape')closeArtworkEnquiry();});
+</script>
+<!-- ── /ARTWORK ENQUIRY MODAL ────────────────────────────────────────────── -->
 
 </body>
 </html>
