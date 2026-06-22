@@ -2963,51 +2963,6 @@ window.sendCouncil=async function(){
   // ── MOCK MODE: add ?mock=1 to URL to bypass API ──
   const _devp=new URLSearchParams(window.location.search);
 if(_devp.get('key')==='1'){try{localStorage.setItem('temenos_sigil_key','1');}catch(e){}}
-// ── DEV: ?testGrimoire=1 — open grimoire with mock Venus data ───────────────
-(function(){
-  const _devp=new URLSearchParams(window.location.search);
-  if(_devp.get('testGrimoire')!=='1')return;
-  window.testGrimoireOpen=function(){
-    // seed Venus session so generateInvocation has real content
-    if(!window.vHistory)window.vHistory=[];
-    window.vHistory=[
-      {role:'user',content:'I keep giving everything to people who don\u2019t ask for it and then feeling empty.'},
-      {role:'assistant',content:JSON.stringify({
-        principle:'The Principle of Polarity',
-        mirror:'You have not lost the ability to receive. You have been so committed to giving that receiving began to feel unsafe.',
-        kybalion:'Everything is dual; everything has poles.',
-        affirmation:'I am allowed to receive what is already mine.',
-        question:'What would you let yourself want today if no one was watching?',
-        actions:['Rest before you plan.','Name one thing you need that you have not asked for.']
-      })}
-    ];
-    // set venusChat so grimoire knows the mode
-    window.venusChat=window.vHistory.map(m=>m.content).join('\n');
-    // open grimoire in Venus mode
-    currentScreen='venusApproach';
-    openGrimoire();
-  };
-  // readyState guard: DOMContentLoaded may have already fired when this script runs mid-parse
-  function _attachGrimoireBtn(){
-    const w=document.createElement('div');
-    w.style.cssText='position:fixed;bottom:1.4rem;left:1.4rem;z-index:9999;';
-    const b=document.createElement('button');
-    b.textContent='✦ Test Grimoire';
-    b.style.cssText='background:rgba(12,8,3,0.94);border:.5px solid rgba(196,158,72,0.55);color:rgba(196,158,72,0.88);font-family:"Cinzel",serif;font-size:9px;letter-spacing:.38em;text-transform:uppercase;padding:.65rem 1.3rem;cursor:pointer;transition:all .4s;';
-    b.onmouseover=function(){this.style.borderColor='rgba(214,178,104,0.85)';this.style.color='#fff';};
-    b.onmouseout=function(){this.style.borderColor='rgba(196,158,72,0.55)';this.style.color='rgba(196,158,72,0.88)';};
-    b.onclick=window.testGrimoireOpen;
-    w.appendChild(b);document.body.appendChild(w);
-    console.info('[Temenos dev] ✦ testGrimoireOpen() ready. Also callable in console.');
-  }
-  if(document.readyState==='loading'){
-    document.addEventListener('DOMContentLoaded',_attachGrimoireBtn);
-  }else{
-    // DOM already ready — fire immediately
-    _attachGrimoireBtn();
-  }
-})();
-// ── /DEV testGrimoire ────────────────────────────────────────────────────────
 
 // [dev shortcut: moved to bottom of body — see below]
 const _mock=new URLSearchParams(window.location.search).get('mock');
@@ -3281,6 +3236,49 @@ initFoyer=function(){
 
 </script>
 </script>
+
+<!-- ── DEV: ?testGrimoire=1 — open grimoire with mock Venus data ────────────── -->
+<script>
+(function(){
+  if(new URLSearchParams(location.search).get('testGrimoire')!=='1')return;
+  window.testGrimoireOpen=function(){
+    if(!window.vHistory)window.vHistory=[];
+    window.vHistory=[
+      {role:'user',content:'I keep giving everything to people who don’t ask for it and then feeling empty.'},
+      {role:'assistant',content:JSON.stringify({
+        principle:'The Principle of Polarity',
+        mirror:'You have not lost the ability to receive. You have been so committed to giving that receiving began to feel unsafe.',
+        kybalion:'Everything is dual; everything has poles.',
+        affirmation:'I am allowed to receive what is already mine.',
+        question:'What would you let yourself want today if no one was watching?',
+        actions:['Rest before you plan.','Name one thing you need that you have not asked for.']
+      })}
+    ];
+    window.venusChat=window.vHistory.map(m=>m.content).join('\n');
+    currentScreen='venusApproach';
+    openGrimoire();
+  };
+  function _attachBtn(){
+    var w=document.createElement('div');
+    w.style.cssText='position:fixed;bottom:1.4rem;left:1.4rem;z-index:999999;';
+    var b=document.createElement('button');
+    b.textContent='✦ Test Grimoire';
+    b.style.cssText='background:rgba(12,8,3,0.94);border:.5px solid rgba(196,158,72,0.55);color:rgba(196,158,72,0.88);font-family:"Cinzel",serif;font-size:9px;letter-spacing:.38em;text-transform:uppercase;padding:.65rem 1.3rem;cursor:pointer;';
+    b.onmouseover=function(){this.style.borderColor='rgba(214,178,104,0.85)';this.style.color='#fff';};
+    b.onmouseout=function(){this.style.borderColor='rgba(196,158,72,0.55)';this.style.color='rgba(196,158,72,0.88)';};
+    b.onclick=window.testGrimoireOpen;
+    w.appendChild(b);
+    document.body.appendChild(w);
+    console.info('[Temenos dev] ✦ testGrimoireOpen() ready — also callable in console.');
+  }
+  if(document.readyState==='loading'){
+    document.addEventListener('DOMContentLoaded',_attachBtn);
+  }else{
+    _attachBtn();
+  }
+})();
+</script>
+<!-- ── /DEV testGrimoire ──────────────────────────────────────────────────────── -->
 <!-- ══ DEV: Key reveal test button — production no-op ══════════════════════════ -->
 <script>
 (function(){
