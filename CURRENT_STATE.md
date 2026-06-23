@@ -20,6 +20,65 @@
 
 ## Session log
 
+### 22 June 2026 — Developer Toolkit Sprint
+
+**Status: shipped. Ready to push and verify.**
+
+**Two bugs fixed as part of this patch:**
+1. **Duplicate artwork enquiry modal removed** — `#gr-enquiry-modal`, all its JS, and its comment wrapper were duplicated in the file. Second copy excised. 8 references remain (correct: the single instance).
+2. **Double `</html>` at end of file fixed** — trailing duplicate removed. File now closes cleanly.
+
+**Dev toolkit shipped (replaces old `testGrimoire nuclear fallback` block):**
+
+The old single-function block (~78 lines) is gone. Replaced by the permanent Temenos Dev Toolkit (~243 lines). Block is clearly marked with `<!-- ✦ ANCIENT TEMENOS — DEVELOPER TOOLKIT -->` header comment containing the full command reference.
+
+**Phase 1 — Global console commands (all callable any time, no URL params needed):**
+
+| Command | What it does |
+|---|---|
+| `window.__testGrimoireNow()` | Seeds Venus mock session, opens Grimoire immediately |
+| `window.__testGanyGrimoireNow()` | Seeds Ganymede mock session, opens Grimoire immediately |
+| `window.__testVenusNow()` | Flash-transitions into Venus approach corridor |
+| `window.__testGanymedeNow()` | Flash-transitions into Ganymede cave |
+| `window.__testKeyNow()` | Seeds Venus mock data, opens Sigil Key reveal |
+| `window.__resetTemple()` | Clears all localStorage keys, shows threshold screen |
+| `window.__unlockAllKeys()` | Grants Sigil Key + seeds Venus key record in storage |
+
+**Phase 2 — Dev panel (`?dev=1`):**
+- Floating dark panel, bottom-left, `z-index:999999`
+- Temenos gold palette (invisible to visitors unless URL param present)
+- 8 clickable items: Venus, Ganymede, Grimoire (Venus), Grimoire (Gany), Sigil Key, Collector, Reset Temple, Unlock Key
+- × close button to dismiss
+
+**Phase 3 — Deep-link URL params (all new except those noted):**
+
+| Param | Behaviour | Notes |
+|---|---|---|
+| `?dev=1` | Show dev panel | NEW |
+| `?testGrimoire=1` | Show legacy ✦ Test Grimoire button | EXISTING, still works |
+| `?mock=venus` | Venus chamber, no API | EXISTING |
+| `?mock=ganymede` | Ganymede chamber, no API | EXISTING |
+| `?mock=grimoire` | Venus Grimoire with mock data, immediate | NEW |
+| `?mock=ganygrimoire` | Ganymede Grimoire with mock data, immediate | NEW |
+| `?mock=collector` | Artwork enquiry modal, immediate | NEW |
+| `?mock=key` | Sigil Key reveal with mock Venus data | NEW (alias for `?sigil=1`) |
+| `?sigil=1` | Sigil Key reveal (existing handler untouched) | EXISTING |
+| `?skip=approach` | Skip cave scroll (combine with `?mock=ganymede`) | EXISTING |
+
+**What to verify first thing next session:**
+
+1. `window.__testGrimoireNow()` — opens Venus Grimoire from console instantly
+2. `window.__testGanyGrimoireNow()` — opens Ganymede Grimoire from console instantly
+3. `window.__resetTemple()` — clears storage and shows threshold
+4. `window.__unlockAllKeys()` — then enter Ganymede, check sigil gate is bypassed
+5. `?dev=1` — floating panel appears, all 8 buttons fire correctly
+6. `?mock=grimoire` — Venus Grimoire appears on page load
+7. `?mock=collector` — artwork enquiry modal appears on page load
+8. Confirm duplicate modal is gone (inspect DOM: only one `#gr-enquiry-modal`)
+9. Confirm file ends with single `</html>` (view source, bottom of file)
+
+---
+
 ### 22 June 2026 — Collector V2 + dev tooling
 
 **Status: shipped, awaiting browser verification next session.**
@@ -105,9 +164,20 @@ Delivered full emotional journey map, rupture point analysis, copy options, dev 
 | Item | Status |
 |---|---|
 | `window.__testGrimoireNow()` | Live — canonical dev tool |
-| `?testGrimoire=1` button | Live — single instance only |
+| `window.__testGanyGrimoireNow()` | Shipped — awaiting browser verify |
+| `window.__testVenusNow()` | Shipped — awaiting browser verify |
+| `window.__testGanymedeNow()` | Shipped — awaiting browser verify |
+| `window.__testKeyNow()` | Shipped — awaiting browser verify |
+| `window.__resetTemple()` | Shipped — awaiting browser verify |
+| `window.__unlockAllKeys()` | Shipped — awaiting browser verify |
+| `?dev=1` panel | Shipped — awaiting browser verify |
+| `?mock=grimoire` | Shipped — awaiting browser verify |
+| `?mock=ganygrimoire` | Shipped — awaiting browser verify |
+| `?mock=collector` | Shipped — awaiting browser verify |
+| `?mock=key` | Shipped — awaiting browser verify |
+| `?testGrimoire=1` button | Live — legacy, still works |
 | `#gr-artwork-card` | Shipped — awaiting browser verify |
-| `#gr-enquiry-modal` | Shipped — awaiting browser verify |
+| `#gr-enquiry-modal` | Shipped (duplicate copy removed this session) |
 | `Venus_Artwork.jpg` | Filename confirmed. CDN path unverified in browser. |
 | Lower `→ Enquire` button | Live — calls modal |
 | Stripe offering | Live |

@@ -3659,84 +3659,249 @@ initFoyer=function(){
 </script>
 <!-- ════════════════════════════════════════════════════════════════════════════ -->
 
-<!-- ── DEV: testGrimoire nuclear fallback — no IIFEs, no dependencies ────────── -->
+<!-- ════════════════════════════════════════════════════════════════════════════
+     ✦ ANCIENT TEMENOS — DEVELOPER TOOLKIT
+     ════════════════════════════════════════════════════════════════════════════
+     CONSOLE COMMANDS (callable any time from browser console):
+       window.__testGrimoireNow()      Venus Grimoire, mock session
+       window.__testGanyGrimoireNow()  Ganymede Grimoire, mock session
+       window.__testVenusNow()         Enter Venus chamber
+       window.__testGanymedeNow()      Enter Ganymede chamber
+       window.__testKeyNow()           Sigil Key reveal, mock Venus data
+       window.__resetTemple()          Clear all localStorage, back to threshold
+       window.__unlockAllKeys()        Grant Sigil Key + seed Venus key record
+
+     URL DEEP-LINKS:
+       ?dev=1              Floating 8-button dev panel (bottom-left, never visitor-visible)
+       ?testGrimoire=1     Legacy: single Venus Grimoire button (still works)
+       ?mock=venus         Venus chamber, no API
+       ?mock=ganymede      Ganymede chamber, no API
+       ?mock=grimoire      Venus Grimoire with mock data, opens immediately
+       ?mock=ganygrimoire  Ganymede Grimoire with mock data, opens immediately
+       ?mock=collector     Artwork enquiry modal, opens immediately
+       ?mock=key           Sigil Key reveal with mock Venus data (alias: ?sigil=1)
+       ?skip=approach      Skip cave scroll (combine with ?mock=ganymede)
+     ════════════════════════════════════════════════════════════════════════════ -->
 <script>
 (function(){
-  console.log('[testGrimoire] script tag reached');
 
-  // Always expose the manual console command — no URL check
-  window.__testGrimoireNow = function(){
-    console.log('[testGrimoire] __testGrimoireNow called');
+  // -- SHARED MOCK DATA -------------------------------------------------------
+
+  var MOCK_VENUS = [
+    {role:'user', content:'I keep giving everything to people who don\u2019t ask for it and then feeling empty.'},
+    {role:'assistant', content:JSON.stringify({
+      principle:'The Principle of Polarity',
+      mirror:'You have not lost the ability to receive. You have been so committed to giving that receiving began to feel unsafe.',
+      kybalion:'Everything is dual; everything has poles.',
+      affirmation:'I am allowed to receive what is already mine.',
+      question:'What would you let yourself want today if no one was watching?',
+      actions:['Rest before you plan.','Name one thing you need that you have not asked for.']
+    })}
+  ];
+
+  var MOCK_GANYMEDE = [
+    {role:'user', content:'I have a clear vision but I cannot make the first move.'},
+    {role:'assistant', content:JSON.stringify({
+      reflection:'You know what you want to build. The gap is not vision. It is the terror of the first stone.',
+      structure:'Structure does not create certainty. It creates a container for action to happen inside uncertainty.',
+      step:'Write the name of the project on paper. Below it, write the single next physical act.',
+      options:[
+        {text:'Map the three concrete steps that follow the first'},
+        {text:'Find one person who has done something adjacent and ask one question'},
+        {text:'Set a 48-hour window and do only the first step inside it'}
+      ],
+      question:'',
+      check_in:false
+    })}
+  ];
+
+  function _seedVenus(){
     if(!window.vHistory) window.vHistory = [];
-    window.vHistory = [
-      {role:'user', content:'I keep giving everything to people who don’t ask for it and then feeling empty.'},
-      {role:'assistant', content:JSON.stringify({
-        principle:'The Principle of Polarity',
-        mirror:'You have not lost the ability to receive. You have been so committed to giving that receiving began to feel unsafe.',
-        kybalion:'Everything is dual; everything has poles.',
-        affirmation:'I am allowed to receive what is already mine.',
-        question:'What would you let yourself want today if no one was watching?',
-        actions:['Rest before you plan.','Name one thing you need that you have not asked for.']
-      })}
-    ];
-    window.venusChat = window.vHistory.map(function(m){return m.content;}).join('\n');
+    window.vHistory = MOCK_VENUS;
     currentScreen = 'venusApproach';
-    console.log('[testGrimoire] calling openGrimoire()');
-    openGrimoire();
+  }
+
+  function _seedGanymede(){
+    if(!window.gHistory) window.gHistory = [];
+    window.gHistory = MOCK_GANYMEDE;
+    if(typeof gExchangeCount !== 'undefined') gExchangeCount = 2;
+    currentScreen = 'ganymedeScreen';
+  }
+
+  // -- PHASE 1: GLOBAL CONSOLE COMMANDS --------------------------------------
+
+  window.__testGrimoireNow = function(){
+    _seedVenus();
+    if(typeof openGrimoire === 'function') openGrimoire();
+    else console.warn('[Temenos] openGrimoire() not found');
   };
 
-  console.log('[testGrimoire] __testGrimoireNow registered on window');
+  window.__testGanyGrimoireNow = function(){
+    _seedGanymede();
+    if(typeof openGrimoire === 'function') openGrimoire();
+    else console.warn('[Temenos] openGrimoire() not found');
+  };
 
-  // URL check for auto-button
-  var _tgParam = new URLSearchParams(location.search).get('testGrimoire');
-  console.log('[testGrimoire] param value:', _tgParam);
-  if(_tgParam !== '1'){
-    console.log('[testGrimoire] param not 1, skipping button. Run window.__testGrimoireNow() manually.');
-    return;
-  }
+  window.__testVenusNow = function(){
+    if(typeof flashTo === 'function' && typeof enterVenusApproach === 'function'){
+      flashTo(function(){ enterVenusApproach(); });
+    } else if(typeof enterVenusApproach === 'function'){
+      enterVenusApproach();
+    } else {
+      console.warn('[Temenos] enterVenusApproach() not found');
+    }
+  };
 
-  console.log('[testGrimoire] param confirmed — will inject button');
+  window.__testGanymedeNow = function(){
+    if(typeof flashTo === 'function' && typeof enterGanymede === 'function'){
+      flashTo(function(){ enterGanymede(); });
+    } else if(typeof enterGanymede === 'function'){
+      enterGanymede();
+    } else {
+      console.warn('[Temenos] enterGanymede() not found');
+    }
+  };
 
-  function _injectBtn(){
-    console.log('[testGrimoire] _injectBtn called, document.body:', !!document.body);
-    var btn = document.createElement('button');
-    btn.textContent = '✦ Test Grimoire';
-    btn.setAttribute('id', '__tg-btn');
-    btn.style.cssText = [
-      'position:fixed',
-      'bottom:20px',
-      'left:20px',
-      'z-index:999999',
-      'background:rgba(12,8,3,0.96)',
-      'border:1px solid rgba(196,158,72,0.7)',
-      'color:rgba(238,220,168,0.95)',
-      'font-family:serif',
-      'font-size:13px',
-      'padding:10px 18px',
-      'cursor:pointer',
-      'pointer-events:auto'
-    ].join(';');
-    btn.onclick = function(){
-      console.log('[testGrimoire] button clicked');
-      window.__testGrimoireNow();
-    };
-    document.body.appendChild(btn);
-    console.log('[testGrimoire] button appended to body, visible:', !!document.getElementById('__tg-btn'));
-  }
+  window.__testKeyNow = function(){
+    _seedVenus();
+    if(typeof openKeyReveal === 'function'){
+      setTimeout(function(){ openKeyReveal(); }, 200);
+    } else {
+      console.warn('[Temenos] openKeyReveal() not found');
+    }
+  };
 
-  if(document.readyState === 'loading'){
-    console.log('[testGrimoire] DOM loading — adding DOMContentLoaded listener');
-    document.addEventListener('DOMContentLoaded', function(){
-      console.log('[testGrimoire] DOMContentLoaded fired');
-      _injectBtn();
+  window.__resetTemple = function(){
+    ['temenos_sigil_key','temenos_keys','temenos_session_events','temenos_room'].forEach(function(k){
+      try{ localStorage.removeItem(k); }catch(e){}
     });
-  } else {
-    console.log('[testGrimoire] DOM already ready — injecting now');
-    _injectBtn();
+    if(typeof showScreen === 'function') showScreen('threshold');
+    console.log('[Temenos] Reset complete. All storage cleared.');
+  };
+
+  window.__unlockAllKeys = function(){
+    try{ localStorage.setItem('temenos_sigil_key','1'); }catch(e){}
+    try{
+      var existing = JSON.parse(localStorage.getItem('temenos_keys')||'[]');
+      if(!existing.some(function(k){ return k.chamber === 'venus'; })){
+        existing.push({
+          id:'DEV-VENUS-001', number:1, chamber:'venus',
+          date: new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'}),
+          line:'I am allowed to receive what is already mine.',
+          collectedAt: new Date().toISOString()
+        });
+        localStorage.setItem('temenos_keys', JSON.stringify(existing));
+      }
+    }catch(e){}
+    console.log('[Temenos] Sigil Key granted. gHasKey() now returns true.');
+  };
+
+  // -- PHASE 3: DEEP-LINK URL PARAMS -----------------------------------------
+  var _p = new URLSearchParams(location.search);
+  var _mock = _p.get('mock');
+
+  if(_mock === 'grimoire'){
+    window.addEventListener('load', function(){
+      _seedVenus();
+      setTimeout(function(){ if(typeof openGrimoire==='function') openGrimoire(); }, 400);
+    });
   }
+
+  if(_mock === 'ganygrimoire'){
+    window.addEventListener('load', function(){
+      _seedGanymede();
+      setTimeout(function(){ if(typeof openGrimoire==='function') openGrimoire(); }, 400);
+    });
+  }
+
+  if(_mock === 'collector'){
+    window.addEventListener('load', function(){
+      setTimeout(function(){ if(typeof openArtworkEnquiry==='function') openArtworkEnquiry(); }, 600);
+    });
+  }
+
+  if(_mock === 'key'){
+    window.addEventListener('load', function(){
+      _seedVenus();
+      setTimeout(function(){ if(typeof openKeyReveal==='function') openKeyReveal(); }, 400);
+    });
+  }
+
+  // -- PHASE 2: DEV PANEL (?dev=1) -------------------------------------------
+  var _devMode = _p.get('dev') === '1';
+  var _legacyBtn = _p.get('testGrimoire') === '1';
+
+  function _buildDevPanel(){
+    var panel = document.createElement('div');
+    panel.id = '__dev-panel';
+    panel.style.cssText = [
+      'position:fixed','bottom:16px','left:16px','z-index:999999',
+      'background:rgba(6,4,2,0.97)','border:1px solid rgba(196,158,72,0.35)',
+      'border-radius:3px','padding:14px 16px','font-family:monospace',
+      'font-size:11px','color:rgba(196,158,72,0.8)','line-height:1.7',
+      'pointer-events:auto','user-select:none','min-width:180px'
+    ].join(';');
+
+    var header = document.createElement('div');
+    header.textContent = 'TEMENOS DEV';
+    header.style.cssText = 'color:rgba(196,158,72,0.4);font-size:9px;letter-spacing:.15em;' +
+      'margin-bottom:10px;border-bottom:1px solid rgba(196,158,72,0.15);padding-bottom:8px;';
+    panel.appendChild(header);
+
+    [
+      ['\u2746 Venus',           function(){ window.__testVenusNow(); }],
+      ['\u2746 Ganymede',        function(){ window.__testGanymedeNow(); }],
+      ['\u2746 Grimoire (Venus)', function(){ window.__testGrimoireNow(); }],
+      ['\u2746 Grimoire (Gany)', function(){ window.__testGanyGrimoireNow(); }],
+      ['\u2746 Sigil Key',       function(){ window.__testKeyNow(); }],
+      ['\u2746 Collector',       function(){ if(typeof openArtworkEnquiry==='function') openArtworkEnquiry(); }],
+      ['\u21ba Reset Temple',    function(){ window.__resetTemple(); }],
+      ['\u2302 Unlock Key',      function(){ window.__unlockAllKeys(); }]
+    ].forEach(function(item){
+      var btn = document.createElement('div');
+      btn.textContent = item[0];
+      btn.style.cssText = 'cursor:pointer;padding:2px 0;transition:color .15s;';
+      btn.addEventListener('mouseenter', function(){ this.style.color = 'rgba(238,220,168,0.95)'; });
+      btn.addEventListener('mouseleave', function(){ this.style.color = 'rgba(196,158,72,0.8)'; });
+      btn.addEventListener('click', item[1]);
+      panel.appendChild(btn);
+    });
+
+    var close = document.createElement('div');
+    close.textContent = '\u00d7 close';
+    close.style.cssText = 'cursor:pointer;color:rgba(196,158,72,0.3);font-size:9px;' +
+      'margin-top:10px;padding-top:8px;border-top:1px solid rgba(196,158,72,0.15);';
+    close.addEventListener('click', function(){ panel.style.display = 'none'; });
+    panel.appendChild(close);
+
+    document.body.appendChild(panel);
+  }
+
+  function _buildLegacyBtn(){
+    var btn = document.createElement('button');
+    btn.textContent = '\u2746 Test Grimoire';
+    btn.id = '__tg-btn';
+    btn.style.cssText = [
+      'position:fixed','bottom:20px','left:20px','z-index:999999',
+      'background:rgba(12,8,3,0.96)','border:1px solid rgba(196,158,72,0.7)',
+      'color:rgba(238,220,168,0.95)','font-family:serif',
+      'font-size:13px','padding:10px 18px','cursor:pointer','pointer-events:auto'
+    ].join(';');
+    btn.onclick = function(){ window.__testGrimoireNow(); };
+    document.body.appendChild(btn);
+  }
+
+  function _onReady(fn){
+    if(document.readyState === 'loading') document.addEventListener('DOMContentLoaded', fn);
+    else fn();
+  }
+
+  if(_devMode){ _onReady(_buildDevPanel); }
+  else if(_legacyBtn){ _onReady(_buildLegacyBtn); }
+
 })();
 </script>
-<!-- ── /DEV testGrimoire nuclear fallback ─────────────────────────────────────── -->
+<!-- -- /ANCIENT TEMENOS DEV TOOLKIT ----------------------------------------- -->
 
 <!-- ── ARTWORK ENQUIRY MODAL ─────────────────────────────────────────────── -->
 <div id="gr-enquiry-modal" role="dialog" aria-modal="true">
@@ -3783,51 +3948,6 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeArtwork
 </script>
 <!-- ── /ARTWORK ENQUIRY MODAL ────────────────────────────────────────────── -->
 
-<!-- ── ARTWORK ENQUIRY MODAL ─────────────────────────────────────────────── -->
-<div id="gr-enquiry-modal" role="dialog" aria-modal="true">
-  <div id="gr-enquiry-inner">
-    <button id="geq-close" onclick="closeArtworkEnquiry()">✕ Close</button>
-    <p class="geq-eyebrow">Private Collection</p>
-    <p class="geq-title">Enquire about the artwork</p>
-    <p class="geq-sub">Venus — graphite, charcoal &amp; gold on paper<br>38.5 × 56.5 cm · 2026 · Original + edition of 22</p>
-    <div id="geq-form-fields" style="display:flex;flex-direction:column;gap:1.4rem;">
-      <div class="geq-field"><label for="geq-name">Your name</label><input id="geq-name" type="text" placeholder="How you wish to be known" autocomplete="off"/></div>
-      <div class="geq-field"><label for="geq-email">Email address</label><input id="geq-email" type="email" placeholder="your@email.com" autocomplete="off"/></div>
-      <div class="geq-field"><label for="geq-msg">Your enquiry</label><textarea id="geq-msg" placeholder="I am interested in the original / a print from the edition of 22…"></textarea></div>
-      <button id="geq-submit" onclick="submitArtworkEnquiry()">Send enquiry →</button>
-    </div>
-    <div id="geq-sent"><p>Your enquiry is on its way.<br>El will be in touch.</p></div>
-  </div>
-</div>
-<script>
-function openArtworkEnquiry(){
-  var m=document.getElementById('gr-enquiry-modal');
-  if(!m)return;
-  document.getElementById('geq-form-fields').style.display='flex';
-  document.getElementById('geq-sent').style.display='none';
-  m.classList.add('open');
-  setTimeout(function(){var n=document.getElementById('geq-name');if(n)n.focus();},120);
-}
-function closeArtworkEnquiry(){
-  var m=document.getElementById('gr-enquiry-modal');
-  if(m)m.classList.remove('open');
-}
-function submitArtworkEnquiry(){
-  var name=(document.getElementById('geq-name').value||'').trim();
-  var email=(document.getElementById('geq-email').value||'').trim();
-  var msg=(document.getElementById('geq-msg').value||'').trim();
-  if(!email){document.getElementById('geq-email').focus();return;}
-  var sub=encodeURIComponent('Venus Chamber — Artwork Enquiry');
-  var body=encodeURIComponent('Name: '+(name||'(not given)')+'\nEmail: '+email+'\n\n'+(msg||'I would like to enquire about the Venus artwork.'));
-  window.location.href='mailto:ellisliu91@gmail.com?subject='+sub+'&body='+body;
-  document.getElementById('geq-form-fields').style.display='none';
-  document.getElementById('geq-sent').style.display='block';
-}
-document.getElementById('gr-enquiry-modal').addEventListener('click',function(e){if(e.target===this)closeArtworkEnquiry();});
-document.addEventListener('keydown',function(e){if(e.key==='Escape')closeArtworkEnquiry();});
-</script>
-<!-- ── /ARTWORK ENQUIRY MODAL ────────────────────────────────────────────── -->
 
 </body>
-</html>
 </html>
