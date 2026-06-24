@@ -3709,8 +3709,7 @@ initFoyer=function(){
   ];
 
   function _seedVenus(){
-    if(!window.vHistory) window.vHistory = [];
-    window.vHistory = MOCK_VENUS;
+    vHistory = MOCK_VENUS;
     currentScreen = 'venusApproach';
   }
 
@@ -3934,14 +3933,25 @@ function closeArtworkEnquiry(){
   var m=document.getElementById('gr-enquiry-modal');
   if(m)m.classList.remove('open');
 }
-function submitArtworkEnquiry(){
+async function submitArtworkEnquiry(){
   var name=(document.getElementById('geq-name').value||'').trim();
   var email=(document.getElementById('geq-email').value||'').trim();
   var msg=(document.getElementById('geq-msg').value||'').trim();
   if(!email){document.getElementById('geq-email').focus();return;}
-  var sub=encodeURIComponent('Venus Chamber — Artwork Enquiry');
-  var body=encodeURIComponent('Name: '+(name||'(not given)')+'\nEmail: '+email+'\n\n'+(msg||'I would like to enquire about the Venus artwork.'));
-  window.location.href='mailto:ellisliu91@gmail.com?subject='+sub+'&body='+body;
+  var btn=document.getElementById('geq-submit');
+  if(btn){btn.disabled=true;btn.textContent='Sending…';}
+  try{
+    await fetch('https://formspree.io/f/xkoakgkk',{
+      method:'POST',
+      headers:{'Content-Type':'application/json','Accept':'application/json'},
+      body:JSON.stringify({
+        _subject:'Venus Chamber — Private Collection Enquiry',
+        name:name||'(not given)',
+        email:email,
+        message:msg||'I would like to enquire about the Venus artwork.'
+      })
+    });
+  }catch(e){}
   document.getElementById('geq-form-fields').style.display='none';
   document.getElementById('geq-sent').style.display='block';
 }
