@@ -1,24 +1,81 @@
 # Ancient Temenos — Current State
-**Date:** 22 June 2026
+**Date:** 24 June 2026
 **Source of truth:** `https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/index.html`
 **Live URL:** `https://ellisliu7.github.io/ancient-temenos-assets/`
 
 ---
 
-## Session discipline (carry into every new chat)
+## Session log
 
-- **ALWAYS fetch the live `index.html` before any code work.** Never use `/mnt/project/index.html` — it is always stale.
-- Also fetch `CURRENT_STATE.md` at session start.
-- Fetch live file ONCE per session. Do not re-fetch mid-session unless El has pushed.
-- Navigate the file via grep/line-slices, never full reads.
-- Fix ONLY what is in the bug report. Never touch unrelated systems.
-- One surgical change per session. One bug, one fix, verify before shipping.
-- Never make three attempts at the same thing — diagnose before retrying.
-- At session end, output the FULL updated `CURRENT_STATE.md` alongside `index.html`.
+### 24 June 2026 — Collector V1 polish sprint
+
+**Status: shipped. Ready to push and verify.**
+
+**What changed (all surgical, no new screens, no new infrastructure):**
+
+1. **Duplicate `#gr-artwork-card` removed** — two identical HTML blocks existed side by side. Second copy excised. One card remains, correctly positioned below the Grimoire divider.
+
+2. **Artwork card copy updated:**
+   - Eyebrow: `FROM THE CHAMBER OF VENUS` (was: `Venus · Original Work`)
+   - Body: artwork named, medium specified, dimensions given, singularity stated — `Venus, 2026. Original graphite, charcoal & gold on paper. 38.5 × 56.5 cm. The original. One exists.`
+   - CTA: `Enquire Privately` (was: `Enquire about the artwork`)
+
+3. **Modal copy updated:**
+   - Title: `Private Collection Enquiry` (was: `Enquire about the artwork`)
+   - Sub: `Share your details below and El will reply personally within 48 hours.` (was: medium/dimensions repeated)
+   - Fields: `Name` / `Email` / `Message (optional)` — clean, no over-labeling
+   - Message placeholder: `I would like to enquire about Venus…`
+
+4. **Success state updated:**
+   > Your enquiry has been received.
+   > Thank you for your interest in Venus.
+   > El will be in touch within 48 hours.
+   (was: "Your enquiry is on its way. El will be in touch." — no timeframe, no warmth)
+
+5. **`window.__testCollectorNow()` added to Developer Toolkit:**
+   - Opens `#gr-enquiry-modal` instantly from any state
+   - Works from console at any time, no URL param needed
+   - Listed in toolkit comment header
+   - Added alongside existing 7 commands (8 total now)
+
+**What was NOT changed (confirm these still work):**
+- `?mock=collector` handler — seeds nothing, just calls `openArtworkEnquiry()` after 600ms
+- Lower `→ Enquire` button — still calls `openArtworkEnquiry()`, still present
+- mailto routing to `ellisliu91@gmail.com` — intact
+- Escape key + backdrop-click close — intact
+- Dev panel `✦ Collector` button — intact (calls `openArtworkEnquiry()`)
+- All other toolkit commands — untouched
+
+**Verify checklist (browser, in order):**
+
+1. `?mock=collector` — modal opens on page load (no Grimoire needed)
+2. `window.__testCollectorNow()` from console — modal opens instantly
+3. Run `window.__testGrimoireNow()` from console → confirm:
+   - Artwork card appears below the gold divider
+   - Card shows: `FROM THE CHAMBER OF VENUS` eyebrow, artwork image, new body copy with dimensions
+   - CTA reads: `Enquire Privately`
+4. Click `Enquire Privately` → modal opens with title `Private Collection Enquiry`
+5. Submit with email only (name + message empty) → mailto fires, success state shows
+6. Success state reads: `Your enquiry has been received. / Thank you for your interest in Venus. / El will be in touch within 48 hours.`
+7. Escape key closes modal
+8. Lower `→ Enquire` button also opens modal
+9. Inspect DOM: confirm only one `#gr-artwork-card` and one `#gr-enquiry-modal`
+
+**Definition of done:**
+A visitor completes a Venus session → Grimoire opens → sees the artwork named concretely as a singular original → clicks `Enquire Privately` → submits name/email → mailto fires to ellisliu91@gmail.com → confirmation appears.
+
+**Not built (do not touch until real enquiry exists):**
+- Collector portal or dedicated page
+- Certificate or edition system
+- Print production
+- Wallet / Privy / Supabase
+- New chambers or animations
 
 ---
 
-## Session log
+---
+
+## Prior sessions
 
 ### 22 June 2026 — Developer Toolkit Sprint
 

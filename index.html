@@ -894,18 +894,10 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     <div class="gr-divider"><div class="gr-div-l"></div><div class="gr-div-g"></div><div class="gr-div-l"></div></div>
     <!-- ── ARTWORK CARD (primary collector CTA) ──────────────────────── -->
     <div id="gr-artwork-card">
-      <p class="grac-label">Venus · Original Work</p>
+      <p class="grac-label">From the Chamber of Venus</p>
       <img src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Artwork.jpg" alt="Venus — graphite, charcoal and gold on paper" loading="lazy" onerror="this.style.display='none'"/>
-      <p class="grac-body">You passed through an artwork that exists beyond this chamber.<br>Original work and limited editions are available for private collection.</p>
-      <button class="grac-cta" onclick="openArtworkEnquiry()">Enquire about the artwork</button>
-    </div>
-    <!-- ── /ARTWORK CARD ─────────────────────────────────────────────── -->
-    <!-- ── ARTWORK CARD ──────────────────────────────────────────────── -->
-    <div id="gr-artwork-card">
-      <p class="grac-label">Venus · Original Work</p>
-      <img src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Artwork.jpg" alt="Venus — graphite, charcoal and gold on paper" loading="lazy" onerror="this.style.display='none'"/>
-      <p class="grac-body">You passed through an artwork that exists beyond this chamber.<br>Original work and limited editions are available for private collection.</p>
-      <button class="grac-cta" onclick="openArtworkEnquiry()">Enquire about the artwork</button>
+      <p class="grac-body">This original work resides beyond the chamber.<br><br>Venus, 2026. Original graphite, charcoal &amp; gold on paper.<br>38.5 × 56.5 cm. The original. One exists.<br><br>Private collection enquiries are welcome.</p>
+      <button class="grac-cta" onclick="openArtworkEnquiry()">Enquire Privately</button>
     </div>
     <!-- ── /ARTWORK CARD ─────────────────────────────────────────────── -->
     <div id="grVenusSection" style="display:none;"><p class="gr-section-label">What Venus Revealed</p><p class="gr-section-body" id="grVenusBody"></p></div>
@@ -3668,6 +3660,7 @@ initFoyer=function(){
        window.__testVenusNow()         Enter Venus chamber
        window.__testGanymedeNow()      Enter Ganymede chamber
        window.__testKeyNow()           Sigil Key reveal, mock Venus data
+       window.__testCollectorNow()     Collector enquiry modal, instant open
        window.__resetTemple()          Clear all localStorage, back to threshold
        window.__unlockAllKeys()        Grant Sigil Key + seed Venus key record
 
@@ -3768,6 +3761,15 @@ initFoyer=function(){
       setTimeout(function(){ openKeyReveal(); }, 200);
     } else {
       console.warn('[Temenos] openKeyReveal() not found');
+    }
+  };
+
+  window.__testCollectorNow = function(){
+    if(typeof openArtworkEnquiry === 'function'){
+      openArtworkEnquiry();
+      console.log('[Temenos] Collector modal opened.');
+    } else {
+      console.warn('[Temenos] openArtworkEnquiry() not found — is the modal in DOM?');
     }
   };
 
@@ -3908,15 +3910,15 @@ initFoyer=function(){
   <div id="gr-enquiry-inner">
     <button id="geq-close" onclick="closeArtworkEnquiry()">✕ Close</button>
     <p class="geq-eyebrow">Private Collection</p>
-    <p class="geq-title">Enquire about the artwork</p>
-    <p class="geq-sub">Venus — graphite, charcoal &amp; gold on paper<br>38.5 × 56.5 cm · 2026 · Original + edition of 22</p>
+    <p class="geq-title">Private Collection Enquiry</p>
+    <p class="geq-sub">Share your details below and El will reply personally within 48 hours.</p>
     <div id="geq-form-fields" style="display:flex;flex-direction:column;gap:1.4rem;">
-      <div class="geq-field"><label for="geq-name">Your name</label><input id="geq-name" type="text" placeholder="How you wish to be known" autocomplete="off"/></div>
-      <div class="geq-field"><label for="geq-email">Email address</label><input id="geq-email" type="email" placeholder="your@email.com" autocomplete="off"/></div>
-      <div class="geq-field"><label for="geq-msg">Your enquiry</label><textarea id="geq-msg" placeholder="I am interested in the original / a print from the edition of 22…"></textarea></div>
+      <div class="geq-field"><label for="geq-name">Name</label><input id="geq-name" type="text" placeholder="Your name" autocomplete="off"/></div>
+      <div class="geq-field"><label for="geq-email">Email</label><input id="geq-email" type="email" placeholder="your@email.com" autocomplete="off"/></div>
+      <div class="geq-field"><label for="geq-msg">Message <span style="opacity:0.45;font-size:0.85em;">(optional)</span></label><textarea id="geq-msg" placeholder="I would like to enquire about Venus…"></textarea></div>
       <button id="geq-submit" onclick="submitArtworkEnquiry()">Send enquiry →</button>
     </div>
-    <div id="geq-sent"><p>Your enquiry is on its way.<br>El will be in touch.</p></div>
+    <div id="geq-sent"><p>Your enquiry has been received.<br><br>Thank you for your interest in Venus.<br>El will be in touch within 48 hours.</p></div>
   </div>
 </div>
 <script>
