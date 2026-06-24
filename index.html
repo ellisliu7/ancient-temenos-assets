@@ -274,6 +274,15 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #gr-artwork-card .grac-status{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.2vw,15px);color:rgba(232,216,186,0.38);text-align:center;margin:.1rem 0 0;letter-spacing:.03em;}
 #gr-artwork-card .grac-cta{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.44em;text-transform:uppercase;color:rgba(196,158,72,0.42);background:transparent;border:none;border-bottom:.5px solid rgba(196,158,72,0.18);padding-bottom:.22rem;cursor:pointer;transition:all .6s ease;margin-top:.9rem;}
 #gr-artwork-card .grac-cta:hover{color:rgba(238,220,168,0.75);border-bottom-color:rgba(196,158,72,0.45);}
+#gr-artwork-card-gany{width:100%;max-width:520px;display:none;flex-direction:column;align-items:center;gap:1.1rem;margin:2.8rem auto 0;padding:2.4rem 1.8rem 2.8rem;border:.5px solid rgba(196,158,72,0.10);background:rgba(196,158,72,0.018);}
+#gr-artwork-card-gany img{width:100%;max-width:300px;height:auto;display:block;object-fit:cover;filter:sepia(0.18) brightness(0.92);border:.5px solid rgba(196,158,72,0.09);}
+#gr-artwork-card-gany .grac-label{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.5em;text-transform:uppercase;color:rgba(196,158,72,0.32);margin:0;}
+#gr-artwork-card-gany .grac-title{font-family:'Almendra',serif;font-style:italic;font-size:clamp(17px,1.7vw,20px);color:rgba(232,216,186,0.55);margin:.3rem 0 0;letter-spacing:.06em;text-align:center;}
+#gr-artwork-card-gany .grac-poetic{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,1.35vw,16px);color:rgba(196,158,72,0.48);line-height:1.85;text-align:center;margin:.2rem 0 0;max-width:36ch;}
+#gr-artwork-card-gany .grac-facts{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(196,158,72,0.28);text-align:center;margin:.6rem 0 0;line-height:1.8;}
+#gr-artwork-card-gany .grac-status{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.2vw,15px);color:rgba(232,216,186,0.38);text-align:center;margin:.1rem 0 0;letter-spacing:.03em;}
+#gr-artwork-card-gany .grac-cta{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.44em;text-transform:uppercase;color:rgba(196,158,72,0.42);background:transparent;border:none;border-bottom:.5px solid rgba(196,158,72,0.18);padding-bottom:.22rem;cursor:pointer;transition:all .6s ease;margin-top:.9rem;}
+#gr-artwork-card-gany .grac-cta:hover{color:rgba(238,220,168,0.75);border-bottom-color:rgba(196,158,72,0.45);}
 #gr-enquiry-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;background:rgba(4,3,2,0.88);backdrop-filter:blur(6px);}
 #gr-enquiry-modal.open{display:flex;}
 #gr-enquiry-inner{width:min(480px,90vw);background:rgba(8,6,3,0.97);border:.5px solid rgba(196,158,72,0.18);padding:2.8rem 2.4rem 2.6rem;display:flex;flex-direction:column;gap:1.4rem;position:relative;}
@@ -929,9 +938,31 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
       <button class="grac-cta" onclick="openArtworkEnquiry()">Enquire Privately</button>
     </div>
 
-    <!-- ── 9. CLOSING BREATH ─────────────────────────────────────────────── -->
+    <!-- ── 9. GANYMEDE ARTIFACT CARD (Ganymede sessions only — hidden until after seal) -->
+    <!--
+      ARCHIVAL STATE (future, when original is collected):
+      - Replace status line with: "One was made. It has found its keeper."
+      - Remove or hide the "Enquire Privately" button
+      - Do not use the word "Sold"
+      - Card remains visible as a permanent provenance record
+    -->
+    <div id="gr-artwork-card-gany" style="opacity:0;transform:translateY(-10px);transition:opacity 1.4s ease,transform 1.6s cubic-bezier(.16,.84,.44,1);">
+      <p class="grac-label">From the Chamber of Ganymede</p>
+      <img src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_gold.jpg" alt="Ganymede — graphite, charcoal and gold on paper" loading="lazy" onerror="this.style.display='none'"/>
+      <p class="grac-title">Ganymede</p>
+      <p class="grac-poetic">The structure revealed here exists beyond the chamber.</p>
+      <p class="grac-facts">Ganymede, 2026&nbsp;&nbsp;&middot;&nbsp;&nbsp;Original graphite, charcoal &amp; gold on paper&nbsp;&nbsp;&middot;&nbsp;&nbsp;38.5 &times; 56.5 cm</p>
+      <p class="grac-status">One was made. It stands alone.</p>
+      <button class="grac-cta" onclick="openArtworkEnquiry('ganymede')">Enquire Privately</button>
+    </div>
+
+    <!-- ── 10. CLOSING BREATH (Venus) ──────────────────────────────────── -->
     <p id="gr-closing-breath" style="display:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.2vw,15px);color:rgba(196,158,72,0.28);text-align:center;letter-spacing:.04em;margin:2.4rem auto 3.2rem;max-width:34ch;opacity:0;transition:opacity 2.8s ease;">
       The temple holds what was true here.
+    </p>
+    <!-- Ganymede closing breath — revealed by JS for Ganymede sessions only -->
+    <p id="gr-closing-breath-gany" style="display:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.2vw,15px);color:rgba(196,158,72,0.28);text-align:center;letter-spacing:.04em;margin:2.4rem auto 3.2rem;max-width:34ch;opacity:0;transition:opacity 2.8s ease;">
+      What was built here will hold.
     </p>
 
   </div>
@@ -1827,19 +1858,36 @@ Return ONLY valid JSON, no markdown, no fences:
   // Always reveal — grActions must show even if invocation fails
   if(loading)loading.style.display='none';
   if(actions)actions.style.display='flex';
-  // Venus artifact: threshold divider + card + closing breath fade in after seal settles
-  // Never shown for Ganymede or council sessions
+  // Venus artifact: threshold divider + card + closing breath
+  // Ganymede: same skeleton, placed/settle motion, distinct closing breath
   if(mode==='venus'){
     var _th=document.getElementById('gr-artifact-threshold');
     var _ac=document.getElementById('gr-artwork-card');
     var _cb=document.getElementById('gr-closing-breath');
+    var _acg=document.getElementById('gr-artwork-card-gany');
+    if(_acg){_acg.style.display='none';_acg.style.opacity='0';_acg.style.transform='translateY(-10px)';}
     if(_th){_th.style.display='flex';}
     if(_ac){_ac.style.display='flex';}
-    // Opacity fades in after a breath — card arrives as a discovered artifact, not a header
     setTimeout(function(){
       if(_ac)_ac.style.opacity='1';
       if(_cb){_cb.style.display='block';setTimeout(function(){_cb.style.opacity='1';},120);}
     },1800);
+  }
+  if(mode==='ganymede'){
+    var _th=document.getElementById('gr-artifact-threshold');
+    var _acg=document.getElementById('gr-artwork-card-gany');
+    var _cbg=document.getElementById('gr-closing-breath-gany');
+    var _ac=document.getElementById('gr-artwork-card');
+    if(_ac){_ac.style.display='none';_ac.style.opacity='0';}
+    var _cb=document.getElementById('gr-closing-breath');
+    if(_cb){_cb.style.display='none';_cb.style.opacity='0';}
+    if(_acg){_acg.style.opacity='0';_acg.style.transform='translateY(-10px)';}
+    if(_th){_th.style.display='flex';}
+    if(_acg){_acg.style.display='flex';}
+    setTimeout(function(){
+      if(_acg){_acg.style.opacity='1';_acg.style.transform='translateY(0)';}
+      if(_cbg){_cbg.style.display='block';setTimeout(function(){_cbg.style.opacity='1';},120);}
+    },1200);
   }
 }
 // ── GRIMOIRE REMEMBRANCE ────────────────────────────────────────────────────
@@ -3669,7 +3717,8 @@ initFoyer=function(){
        window.__testVenusNow()         Enter Venus chamber
        window.__testGanymedeNow()      Enter Ganymede chamber
        window.__testKeyNow()           Sigil Key reveal, mock Venus data
-       window.__testCollectorNow()     Collector enquiry modal, instant open
+       window.__testCollectorNow()     Venus collector modal, instant open
+       window.__testGanyArtifactNow()  Ganymede Grimoire + artifact card reveal
        window.__resetTemple()          Clear all localStorage, back to threshold
        window.__unlockAllKeys()        Grant Sigil Key + seed Venus key record
 
@@ -3680,7 +3729,8 @@ initFoyer=function(){
        ?mock=ganymede      Ganymede chamber, no API
        ?mock=grimoire      Venus Grimoire with mock data, opens immediately
        ?mock=ganygrimoire  Ganymede Grimoire with mock data, opens immediately
-       ?mock=collector     Artwork enquiry modal, opens immediately
+       ?mock=collector     Venus artwork enquiry modal, opens immediately
+       ?mock=ganycollector Ganymede artwork enquiry modal, opens immediately
        ?mock=key           Sigil Key reveal with mock Venus data (alias: ?sigil=1)
        ?skip=approach      Skip cave scroll (combine with ?mock=ganymede)
      ════════════════════════════════════════════════════════════════════════════ -->
@@ -3774,10 +3824,20 @@ initFoyer=function(){
 
   window.__testCollectorNow = function(){
     if(typeof openArtworkEnquiry === 'function'){
-      openArtworkEnquiry();
-      console.log('[Temenos] Collector modal opened.');
+      openArtworkEnquiry('venus');
+      console.log('[Temenos] Venus collector modal opened.');
     } else {
       console.warn('[Temenos] openArtworkEnquiry() not found — is the modal in DOM?');
+    }
+  };
+
+  window.__testGanyArtifactNow = function(){
+    _seedGanymede();
+    if(typeof openGrimoire === 'function'){
+      openGrimoire();
+      console.log('[Temenos] Ganymede Grimoire opened — artifact settles at 1.2s.');
+    } else {
+      console.warn('[Temenos] openGrimoire() not found');
     }
   };
 
@@ -3826,7 +3886,13 @@ initFoyer=function(){
 
   if(_mock === 'collector'){
     window.addEventListener('load', function(){
-      setTimeout(function(){ if(typeof openArtworkEnquiry==='function') openArtworkEnquiry(); }, 600);
+      setTimeout(function(){ if(typeof openArtworkEnquiry==='function') openArtworkEnquiry('venus'); }, 600);
+    });
+  }
+
+  if(_mock === 'ganycollector'){
+    window.addEventListener('load', function(){
+      setTimeout(function(){ if(typeof openArtworkEnquiry==='function') openArtworkEnquiry('ganymede'); }, 600);
     });
   }
 
@@ -3864,7 +3930,8 @@ initFoyer=function(){
       ['\u2746 Grimoire (Venus)', function(){ window.__testGrimoireNow(); }],
       ['\u2746 Grimoire (Gany)', function(){ window.__testGanyGrimoireNow(); }],
       ['\u2746 Sigil Key',       function(){ window.__testKeyNow(); }],
-      ['\u2746 Collector',       function(){ if(typeof openArtworkEnquiry==='function') openArtworkEnquiry(); }],
+      ['\u2746 Collector (V)',    function(){ if(typeof openArtworkEnquiry==='function') openArtworkEnquiry('venus'); }],
+      ['\u2746 Collector (G)',    function(){ if(typeof window.__testGanyArtifactNow==='function') window.__testGanyArtifactNow(); }],
       ['\u21ba Reset Temple',    function(){ window.__resetTemple(); }],
       ['\u2302 Unlock Key',      function(){ window.__unlockAllKeys(); }]
     ].forEach(function(item){
@@ -3931,7 +3998,10 @@ initFoyer=function(){
   </div>
 </div>
 <script>
-function openArtworkEnquiry(){
+// _geqChamber: tracks which chamber opened the modal so subject + success copy are always correct
+var _geqChamber = 'venus';
+function openArtworkEnquiry(chamber){
+  _geqChamber = (chamber === 'ganymede') ? 'ganymede' : 'venus';
   var m=document.getElementById('gr-enquiry-modal');
   if(!m)return;
   document.getElementById('geq-form-fields').style.display='flex';
@@ -3960,10 +4030,10 @@ async function submitArtworkEnquiry(){
       method:'POST',
       headers:{'Content-Type':'application/json','Accept':'application/json'},
       body:JSON.stringify({
-        _subject:'Venus Chamber — Private Collection Enquiry',
+        _subject:(_geqChamber==='ganymede'?'Ganymede':'Venus')+' Chamber — Private Collection Enquiry',
         name:name||'(not given)',
         email:email,
-        message:msg||'I would like to enquire about the Venus artwork.'
+        message:msg||'I would like to enquire about the '+(_geqChamber==='ganymede'?'Ganymede':'Venus')+' artwork.'
       })
     });
     var res=await Promise.race([_req,_timeout]);
@@ -3971,7 +4041,9 @@ async function submitArtworkEnquiry(){
   }catch(e){_ok=false;}
   if(_ok){
     document.getElementById('geq-form-fields').style.display='none';
-    document.getElementById('geq-sent').style.display='block';
+    var _sentEl=document.getElementById('geq-sent');
+    var _cLabel=_geqChamber==='ganymede'?'Ganymede':'Venus';
+    if(_sentEl){_sentEl.innerHTML='<p>Your enquiry has been received.<br><br>Thank you for your interest in '+_cLabel+'.<br>El will be in touch within 48 hours.</p>';_sentEl.style.display='block';}
   }else{
     if(btn){btn.disabled=false;btn.textContent='Send enquiry →';}
     document.getElementById('geq-error').style.display='block';
