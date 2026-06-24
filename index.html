@@ -3773,8 +3773,7 @@ initFoyer=function(){
   }
 
   function _seedGanymede(){
-    if(!window.gHistory) window.gHistory = [];
-    window.gHistory = MOCK_GANYMEDE;
+    gHistory = MOCK_GANYMEDE;
     if(typeof gExchangeCount !== 'undefined') gExchangeCount = 2;
     currentScreen = 'ganymedeScreen';
   }
