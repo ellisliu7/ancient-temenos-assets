@@ -3918,6 +3918,7 @@ initFoyer=function(){
       <button id="geq-submit" onclick="submitArtworkEnquiry()">Send enquiry →</button>
     </div>
     <div id="geq-sent"><p>Your enquiry has been received.<br><br>Thank you for your interest in Venus.<br>El will be in touch within 48 hours.</p></div>
+    <div id="geq-error" style="display:none;text-align:center;"><p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:rgba(196,100,80,0.75);line-height:1.85;">Something went wrong.<br>Please try again, or email El directly at<br><a href="mailto:ellisliu91@gmail.com" style="color:rgba(196,158,72,0.7);">ellisliu91@gmail.com</a></p></div>
   </div>
 </div>
 <script>
@@ -3926,6 +3927,9 @@ function openArtworkEnquiry(){
   if(!m)return;
   document.getElementById('geq-form-fields').style.display='flex';
   document.getElementById('geq-sent').style.display='none';
+  document.getElementById('geq-error').style.display='none';
+  var btn=document.getElementById('geq-submit');
+  if(btn){btn.disabled=false;btn.textContent='Send enquiry →';}
   m.classList.add('open');
   setTimeout(function(){var n=document.getElementById('geq-name');if(n)n.focus();},120);
 }
@@ -3940,8 +3944,10 @@ async function submitArtworkEnquiry(){
   if(!email){document.getElementById('geq-email').focus();return;}
   var btn=document.getElementById('geq-submit');
   if(btn){btn.disabled=true;btn.textContent='Sending…';}
+  var _ok=false;
   try{
-    await fetch('https://formspree.io/f/xkoakgkk',{
+    var _timeout=new Promise(function(_,rej){setTimeout(function(){rej(new Error('timeout'));},8000);});
+    var _req=fetch('https://formspree.io/f/xkoakgkk',{
       method:'POST',
       headers:{'Content-Type':'application/json','Accept':'application/json'},
       body:JSON.stringify({
@@ -3951,9 +3957,16 @@ async function submitArtworkEnquiry(){
         message:msg||'I would like to enquire about the Venus artwork.'
       })
     });
-  }catch(e){}
-  document.getElementById('geq-form-fields').style.display='none';
-  document.getElementById('geq-sent').style.display='block';
+    var res=await Promise.race([_req,_timeout]);
+    _ok=res.ok;
+  }catch(e){_ok=false;}
+  if(_ok){
+    document.getElementById('geq-form-fields').style.display='none';
+    document.getElementById('geq-sent').style.display='block';
+  }else{
+    if(btn){btn.disabled=false;btn.textContent='Send enquiry →';}
+    document.getElementById('geq-error').style.display='block';
+  }
 }
 document.getElementById('gr-enquiry-modal').addEventListener('click',function(e){if(e.target===this)closeArtworkEnquiry();});
 document.addEventListener('keydown',function(e){if(e.key==='Escape')closeArtworkEnquiry();});
