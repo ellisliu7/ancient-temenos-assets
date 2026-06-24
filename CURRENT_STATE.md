@@ -1,5 +1,5 @@
 # Ancient Temenos — Current State
-**Date:** 24 June 2026
+**Date:** 24 June 2026 (collector sprint closed)
 **Source of truth:** `https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/index.html`
 **Live URL:** `https://ellisliu7.github.io/ancient-temenos-assets/`
 
@@ -9,7 +9,7 @@
 
 ### 24 June 2026 — Ganymede artifact: modal cross-chamber leakage fix
 
-**Status: shipped. Awaiting browser verification.**
+**Status: shipped. Browser-verified.**
 
 **Bug:** Three Venus-hardcoded strings in the enquiry modal were not being overwritten when the Ganymede artifact card's "Enquire Privately" was clicked:
 1. Textarea placeholder — `"I would like to enquire about Venus…"` (HTML attribute, not JS-settable at open time)
@@ -235,7 +235,7 @@ When an original is collected:
 | Council Grimoire | Live |
 | Venus artifact card | Live — browser-verified |
 | Ganymede artifact card | Live — browser-verified (settle motion confirmed) |
-| Enquiry modal (chamber-aware) | Live — awaiting browser verification of modal copy fix |
+| Enquiry modal (chamber-aware) | Live — browser-verified |
 | Formspree enquiry flow | Live |
 | Dev toolkit (9 commands + panel) | Live — browser-verified |
 | Persephone | Prototype only (`persephone-oracle.html`) — not in `index.html` |
