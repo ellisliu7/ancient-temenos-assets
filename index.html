@@ -250,14 +250,6 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .of-save{background:transparent;border:.5px solid rgba(196,158,72,0.4);color:rgba(196,158,72,0.7);font-family:'Cinzel',serif;font-size:8px;letter-spacing:.3em;text-transform:uppercase;padding:.55rem 1.6rem;cursor:pointer;transition:all .4s;margin-top:.8rem;}
 
 /* ── GRIMOIRE ── */
-#gr-artwork-card{width:100%;max-width:520px;display:none;flex-direction:column;align-items:center;gap:1.6rem;margin:0 auto 2.4rem;padding:2rem 1.8rem 2.2rem;border:.5px solid rgba(196,158,72,0.14);background:rgba(196,158,72,0.025);}
-#gr-artwork-card img{width:100%;max-width:320px;height:auto;display:block;object-fit:cover;filter:sepia(0.18) brightness(0.92);border:.5px solid rgba(196,158,72,0.1);}
-#gr-artwork-card .grac-label{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.5em;text-transform:uppercase;color:rgba(196,158,72,0.38);margin:0;}
-#gr-artwork-card .grac-body{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,1.4vw,16px);color:rgba(232,216,186,0.6);line-height:1.95;text-align:center;margin:0;max-width:38ch;}
-#gr-artwork-card .grac-cta{font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:.44em;text-transform:uppercase;color:rgba(238,220,168,0.75);background:transparent;border:.5px solid rgba(196,158,72,0.32);padding:.7rem 1.8rem;cursor:pointer;transition:all .5s ease;margin-top:.4rem;}
-#gr-artwork-card .grac-cta:hover{color:rgba(255,245,220,1);border-color:rgba(196,158,72,0.75);background:rgba(196,158,72,0.06);}
-#gr-enquiry-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;background:rgba(4,3,2,0.88);backdrop-filter:blur(6px);}
-#gr-enquiry-modal.open{display:flex;}
 #gr-enquiry-inner{width:min(480px,90vw);background:rgba(8,6,3,0.97);border:.5px solid rgba(196,158,72,0.18);padding:2.8rem 2.4rem 2.6rem;display:flex;flex-direction:column;gap:1.4rem;position:relative;}
 #gr-enquiry-inner .geq-eyebrow{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.52em;text-transform:uppercase;color:rgba(196,158,72,0.4);margin:0;text-align:center;}
 #gr-enquiry-inner .geq-title{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(20px,2vw,24px);color:rgba(238,220,168,0.85);margin:0;text-align:center;line-height:1.4;}
@@ -273,12 +265,15 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #geq-close:hover{color:rgba(196,158,72,0.9);}
 #geq-sent{display:none;text-align:center;}
 #geq-sent p{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:17px;color:rgba(196,158,72,0.7);line-height:1.85;}
-#gr-artwork-card{width:100%;max-width:520px;display:none;flex-direction:column;align-items:center;gap:1.4rem;margin:0 auto 2.4rem;padding:2rem 1.8rem 2.2rem;border:.5px solid rgba(196,158,72,0.14);background:rgba(196,158,72,0.025);}
-#gr-artwork-card img{width:100%;max-width:300px;height:auto;display:block;object-fit:cover;filter:sepia(0.18) brightness(0.92);border:.5px solid rgba(196,158,72,0.1);}
-#gr-artwork-card .grac-label{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.5em;text-transform:uppercase;color:rgba(196,158,72,0.38);margin:0;}
-#gr-artwork-card .grac-body{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,1.4vw,16px);color:rgba(232,216,186,0.58);line-height:1.95;text-align:center;margin:0;max-width:38ch;}
-#gr-artwork-card .grac-cta{font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:.44em;text-transform:uppercase;color:rgba(238,220,168,0.75);background:transparent;border:.5px solid rgba(196,158,72,0.32);padding:.7rem 1.8rem;cursor:pointer;transition:all .5s ease;margin-top:.2rem;}
-#gr-artwork-card .grac-cta:hover{color:rgba(255,245,220,1);border-color:rgba(196,158,72,0.75);background:rgba(196,158,72,0.06);}
+#gr-artwork-card{width:100%;max-width:520px;display:none;flex-direction:column;align-items:center;gap:1.1rem;margin:2.8rem auto 0;padding:2.4rem 1.8rem 2.8rem;border:.5px solid rgba(196,158,72,0.10);background:rgba(196,158,72,0.018);}
+#gr-artwork-card img{width:100%;max-width:300px;height:auto;display:block;object-fit:cover;filter:sepia(0.18) brightness(0.92);border:.5px solid rgba(196,158,72,0.09);}
+#gr-artwork-card .grac-label{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.5em;text-transform:uppercase;color:rgba(196,158,72,0.32);margin:0;}
+#gr-artwork-card .grac-title{font-family:'Almendra',serif;font-style:italic;font-size:clamp(17px,1.7vw,20px);color:rgba(232,216,186,0.55);margin:.3rem 0 0;letter-spacing:.06em;text-align:center;}
+#gr-artwork-card .grac-poetic{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,1.35vw,16px);color:rgba(196,158,72,0.48);line-height:1.85;text-align:center;margin:.2rem 0 0;max-width:36ch;}
+#gr-artwork-card .grac-facts{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.22em;text-transform:uppercase;color:rgba(196,158,72,0.28);text-align:center;margin:.6rem 0 0;line-height:1.8;}
+#gr-artwork-card .grac-status{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.2vw,15px);color:rgba(232,216,186,0.38);text-align:center;margin:.1rem 0 0;letter-spacing:.03em;}
+#gr-artwork-card .grac-cta{font-family:'Cinzel',serif;font-size:8px;letter-spacing:.44em;text-transform:uppercase;color:rgba(196,158,72,0.42);background:transparent;border:none;border-bottom:.5px solid rgba(196,158,72,0.18);padding-bottom:.22rem;cursor:pointer;transition:all .6s ease;margin-top:.9rem;}
+#gr-artwork-card .grac-cta:hover{color:rgba(238,220,168,0.75);border-bottom-color:rgba(196,158,72,0.45);}
 #gr-enquiry-modal{position:fixed;inset:0;z-index:200;display:none;align-items:center;justify-content:center;background:rgba(4,3,2,0.88);backdrop-filter:blur(6px);}
 #gr-enquiry-modal.open{display:flex;}
 #gr-enquiry-inner{width:min(480px,90vw);background:rgba(8,6,3,0.97);border:.5px solid rgba(196,158,72,0.18);padding:2.8rem 2.4rem 2.6rem;display:flex;flex-direction:column;gap:1.4rem;position:relative;}
@@ -886,51 +881,59 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 <div id="grimoireScreen">
   <button class="gr-close" onclick="closeGrimoire()">✕ Return</button>
   <div class="gr-content">
+
+    <!-- ── 1. SACRED RECORD HEADER ─────────────────────────────────────── -->
     <div style="text-align:center;">
       <p class="gr-eyebrow">Ancient Temenos · Sacred Record</p>
       <p class="gr-title">What Was Revealed</p>
       <p class="gr-date" id="grDate"></p>
     </div>
-    <div class="gr-divider"><div class="gr-div-l"></div><div class="gr-div-g"></div><div class="gr-div-l"></div></div>
-    <!-- ── ARTWORK CARD (primary collector CTA) ──────────────────────── -->
-    <div id="gr-artwork-card">
-      <p class="grac-label">From the Chamber of Venus</p>
-      <img src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Artwork.jpg" alt="Venus — graphite, charcoal and gold on paper" loading="lazy" onerror="this.style.display='none'"/>
-      <p class="grac-body">This original work resides beyond the chamber.<br><br>Venus, 2026. Original graphite, charcoal &amp; gold on paper.<br>38.5 × 56.5 cm. The original. One exists.<br><br>Private collection enquiries are welcome.</p>
-      <button class="grac-cta" onclick="openArtworkEnquiry()">Enquire Privately</button>
-    </div>
-    <!-- ── /ARTWORK CARD ─────────────────────────────────────────────── -->
+
+    <!-- ── 2–4. REFLECTION SECTIONS (populated by JS) ──────────────────── -->
     <div id="grVenusSection" style="display:none;"><p class="gr-section-label">What Venus Revealed</p><p class="gr-section-body" id="grVenusBody"></p></div>
     <div id="grGanySection" style="display:none;"><p class="gr-section-label">What We Explored Together</p><p class="gr-section-body" id="grGanyBody"></p></div>
+
+    <!-- ── 5. CLOSING INVOCATION ────────────────────────────────────────── -->
     <div id="grInvocationSection" style="display:none;"><p class="gr-section-label">Your Closing Invocation</p><p class="gr-invocation" id="grInvocation"></p></div>
+
+    <!-- ── SEALING INDICATOR ─────────────────────────────────────────────── -->
     <p class="gr-loading" id="grLoading">The Grimoire is being sealed…</p>
+
+    <!-- ── 6. KEEP THIS (actions reveal after sealing) ─────────────────── -->
     <div class="gr-actions" id="grActions" style="display:none;">
       <button class="gr-dl-btn" onclick="copyGrimoire()">Keep this</button>
       <p id="grCopyHint" style="font-family:'Cinzel',serif;font-size:7px;letter-spacing:.3em;color:rgba(196,158,72,0);transition:color .4s;">Copied to clipboard</p>
-
-      <!-- ── OFFERING ─────────────────────────────────────────────────── -->
-      <div id="gr-offering" style="width:100%;border-top:.5px solid rgba(196,158,72,0.08);margin-top:1.4rem;padding-top:2rem;display:flex;flex-direction:column;align-items:center;gap:0;">
-        <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(15px,1.5vw,18px);color:rgba(196,158,72,0.55);line-height:1.85;text-align:center;margin:0 0 1.6rem;max-width:34ch;">Places like this exist because someone, once,<br>decided they were worth keeping.</p>
-        <a href="https://buy.stripe.com/dRmfZhegNawC60V5IT5kk00" target="_blank" rel="noopener" style="font-family:'Cinzel',serif;font-size:9px;letter-spacing:.42em;text-transform:uppercase;color:rgba(238,220,168,0.7);text-decoration:none;border-bottom:.5px solid rgba(196,158,72,0.25);padding-bottom:.25rem;transition:all .5s ease;" onmouseover="this.style.color='rgba(238,220,168,0.95)';this.style.borderBottomColor='rgba(196,158,72,0.6)'" onmouseout="this.style.color='rgba(238,220,168,0.7)';this.style.borderBottomColor='rgba(196,158,72,0.25)'">Sustain the temple →</a>
-        <div id="gr-guestbook" style="margin-top:2.4rem;display:flex;flex-direction:column;align-items:center;gap:.9rem;width:100%;">
-          <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:13px;color:rgba(196,158,72,0.38);letter-spacing:.04em;margin:0;text-align:center;">Or leave your name. The temple will remember you.</p>
-          <div style="display:flex;gap:.7rem;align-items:center;justify-content:center;flex-wrap:wrap;">
-            <input id="gr-email" type="email" placeholder="your@email.com" autocomplete="off" spellcheck="false" style="background:rgba(20,14,6,0.4);border:.5px solid rgba(196,158,72,0.18);padding:.55rem .9rem;font-family:'Cormorant Garamond',serif;font-size:15px;color:rgba(232,216,186,0.9);outline:none;width:min(220px,52vw);text-align:center;letter-spacing:.03em;transition:border-color .6s ease;" onfocus="this.style.borderColor='rgba(196,158,72,0.45)'" onblur="this.style.borderColor='rgba(196,158,72,0.18)'" onkeydown="if(event.key==='Enter')grRemember()"/>
-            <button onclick="grRemember()" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:.38em;text-transform:uppercase;background:transparent;border:.5px solid rgba(196,158,72,0.22);color:rgba(196,158,72,0.6);padding:.55rem 1.1rem;cursor:pointer;transition:all .5s ease;white-space:nowrap;" onmouseover="this.style.borderColor='rgba(196,158,72,0.55)';this.style.color='rgba(238,220,168,0.85)'" onmouseout="this.style.borderColor='rgba(196,158,72,0.22)';this.style.color='rgba(196,158,72,0.6)'">Remember me</button>
-          </div>
-          <p id="gr-remembered" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:rgba(196,158,72,0.65);display:none;margin:0;">You are remembered.</p>
-        </div>
-      </div>
-      <!-- ── ARTWORK ENQUIRY ─────────────────────────────────────────────── -->
-      <div id="gr-artwork-enquiry" style="opacity:0;transition:opacity 1.8s ease;width:100%;display:flex;flex-direction:column;align-items:center;gap:0.6rem;margin-top:2.4rem;padding-top:2rem;border-top:.5px solid rgba(196,158,72,0.06);">
-        <p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.3vw,15px);color:rgba(196,158,72,0.38);line-height:1.95;text-align:center;margin:0 0 0.6rem;max-width:36ch;">The artwork you passed through exists as a singular object.<br>A limited edition of 22 prints also exists.</p>
-        <button onclick="openArtworkEnquiry()" style="font-family:'Cinzel',serif;font-size:8px;letter-spacing:.44em;text-transform:uppercase;color:rgba(238,220,168,0.38);background:transparent;border:none;border-bottom:.5px solid rgba(196,158,72,0.14);padding-bottom:.22rem;cursor:pointer;transition:all .5s ease;" onmouseover="this.style.color='rgba(238,220,168,0.72)';this.style.borderBottomColor='rgba(196,158,72,0.42)'" onmouseout="this.style.color='rgba(238,220,168,0.38)';this.style.borderBottomColor='rgba(196,158,72,0.14)'">→ Enquire</button>
-      </div>
-      <!-- ── /ARTWORK ENQUIRY ────────────────────────────────────────────────── -->
-
-      <!-- ── /OFFERING ──────────────────────────────────────────────────── -->
-
     </div>
+
+    <!-- ── 7. THRESHOLD DIVIDER (Venus only — rendered by JS when artifact follows) -->
+    <!-- id="gr-artifact-threshold" lets JS show/hide it alongside the card -->
+    <div id="gr-artifact-threshold" class="gr-divider" style="display:none;margin-top:3.2rem;">
+      <div class="gr-div-l"></div><div class="gr-div-g"></div><div class="gr-div-l"></div>
+    </div>
+
+    <!-- ── 8. VENUS ARTIFACT CARD (Venus sessions only — hidden until after seal) -->
+    <!--
+      ARCHIVAL STATE (future, when original is collected):
+      - Replace status line with: "One exists. It has found its keeper."
+      - Remove or hide the "Enquire Privately" button
+      - Do not use the word "Sold"
+      - Card remains visible as a permanent provenance record
+    -->
+    <div id="gr-artwork-card" style="opacity:0;transition:opacity 2.2s ease;">
+      <p class="grac-label">From the Chamber of Venus</p>
+      <img src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Artwork.jpg" alt="Venus — graphite, charcoal and gold on paper" loading="lazy" onerror="this.style.display='none'"/>
+      <p class="grac-title">Venus</p>
+      <p class="grac-poetic">This original work resides beyond the chamber.</p>
+      <p class="grac-facts">Venus, 2026&nbsp;&nbsp;·&nbsp;&nbsp;Original graphite, charcoal &amp; gold on paper&nbsp;&nbsp;·&nbsp;&nbsp;38.5 &times; 56.5 cm</p>
+      <p class="grac-status">The original. One exists.</p>
+      <button class="grac-cta" onclick="openArtworkEnquiry()">Enquire Privately</button>
+    </div>
+
+    <!-- ── 9. CLOSING BREATH ─────────────────────────────────────────────── -->
+    <p id="gr-closing-breath" style="display:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.2vw,15px);color:rgba(196,158,72,0.28);text-align:center;letter-spacing:.04em;margin:2.4rem auto 3.2rem;max-width:34ch;opacity:0;transition:opacity 2.8s ease;">
+      The temple holds what was true here.
+    </p>
+
   </div>
 </div>
 
@@ -1824,14 +1827,20 @@ Return ONLY valid JSON, no markdown, no fences:
   // Always reveal — grActions must show even if invocation fails
   if(loading)loading.style.display='none';
   if(actions)actions.style.display='flex';
-  // Artwork card: Venus sessions only
-  var _ac=document.getElementById('gr-artwork-card');
-  if(_ac&&mode==='venus'){_ac.style.display='flex';}
-  // Show artwork card for Venus sessions only
-  var _ac=document.getElementById('gr-artwork-card');
-  if(_ac&&mode==='venus'){_ac.style.display='flex';}
-  // Artwork enquiry fades in after existing actions settle
-  setTimeout(()=>{const enq=document.getElementById('gr-artwork-enquiry');if(enq)enq.style.opacity='1';},2800);
+  // Venus artifact: threshold divider + card + closing breath fade in after seal settles
+  // Never shown for Ganymede or council sessions
+  if(mode==='venus'){
+    var _th=document.getElementById('gr-artifact-threshold');
+    var _ac=document.getElementById('gr-artwork-card');
+    var _cb=document.getElementById('gr-closing-breath');
+    if(_th){_th.style.display='flex';}
+    if(_ac){_ac.style.display='flex';}
+    // Opacity fades in after a breath — card arrives as a discovered artifact, not a header
+    setTimeout(function(){
+      if(_ac)_ac.style.opacity='1';
+      if(_cb){_cb.style.display='block';setTimeout(function(){_cb.style.opacity='1';},120);}
+    },1800);
+  }
 }
 // ── GRIMOIRE REMEMBRANCE ────────────────────────────────────────────────────
 function _grUUID(){
