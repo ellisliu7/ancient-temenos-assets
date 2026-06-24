@@ -3989,10 +3989,10 @@ initFoyer=function(){
     <div id="geq-form-fields" style="display:flex;flex-direction:column;gap:1.4rem;">
       <div class="geq-field"><label for="geq-name">Name</label><input id="geq-name" type="text" placeholder="Your name" autocomplete="off"/></div>
       <div class="geq-field"><label for="geq-email">Email</label><input id="geq-email" type="email" placeholder="your@email.com" autocomplete="off"/></div>
-      <div class="geq-field"><label for="geq-msg">Message <span style="opacity:0.45;font-size:0.85em;">(optional)</span></label><textarea id="geq-msg" placeholder="I would like to enquire about Venus…"></textarea></div>
+      <div class="geq-field"><label for="geq-msg">Message <span style="opacity:0.45;font-size:0.85em;">(optional)</span></label><textarea id="geq-msg" placeholder="I would like to enquire about this work…"></textarea></div>
       <button id="geq-submit" onclick="submitArtworkEnquiry()">Send enquiry →</button>
     </div>
-    <div id="geq-sent"><p>Your enquiry has been received.<br><br>Thank you for your interest in Venus.<br>El will be in touch within 48 hours.</p></div>
+    <div id="geq-sent"><p>Your enquiry has been received.<br><br>El will be in touch within 48 hours.</p></div>
     <div id="geq-error" style="display:none;text-align:center;"><p style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:rgba(196,100,80,0.75);line-height:1.85;">Something went wrong.<br>Please try again, or email El directly at<br><a href="mailto:ellisliu91@gmail.com" style="color:rgba(196,158,72,0.7);">ellisliu91@gmail.com</a></p></div>
   </div>
 </div>
@@ -4001,8 +4001,15 @@ initFoyer=function(){
 var _geqChamber = 'venus';
 function openArtworkEnquiry(chamber){
   _geqChamber = (chamber === 'ganymede') ? 'ganymede' : 'venus';
+  var _cName = _geqChamber === 'ganymede' ? 'Ganymede' : 'Venus';
   var m=document.getElementById('gr-enquiry-modal');
   if(!m)return;
+  // Update textarea placeholder to match chamber
+  var _ta=document.getElementById('geq-msg');
+  if(_ta)_ta.placeholder='I would like to enquire about the '+_cName+' work…';
+  // Reset geq-sent to correct chamber copy so no stale cross-chamber text persists
+  var _sent=document.getElementById('geq-sent');
+  if(_sent)_sent.innerHTML='<p>Your enquiry has been received.<br><br>Thank you for your interest in '+_cName+'.<br>El will be in touch within 48 hours.</p>';
   document.getElementById('geq-form-fields').style.display='flex';
   document.getElementById('geq-sent').style.display='none';
   document.getElementById('geq-error').style.display='none';
