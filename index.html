@@ -1572,7 +1572,7 @@ function vaRenderCard(data){
   // Scroll glass to bottom ONCE before revealing — so text fades in where it lives
   const vg=document.getElementById('va-glass');
   d.appendChild(who);d.appendChild(card);t.appendChild(d);
-  if(vg)vg.scrollTop=vg.scrollHeight;
+  if(vg)requestAnimationFrame(()=>vg.scrollTop=vg.scrollHeight);
   const mirrorEl=card.querySelector('.va-mirror');
   const paras=mirrorText.split(/\n\n+/).filter(p=>p.trim());
   // Pure opacity — no movement. Venus arrives, she does not shift.
@@ -1611,7 +1611,7 @@ function vaMaybeShowClosing(){
         const sep=document.getElementById('va-closing-sep');
         setTimeout(()=>{if(line)line.style.opacity='1';},1200);
         setTimeout(()=>{if(sep)sep.style.opacity='1';},2800);
-        setTimeout(()=>{if(keyCta)keyCta.style.opacity='1';},3600);
+        setTimeout(()=>{if(keyCta)keyCta.style.opacity='1';},9000);
         setTimeout(()=>{if(acts)acts.style.opacity='1';},5800);
       },5000);
     }
@@ -2670,7 +2670,7 @@ function openKeyReveal(){
     if(collect)collect.style.display='none';
     if(after)after.style.display='flex';
     if(insc)insc.style.opacity='1';
-    if(offer)offer.style.display='flex';
+    // if(offer)offer.style.display='flex'; // hidden Jun 25 sprint
     if(head)head.textContent='You hold this Key.';
   }else{
     _keyCurrent=null;
@@ -2688,7 +2688,7 @@ function openKeyReveal(){
 function closeKeyReveal(){const ov=document.getElementById('keyReveal');if(!ov)return;ov.classList.remove('show');setTimeout(()=>{ov.style.display='none';},900);}
 function collectKey(){
   if(_getVenusKey())return;
-  const k={id:'VEN-'+_keyDateStamp()+'-'+_keyShortRand(),number:_keyNextNumber(),chamber:'venus',date:_keyPrettyDate(),line:_venusSessionLine(),collectedAt:new Date().toISOString()};
+  const k={id:'VENUS-'+_keyDateStamp()+'-'+_keyShortRand(),number:_keyNextNumber(),chamber:'venus',date:_keyPrettyDate(),line:_venusSessionLine(),collectedAt:new Date().toISOString()};
   _saveVenusKey(k);_keyCurrent=k;
   if(window.trackTempleEvent)trackTempleEvent('key_collected',{chamber:'venus',id:k.id});
   const img=document.getElementById('kr-key-img');if(img){img.classList.remove('pulse');void img.offsetWidth;img.classList.add('pulse');}
@@ -2696,7 +2696,7 @@ function collectKey(){
   const head=document.getElementById('kr-headline');if(head)head.textContent='The Key is yours. It remembers this moment.';
   _renderInscription(k);
   setTimeout(()=>{const insc=document.getElementById('kr-inscription');if(insc)insc.style.opacity='1';},400);
-  setTimeout(()=>{const offer=document.getElementById('kr-offer');if(offer)offer.style.display='flex';},1600);
+  // Offering block hidden (sprint Jun 25) — reintroduce after key adoption validated
   setTimeout(()=>{const after=document.getElementById('kr-after');if(after)after.style.display='flex';},2800);
 }
 function _krWrap(ctx,text,x,y,maxW,lh){const words=text.split(' ');let line='';let yy=y;for(let n=0;n<words.length;n++){const test=line+words[n]+' ';if(ctx.measureText(test).width>maxW&&n>0){ctx.fillText(line.trim(),x,yy);line=words[n]+' ';yy+=lh;}else{line=test;}}ctx.fillText(line.trim(),x,yy);return yy;}
