@@ -1110,6 +1110,18 @@ const VENUS_GLB='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-ass
 const GANY_GLB='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/ganymedestatue-v1.glb';
 const FRAME_PNG=CDN+'Portal%20Frame.png';
 
+// == SOUND V0.5 — portal chime experiment ==
+const SOUND_ENABLED = true; // set false to disable instantly
+let _chimeAudio = null;
+function playPortalChime(){
+  if(!SOUND_ENABLED) return;
+  try{
+    if(!_chimeAudio){ _chimeAudio = new Audio(CDN+'portal-chime.mp3'); _chimeAudio.volume = 0.6; }
+    _chimeAudio.currentTime = 0;
+    _chimeAudio.play().catch(()=>{});
+  }catch(e){}
+}
+
 // == STARS BG ==
 const bgC=document.getElementById('bgCanvas'),bgX=bgC.getContext('2d');
 let BW,BH,bfr=0,nOff=0;
@@ -1449,6 +1461,7 @@ function foyerLeave(side){
 
 function foyerEnter(side){
   if(currentScreen!=='foyer')return;
+  playPortalChime();
   foyerActive=false;
   flashTo(()=>{
     if(side==='venus')enterVenusApproach();
