@@ -1,11 +1,46 @@
 # Ancient Temenos — Current State
-**Date:** 24 June 2026 (collector sprint closed)
+**Date:** 25 June 2026 (oracle production migration closed)
 **Source of truth:** `https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/index.html`
-**Live URL:** `https://ellisliu7.github.io/ancient-temenos-assets/`
+**Live URL:** `https://ancienttemenos.art`
 
 ---
 
 ## Session log
+
+### 25 June 2026 — Oracle production migration: CORS + runtime fix
+
+**Status: shipped. Browser-verified. Venus oracle live on ancienttemenos.art.**
+
+**Context:** Ancient Temenos migrated from `ellisliu7.github.io/ancient-temenos-assets` to `ancienttemenos.art`. Site loaded correctly but Venus oracle returned fallback copy: *"The connection stirs but does not hold tonight."*
+
+**Root cause chain (three sequential failures in `api/oracle.js`):**
+
+1. **CORS allowlist** — `ALLOWED_ORIGIN` was a single hardcoded string `'https://ellisliu7.github.io'`. Every preflight OPTIONS from `ancienttemenos.art` was blocked before the POST ever fired.
+
+2. **ESM/CJS mismatch** — CORS patch introduced `export default` syntax. Vercel project has no `"type": "module"` in `package.json`, so Node treated the file as CommonJS. Function crashed on load (`Failed to load ES module`) before any header was written. Every request returned a raw 500 with no CORS headers.
+
+3. **Missing `async`** — The `async` keyword was dropped from the handler declaration during the CJS fix, making `await readBody(req)` a syntax error at runtime.
+
+**What changed in `api/oracle.js` (Vercel private repo only — `index.html` untouched):**
+
+- `ALLOWED_ORIGIN` (string) → `ALLOWED_ORIGINS` (Set) containing `ancienttemenos.art`, `www.ancienttemenos.art`, `ellisliu7.github.io`
+- Preflight `setHeader` block updated to derive `allowedOrigin` dynamically from Set lookup; added `Vary: Origin`
+- Origin guard updated from `!== ALLOWED_ORIGIN` to `!ALLOWED_ORIGINS.has(origin)`
+- `export default` → `module.exports` (CommonJS)
+- `async` restored on both `handler` and `readBody`
+
+**Verified live:**
+- Venus oracle responds on `ancienttemenos.art` ✓
+- Key generation working ✓
+- Key download working ✓
+- Vercel proxy stable ✓
+
+**Known polish bugs (next sprint — not yet fixed):**
+1. Oracle response renders at top then jumps/reflows downward — container height not reserved before streaming
+2. Second oracle response auto-advances to "Receive your first key" CTA before user finishes reading — needs delay or user action gate
+3. Key display label reads `VEN`, should read `VENUS` — cosmetic, one string change
+
+---
 
 ### 24 June 2026 — Ganymede artifact: modal cross-chamber leakage fix
 
@@ -228,7 +263,7 @@ When an original is collected:
 |---|---|
 | Threshold | Live |
 | Foyer council debate | Live |
-| Venus chamber + oracle | Live |
+| Venus chamber + oracle | Live — ancienttemenos.art ✓ |
 | Ganymede chamber + oracle | Live |
 | Venus Grimoire (Version C) | Live — browser-verified |
 | Ganymede Grimoire | Live — browser-verified |
@@ -238,6 +273,7 @@ When an original is collected:
 | Enquiry modal (chamber-aware) | Live — browser-verified |
 | Formspree enquiry flow | Live |
 | Dev toolkit (9 commands + panel) | Live — browser-verified |
+| Vercel oracle proxy | Live — CORS resolved, CommonJS runtime confirmed |
 | Persephone | Prototype only (`persephone-oracle.html`) — not in `index.html` |
 | Psyche | Not built |
 | Sigil Key reveal | Live (partial) |
