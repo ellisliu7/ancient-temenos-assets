@@ -1,11 +1,176 @@
 # Ancient Temenos — Current State
-**Date:** 25 June 2026 (oracle production migration closed)
+**Date:** 26 June 2026 (Ganymede Sacred Contract sprint closed)
 **Source of truth:** `https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/index.html`
 **Live URL:** `https://ancienttemenos.art`
 
 ---
 
 ## Session log
+
+### 26 June 2026 — Ganymede Sacred Contract + readability sprint
+
+**Status: shipped. Browser-verified end-to-end.**
+
+---
+
+#### Readability pass — global text contrast
+
+Full audit of all text colour tokens in `index.html`. All values were hardcoded `rgba()` inline — no design token system exists.
+
+**8 elements patched (opacity lifts only, no layout or colour family changes):**
+
+| Element | Selector | Before | After |
+|---|---|---|---|
+| Kybalion pull-quote | `.va-kybalion` / `#va-vthread .vc-k` | `rgba(238,220,168,0.28)` | `0.48` |
+| Grimoire closing breath (Venus + Ganymede) | `#gr-closing-breath` / `#gr-closing-breath-gany` | `rgba(196,158,72,0.28)` | `0.48` |
+| Foyer "Ask Again" button | `#c-again` | `rgba(196,158,72,0.18)` | `0.38` |
+| Venus oracle "VENUS" speaker label | `#va-vthread .msg-v .who` | `rgba(196,158,72,0.22)` | `0.40` |
+| User "YOU" speaker label | `#va-vthread .msg-user .who` | `rgba(196,158,72,0.18)` | `0.35` |
+| "Seal in Grimoire" button | `.vc-grimoire-btn` | `rgba(196,158,72,0.28)` | `0.45` |
+
+Wishing Well placeholder/hint and "breathe" inline copy excluded — dormant room, not touched in this pass.
+
+**Ganymede-specific contrast pass (separate patch, triggered by live testing with Kenneth):**
+
+| Element | Selector | Before | After |
+|---|---|---|---|
+| Echoed user message | `#g-prev-text` | `rgba(238,220,168,0.16)` | `0.55` |
+| Input placeholder "Speak into the cave…" | `#gi::placeholder` | `rgba(196,158,72,0.18)` | `0.42` |
+| Send arrow button | `#gb` opacity | `0.45` | `0.65` |
+| Invitation eyebrow label | `#g-inv-line1` | `rgba(196,158,72,0.28)` | `0.45` |
+| Candle option text | `.g-candle-text` | `rgba(238,220,168,0.50)` | `0.65` |
+
+Note: `#g-curr-text` (main oracle reply) was already `0.82` — left unchanged.
+
+---
+
+#### Sacred Contract — new Ganymede ending
+
+**What it is:** A quiet rite-of-passage ending that replaces the old post-conversation button injection. Fires when `check_in: true` arrives from Ganymede. Reference tone: Brit Marling / The OA. Not coaching, not productivity — witnessing.
+
+**Full flow:**
+```
+check_in:true → ganyRitual() → [existing 12.5s ritual flash sequence] →
+showSacredContract()
+  → three copy blocks, staggered fade-in (2400ms apart)
+  → two textarea fields: "What are you building?" / "What is asking to happen next?"
+  → "Witness this" submit button
+  → submitSacredContract()
+      → fields fade out
+      → gStream() renders two closing stanzas as ceremonial paragraph fade-ins:
+          "Perhaps what you're building is also building you. / Stone by stone. / Choice by choice."
+          "Then it has begun. / Go on."
+      → "✦ Seal in Grimoire" fades in
+      → "I want to go deeper" ghost option beneath it
+      → openGrimoire() — Sacred Contract answers appended to transcript
+```
+
+**Sacred Contract in Grimoire:**
+- Appended to the `ganymede` INPUTS prompt so the invocation AI has the answers
+- Rendered as a dedicated **Sacred Contract** section at the bottom of the Grimoire entry
+- Two sub-labels: "What I am building" / "What is asking to happen next"
+- Same `gr-section-label` / `gr-section-body` typographic pattern as existing sections
+- Only appears if `gSacredContractData.building` is non-empty (guards against dev skips)
+
+**New CSS namespace (`.sc-`):**
+All Sacred Contract styles use a `.sc-` prefix. No existing classes modified.
+
+**`gSacredContractData` global:**
+```js
+let gSacredContractData = { building: '', next: '' };
+```
+Module-scope. Reset on each Sacred Contract submission. Read by `openGrimoire()`.
+
+---
+
+#### Gate priority fix — critical bug
+
+**Bug:** `check_in: true` was silently swallowed when `gExchangeCount >= G_FREE_LIMIT` (3) and no Sigil Key present. The gate condition ran first, showed the "Sigil Key opens the way" screen, and `ganyRitual()` was never called.
+
+**Root cause:** Both the mock path and live API path had the same structure:
+```js
+// OLD — gate won
+if (!gHasKey() && gExchangeCount >= G_FREE_LIMIT) { ganyGate(); }
+else { if (check_in) ganyRitual(); }
+```
+
+**Fix:** Inverted priority in both paths:
+```js
+// NEW — check_in always wins
+if (p.check_in === true) { ganyRitual(); }
+else if (!gHasKey() && gExchangeCount >= G_FREE_LIMIT) { ganyGate(); }
+else { showCandles(); }
+```
+
+The Sacred Contract is the ending. The gate is a conversion screen. `check_in` outranks the gate.
+
+---
+
+#### Dev shortcut — `window.__testGanymedeContract()`
+
+**What it does:** Opens Ganymede if needed, seeds minimal `gHistory`, replicates `gArrive()` state (glass panel visible, exchange panel visible, scrub.arrived = true), then calls `showSacredContract()` directly. No API, no conversation required.
+
+**Initial bug:** First implementation injected into invisible DOM — `#g-glass` was `opacity:0; pointer-events:none` because `.show` class was never added. The shortcut bypassed `gArrive()` entirely.
+
+**Fix:** `_launch()` now replicates `gArrive()` before calling `showSacredContract()`:
+```js
+gl.classList.remove('sunk');
+gl.classList.add('show');        // was missing
+gScrub.arrived = true;           // scroll guards pass
+inv → hidden, exch → visible
+```
+
+Also wired into the `?dev=1` floating panel as **✦ Contract (G)**.
+
+**Dev toolkit — now 10 console commands:**
+
+| Command | What it does |
+|---|---|
+| `window.__testGrimoireNow()` | Seeds Venus mock session, opens Grimoire |
+| `window.__testGanyGrimoireNow()` | Seeds Ganymede mock session, opens Grimoire |
+| `window.__testGanyArtifactNow()` | Seeds Ganymede mock session, opens Grimoire (artifact card) |
+| `window.__testGanymedeContract()` | Opens Sacred Contract ending directly, no API |
+| `window.__testCollectorNow()` | Opens enquiry modal as Venus |
+| `window.__testVenusNow()` | Flash-transitions into Venus approach corridor |
+| `window.__testGanymedeNow()` | Flash-transitions into Ganymede cave |
+| `window.__testKeyNow()` | Seeds Venus mock data, opens Sigil Key reveal |
+| `window.__resetTemple()` | Clears all localStorage, shows threshold |
+| `window.__unlockAllKeys()` | Grants Sigil Key + seeds Venus key record |
+
+---
+
+#### Sacred Contract — vertical fit + contrast (second pass)
+
+After live testing, two issues:
+1. Content too tall — required scrolling to reach fields and ending
+2. Copy and labels too faint against glass panel
+
+**Vertical fit patches (estimated stack: ~956px → ~514px, budget ~658px):**
+
+| Property | Before | After |
+|---|---|---|
+| `.sc-copy` font-size | `clamp(16px,1.55vw,21px)` | `clamp(14px,1.25vw,17px)` |
+| `.sc-copy` line-height | `2.0` | `1.75` |
+| Copy inter-block margin | `3rem` | `1.6rem` |
+| Block 2 inner breaks | 6 (6 separate lines) | 3 (condensed) |
+| `.sc-fields` margin-top | `2.8rem` | `1.4rem` |
+| `.sc-fields` gap | `1.6rem` | `1rem` |
+| Textarea rows | `3` | `2` |
+| `.sc-submit` margin-top | `2.4rem` | `1.2rem` |
+| Per-block stagger | `3200ms` | `2400ms` |
+
+**Contrast patches:**
+
+| Element | Before | After |
+|---|---|---|
+| `.sc-copy` prose | `rgba(238,220,168,0.72)` | `0.88` |
+| `.sc-label` | `rgba(196,158,72,0.45)` | `0.65` |
+| `.sc-textarea::placeholder` | `rgba(196,158,72,0.28)` | `0.42` |
+| `.sc-submit` ("Witness this") | `rgba(196,158,72,0.50)` | `0.70` |
+
+Textarea input text (`rgba(238,220,168,0.82)`) unchanged — already correct.
+
+---
 
 ### 25 June 2026 — Oracle production migration: CORS + runtime fix
 
@@ -29,72 +194,31 @@
 - `export default` → `module.exports` (CommonJS)
 - `async` restored on both `handler` and `readBody`
 
-**Verified live:**
-- Venus oracle responds on `ancienttemenos.art` ✓
-- Key generation working ✓
-- Key download working ✓
-- Vercel proxy stable ✓
-
-**Known polish bugs (next sprint — not yet fixed):**
-1. Oracle response renders at top then jumps/reflows downward — container height not reserved before streaming
-2. Second oracle response auto-advances to "Receive your first key" CTA before user finishes reading — needs delay or user action gate
-3. Key display label reads `VEN`, should read `VENUS` — cosmetic, one string change
-
 ---
 
 ### 24 June 2026 — Ganymede artifact: modal cross-chamber leakage fix
 
 **Status: shipped. Browser-verified.**
 
-**Bug:** Three Venus-hardcoded strings in the enquiry modal were not being overwritten when the Ganymede artifact card's "Enquire Privately" was clicked:
-1. Textarea placeholder — `"I would like to enquire about Venus…"` (HTML attribute, not JS-settable at open time)
-2. `#geq-sent` default innerHTML — `"Thank you for your interest in Venus."` (stale content persisted if modal had been opened for Venus earlier in the same session)
-3. Both were missed in the original Ganymede artifact sprint; the Formspree `_subject` and submit success copy were already dynamic.
+**Bug:** Three Venus-hardcoded strings in the enquiry modal were not being overwritten when the Ganymede artifact card's "Enquire Privately" was clicked.
 
-**What changed (3 replacements):**
-
-1. **Textarea placeholder HTML** — neutralised to `"I would like to enquire about this work…"` as a safe static fallback. `openArtworkEnquiry()` now overwrites it dynamically on every open.
-2. **`#geq-sent` default HTML** — neutralised to `"Your enquiry has been received. El will be in touch within 48 hours."` (no chamber name) as a safe static fallback. `openArtworkEnquiry()` now writes the correct chamber copy before the modal opens, so `submitArtworkEnquiry()` only needs to call `display:block`.
-3. **`openArtworkEnquiry(chamber)`** — three additions immediately after `_geqChamber` is set:
-   - `var _cName` derived from `_geqChamber`
-   - Textarea placeholder set to `"I would like to enquire about the [Chamber] work…"`
-   - `#geq-sent` innerHTML reset to correct chamber copy
-
-**Chamber-specific string coverage — now complete:**
-
-| String | Venus | Ganymede | Mechanism |
-|---|---|---|---|
-| Textarea placeholder | `…the Venus work…` | `…the Ganymede work…` | Set in `openArtworkEnquiry()` |
-| `#geq-sent` success copy | `…interest in Venus.` | `…interest in Ganymede.` | Reset in `openArtworkEnquiry()` + overwritten in `submitArtworkEnquiry()` |
-| Formspree `_subject` | `Venus Chamber — Private Collection Enquiry` | `Ganymede Chamber — Private Collection Enquiry` | Dynamic in `submitArtworkEnquiry()` |
-| Formspree `message` default | `…the Venus artwork.` | `…the Ganymede artwork.` | Dynamic in `submitArtworkEnquiry()` |
-
-**What was NOT changed:** modal HTML structure, Formspree endpoint, field layout, close/escape behaviour, dev toolkit, any other screen.
+**Fix:** Neutralised textarea placeholder and `#geq-sent` default HTML; `openArtworkEnquiry()` now overwrites both dynamically on every open.
 
 ---
 
 ### 24 June 2026 — Ganymede artifact: _seedGanymede visibility fix
 
-**Status: shipped. Browser-verified (artifact card, settle motion, copy all correct).**
+**Status: shipped. Browser-verified.**
 
-**Bug:** `_seedGanymede()` wrote to `window.gHistory` instead of the scoped `let gHistory`. `openGrimoire()` reads the scoped variable — so `gc` was always empty, `mode` resolved to `'council'`, and the Ganymede reveal branch never fired. Card stayed hidden despite the console log (which fires before the mode check).
-
-**Fix:** Two lines → one: `gHistory = MOCK_GANYMEDE` (matches `_seedVenus` pattern). No other changes.
+**Bug:** `_seedGanymede()` wrote to `window.gHistory` instead of the scoped `let gHistory`. Fix: `gHistory = MOCK_GANYMEDE` (one line).
 
 ---
 
 ### 24 June 2026 — Ganymede collector artifact sprint
 
-**Status: shipped. Browser-verified (card visible, settle motion confirmed distinct from Venus).**
+**Status: shipped. Browser-verified.**
 
-**What shipped:**
-- `#gr-artwork-card-gany` — Ganymede artifact card (11 CSS rules + HTML block), `Ganymede_gold.jpg`, five-element structure with approved copy
-- `#gr-closing-breath-gany` — *"What was built here will hold."*
-- `mode==='ganymede'` branch in Grimoire reveal — settle motion (`translateY -10px → 0`, `cubic-bezier(.16,.84,.44,1)`, 1.2s dwell) vs Venus bloom (opacity only, 1.8s)
-- Cross-card reset on each open (Venus branch resets Gany card; Ganymede branch resets Venus card)
-- `_geqChamber` module-scope var + `openArtworkEnquiry(chamber)` arg — modal is now chamber-aware
-- Dynamic Formspree `_subject` and submit success copy keyed to `_geqChamber`
-- Dev: `__testGanyArtifactNow()`, `?mock=ganycollector`, `✦ Collector (V)` / `✦ Collector (G)` panel buttons
+What shipped: `#gr-artwork-card-gany`, `#gr-closing-breath-gany`, `mode==='ganymede'` Grimoire branch with settle motion, cross-card reset, `openArtworkEnquiry(chamber)` chamber-aware modal, dev shortcuts.
 
 ---
 
@@ -102,43 +226,52 @@
 
 **Status: shipped. Browser-verified.**
 
-**Sprint goal:** Resequence the Grimoire so the visitor receives the reflection first and discovers the Venus artwork as a closing artifact — not an opening product card. Remove all competing asks from the Venus closing moment.
-
-**What shipped:**
-
-1. **Grimoire HTML block replaced (Version C layout)**
-
-   New scroll order:
-   1. Sacred Record header (eyebrow, title, date)
-   2. Reflection (`grVenusSection` / `grGanySection`)
-   3. Closing Invocation (`grInvocationSection`)
-   4. Keep this (`grActions`)
-   5. Gold threshold divider (`gr-artifact-threshold`) — Venus sessions only, hidden by default, JS-revealed
-   6. Venus artifact card (`gr-artwork-card`) — Venus sessions only, fades in 1.8s after seal
-   7. Closing breath (`gr-closing-breath`) — *"The temple holds what was true here."* — fades in after card
-   8. End
-
-2. **Removed from Grimoire (Venus flow):**
-   - `gr-offering` — Stripe donation block
-   - `gr-guestbook` — Remember Me email capture
-   - `gr-artwork-enquiry` — duplicate secondary enquiry copy
-   - "22 prints" scarcity contradiction
-
-3. **Venus artifact card restructured** — five distinct typographic elements (label / title / poetic / facts / status / CTA)
+Resequenced Grimoire so artwork card appears as closing artifact after reflection, not opening product card. Removed offering block, guestbook, and duplicate enquiry copy.
 
 ---
 
 ## Current architecture
 
+### Sacred Contract data flow
+
+```
+Ganymede conversation → check_in:true → ganyRitual() → 12.5s flash →
+showSacredContract()
+  → three copy blocks in #g-curr-text (staggered fade)
+  → two textareas + "Witness this" in #g-options
+submitSacredContract()
+  → gSacredContractData = { building, next }
+  → gStream() → closing stanzas → "✦ Seal in Grimoire"
+openGrimoire()
+  → Sacred Contract answers appended to INPUTS prompt
+  → Sacred Contract section rendered in Grimoire below "What Remains"
+```
+
+### Grimoire flow (Ganymede with Sacred Contract)
+
+```
+openGrimoire()
+  → populate grGanySection from gHistory
+  → generateInvocation(mode='ganymede', with Sacred Contract in transcript)
+      → API call → invocation renders
+      → grActions revealed
+      → gr-artifact-threshold shown
+      → gr-artwork-card-gany shown
+      → setTimeout 1200ms:
+          → gr-artwork-card-gany opacity → 1, translateY(-10px) → 0
+          → gr-closing-breath-gany opacity → 1
+          → [if gSacredContractData.building]:
+              Sacred Contract section visible at bottom
+```
+
 ### Grimoire flow (Venus)
 
 ```
 openGrimoire()
-  → show grimoireScreen
   → populate grVenusSection from vHistory
   → generateInvocation(mode='venus')
       → API call → invocation renders
-      → grActions revealed (Keep this)
+      → grActions revealed
       → gr-artifact-threshold shown
       → gr-artwork-card shown (display:flex)
       → setTimeout 1800ms:
@@ -146,57 +279,16 @@ openGrimoire()
           → gr-closing-breath display:block → opacity → 1
 ```
 
-### Grimoire flow (Ganymede)
+### Collector flow (Venus + Ganymede)
 
 ```
-openGrimoire()
-  → populate grGanySection from gHistory
-  → generateInvocation(mode='ganymede')
-      → API call → invocation renders
-      → grActions revealed (Keep this)
-      → gr-artifact-threshold shown
-      → gr-artwork-card-gany shown (display:flex)
-      → setTimeout 1200ms:
-          → gr-artwork-card-gany opacity → 1, translateY(-10px) → 0 (settle)
-          → gr-closing-breath-gany display:block → opacity → 1
-```
-
-### Collector flow (Venus)
-
-```
-Visitor seals Venus Grimoire
-  → 1.8s later: Venus artifact card fades in
-  → "Enquire Privately" → openArtworkEnquiry('venus')
-      → _geqChamber = 'venus'
-      → textarea placeholder = "I would like to enquire about the Venus work…"
-      → geq-sent innerHTML = "…Thank you for your interest in Venus…"
-      → modal opens
+"Enquire Privately" → openArtworkEnquiry('venus'|'ganymede')
+  → _geqChamber set
+  → textarea placeholder, #geq-sent innerHTML set dynamically
+  → modal opens
   → Submit → Formspree xkoakgkk
-      → _subject: "Venus Chamber — Private Collection Enquiry"
-  → Success: "Thank you for your interest in Venus. El will be in touch within 48 hours."
+  → _subject: "[Chamber] Chamber — Private Collection Enquiry"
 ```
-
-### Collector flow (Ganymede)
-
-```
-Visitor seals Ganymede Grimoire
-  → 1.2s later: Ganymede artifact card settles into place
-  → "Enquire Privately" → openArtworkEnquiry('ganymede')
-      → _geqChamber = 'ganymede'
-      → textarea placeholder = "I would like to enquire about the Ganymede work…"
-      → geq-sent innerHTML = "…Thank you for your interest in Ganymede…"
-      → modal opens
-  → Submit → Formspree xkoakgkk
-      → _subject: "Ganymede Chamber — Private Collection Enquiry"
-  → Success: "Thank you for your interest in Ganymede. El will be in touch within 48 hours."
-```
-
-### Archival / sold state (future — not yet active)
-
-When an original is collected:
-- Venus: replace `grac-status` with *"One exists. It has found its keeper."*, hide `.grac-cta`
-- Ganymede: replace `grac-status` with *"One was made. It has found its keeper."*, hide `.grac-cta`
-- Do not use the word "Sold". Card stays visible as permanent provenance record.
 
 ---
 
@@ -209,6 +301,7 @@ When an original is collected:
 | `window.__testGrimoireNow()` | Seeds Venus mock session, opens Grimoire |
 | `window.__testGanyGrimoireNow()` | Seeds Ganymede mock session, opens Grimoire |
 | `window.__testGanyArtifactNow()` | Seeds Ganymede mock session, opens Grimoire (artifact card reveals) |
+| `window.__testGanymedeContract()` | Opens Sacred Contract directly — no API, no conversation |
 | `window.__testCollectorNow()` | Opens enquiry modal as Venus |
 | `window.__testVenusNow()` | Flash-transitions into Venus approach corridor |
 | `window.__testGanymedeNow()` | Flash-transitions into Ganymede cave |
@@ -233,27 +326,42 @@ When an original is collected:
 
 ---
 
+## Remaining refinement — Ganymede (next sprint)
+
+These are deferred with fresh eyes — no action taken today:
+
+| Item | Notes |
+|---|---|
+| Ganymede text contrast — continued | Live testing shows further tuning needed. `#g-prev-text` raised to 0.55 this session but may need adjustment. Review with Kenneth. |
+| Sacred Contract copy and pacing | Block 2 condensed this session. May benefit from further reduction or rephrasing. Timing (2400ms stagger) still feels long on repeat testing. |
+| Vertical density — further reduction | Stack now ~514px vs ~658px budget. Comfortable on 900px laptop but may still crowd on 768px. Monitor. |
+| Visual hierarchy review | `.sc-copy`, `.sc-label`, `.sc-submit`, `.gc-grimoire-btn` all coexist on screen at different opacities. Worth a fresh-eyes pass on the relative weight. |
+| Sacred Contract — "I want to go deeper" | Ghost option is present and wired but not tested end-to-end from the contract submission path. Verify re-enables input correctly. |
+| Ganymede options (candle) text | Raised to 0.65 this session. Confirm in live testing. |
+
+---
+
 ## Known technical debt
 
 | Item | Notes |
 |---|---|
 | Council → Venus routing bug | `enterVenusAltar()` (empty shell) called instead of `enterVenusApproach()`. ~lines 3034 and 3181. Simple 2-line fix. Unfixed. |
 | Ghost Venus oracle code | ~250 lines of dead code: `sendVenus`, `renderVCard`, `addUserMsg`, `initVenusSculpture`, `_buildVenusSculpture`. Not wired to HTML. Safe, not urgent. |
-| `grRemember()` JS function | Dead function — HTML callers removed. JS body still present, unreachable. Tidy next convenient session. |
-| Duplicate `#gr-enquiry-modal` CSS | Modal + modal.open + inner rules appear twice in CSS. Invisible to visitors. Tidy next convenient session. |
+| `grRemember()` JS function | Dead function — HTML callers removed. JS body still present, unreachable. |
+| Duplicate `#gr-enquiry-modal` CSS | Modal rules appear twice in CSS. Invisible to visitors. |
 
 ---
 
-## Backlog (do not implement until real enquiry behaviour exists)
+## Backlog
 
 - Council → Venus routing bug fix
 - Persephone integration into `index.html` (prototype complete: `persephone-oracle.html`)
 - Psyche chamber (no artwork, no video, no GLB, no system prompt)
-- Sigil Key architecture — 9 open design questions deferred
-- The Memory layer — asynchronous inhabited presence, no backend yet
+- Sigil Key architecture — design questions deferred
+- The Memory layer — architecture undecided
 - Collector page, print production, edition certificates
-- Wallet / Privy / Supabase — do not build until visitor behaviour proves need
-- File splitting (separate CSS/JS files) — revisit when complexity warrants
+- Wallet / on-chain collection — deferred until demand validated
+- File splitting (separate CSS/JS files) — deferred
 
 ---
 
@@ -265,14 +373,15 @@ When an original is collected:
 | Foyer council debate | Live |
 | Venus chamber + oracle | Live — ancienttemenos.art ✓ |
 | Ganymede chamber + oracle | Live |
+| Ganymede Sacred Contract ending | Live — browser-verified end-to-end ✓ |
 | Venus Grimoire (Version C) | Live — browser-verified |
-| Ganymede Grimoire | Live — browser-verified |
+| Ganymede Grimoire (with Sacred Contract section) | Live — browser-verified |
 | Council Grimoire | Live |
 | Venus artifact card | Live — browser-verified |
-| Ganymede artifact card | Live — browser-verified (settle motion confirmed) |
+| Ganymede artifact card | Live — browser-verified |
 | Enquiry modal (chamber-aware) | Live — browser-verified |
 | Formspree enquiry flow | Live |
-| Dev toolkit (9 commands + panel) | Live — browser-verified |
+| Dev toolkit (10 commands + panel) | Live — browser-verified |
 | Vercel oracle proxy | Live — CORS resolved, CommonJS runtime confirmed |
 | Persephone | Prototype only (`persephone-oracle.html`) — not in `index.html` |
 | Psyche | Not built |
