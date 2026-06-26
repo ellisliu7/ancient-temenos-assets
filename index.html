@@ -3988,19 +3988,8 @@ initFoyer=function(){
   };
 
   window.__testGanymedeContract = function(){
-    // Enter Ganymede if not already there
-    if(typeof currentScreen !== 'undefined' && currentScreen !== 'ganymedeScreen'){
-      if(typeof flashTo === 'function' && typeof enterGanymede === 'function'){
-        flashTo(function(){
-          enterGanymede();
-          setTimeout(function(){ _runContract(); }, 1800);
-        });
-        return;
-      }
-    }
-    _runContract();
-    function _runContract(){
-      // Seed minimal gHistory so grimoire has content to work with
+    function _launch(){
+      // Seed gHistory so Grimoire has content
       if(typeof gHistory !== 'undefined' && gHistory.length === 0){
         gHistory = [
           {role:'user',content:'I am building a sacred digital sanctuary for art and mythological reflection.'},
@@ -4008,17 +3997,34 @@ initFoyer=function(){
         ];
         if(typeof gExchangeCount !== 'undefined') gExchangeCount = 3;
       }
+      // Replicate gArrive(): make the glass panel visible and swap invitation → exchange
+      var gl  = document.getElementById('g-glass');
+      var inv = document.getElementById('g-invitation');
+      var exch = document.getElementById('g-exchange');
+      var iw  = document.getElementById('g-input-wrap');
+      if(gl){ gl.classList.remove('sunk'); gl.classList.add('show'); }
+      if(inv){ inv.classList.remove('show'); inv.style.opacity = '0'; }
+      if(exch){ exch.style.display = 'block'; }
+      if(iw){ iw.style.opacity = '0'; }
+      // Also mark scrub as arrived so scroll/click guards pass
+      if(typeof gScrub !== 'undefined'){ gScrub.arrived = true; }
       if(typeof showSacredContract === 'function'){
-        // Show exchange panel first so Sacred Contract has a container
-        var exch = document.getElementById('g-exchange');
-        var inv = document.getElementById('g-invitation');
-        if(inv){ inv.style.opacity = '0'; }
-        if(exch){ exch.style.display = 'block'; }
         showSacredContract();
         console.log('[Temenos] Sacred Contract flow initiated. Fill fields and press Witness this.');
       } else {
-        console.warn('[Temenos] showSacredContract() not found — check Sacred Contract patch is in file.');
+        console.warn('[Temenos] showSacredContract() not found.');
       }
+    }
+    // If not on Ganymede screen, flash-enter first, then launch
+    if(typeof currentScreen !== 'undefined' && currentScreen !== 'ganymedeScreen'){
+      if(typeof flashTo === 'function' && typeof enterGanymede === 'function'){
+        flashTo(function(){ enterGanymede(); setTimeout(_launch, 2000); });
+      } else {
+        console.warn('[Temenos] flashTo / enterGanymede not found.');
+      }
+    } else {
+      // Already on Ganymede — just launch
+      _launch();
     }
   };
 
