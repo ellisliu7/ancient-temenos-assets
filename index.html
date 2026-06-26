@@ -531,7 +531,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #g-inv-line1{font-family:'Cinzel',serif;font-size:clamp(7px,.75vw,9px);letter-spacing:.6em;color:rgba(196,158,72,0.28);text-transform:uppercase;display:block;margin-bottom:1.4rem;}
 #g-inv-line2{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,2.2vw,28px);color:rgba(238,220,168,0.82);display:block;text-shadow:0 0 30px rgba(196,158,72,0.12);letter-spacing:.04em;}
 #g-exchange{display:none;}
-#g-prev-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(12px,1.1vw,15px);color:rgba(238,220,168,0.16);line-height:1.9;display:block;margin-bottom:1.8rem;min-height:1em;transition:opacity 1s ease;}
+#g-prev-text{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(12px,1.1vw,15px);color:rgba(238,220,168,0.55);line-height:1.9;display:block;margin-bottom:1.8rem;min-height:1em;transition:opacity 1s ease;}
 #g-curr-text{font-family:'Cormorant Garamond',serif;font-size:clamp(15px,1.5vw,20px);color:rgba(238,220,168,0.82);line-height:2.05;display:block;margin-bottom:1.5rem;min-height:1.5em;white-space:pre-line;text-shadow:0 2px 20px rgba(0,0,0,0.9);}
 #g-thinking-dots{display:none;justify-content:center;gap:8px;margin-top:.6rem;}
 #g-thinking-dots.show{display:flex;}
@@ -2382,12 +2382,13 @@ async function sendGany(){
     if(p.step)parts.push('→ '+p.step);
     if(!p.options||!p.options.length){if(p.question)parts.push(p.question);}
     await gStream(curr,parts.join('\n\n'));
-    if(!gHasKey()&&gExchangeCount>=G_FREE_LIMIT){
+    if(p.check_in===true){
+      setTimeout(ganyRitual,2000);
+    }else if(!gHasKey()&&gExchangeCount>=G_FREE_LIMIT){
       if(opts)opts.innerHTML='';
       setTimeout(ganyGate,2200);
     }else{
       if(Array.isArray(p.options)&&p.options.length===3)setTimeout(()=>showCandles(p.options,p.context||''),1100);
-      if(p.check_in===true)setTimeout(ganyRitual,2000);
     }
     gBusy=false;
     return;
@@ -2422,13 +2423,14 @@ async function sendGany(){
     if(!p.options||!p.options.length){if(p.question)parts.push(p.question.trim());}
     const fullText=parts.join('\n\n');
     await gStream(curr,fullText);
-    if(!gHasKey()&&gExchangeCount>=G_FREE_LIMIT){
+    if(p.check_in===true){
+      setTimeout(ganyRitual,2000);
+    }else if(!gHasKey()&&gExchangeCount>=G_FREE_LIMIT){
       if(opts)opts.innerHTML='';
       setTimeout(ganyGate,2200);
     }else{
       const options=Array.isArray(p.options)&&p.options.length===3?p.options:null;
       if(options)setTimeout(()=>showCandles(options,p.context||''),1100);
-      if(p.check_in===true)setTimeout(ganyRitual,2000);
     }
   }catch(e){if(dots)dots.classList.remove('show');if(curr)curr.textContent='The cave listens. Speak again.';}
   gBusy=false;
@@ -3863,6 +3865,7 @@ initFoyer=function(){
        window.__testKeyNow()           Sigil Key reveal, mock Venus data
        window.__testCollectorNow()     Venus collector modal, instant open
        window.__testGanyArtifactNow()  Ganymede Grimoire + artifact card reveal
+       window.__testGanymedeContract()  Ganymede Sacred Contract ending, no API
        window.__resetTemple()          Clear all localStorage, back to threshold
        window.__unlockAllKeys()        Grant Sigil Key + seed Venus key record
 
@@ -3984,6 +3987,41 @@ initFoyer=function(){
     }
   };
 
+  window.__testGanymedeContract = function(){
+    // Enter Ganymede if not already there
+    if(typeof currentScreen !== 'undefined' && currentScreen !== 'ganymedeScreen'){
+      if(typeof flashTo === 'function' && typeof enterGanymede === 'function'){
+        flashTo(function(){
+          enterGanymede();
+          setTimeout(function(){ _runContract(); }, 1800);
+        });
+        return;
+      }
+    }
+    _runContract();
+    function _runContract(){
+      // Seed minimal gHistory so grimoire has content to work with
+      if(typeof gHistory !== 'undefined' && gHistory.length === 0){
+        gHistory = [
+          {role:'user',content:'I am building a sacred digital sanctuary for art and mythological reflection.'},
+          {role:'assistant',content:JSON.stringify({stage:'The first stone',reflection:'You have been circling this for longer than you admit. The vision is not unclear. The hesitation is.',structure:'What you are building asks to be begun, not finished. Begin with the part that feels most true.',step:'Write down what this is for — not what it does.',options:[],question:'',check_in:true})}
+        ];
+        if(typeof gExchangeCount !== 'undefined') gExchangeCount = 3;
+      }
+      if(typeof showSacredContract === 'function'){
+        // Show exchange panel first so Sacred Contract has a container
+        var exch = document.getElementById('g-exchange');
+        var inv = document.getElementById('g-invitation');
+        if(inv){ inv.style.opacity = '0'; }
+        if(exch){ exch.style.display = 'block'; }
+        showSacredContract();
+        console.log('[Temenos] Sacred Contract flow initiated. Fill fields and press Witness this.');
+      } else {
+        console.warn('[Temenos] showSacredContract() not found — check Sacred Contract patch is in file.');
+      }
+    }
+  };
+
   window.__resetTemple = function(){
     ['temenos_sigil_key','temenos_keys','temenos_session_events','temenos_room'].forEach(function(k){
       try{ localStorage.removeItem(k); }catch(e){}
@@ -4075,6 +4113,7 @@ initFoyer=function(){
       ['\u2746 Sigil Key',       function(){ window.__testKeyNow(); }],
       ['\u2746 Collector (V)',    function(){ if(typeof openArtworkEnquiry==='function') openArtworkEnquiry('venus'); }],
       ['\u2746 Collector (G)',    function(){ if(typeof window.__testGanyArtifactNow==='function') window.__testGanyArtifactNow(); }],
+      ['\u2736 Contract (G)',    function(){ if(typeof window.__testGanymedeContract==='function') window.__testGanymedeContract(); }],
       ['\u21ba Reset Temple',    function(){ window.__resetTemple(); }],
       ['\u2302 Unlock Key',      function(){ window.__unlockAllKeys(); }]
     ].forEach(function(item){
