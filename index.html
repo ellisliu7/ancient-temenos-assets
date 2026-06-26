@@ -220,6 +220,17 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .gc-grimoire-btn{background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.4em;color:rgba(180,120,50,0.22);text-transform:uppercase;transition:color .4s;}
 .gc-grimoire-btn:hover{color:rgba(180,120,50,0.6);}
 
+/* ── SACRED CONTRACT ── */
+.sc-copy{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(16px,1.55vw,21px);color:rgba(238,220,168,0.72);line-height:2.0;text-align:center;max-width:38ch;margin:0 auto;opacity:0;transform:translateY(6px);transition:opacity 3s ease,transform 3s ease;}
+.sc-copy.show{opacity:1;transform:translateY(0);}
+.sc-fields{display:flex;flex-direction:column;gap:1.6rem;width:100%;max-width:480px;margin:2.8rem auto 0;opacity:0;transition:opacity 2.4s ease;}
+.sc-fields.show{opacity:1;}
+.sc-label{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.45em;text-transform:uppercase;color:rgba(196,158,72,0.45);margin-bottom:.5rem;display:block;}
+.sc-textarea{width:100%;background:transparent;border:none;border-bottom:.5px solid rgba(196,158,72,0.22);outline:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(15px,1.4vw,18px);color:rgba(238,220,168,0.82);padding:.6rem 0;caret-color:rgba(196,158,72,0.7);resize:none;line-height:1.7;letter-spacing:.02em;min-height:3.2em;}
+.sc-textarea::placeholder{color:rgba(196,158,72,0.28);font-style:italic;}
+.sc-submit{display:block;margin:2.4rem auto 0;background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.45em;text-transform:uppercase;color:rgba(196,158,72,0.50);padding:.5rem 0;transition:color .4s ease;opacity:0;transition:opacity 2s ease,color .4s ease;}
+.sc-submit:hover{color:rgba(196,158,72,0.85);}
+
 /* ── WELL ── */
 #wellOverlay{position:fixed;inset:0;z-index:90;background:rgba(4,3,2,0.97);display:none;flex-direction:column;align-items:center;justify-content:center;overflow-y:auto;}
 .ws-close{position:fixed;top:1.6rem;right:1.8rem;background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.38em;color:rgba(196,158,72,0.3);text-transform:uppercase;z-index:91;transition:color .3s;}
@@ -1809,7 +1820,7 @@ Return ONLY valid JSON, no markdown, no fences:
   const INPUTS={
     council:`Seal this council encounter.\n\nWhat the seeker brought: ${_lci||'An open question.'}\n\nWhat the council saw:\n${document.getElementById('c-debate-lines')?.innerText||'The council listened.'}`,
     venus:`Seal this Venus session.\n\nWhat was shared:\n${vt||'The visitor opened up.'}`,
-    ganymede:`Seal this Ganymede session.\n\nWhat was explored:\n${gt||'The visitor found direction.'}`
+    ganymede:`Seal this Ganymede session.\n\nWhat was explored:\n${gt||'The visitor found direction.'}${gSacredContractData&&gSacredContractData.building?'\n\nSacred Contract — What they are building:\n'+gSacredContractData.building+(gSacredContractData.next?'\n\nWhat is asking to happen next:\n'+gSacredContractData.next:''):''}`
   };
 
   const RENDERS={
@@ -1839,7 +1850,10 @@ Return ONLY valid JSON, no markdown, no fences:
       <p class="gr-section-label">What Is Being Asked</p>
       <p class="gr-section-body" style="margin-bottom:2rem;">${clean(p.what_is_being_asked)}</p>
       <p class="gr-section-label">What Remains</p>
-      <p class="gr-invocation" style="text-align:left;">${clean(p.truth_to_carry)}</p>`
+      <p class="gr-invocation" style="text-align:left;">${clean(p.truth_to_carry)}</p>${(gSacredContractData&&gSacredContractData.building)?`
+      <p class="gr-section-label" style="margin-top:2.4rem;border-top:.5px solid rgba(196,158,72,0.12);padding-top:2rem;">Sacred Contract</p>
+      <p class="gr-section-body" style="margin-bottom:.6rem;font-style:normal;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,158,72,0.38);">What I am building</p>
+      <p class="gr-section-body" style="margin-bottom:1.8rem;">${gSacredContractData.building}</p>${gSacredContractData.next?`<p class="gr-section-body" style="margin-bottom:.6rem;font-style:normal;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,158,72,0.38);">What is asking to happen next</p><p class="gr-section-body">${gSacredContractData.next}</p>`:''}`:''}`
   };
 
   // 25s timeout — prevents grimoire hanging indefinitely if proxy stalls
@@ -2564,34 +2578,151 @@ function ganyRitual(){
     if(dustC){dustC.style.transition='';dustC.style.opacity='1';}
     ritual.style.pointerEvents='none';
     const glass=document.getElementById('g-glass');
-    const opts=document.getElementById('g-options');
-    const curr=document.getElementById('g-curr-text');
+    if(glass)glass.classList.remove('sunk');
+    showSacredContract();
+  },12500);
+}
+
+let gSacredContractData={building:'',next:''};
+
+function showSacredContract(){
+  const curr=document.getElementById('g-curr-text');
+  const prev=document.getElementById('g-prev-text');
+  const opts=document.getElementById('g-options');
+  const inputWrap=document.getElementById('g-input-wrap');
+  if(curr)curr.textContent='';
+  if(prev)prev.textContent='';
+  if(opts)opts.innerHTML='';
+  if(inputWrap)inputWrap.style.opacity='0';
+
+  // Three copy blocks — paragraph fade-in via reusing gStream visual pattern
+  const copyLines=[
+    'For a while, you thought the question was whether you could do it.\n\nBut that was never really the question.\n\nThe question was whether you would.',
+    'Strange, isn\u2019t it?\n\nHow a thing can call to you for years.\n\nWaiting patiently.\n\nNot asking to be finished.\n\nOnly asking to be continued.',
+    'Before you go, leave a record.\n\nNot for us.\n\nFor the version of you who will stand here again someday.'
+  ];
+
+  const wrap=document.createElement('div');
+  wrap.style.cssText='width:100%;text-align:center;';
+
+  copyLines.forEach((block,bi)=>{
+    const p=document.createElement('p');
+    p.className='sc-copy';
+    // Render line breaks within each block
+    p.innerHTML=block.replace(/\n\n/g,'<br><br>');
+    p.style.marginBottom = bi < copyLines.length-1 ? '3rem' : '0';
+    wrap.appendChild(p);
+  });
+
+  if(curr){
+    curr.innerHTML='';
+    curr.appendChild(wrap);
+  }
+
+  // Stagger each copy block in
+  const copyEls=wrap.querySelectorAll('.sc-copy');
+  let delay=400;
+  copyEls.forEach((el,i)=>{
+    setTimeout(()=>el.classList.add('show'), delay);
+    delay+=3200;
+  });
+
+  // Fields appear after all copy has settled
+  const fieldsDelay=delay+800;
+  setTimeout(()=>{
+    const fields=document.createElement('div');
+    fields.className='sc-fields';
+    fields.innerHTML=
+      '<label class="sc-label">What are you building?</label>'+
+      '<textarea class="sc-textarea" id="sc-building" placeholder="Speak plainly. The cave will remember." rows="3" spellcheck="false"></textarea>'+
+      '<label class="sc-label" style="margin-top:.4rem;">What is asking to happen next?</label>'+
+      '<textarea class="sc-textarea" id="sc-next" placeholder="The next stone. However small." rows="3" spellcheck="false"></textarea>';
+
+    const submitBtn=document.createElement('button');
+    submitBtn.className='sc-submit';
+    submitBtn.textContent='Witness this';
+
+    submitBtn.onclick=()=>submitSacredContract(submitBtn,fields);
+
     if(opts){
       opts.innerHTML='';
+      opts.appendChild(fields);
+      opts.appendChild(submitBtn);
+      const gl=document.getElementById('g-glass');
+      if(gl)setTimeout(()=>gl.scrollTop=gl.scrollHeight,100);
+      requestAnimationFrame(()=>{
+        setTimeout(()=>{
+          fields.classList.add('show');
+          submitBtn.style.opacity='1';
+        },100);
+      });
+    }
+  },fieldsDelay);
+}
+
+async function submitSacredContract(btn,fields){
+  const bEl=document.getElementById('sc-building');
+  const nEl=document.getElementById('sc-next');
+  const building=(bEl?.value||'').trim();
+  const next=(nEl?.value||'').trim();
+  if(!building&&!next)return;
+
+  // Store for grimoire
+  gSacredContractData={building,next};
+
+  // Fade out fields and button
+  fields.style.transition='opacity 1.6s ease';
+  fields.style.opacity='0';
+  btn.style.transition='opacity 1.2s ease';
+  btn.style.opacity='0';
+
+  const curr=document.getElementById('g-curr-text');
+  const opts=document.getElementById('g-options');
+
+  setTimeout(async()=>{
+    if(opts)opts.innerHTML='';
+    if(curr)curr.innerHTML='';
+
+    // Final ceremonial lines as two paragraphs — slow fade-in via gStream
+    const closing=[
+      'Perhaps what you\u2019re building is also building you.\n\nStone by stone.\n\nChoice by choice.',
+      'Then it has begun.\n\nGo on.'
+    ].join('\n\n \n\n');  // spacer between the two stanzas
+
+    await gStream(curr,closing);
+
+    // Reveal seal + ghost option
+    if(opts){
       const grimBtn=document.createElement('button');
       grimBtn.className='gc-grimoire-btn';
-      grimBtn.textContent='✦ Seal this into my Grimoire ✦';
-      grimBtn.style.cssText='display:block;margin:2rem auto 0;opacity:0;transition:opacity 1.8s ease;';
+      grimBtn.textContent='\u2736 Seal in Grimoire';
+      grimBtn.style.cssText='display:block;margin:2.8rem auto 0;opacity:0;transition:opacity 2s ease;';
       grimBtn.onclick=openGrimoire;
-      opts.appendChild(grimBtn);
-      // Soft continue option — visitor can go deeper rather than seal
+
       const contBtn=document.createElement('button');
       contBtn.textContent='I want to go deeper';
-      contBtn.style.cssText='display:block;margin:.8rem auto 0;background:transparent;border:none;cursor:pointer;font-family:\'Cinzel\',serif;font-size:7px;letter-spacing:.4em;color:rgba(196,158,72,0.22);text-transform:uppercase;transition:color .4s ease;padding:.4rem 0;opacity:0;transition:opacity 1.8s ease,color .4s ease;';
+      contBtn.style.cssText='display:block;margin:1rem auto 0;background:transparent;border:none;cursor:pointer;font-family:\'Cinzel\',serif;font-size:7px;letter-spacing:.4em;color:rgba(196,158,72,0.22);text-transform:uppercase;padding:.4rem 0;opacity:0;transition:opacity 2s ease,color .4s ease;';
       contBtn.onmouseover=()=>contBtn.style.color='rgba(196,158,72,0.55)';
       contBtn.onmouseout=()=>contBtn.style.color='rgba(196,158,72,0.22)';
       contBtn.onclick=()=>{
         opts.innerHTML='';
+        if(curr)curr.innerHTML='';
         const gi=document.getElementById('gi');const gb=document.getElementById('gb');
         if(gi){gi.disabled=false;gi.focus();}if(gb)gb.disabled=false;
+        const inputWrap=document.getElementById('g-input-wrap');
+        if(inputWrap)inputWrap.style.opacity='1';
       };
+
+      opts.appendChild(grimBtn);
       opts.appendChild(contBtn);
-      setTimeout(()=>{grimBtn.style.opacity='1';contBtn.style.opacity='1';},400);
+      setTimeout(()=>{
+        grimBtn.style.opacity='1';
+        contBtn.style.opacity='1';
+        const gl=document.getElementById('g-glass');
+        if(gl)gl.scrollTop=gl.scrollHeight;
+      },300);
     }
-    if(glass)glass.classList.remove('sunk');
-    const gi=document.getElementById('gi');const gb=document.getElementById('gb');
-    if(gi)gi.disabled=false;if(gb)gb.disabled=false;
-  },12500);
+  },1800);
 }
 
 function gStream(el,text){
