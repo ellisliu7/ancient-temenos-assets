@@ -221,14 +221,14 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .gc-grimoire-btn:hover{color:rgba(180,120,50,0.6);}
 
 /* ── SACRED CONTRACT ── */
-.sc-copy{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(16px,1.55vw,21px);color:rgba(238,220,168,0.72);line-height:2.0;text-align:center;max-width:38ch;margin:0 auto;opacity:0;transform:translateY(6px);transition:opacity 3s ease,transform 3s ease;}
+.sc-copy{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,1.25vw,17px);color:rgba(238,220,168,0.88);line-height:1.75;text-align:center;max-width:38ch;margin:0 auto;opacity:0;transform:translateY(6px);transition:opacity 3s ease,transform 3s ease;}
 .sc-copy.show{opacity:1;transform:translateY(0);}
-.sc-fields{display:flex;flex-direction:column;gap:1.6rem;width:100%;max-width:480px;margin:2.8rem auto 0;opacity:0;transition:opacity 2.4s ease;}
+.sc-fields{display:flex;flex-direction:column;gap:1rem;width:100%;max-width:480px;margin:1.4rem auto 0;opacity:0;transition:opacity 2.4s ease;}
 .sc-fields.show{opacity:1;}
-.sc-label{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.45em;text-transform:uppercase;color:rgba(196,158,72,0.45);margin-bottom:.5rem;display:block;}
+.sc-label{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.45em;text-transform:uppercase;color:rgba(196,158,72,0.65);margin-bottom:.5rem;display:block;}
 .sc-textarea{width:100%;background:transparent;border:none;border-bottom:.5px solid rgba(196,158,72,0.22);outline:none;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(15px,1.4vw,18px);color:rgba(238,220,168,0.82);padding:.6rem 0;caret-color:rgba(196,158,72,0.7);resize:none;line-height:1.7;letter-spacing:.02em;min-height:3.2em;}
-.sc-textarea::placeholder{color:rgba(196,158,72,0.28);font-style:italic;}
-.sc-submit{display:block;margin:2.4rem auto 0;background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.45em;text-transform:uppercase;color:rgba(196,158,72,0.50);padding:.5rem 0;transition:color .4s ease;opacity:0;transition:opacity 2s ease,color .4s ease;}
+.sc-textarea::placeholder{color:rgba(196,158,72,0.42);font-style:italic;}
+.sc-submit{display:block;margin:1.2rem auto 0;background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.45em;text-transform:uppercase;color:rgba(196,158,72,0.70);padding:.5rem 0;opacity:0;transition:opacity 2s ease,color .4s ease;}
 .sc-submit:hover{color:rgba(196,158,72,0.85);}
 
 /* ── WELL ── */
@@ -2600,7 +2600,7 @@ function showSacredContract(){
   // Three copy blocks — paragraph fade-in via reusing gStream visual pattern
   const copyLines=[
     'For a while, you thought the question was whether you could do it.\n\nBut that was never really the question.\n\nThe question was whether you would.',
-    'Strange, isn\u2019t it?\n\nHow a thing can call to you for years.\n\nWaiting patiently.\n\nNot asking to be finished.\n\nOnly asking to be continued.',
+    'Strange, isn\u2019t it?\n\nHow a thing can call to you for years \u2014 waiting patiently.\n\nNot asking to be finished. Only asking to be continued.',
     'Before you go, leave a record.\n\nNot for us.\n\nFor the version of you who will stand here again someday.'
   ];
 
@@ -2612,7 +2612,7 @@ function showSacredContract(){
     p.className='sc-copy';
     // Render line breaks within each block
     p.innerHTML=block.replace(/\n\n/g,'<br><br>');
-    p.style.marginBottom = bi < copyLines.length-1 ? '3rem' : '0';
+    p.style.marginBottom = bi < copyLines.length-1 ? '1.6rem' : '0';
     wrap.appendChild(p);
   });
 
@@ -2626,7 +2626,7 @@ function showSacredContract(){
   let delay=400;
   copyEls.forEach((el,i)=>{
     setTimeout(()=>el.classList.add('show'), delay);
-    delay+=3200;
+    delay+=2400;
   });
 
   // Fields appear after all copy has settled
@@ -2636,9 +2636,9 @@ function showSacredContract(){
     fields.className='sc-fields';
     fields.innerHTML=
       '<label class="sc-label">What are you building?</label>'+
-      '<textarea class="sc-textarea" id="sc-building" placeholder="Speak plainly. The cave will remember." rows="3" spellcheck="false"></textarea>'+
+      '<textarea class="sc-textarea" id="sc-building" placeholder="Speak plainly. The cave will remember." rows="2" spellcheck="false"></textarea>'+
       '<label class="sc-label" style="margin-top:.4rem;">What is asking to happen next?</label>'+
-      '<textarea class="sc-textarea" id="sc-next" placeholder="The next stone. However small." rows="3" spellcheck="false"></textarea>';
+      '<textarea class="sc-textarea" id="sc-next" placeholder="The next stone. However small." rows="2" spellcheck="false"></textarea>';
 
     const submitBtn=document.createElement('button');
     submitBtn.className='sc-submit';
