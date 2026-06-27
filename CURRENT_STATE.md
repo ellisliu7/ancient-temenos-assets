@@ -352,6 +352,29 @@ These are deferred with fresh eyes — no action taken today:
 
 ---
 
+## Temple Stewardship Principle
+
+Ancient Temenos is intended to become a financially abundant creative sanctuary.
+
+As the project grows, a percentage of future revenue may be dedicated to supporting women's dignity, education, menstrual health, and empowerment initiatives — particularly within Asia and Southeast Asia.
+
+> **"When the temple earns, women benefit."**
+
+When evaluating future business models, memberships, collector programs, patron systems, partnerships, products, experiences, or revenue streams — consider whether they can support this principle without compromising the integrity, beauty, or sustainability of the temple.
+
+Preference is given to initiatives that support:
+
+- menstrual health education
+- keeping girls in school
+- women's dignity and body literacy
+- women-led entrepreneurship
+- sustainable long-term empowerment rather than dependency
+
+This is not an active project or sprint item.
+It is a founding stewardship value intended to guide long-term decision-making as Ancient Temenos evolves.
+
+---
+
 ## Backlog
 
 - Council → Venus routing bug fix
