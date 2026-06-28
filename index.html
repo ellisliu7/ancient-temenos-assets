@@ -680,6 +680,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
         </button>
       </div>
     </div>
+    </div><!-- /fc-inp-block -->
   </div>
 </div>
 
@@ -1021,11 +1022,17 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   </style>
   <p class="kr-eyebrow">Ancient Temenos</p>
   <video id="kr-video" autoplay muted loop playsinline preload="auto" crossorigin="anonymous" onerror="this.style.display='none';document.getElementById('kr-video-fallback').style.display='flex';">
-    <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Sigil_Key.mp4" type="video/mp4">
+    <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Sigil_Key.mp4" type="video/mp4">
   </video>
   <div id="kr-scrim"></div>
   <div id="kr-video-fallback"><span>✦</span></div>
   <button id="kr-close" onclick="closeKeyReveal()" style="position:absolute;top:1.4rem;right:1.8rem;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.44em;text-transform:uppercase;color:rgba(196,158,72,0.42);background:transparent;border:none;cursor:pointer;transition:color .5s;z-index:4;" onmouseover="this.style.color='rgba(196,158,72,0.8)'" onmouseout="this.style.color='rgba(196,158,72,0.42)'">✕ Close</button>
+  <div id="kr-key-wrap">
+    <img id="kr-key-img" src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Artwork.jpg"
+         onerror="this.style.display='none';document.getElementById('kr-key-fallback').style.display='block';"
+         alt="Venus Key" style="width:clamp(120px,22vh,200px);height:auto;border-radius:4px;opacity:0.82;filter:drop-shadow(0 0 26px rgba(214,178,104,0.45)) drop-shadow(0 0 60px rgba(196,158,72,0.22));animation:krFloat 5.5s ease-in-out infinite, krGlow 4.2s ease-in-out infinite;will-change:transform,filter;">
+    <div id="kr-key-fallback" style="display:none;font-size:96px;color:rgba(214,178,104,0.85);text-shadow:0 0 44px rgba(214,178,104,0.6);animation:krFloat 5.5s ease-in-out infinite, krGlow 4.2s ease-in-out infinite;">✦</div>
+  </div>
   <p id="kr-headline">The temple offers you its first Key.</p>
   <button id="kr-collect" onclick="collectKey()">✦ Collect this Key</button>
   <div id="kr-inscription">
@@ -1596,7 +1603,8 @@ function vaRenderCard(data){
   // Scroll glass to bottom ONCE before revealing — so text fades in where it lives
   const vg=document.getElementById('va-glass');
   d.appendChild(who);d.appendChild(card);t.appendChild(d);
-  if(vg)requestAnimationFrame(()=>vg.scrollTop=vg.scrollHeight);
+  // Scroll to top so visitor sees the beginning of Venus's response
+  if(vg)requestAnimationFrame(()=>vg.scrollTop=0);
   const mirrorEl=card.querySelector('.va-mirror');
   const paras=mirrorText.split(/\n\n+/).filter(p=>p.trim());
   // Pure opacity — no movement. Venus arrives, she does not shift.
@@ -1633,10 +1641,11 @@ function vaMaybeShowClosing(){
         const keyCta=document.getElementById('va-key-cta');
         const acts=document.getElementById('va-closing-actions');
         const sep=document.getElementById('va-closing-sep');
+        // Ceremonial reveal: reflection → separator breath → actions → key
         setTimeout(()=>{if(line)line.style.opacity='1';},1200);
-        setTimeout(()=>{if(sep)sep.style.opacity='1';},2800);
-        setTimeout(()=>{if(keyCta)keyCta.style.opacity='1';},9000);
-        setTimeout(()=>{if(acts)acts.style.opacity='1';},5800);
+        setTimeout(()=>{if(sep)sep.style.opacity='1';},3200);
+        setTimeout(()=>{if(acts)acts.style.opacity='1';},6000);
+        setTimeout(()=>{if(keyCta)keyCta.style.opacity='1';},10000);
       },5000);
     }
   }
@@ -3143,8 +3152,12 @@ function initCouncil(){
       if(pl)pl.style.opacity='1';
       if(ql)ql.style.opacity='1';
       // auto-focus: blinking cursor signals "type here"
-      const inp2=document.getElementById('fc-inp');
-      if(inp2)inp2.focus();
+      // staggered reveal: Welcome home → then input field
+      setTimeout(()=>{const wl=document.getElementById('fc-welcome');if(wl)wl.style.opacity='1';},600);
+      setTimeout(()=>{
+        const ib=document.getElementById('fc-inp-block');if(ib)ib.style.opacity='1';
+        const inp2=document.getElementById('fc-inp');if(inp2)inp2.focus();
+      },1800);
       // EVENT: foyer fully loaded and council revealed
       if(window.trackTempleEvent) trackTempleEvent('foyer_loaded');
     },2800);
