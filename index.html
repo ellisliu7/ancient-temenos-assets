@@ -1155,7 +1155,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   transform:translateX(-50%);
   z-index:3;
   display:block;
-  width:clamp(280px,42vw,580px);
+  width:clamp(220px,30vw,440px);
   height:auto;
   object-fit:contain;
   background:transparent;
@@ -1189,8 +1189,8 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   z-index:3;
   display:none;
   align-items:center; justify-content:center;
-  width:clamp(280px,42vw,580px);
-  height:clamp(280px,42vw,580px);
+  width:clamp(220px,30vw,440px);
+  height:clamp(220px,30vw,440px);
 }
 #ch-video-fallback span {
   font-size:88px;
@@ -1228,7 +1228,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 ── */
 #ch-text {
   position:absolute;
-  top:54vh; left:0; right:0; bottom:0;
+  top:62vh; left:0; right:0; bottom:0;
   z-index:4;
   display:flex; flex-direction:column;
   align-items:center; text-align:center;
@@ -1239,7 +1239,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 /* 1. CONSECRATION — primary voice, largest text on screen */
 #ch-consecration {
   font-family:'Cormorant Garamond',serif; font-style:italic;
-  font-size:clamp(22px,2.6vw,32px);
+  font-size:clamp(18px,2vw,26px);
   color:rgba(238,220,168,0.90);
   line-height:1.7; margin:0 0 1.4rem; max-width:26ch;
   opacity:0; transition:opacity 3s ease;
@@ -1358,7 +1358,6 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 <!-- Text zone — lower portion of scene -->
 <div id="ch-text">
   <p id="ch-consecration"></p>
-  <p id="ch-eyebrow">Ganymede &#xb7; Chamber of Building</p>
   <hr id="ch-sep">
   <div id="ch-inscription">
     <span id="ch-tikkun-label">What you carry</span>
@@ -2343,7 +2342,7 @@ function openChaliceReveal(){
   }
 
   // Reset: all text invisible, video invisible
-  ['ch-eyebrow','ch-consecration','ch-inscription','ch-sep','ch-carry-line','ch-actions'].forEach(id=>{
+  ['ch-consecration','ch-inscription','ch-sep','ch-carry-line','ch-actions'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.style.opacity='0';
   });
   const cv=document.getElementById('ch-video');
@@ -2357,7 +2356,6 @@ function openChaliceReveal(){
     setTimeout(()=>{if(cv)cv.style.opacity='1';},500);
     // Nearly 3s of silence before any word. The object holds the space alone.
     setTimeout(()=>{const el=document.getElementById('ch-consecration');if(el)el.style.opacity='1';},3200);
-    setTimeout(()=>{const el=document.getElementById('ch-eyebrow');if(el)el.style.opacity='1';},4600);
     setTimeout(()=>{const el=document.getElementById('ch-sep');if(el)el.style.opacity='1';},5000);
     setTimeout(()=>{const el=document.getElementById('ch-inscription');if(el)el.style.opacity='1';},5800);
     setTimeout(()=>{const el=document.getElementById('ch-carry-line');if(el)el.style.opacity='1';},7000);
