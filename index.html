@@ -821,8 +821,8 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     </button>
   </div>
   </div>
-  <div id="g-stillness" style="position:fixed;bottom:3.5rem;left:50%;transform:translateX(-50%);opacity:0;transition:opacity 2.2s ease;pointer-events:none;z-index:55;text-align:center;">
-  <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.2vw,16px);color:rgba(196,158,72,0.52);letter-spacing:.08em;">The cave remembers.</span>
+  <div id="g-stillness" style="position:fixed;bottom:3.5rem;left:50%;transform:translateX(-50%);opacity:0;transition:opacity 2.2s ease;pointer-events:none;z-index:55;text-align:center;max-width:min(420px,78vw);">
+  <span id="g-stillness-text" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,1.3vw,17px);color:rgba(238,220,168,0.72);letter-spacing:.03em;line-height:1.7;"></span>
 </div>
 <div id="g-gate">
     <div id="g-gate-words">
@@ -1052,6 +1052,49 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   <div id="kr-after">
     <button class="kr-btn primary" onclick="keepKey()">Keep your Key</button>
     <button class="kr-btn ghost" onclick="closeKeyReveal()">Close</button>
+  </div>
+</div>
+
+<!-- THE CHALICE OF GANYMEDE -->
+<div id="chaliceReveal">
+  <style>
+    #chaliceReveal{position:fixed;inset:0;z-index:95;display:none;flex-direction:column;align-items:center;justify-content:flex-end;padding-bottom:clamp(2.6rem,8vh,5rem);background:radial-gradient(ellipse 58% 48% at 50% 42%,rgba(18,12,4,0.97),rgba(2,1,0,0.988));opacity:0;transition:opacity 1.4s ease;overflow-y:auto;}
+    #chaliceReveal.show{opacity:1;}
+    #ch-video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:transparent;z-index:0;}
+    #ch-scrim{position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(to bottom,rgba(2,1,0,0.5) 0%,rgba(2,1,0,0.04) 28%,rgba(2,1,0,0.08) 52%,rgba(2,1,0,0.58) 78%,rgba(2,1,0,0.95) 100%);}
+    #ch-video-fallback{position:absolute;inset:0;z-index:0;display:none;align-items:center;justify-content:center;}
+    #ch-video-fallback span{font-size:110px;color:rgba(196,158,72,0.7);text-shadow:0 0 50px rgba(196,158,72,0.5);animation:chFloat 7s ease-in-out infinite;}
+    @keyframes chFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-14px);}}
+    @keyframes chGlow{0%,100%{filter:drop-shadow(0 0 18px rgba(196,158,72,0.28)) drop-shadow(0 0 44px rgba(196,158,72,0.14));}50%{filter:drop-shadow(0 0 30px rgba(196,158,72,0.48)) drop-shadow(0 0 72px rgba(196,158,72,0.28));}}
+    #chaliceReveal>.ch-content{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;text-align:center;max-width:min(480px,82vw);}
+    #ch-eyebrow{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.5em;text-transform:uppercase;color:rgba(196,158,72,0.42);margin:0 0 1.6rem;opacity:0;transition:opacity 2s ease;}
+    #ch-consecration{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(18px,2.1vw,24px);color:rgba(238,220,168,0.88);line-height:1.75;margin:0 0 2.8rem;max-width:28ch;opacity:0;transition:opacity 2.4s ease;}
+    #ch-inscription{opacity:0;transition:opacity 2s ease;text-align:center;margin:0 0 2.4rem;}
+    #ch-tikkun-label{font-family:'Cinzel',serif;font-size:7.5px;letter-spacing:.45em;text-transform:uppercase;color:rgba(196,158,72,0.38);margin:0 0 .6rem;display:block;}
+    #ch-tikkun-line{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(15px,1.6vw,18px);color:rgba(238,220,168,0.78);line-height:1.7;margin:0;max-width:32ch;}
+    #ch-carry{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.52em;text-transform:uppercase;color:rgba(238,220,168,0.72);background:transparent;border:none;cursor:pointer;padding:.85rem 0;opacity:0;transition:opacity 2s ease,color .5s ease,letter-spacing .5s ease;}
+    #ch-carry:hover{color:rgba(238,220,168,1);letter-spacing:.58em;}
+    #ch-close{position:absolute;top:1.4rem;right:1.8rem;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.44em;text-transform:uppercase;color:rgba(196,158,72,0.38);background:transparent;border:none;cursor:pointer;transition:color .5s;z-index:4;}
+    #ch-close:hover{color:rgba(196,158,72,0.75);}
+    #ch-insc-date{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.38em;text-transform:uppercase;color:rgba(196,158,72,0.32);margin-top:.8rem;display:block;}
+    #ch-insc-id{font-family:'Cinzel',serif;font-size:6.5px;letter-spacing:.35em;text-transform:uppercase;color:rgba(196,158,72,0.22);margin-top:.3rem;display:block;}
+  </style>
+  <video id="ch-video" autoplay muted loop playsinline preload="auto" crossorigin="anonymous" onerror="this.style.display='none';document.getElementById('ch-video-fallback').style.display='flex';">
+    <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Chalice.mp4" type="video/mp4">
+  </video>
+  <div id="ch-scrim"></div>
+  <div id="ch-video-fallback"><span>&#x2767;</span></div>
+  <button id="ch-close" onclick="closeChaliceReveal()">&#x2715; Close</button>
+  <div class="ch-content">
+    <p id="ch-eyebrow">Ganymede &#xb7; Chamber of Building</p>
+    <p id="ch-consecration"></p>
+    <div id="ch-inscription">
+      <span id="ch-tikkun-label">What you carry</span>
+      <p id="ch-tikkun-line"></p>
+      <span id="ch-insc-date"></span>
+      <span id="ch-insc-id"></span>
+    </div>
+    <button id="ch-carry" onclick="keepChalice()">Carry this</button>
   </div>
 </div>
 
@@ -1928,6 +1971,175 @@ Return ONLY valid JSON, no markdown, no fences:
     },1200);
   }
 }
+// ── CHALICE OF GANYMEDE ────────────────────────────────────────────────────
+
+// Five consecration lines. Direction C register: recognition, not reward.
+// Brit Marling-adjacent — a sentence someone keeps thinking about days later.
+const _CONSECRATION_LINES = [
+  'What you have been carrying has already begun to take form.',
+  'You are further along than you allowed yourself to believe.',
+  'The work chose you before you chose it.',
+  'Something in you already knows how to hold this.',
+  'You arrived uncertain. You leave responsible.'
+];
+
+function _ganyConsecrationLine(){
+  // Pick by hashing the tikkun text — same session = same line. Feels fated.
+  try{
+    const t=_ganyTikkunLine()||'';
+    let h=0;for(let i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))%_CONSECRATION_LINES.length;
+    return _CONSECRATION_LINES[Math.abs(h)%_CONSECRATION_LINES.length];
+  }catch(e){return _CONSECRATION_LINES[0];}
+}
+
+function _ganyTikkunLine(){
+  // Extract tikkun_line from the final Ganymede response
+  try{
+    for(let i=gHistory.length-1;i>=0;i--){
+      const m=gHistory[i];
+      if(m.role==='assistant'){
+        try{
+          const p=JSON.parse(m.content.replace(/```json|```/g,'').trim());
+          if(p.tikkun_line&&p.tikkun_line.trim())return stripDash(p.tikkun_line.trim());
+          // Fallback: use the first sentence of the reflection
+          if(p.reflection&&p.reflection.trim()){
+            const first=p.reflection.trim().split(/\.\s+/)[0];
+            return stripDash((first||'').trim());
+          }
+        }catch(e){}
+      }
+    }
+  }catch(e){}
+  return 'You are now capable of carrying what once felt too heavy.';
+}
+
+function _ganyChaliceDateStamp(){
+  const d=new Date();
+  return d.getFullYear()+''+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
+}
+function _ganyChalicePrettyDate(){
+  return new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
+}
+function _ganyChaliceRand(){
+  return Math.random().toString(36).slice(2,6).toUpperCase();
+}
+function _getGanyChalice(){
+  try{const a=JSON.parse(localStorage.getItem('temenos_relics')||'{}');return a.ganymede||null;}catch(e){return null;}
+}
+function _saveGanyChalice(c){
+  try{const a=JSON.parse(localStorage.getItem('temenos_relics')||'{}');a.ganymede=c;localStorage.setItem('temenos_relics',JSON.stringify(a));}catch(e){}
+}
+
+let _chaliceCurrent=null;
+
+function openChaliceReveal(){
+  const ov=document.getElementById('chaliceReveal');if(!ov)return;
+  const existing=_getGanyChalice();
+  const tikkun=existing?existing.tikkun:_ganyTikkunLine();
+  const consecration=existing?existing.consecration:_ganyConsecrationLine();
+
+  // Populate text
+  const consEl=document.getElementById('ch-consecration');
+  const tikkEl=document.getElementById('ch-tikkun-line');
+  const dateEl=document.getElementById('ch-insc-date');
+  const idEl=document.getElementById('ch-insc-id');
+
+  if(consEl)consEl.textContent=consecration;
+  if(tikkEl)tikkEl.textContent=tikkun;
+
+  if(existing){
+    _chaliceCurrent=existing;
+    if(dateEl)dateEl.textContent=existing.date;
+    if(idEl)idEl.textContent='CHALICE '+existing.id;
+  }else{
+    const c={
+      id:'GANYMEDE-'+_ganyChaliceDateStamp()+'-'+_ganyChaliceRand(),
+      chamber:'ganymede',
+      date:_ganyChalicePrettyDate(),
+      tikkun:tikkun,
+      consecration:consecration,
+      collectedAt:new Date().toISOString()
+    };
+    _chaliceCurrent=c;
+    if(dateEl)dateEl.textContent=c.date;
+    if(idEl)idEl.textContent='CHALICE '+c.id;
+  }
+
+  // Reset opacity for staggered reveal
+  ['ch-eyebrow','ch-consecration','ch-inscription','ch-carry'].forEach(id=>{
+    const el=document.getElementById(id);if(el)el.style.opacity='0';
+  });
+
+  ov.style.display='flex';
+  const cv=document.getElementById('ch-video');
+  if(cv){try{cv.muted=true;cv.currentTime=0;const pp=cv.play();if(pp&&pp.catch)pp.catch(()=>{});}catch(e){}}
+  requestAnimationFrame(()=>requestAnimationFrame(()=>{
+    ov.classList.add('show');
+    // Ceremonial stagger — the object arrives first, then meaning accretes
+    setTimeout(()=>{const el=document.getElementById('ch-eyebrow');if(el)el.style.opacity='1';},1800);
+    setTimeout(()=>{const el=document.getElementById('ch-consecration');if(el)el.style.opacity='1';},3200);
+    setTimeout(()=>{const el=document.getElementById('ch-inscription');if(el)el.style.opacity='1';},5400);
+    setTimeout(()=>{const el=document.getElementById('ch-carry');if(el)el.style.opacity='1';},7200);
+  }));
+  if(window.trackTempleEvent)trackTempleEvent('chalice_reveal_opened',{chamber:'ganymede'});
+}
+
+function closeChaliceReveal(){
+  const ov=document.getElementById('chaliceReveal');if(!ov)return;
+  ov.classList.remove('show');
+  setTimeout(()=>{ov.style.display='none';},1200);
+}
+
+async function keepChalice(){
+  const c=_chaliceCurrent||_getGanyChalice();if(!c)return;
+  // Save on first keep
+  if(!_getGanyChalice())_saveGanyChalice(c);
+  if(window.trackTempleEvent)trackTempleEvent('chalice_kept',{chamber:'ganymede',id:c.id});
+  const vid=document.getElementById('ch-video');
+  const draw=(withFrame)=>{
+    const W=900,H=1400;const cv=document.createElement('canvas');cv.width=W;cv.height=H;
+    const ctx=cv.getContext('2d');
+    ctx.fillStyle='#080503';ctx.fillRect(0,0,W,H);
+    if(withFrame&&vid&&vid.readyState>=2&&vid.videoWidth){
+      const th=H*0.58,vw=vid.videoWidth,vh=vid.videoHeight;
+      const scale=Math.max(W/vw,th/vh),dw=vw*scale,dh=vh*scale;
+      ctx.save();ctx.beginPath();ctx.rect(0,0,W,th);ctx.clip();
+      ctx.drawImage(vid,(W-dw)/2,(th-dh)/2,dw,dh);ctx.restore();
+      const fg=ctx.createLinearGradient(0,th*0.52,0,th);
+      fg.addColorStop(0,'rgba(8,5,3,0)');fg.addColorStop(1,'rgba(8,5,3,1)');
+      ctx.fillStyle=fg;ctx.fillRect(0,th*0.52,W,th*0.48);
+    }
+    ctx.textAlign='center';
+    ctx.fillStyle='rgba(196,158,72,0.75)';ctx.font='24px Cinzel, serif';
+    ctx.fillText('ANCIENT TEMENOS',W/2,H*0.64);
+    ctx.fillStyle='rgba(196,158,72,0.5)';ctx.font='13px Cinzel, serif';
+    ctx.fillText('WHAT YOU CARRY',W/2,H*0.695);
+    ctx.fillStyle='rgba(238,220,168,0.88)';ctx.font='italic 34px "Cormorant Garamond", serif';
+    _krWrap(ctx,c.tikkun,W/2,H*0.745,W*0.74,42);
+    ctx.fillStyle='rgba(196,158,72,0.62)';ctx.font='18px Cinzel, serif';
+    ctx.fillText('GANYMEDE \u00b7 CHAMBER OF BUILDING',W/2,H*0.852);
+    ctx.fillText(c.date.toUpperCase(),W/2,H*0.885);
+    ctx.fillStyle='rgba(196,158,72,0.35)';ctx.font='14px Cinzel, serif';
+    ctx.fillText('CHALICE '+c.id,W/2,H*0.918);
+    return cv;
+  };
+  let cv2=draw(true);
+  cv2.toBlob(b=>{
+    if(b)return _chDownload(b,c);
+    const cv3=draw(false);cv3.toBlob(b2=>{if(b2)_chDownload(b2,c);},'image/png');
+  },'image/png');
+}
+
+function _chDownload(b,c){
+  const url=URL.createObjectURL(b);const a=document.createElement('a');
+  a.href=url;a.download='AncientTemenos_Chalice_'+c.id+'.png';
+  document.body.appendChild(a);a.click();a.remove();
+  setTimeout(()=>URL.revokeObjectURL(url),2500);
+  // Close after a breath — let the download register
+  setTimeout(closeChaliceReveal,1400);
+}
+// ── END CHALICE ────────────────────────────────────────────────────────────
+
 // ── GRIMOIRE REMEMBRANCE ────────────────────────────────────────────────────
 function _grUUID(){
   try{
@@ -2109,7 +2321,7 @@ VOICE RULES:
 No bullet points. No dashes of any kind. Plain prose sentences. Warm, precise, grounded. Never hollow. Never vague. Fewer words. Leave space. Write like a museum placard, not an essay. Every sentence earns its place. The reflection should feel like being truly seen. The step should be so specific they can do it today.
 
 ALWAYS return valid JSON, no markdown, no backticks:
-{"stage":"2-4 word phrase","reflection":"2 to 3 short sentences. pattern, tikkun, what is in the way. spare, with breath","structure":"1 to 2 short sentences. the framework or mental model","step":"one specific concrete action for today or this week","context":"one short bridge sentence before options, or empty","options":[{"text":"concrete action phrase"},{"text":"concrete action phrase"},{"text":"concrete action phrase"}],"question":"one sharp question if not ready for options yet","check_in":false}
+{"stage":"2-4 word phrase","reflection":"2 to 3 short sentences. pattern, tikkun, what is in the way. spare, with breath","structure":"1 to 2 short sentences. the framework or mental model","step":"one specific concrete action for today or this week","context":"one short bridge sentence before options, or empty","options":[{"text":"concrete action phrase"},{"text":"concrete action phrase"},{"text":"concrete action phrase"}],"question":"one sharp question if not ready for options yet","tikkun_line":"on final exchange only: one sentence, plain language, the specific soul correction this visitor carries. what they are now capable of holding. not a mantra. a fact. leave empty string otherwise.","check_in":false}
 
 If still gathering: options as [], question filled. If ready: all fields filled, question empty. On final exchange: check_in true.`
 
@@ -2490,18 +2702,19 @@ function gHasKey(){try{return localStorage.getItem('temenos_sigil_key')==='1';}c
 function gGrantKey(){try{localStorage.setItem('temenos_sigil_key','1');}catch(e){}}
 /* Ganymede's closing has already streamed. The cave now asks for the Key. */
 function stillnessGate(){
-  // Silence: oracle done. Nothing happens.
-  // 4s → "The cave remembers." fades in
-  // 3s hold → fades out
-  // Then gate emerges
+  // Direction C: quiet consecration.
+  // 4s silence → consecration line fades in → holds → fades out → Chalice appears.
   const still=document.getElementById('g-stillness');
+  const stillText=document.getElementById('g-stillness-text');
+  // Set the consecration line now, before it appears
+  if(stillText)stillText.textContent=_ganyConsecrationLine();
   setTimeout(()=>{
-    if(still){still.style.opacity='1';}
+    if(still)still.style.opacity='1';
     setTimeout(()=>{
-      if(still){still.style.transition='opacity 1.8s ease';still.style.opacity='0';}
-      setTimeout(ganyGate,2000);
-    },3200);
-  },4000);
+      if(still){still.style.transition='opacity 2s ease';still.style.opacity='0';}
+      setTimeout(()=>openChaliceReveal(),2400);
+    },4000);
+  },4200);
 }
 function ganyGate(){
   const gate=document.getElementById('g-gate');if(!gate)return;
@@ -3570,6 +3783,15 @@ initFoyer=function(){
   window.testKeyReveal = function () {
 
     /* 1. overlay must exist */
+    // Dev mock: ?mock=ganychalice
+    if(params.get('mock')==='ganychalice'){
+      // Seed gHistory with tikkun_line so the Chalice has content
+      if(typeof gHistory!=='undefined'&&gHistory.length===0){
+        gHistory=[{role:'user',content:'Testing the Chalice.'},{role:'assistant',content:JSON.stringify({stage:'Being tested',reflection:'You have carried this longer than you know.',structure:'The work is the vessel.',step:'Open the Chalice.',tikkun_line:'You are now capable of holding what once felt too uncertain to name.',check_in:true,options:[],question:'',context:''})}];
+      }
+      setTimeout(()=>openChaliceReveal(),400);
+      return;
+    }
     var ov = document.getElementById('keyReveal');
     if (!ov) {
       console.error('[Temenos dev] #keyReveal not found. Has the patch been pushed?');
