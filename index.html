@@ -3783,15 +3783,6 @@ initFoyer=function(){
   window.testKeyReveal = function () {
 
     /* 1. overlay must exist */
-    // Dev mock: ?mock=ganychalice
-    if(params.get('mock')==='ganychalice'){
-      // Seed gHistory with tikkun_line so the Chalice has content
-      if(typeof gHistory!=='undefined'&&gHistory.length===0){
-        gHistory=[{role:'user',content:'Testing the Chalice.'},{role:'assistant',content:JSON.stringify({stage:'Being tested',reflection:'You have carried this longer than you know.',structure:'The work is the vessel.',step:'Open the Chalice.',tikkun_line:'You are now capable of holding what once felt too uncertain to name.',check_in:true,options:[],question:'',context:''})}];
-      }
-      setTimeout(()=>openChaliceReveal(),400);
-      return;
-    }
     var ov = document.getElementById('keyReveal');
     if (!ov) {
       console.error('[Temenos dev] #keyReveal not found. Has the patch been pushed?');
@@ -4128,6 +4119,7 @@ initFoyer=function(){
        ?mock=collector     Venus artwork enquiry modal, opens immediately
        ?mock=ganycollector Ganymede artwork enquiry modal, opens immediately
        ?mock=key           Sigil Key reveal with mock Venus data (alias: ?sigil=1)
+       ?mock=ganychalice   Chalice of Ganymede reveal with mock tikkun data
        ?skip=approach      Skip cave scroll (combine with ?mock=ganymede)
      ════════════════════════════════════════════════════════════════════════════ -->
 <script>
@@ -4336,6 +4328,29 @@ initFoyer=function(){
     window.addEventListener('load', function(){
       _seedVenus();
       setTimeout(function(){ if(typeof openKeyReveal==='function') openKeyReveal(); }, 400);
+    });
+  }
+
+  if(_mock === 'ganychalice'){
+    window.addEventListener('load', function(){
+      // Seed gHistory so _ganyTikkunLine() and _ganyConsecrationLine() resolve
+      if(typeof gHistory !== 'undefined' && gHistory.length === 0){
+        gHistory = [
+          {role:'user', content:'I have been trying to build something for a long time.'},
+          {role:'assistant', content:JSON.stringify({
+            stage:'The first stone',
+            reflection:'You have been carrying this longer than you know. The pattern underneath it is not about the work itself. It is about whether you believe you are the kind of person who gets to finish things.',
+            structure:'The work is already underway. What remains is to stop waiting for certainty before continuing.',
+            step:'Place one stone today. Not the whole wall. One stone.',
+            tikkun_line:'You are now capable of holding what once felt too uncertain to name.',
+            check_in:true,
+            options:[],
+            question:'',
+            context:''
+          })}
+        ];
+      }
+      setTimeout(function(){ if(typeof openChaliceReveal==='function') openChaliceReveal(); }, 600);
     });
   }
 
