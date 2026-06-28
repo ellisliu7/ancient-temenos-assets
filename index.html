@@ -1058,194 +1058,279 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 <!-- THE CHALICE OF GANYMEDE -->
 <!-- THE CHALICE OF GANYMEDE -->
 <!-- THE CHALICE OF GANYMEDE ─────────────────────────────────────────── -->
+<!-- THE CHALICE OF GANYMEDE ─────────────────────────────────────────── -->
 <div id="chaliceReveal">
 <style>
 
-/* ── SCENE: the whole screen is the cave ── */
+/* ════════════════════════════════════════════════════════════════════
+   SCENE — the whole screen is the cave.
+   Nothing here is a "layout". All children are position:absolute.
+   The background is a colour-accurate extension of the MP4's own glow.
+   ════════════════════════════════════════════════════════════════════ */
+
 #chaliceReveal {
   position:fixed; inset:0; z-index:95;
   display:none; opacity:0;
-  transition:opacity 1.8s ease;
   overflow:hidden;
-  /* Cave background:
-     Layer 1 (top): warm amber light source positioned where the Chalice glow emanates
-     Layer 2: deep umber mid-tones — stone walls
-     Layer 3: near-black base — the depths
-     Together they make a room with one light source, not a designed page. */
+  transition:opacity 1.8s ease;
+
+  /*
+    THREE background layers — single warm light source above centre.
+
+    Layer 1  LIGHT SOURCE
+    Warm amber radial anchored at 50% 30% — exactly where the Chalice
+    glow comes from in the MP4. When the mask dissolves the video edges,
+    the page underneath is already this colour. No visible boundary.
+    Peak: rgba(52,30,8) — same family as the MP4 ambient.
+
+    Layer 2  CAVE WALLS
+    Broader warm-umber fill — the stone in mid-distance.
+
+    Layer 3  DEEP BASE
+    Near-black. Ensures no browser default bleeds through at the edges.
+  */
   background:
-    radial-gradient(ellipse 48% 36% at 46% 28%, rgba(72,44,12,0.52) 0%, rgba(38,22,6,0.28) 38%, transparent 72%),
-    radial-gradient(ellipse 90% 55% at 44% 18%, rgba(28,16,4,0.72) 0%, rgba(14,8,2,0.90) 55%, rgba(4,2,1,0.98) 100%),
-    radial-gradient(ellipse 120% 80% at 50% 50%, rgba(18,10,3,0.94) 0%, rgba(4,2,1,1.0) 100%);
+    radial-gradient(ellipse 68% 52% at 50% 30%,
+      rgba(52,30,8,0.76) 0%,
+      rgba(28,15,4,0.52) 28%,
+      rgba(10,5,1,0.18) 52%,
+      transparent       70%),
+    radial-gradient(ellipse 120% 80% at 50% 25%,
+      rgba(22,12,3,0.88) 0%,
+      rgba(9,5,1,0.95)   45%,
+      rgba(3,1,0,0.99)   100%),
+    radial-gradient(ellipse 200% 200% at 50% 50%,
+      rgba(6,3,1,1) 0%,
+      rgba(2,1,0,1) 100%);
 }
 #chaliceReveal.show { opacity:1; }
 
-/* Inline SVG noise filter for barely-perceptible stone texture */
+
+/* ── NOISE  stone texture at 2.2% — felt, not seen ── */
 #ch-noise {
-  position:absolute; inset:0; z-index:1; pointer-events:none;
-  opacity:0.028; /* so subtle it is felt, not seen */
+  position:absolute; inset:0; z-index:1;
+  pointer-events:none; opacity:0.022;
 }
 
-/* Vignette: darkens all four edges, heaviest at bottom */
+
+/* ── VIGNETTE  darkens all four edges; heaviest at top and bottom ── */
 #ch-vignette {
   position:absolute; inset:0; z-index:2; pointer-events:none;
   background:
-    radial-gradient(ellipse 110% 85% at 46% 30%, transparent 22%, rgba(2,1,0,0.38) 58%, rgba(2,1,0,0.78) 82%, rgba(2,1,0,0.96) 100%),
-    linear-gradient(to bottom, rgba(2,1,0,0.62) 0%, transparent 18%, transparent 62%, rgba(2,1,0,0.88) 100%);
+    linear-gradient(to bottom,
+      rgba(2,1,0,0.72) 0%,
+      transparent       14%,
+      transparent       72%,
+      rgba(2,1,0,0.82) 100%),
+    radial-gradient(ellipse 100% 80% at 50% 42%,
+      transparent        30%,
+      rgba(2,1,0,0.24)   62%,
+      rgba(2,1,0,0.72)   88%,
+      rgba(2,1,0,0.92)   100%);
 }
 
-/* ── VIDEO: absolute, centred upper-left of screen, fully feathered ── */
+
+/* ── RELIC  the MP4, absolute, centred, masked into the cave ──
+
+   Size: clamp(280px, 42vw, 580px) wide.
+   On a 1440px desktop: 42vw = 605px wide. After the mask removes
+   the outer feather, the visible Chalice body reads at ~35-40vh tall.
+
+   Position: top:2vh centres the glow zone in the upper 55% of screen.
+   left:50% + translateX(-50%) keeps it horizontally centred.
+
+   MASK STRATEGY (from Phase 2 plan):
+   — ellipse 120% 80%: wider than the element so horizontal edges
+     dissolve before reaching the element boundary. Safari can clip
+     masks to the bounding box, so the 120% width is critical here.
+   — Six opacity stops: sharp centre (0%→28%), then gradual dissolution
+     through four stops to transparent at 85%.
+   — anchor: 50% 52% — fractionally below centre so the feather
+     is heavier at the top where the glow spills, preserving the
+     Chalice base which sits lower in the frame.
+── */
 #ch-video {
   position:absolute;
-  /* Positioned upper-centre, slightly left of dead centre — more cinematic */
-  top:50%; left:46%;
-  transform:translate(-50%, -54%);
+  top:2vh; left:50%;
+  transform:translateX(-50%);
   z-index:3;
   display:block;
-  /* Relic size: smaller and more distant than the mockup — discovered, not presented */
-  width:clamp(180px,26vw,340px);
+  width:clamp(280px,42vw,580px);
   height:auto;
   object-fit:contain;
   background:transparent;
   opacity:0;
   transition:opacity 3.2s ease;
-  /* The mask is the key technique.
-     It uses two overlapping ellipses:
-     — a taller inner ellipse keeps the chalice body sharp
-     — the outer feather is generous (starts at 52%, gone by 88%)
-     The result: the video has no visible edge — it simply exists in the cave.
-     Tweak the 52%/72%/88% stops if the feather feels too aggressive or too soft. */
+
   -webkit-mask-image: radial-gradient(
-    ellipse 68% 82% at 50% 50%,
-    black 0%,
-    black 35%,
-    rgba(0,0,0,0.92) 48%,
-    rgba(0,0,0,0.65) 58%,
-    rgba(0,0,0,0.28) 72%,
-    transparent 88%
+    ellipse 120% 80% at 50% 52%,
+    black                 0%,
+    black                 28%,
+    rgba(0,0,0,0.88)      42%,
+    rgba(0,0,0,0.55)      56%,
+    rgba(0,0,0,0.18)      70%,
+    transparent           85%
   );
   mask-image: radial-gradient(
-    ellipse 68% 82% at 50% 50%,
-    black 0%,
-    black 35%,
-    rgba(0,0,0,0.92) 48%,
-    rgba(0,0,0,0.65) 58%,
-    rgba(0,0,0,0.28) 72%,
-    transparent 88%
+    ellipse 120% 80% at 50% 52%,
+    black                 0%,
+    black                 28%,
+    rgba(0,0,0,0.88)      42%,
+    rgba(0,0,0,0.55)      56%,
+    rgba(0,0,0,0.18)      70%,
+    transparent           85%
   );
 }
 
 #ch-video-fallback {
-  position:absolute; top:50%; left:46%; transform:translate(-50%,-54%);
-  z-index:3; display:none; align-items:center; justify-content:center;
-  width:clamp(180px,26vw,340px); height:clamp(180px,26vw,340px);
+  position:absolute;
+  top:2vh; left:50%;
+  transform:translateX(-50%);
+  z-index:3;
+  display:none;
+  align-items:center; justify-content:center;
+  width:clamp(280px,42vw,580px);
+  height:clamp(280px,42vw,580px);
 }
 #ch-video-fallback span {
-  font-size:80px; color:rgba(196,158,72,0.55);
-  text-shadow:0 0 44px rgba(196,158,72,0.32);
+  font-size:88px;
+  color:rgba(196,158,72,0.50);
+  text-shadow:0 0 52px rgba(196,158,72,0.28);
   animation:chFloat 8s ease-in-out infinite;
 }
 
-/* ── TEXT: absolute, lower portion, centred beneath the Chalice ── */
-#ch-text {
-  position:absolute;
-  /* Lower 40% of screen, centred — sits below the relic's visual weight */
-  bottom:0; left:0; right:0;
-  padding:0 clamp(2rem,8vw,6rem) clamp(2rem,5vh,3.8rem);
-  z-index:4;
-  display:flex; flex-direction:column; align-items:center; text-align:center;
+
+/* ── EYEBROW  top-left corner, barely there ── */
+#ch-brand {
+  position:absolute; top:1.6rem; left:2rem; z-index:10;
+  font-family:'Cinzel',serif; font-size:8px; letter-spacing:.48em;
+  text-transform:uppercase; color:rgba(196,158,72,0.36);
+  pointer-events:none;
 }
 
-/* Consecration: the primary voice. Large, italic, generous leading.
-   Sized to feel like a sentence someone sits with rather than reads. */
-#ch-consecration {
-  font-family:'Cormorant Garamond', serif;
-  font-style:italic;
-  font-size:clamp(20px,2.4vw,30px);
-  color:rgba(238,220,168,0.90);
-  line-height:1.7;
-  margin:0 0 1.6rem;
-  max-width:28ch;
-  opacity:0; transition:opacity 3s ease;
-  text-shadow:0 2px 24px rgba(0,0,0,0.7);
-}
 
-/* Eyebrow: attribution. Cinzel small-caps. Quieter than the consecration.
-   Sits between the quote and the tikkun as a breath, not a header. */
-#ch-eyebrow {
-  font-family:'Cinzel', serif;
-  font-size:7.5px; letter-spacing:.55em;
-  text-transform:uppercase;
-  color:rgba(196,158,72,0.68);
-  margin:0 0 1.6rem;
-  opacity:0; transition:opacity 2.2s ease;
-}
-
-/* Hairline separator — very faint, echoes the separator in Venus Grimoire */
-#ch-sep {
-  width:clamp(40px,8vw,72px);
-  height:1px;
-  background:rgba(196,158,72,0.14);
-  margin:0 auto 1.6rem;
-  opacity:0; transition:opacity 2s ease;
-}
-
-/* Inscription block */
-#ch-inscription {
-  opacity:0; transition:opacity 2.2s ease;
-  text-align:center; margin:0 0 2.4rem;
-}
-#ch-tikkun-label {
-  font-family:'Cinzel', serif;
-  font-size:7px; letter-spacing:.52em;
-  text-transform:uppercase;
-  color:rgba(196,158,72,0.70);
-  margin:0 0 .65rem; display:block;
-}
-#ch-tikkun-line {
-  font-family:'Cormorant Garamond', serif;
-  font-style:italic;
-  font-size:clamp(15px,1.6vw,19px);
-  color:rgba(238,220,168,0.80);
-  line-height:1.7; margin:0; max-width:38ch;
-}
-#ch-insc-date {
-  font-family:'Cinzel', serif; font-size:7px; letter-spacing:.38em;
-  text-transform:uppercase; color:rgba(196,158,72,0.44);
-  margin-top:.9rem; display:block;
-}
-#ch-insc-id {
-  font-family:'Cinzel', serif; font-size:6.5px; letter-spacing:.34em;
-  text-transform:uppercase; color:rgba(196,158,72,0.28);
-  margin-top:.3rem; display:block;
-}
-
-/* Carry this: last and plainest.
-   No border, no box — just the words. The weight comes from what preceded it. */
-#ch-carry {
-  font-family:'Cinzel', serif;
-  font-size:9px; letter-spacing:.56em;
-  text-transform:uppercase;
-  color:rgba(238,220,168,0.70);
-  background:transparent; border:none; cursor:pointer;
-  padding:.7rem 0;
-  opacity:0; transition:opacity 2.2s ease, color .5s ease;
-}
-#ch-carry:hover { color:rgba(238,220,168,1); }
-
-/* Close: barely there, top-right */
+/* ── CLOSE  top-right, barely there ── */
 #ch-close {
   position:absolute; top:1.4rem; right:1.8rem; z-index:10;
-  font-family:'Cinzel', serif; font-size:7.5px; letter-spacing:.46em;
-  text-transform:uppercase; color:rgba(196,158,72,0.32);
-  background:transparent; border:none; cursor:pointer; transition:color .5s;
+  font-family:'Cinzel',serif; font-size:7.5px; letter-spacing:.46em;
+  text-transform:uppercase; color:rgba(196,158,72,0.30);
+  background:transparent; border:none; cursor:pointer;
+  transition:color .5s;
 }
-#ch-close:hover { color:rgba(196,158,72,0.65); }
+#ch-close:hover { color:rgba(196,158,72,0.62); }
+
+
+/* ── TEXT ZONE  absolute, lower 46% of screen, centred ──
+
+   Begins at top:54vh — directly below the Chalice's visual base.
+   All text is centred on the same vertical axis as the Chalice.
+   Each element sits in its own pool of silence.
+── */
+#ch-text {
+  position:absolute;
+  top:54vh; left:0; right:0; bottom:0;
+  z-index:4;
+  display:flex; flex-direction:column;
+  align-items:center; text-align:center;
+  padding:0 clamp(1.4rem,6vw,3rem) clamp(1.6rem,4vh,3rem);
+  overflow:hidden;
+}
+
+/* 1. CONSECRATION — primary voice, largest text on screen */
+#ch-consecration {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:clamp(22px,2.6vw,32px);
+  color:rgba(238,220,168,0.90);
+  line-height:1.7; margin:0 0 1.4rem; max-width:26ch;
+  opacity:0; transition:opacity 3s ease;
+  text-shadow:0 1px 28px rgba(0,0,0,0.65);
+}
+
+/* 2. "GANYMEDE · CHAMBER OF BUILDING" */
+#ch-eyebrow {
+  font-family:'Cinzel',serif; font-size:8px; letter-spacing:.52em;
+  text-transform:uppercase; color:rgba(196,158,72,0.62);
+  margin:0 0 1rem;
+  opacity:0; transition:opacity 2.2s ease;
+}
+
+/* Hairline rule */
+#ch-sep {
+  width:clamp(36px,6vw,56px); height:1px;
+  background:rgba(196,158,72,0.16);
+  margin:0 auto 1.4rem;
+  opacity:0; transition:opacity 2s ease;
+  border:none;
+}
+
+/* 3+4. INSCRIPTION — "What you carry" label + tikkun line */
+#ch-inscription {
+  opacity:0; transition:opacity 2.2s ease;
+  text-align:center; margin:0 0 1.6rem;
+}
+#ch-tikkun-label {
+  font-family:'Cinzel',serif; font-size:7px; letter-spacing:.52em;
+  text-transform:uppercase; color:rgba(196,158,72,0.70);
+  margin:0 0 .6rem; display:block;
+}
+#ch-tikkun-line {
+  font-family:'Cormorant Garamond',serif; font-style:italic;
+  font-size:clamp(15px,1.7vw,20px);
+  color:rgba(238,220,168,0.80);
+  line-height:1.7; margin:0; max-width:36ch;
+}
+#ch-insc-date {
+  font-family:'Cinzel',serif; font-size:7px; letter-spacing:.38em;
+  text-transform:uppercase; color:rgba(196,158,72,0.42);
+  margin-top:.85rem; display:block;
+}
+#ch-insc-id {
+  font-family:'Cinzel',serif; font-size:6.5px; letter-spacing:.32em;
+  text-transform:uppercase; color:rgba(196,158,72,0.26);
+  margin-top:.28rem; display:block;
+}
+
+/* 5. "✦  CARRY THIS  ✦"  ceremonial marker, not a CTA */
+#ch-carry-line {
+  font-family:'Cinzel',serif; font-size:10px; letter-spacing:.5em;
+  text-transform:uppercase; color:rgba(238,220,168,0.62);
+  margin:1.8rem 0 1.6rem; pointer-events:none;
+  opacity:0; transition:opacity 2.2s ease;
+}
+
+/* 6. ACTION BUTTONS  side by side, bordered, equal width */
+#ch-actions {
+  display:flex; gap:clamp(.8rem,3vw,1.6rem);
+  justify-content:center; align-items:center;
+  opacity:0; transition:opacity 2.2s ease;
+}
+.ch-btn {
+  font-family:'Cinzel',serif; font-size:8.5px; letter-spacing:.3em;
+  text-transform:uppercase;
+  color:rgba(238,220,168,0.78);
+  background:transparent;
+  border:.5px solid rgba(196,158,72,0.30);
+  padding:.75rem clamp(1.2rem,3vw,2rem);
+  cursor:pointer;
+  transition:color .5s, border-color .5s;
+  white-space:nowrap;
+}
+.ch-btn:hover {
+  color:rgba(238,220,168,1);
+  border-color:rgba(196,158,72,0.65);
+}
+
+/* Mobile: stack buttons below 480px */
+@media(max-width:480px){
+  #ch-actions { flex-direction:column; gap:.75rem; }
+  .ch-btn { width:min(280px,78vw); text-align:center; }
+}
 
 @keyframes chFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
 
 </style>
 
-<!-- Inline SVG noise — stone texture at 2.8% opacity, invisible unless looked for -->
+<!-- Noise texture -->
 <svg id="ch-noise" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
   <filter id="ch-noise-filter">
     <feTurbulence type="fractalNoise" baseFrequency="0.68" numOctaves="4" stitchTiles="stitch"/>
@@ -1254,31 +1339,38 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   <rect width="100%" height="100%" filter="url(#ch-noise-filter)"/>
 </svg>
 
-<!-- Vignette layer -->
+<!-- Vignette -->
 <div id="ch-vignette"></div>
 
-<!-- Close -->
+<!-- Brand — top left -->
+<span id="ch-brand">Ancient Temenos</span>
+
+<!-- Close — top right -->
 <button id="ch-close" onclick="closeChaliceReveal()">&#x2715; Close</button>
 
-<!-- Relic: sits in the cave, not inside a container -->
+<!-- Relic — absolute, centred, feathered into the cave -->
 <video id="ch-video" autoplay muted loop playsinline preload="auto" crossorigin="anonymous"
        onerror="this.style.display='none';document.getElementById('ch-video-fallback').style.display='flex';">
   <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Chalice.mp4" type="video/mp4">
 </video>
 <div id="ch-video-fallback"><span>&#x2767;</span></div>
 
-<!-- Text: lower portion of the scene -->
+<!-- Text zone — lower portion of scene -->
 <div id="ch-text">
   <p id="ch-consecration"></p>
   <p id="ch-eyebrow">Ganymede &#xb7; Chamber of Building</p>
-  <div id="ch-sep"></div>
+  <hr id="ch-sep">
   <div id="ch-inscription">
     <span id="ch-tikkun-label">What you carry</span>
     <p id="ch-tikkun-line"></p>
     <span id="ch-insc-date"></span>
     <span id="ch-insc-id"></span>
   </div>
-  <button id="ch-carry" onclick="keepChalice()">Carry this</button>
+  <p id="ch-carry-line">&#x2736;&nbsp;&nbsp;Carry this&nbsp;&nbsp;&#x2736;</p>
+  <div id="ch-actions">
+    <button class="ch-btn" onclick="keepChalice()">Keep the Chalice</button>
+    <button class="ch-btn" onclick="closeChaliceReveal()">Return to the Temple</button>
+  </div>
 </div>
 
 </div>
@@ -2251,25 +2343,25 @@ function openChaliceReveal(){
   }
 
   // Reset: all text invisible, video invisible
-  ['ch-eyebrow','ch-consecration','ch-inscription','ch-sep','ch-carry'].forEach(id=>{
+  ['ch-eyebrow','ch-consecration','ch-inscription','ch-sep','ch-carry-line','ch-actions'].forEach(id=>{
     const el=document.getElementById(id);if(el)el.style.opacity='0';
   });
   const cv=document.getElementById('ch-video');
   if(cv)cv.style.opacity='0';
 
-  ov.style.display='block'; // block not flex — children are all position:absolute
+  ov.style.display='block'; // block — all children position:absolute
   if(cv){try{cv.muted=true;cv.currentTime=0;const pp=cv.play();if(pp&&pp.catch)pp.catch(()=>{});}catch(e){}}
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     ov.classList.add('show');
-    // Relic materialises from the cave — slow fade, no sudden arrival
+    // Chalice materialises from cave — 3.2s fade so it feels discovered not revealed
     setTimeout(()=>{if(cv)cv.style.opacity='1';},500);
-    // Long silence: the visitor is alone with the object for nearly 3 seconds
-    // before any word appears. This is the most important pause in the sequence.
+    // Nearly 3s of silence before any word. The object holds the space alone.
     setTimeout(()=>{const el=document.getElementById('ch-consecration');if(el)el.style.opacity='1';},3200);
-    setTimeout(()=>{const el=document.getElementById('ch-eyebrow');if(el)el.style.opacity='1';},4800);
-    setTimeout(()=>{const el=document.getElementById('ch-sep');if(el)el.style.opacity='1';},5200);
-    setTimeout(()=>{const el=document.getElementById('ch-inscription');if(el)el.style.opacity='1';},6000);
-    setTimeout(()=>{const el=document.getElementById('ch-carry');if(el)el.style.opacity='1';},7800);
+    setTimeout(()=>{const el=document.getElementById('ch-eyebrow');if(el)el.style.opacity='1';},4600);
+    setTimeout(()=>{const el=document.getElementById('ch-sep');if(el)el.style.opacity='1';},5000);
+    setTimeout(()=>{const el=document.getElementById('ch-inscription');if(el)el.style.opacity='1';},5800);
+    setTimeout(()=>{const el=document.getElementById('ch-carry-line');if(el)el.style.opacity='1';},7000);
+    setTimeout(()=>{const el=document.getElementById('ch-actions');if(el)el.style.opacity='1';},7800);
   }));
   if(window.trackTempleEvent)trackTempleEvent('chalice_reveal_opened',{chamber:'ganymede'});
 }
@@ -2325,8 +2417,7 @@ function _chDownload(b,c){
   a.href=url;a.download='AncientTemenos_Chalice_'+c.id+'.png';
   document.body.appendChild(a);a.click();a.remove();
   setTimeout(()=>URL.revokeObjectURL(url),2500);
-  // Close after a breath — let the download register
-  setTimeout(closeChaliceReveal,1400);
+  // Visitor stays on the Chalice screen — they use "Return to the Temple" to leave
 }
 // ── END CHALICE ────────────────────────────────────────────────────────────
 
