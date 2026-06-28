@@ -671,15 +671,18 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 
   <!-- Council input — bottom center -->
   <div id="foyer-council">
-    <p style="font-family:'Cormorant',serif;font-style:italic;font-size:clamp(24px,3vw,38px);color:rgba(238,220,168,0.95);letter-spacing:.02em;margin-bottom:.3rem;display:block;text-shadow:0 2px 20px rgba(0,0,0,0.9),0 0 40px rgba(0,0,0,0.7);">Welcome home.</p>
+    <p id="fc-welcome" style="font-family:'Cormorant',serif;font-style:italic;font-size:clamp(24px,3vw,38px);color:rgba(238,220,168,0.95);letter-spacing:.02em;margin-bottom:1.1rem;display:block;text-shadow:0 2px 20px rgba(0,0,0,0.9),0 0 40px rgba(0,0,0,0.7);opacity:0;transition:opacity 2.2s ease;">Welcome home.</p>
+    <p id="fc-subtitle" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.15vw,16px);color:rgba(238,220,168,0.62);letter-spacing:.04em;margin:0 0 1.5rem;opacity:0;transition:opacity 2s ease;">What’s on your mind today?</p>
+    <div id="fc-inp-block" style="opacity:0;transition:opacity 1.6s ease;">
     <div class="fc-inp-wrap">
       <div class="fc-inp-row">
-        <input class="fc-inp" id="fc-inp" type="text" placeholder="What's on your mind today?" autocomplete="off" spellcheck="false"/>
+        <input class="fc-inp" id="fc-inp" type="text" placeholder="You are safe to speak here…" autocomplete="off" spellcheck="false"/>
         <button class="fc-send" id="fc-send" onclick="sendCouncil()">
           <svg viewBox="0 0 14 14" fill="none" stroke="rgba(196,158,72,0.7)" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round"><line x1="1" y1="7" x2="13" y2="7"/><polyline points="8,2 13,7 8,12"/></svg>
         </button>
       </div>
     </div>
+    </div><!-- /fc-inp-wrap -->
     </div><!-- /fc-inp-block -->
   </div>
 </div>
@@ -708,7 +711,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
         <div id="va-closing-sep" style="width:40px;height:.5px;background:rgba(196,158,72,0.22);margin:0 auto 1rem;opacity:0;transition:opacity 1.6s ease;"></div>
         <button id="va-key-cta" onclick="openKeyReveal()" style="display:block;margin:0 auto 1.8rem;background:transparent;border:.5px solid rgba(196,158,72,0.4);cursor:pointer;font-family:'Cinzel',serif;font-size:9.5px;letter-spacing:.42em;color:rgba(238,220,168,0.92);text-transform:uppercase;padding:.8rem 2.2rem;opacity:0;transition:opacity 2s ease,border-color .6s ease,color .6s ease,text-shadow .6s ease;" onmouseover="this.style.borderColor='rgba(214,178,104,0.85)';this.style.color='#fff';this.style.textShadow='0 0 18px rgba(214,178,104,0.5)'" onmouseout="this.style.borderColor='rgba(196,158,72,0.4)';this.style.color='rgba(238,220,168,0.92)';this.style.textShadow='none'">✦ Receive your First Key ✦</button>
         <div id="va-closing-actions" style="display:flex;gap:2.4rem;justify-content:center;align-items:center;opacity:0;transition:opacity 1.6s ease;">
-          <button class="va-cta-btn" onclick="openGrimoire()" style="background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:.38em;color:rgba(196,158,72,0.78);text-transform:uppercase;transition:color .4s,text-shadow .4s;padding:.6rem 0;">✦ Seal this into the Grimoire</button>
+          <button class="va-cta-btn" onclick="openGrimoire('venus')" style="background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:.38em;color:rgba(196,158,72,0.78);text-transform:uppercase;transition:color .4s,text-shadow .4s;padding:.6rem 0;">✦ Seal this into the Grimoire</button>
           <span style="color:rgba(196,158,72,0.18);font-size:10px;">·</span>
           <button class="va-cta-btn" onclick="flashTo(()=>{showScreen('foyer');councilReset();})" style="background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:8.5px;letter-spacing:.38em;color:rgba(196,158,72,0.5);text-transform:uppercase;transition:color .4s,text-shadow .4s;padding:.6rem 0;animation-delay:.8s;">Return</button>
         </div>
@@ -767,7 +770,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
       <p class="vc-closing-label">She has seen you</p>
       <p class="vc-closing-text" id="vClosingText">The channel is open. What was received here is yours to carry forward.</p>
       <button class="vc-bridge-btn" onclick="bridgeToGanymede()"><span>Take me to the Ganymede cave</span></button>
-      <button class="vc-grimoire-btn" onclick="openGrimoire()">✦ Seal this into my Grimoire ✦</button>
+      <button class="vc-grimoire-btn" onclick="openGrimoire('venus')">✦ Seal this into my Grimoire ✦</button>
     </div>
     <div class="well-prompt">
       <div class="orn" style="margin-bottom:.6rem;width:140px;"><div class="orn-l"></div><div class="orn-d"></div><div class="orn-l"></div></div>
@@ -822,7 +825,10 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     </button>
   </div>
   </div>
-  <div id="g-gate">
+  <div id="g-stillness" style="position:fixed;bottom:3.5rem;left:50%;transform:translateX(-50%);opacity:0;transition:opacity 2.2s ease;pointer-events:none;z-index:55;text-align:center;">
+  <span style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.2vw,16px);color:rgba(196,158,72,0.52);letter-spacing:.08em;">The cave remembers.</span>
+</div>
+<div id="g-gate">
     <div id="g-gate-words">
       <p class="g-gate-eyebrow">You have reached the threshold</p>
       <p class="g-gate-line">The cave goes deeper.</p>
@@ -1781,7 +1787,7 @@ function maybeShowVClosing(){
   }
 }
 function bridgeToGanymede(){flashTo(()=>enterGanymede());}
-function openGrimoire(){
+function openGrimoire(forceMode){
   if(window.trackTempleEvent) trackTempleEvent('grimoire_opened');
   document.getElementById('grimoireScreen').style.display='flex';
   document.getElementById('grDate').textContent=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
@@ -1789,8 +1795,8 @@ function openGrimoire(){
   if(vc){document.getElementById('grVenusBody').textContent=vc.trim();document.getElementById('grVenusSection').style.display='block';}
   let gc='';gHistory.filter(m=>m.role==='assistant').forEach(m=>{try{const p=JSON.parse(m.content.replace(/```json|```/g,'').trim());if(p.reflection)gc+=p.reflection+'\n\n';}catch(e){}});
   if(gc){document.getElementById('grGanyBody').textContent=gc.trim();document.getElementById('grGanySection').style.display='block';}
-  // Detect seal context: ganymede > venus > council
-  const mode=gc?'ganymede':vc?'venus':'council';
+  // Detect seal context: explicit chamber > ganymede > venus > council
+  const mode=forceMode||(gc?'ganymede':vc?'venus':'council');
   generateInvocation(vc,gc,mode);
 }
 async function generateInvocation(vt,gt,mode){
@@ -2386,16 +2392,17 @@ async function sendGany(){
     gHistory.push({role:'assistant',content:JSON.stringify(p)});
     if(curr)curr.textContent='';
     const parts=[];
-    if(p.reflection)parts.push(p.reflection);
-    if(p.structure)parts.push(p.structure);
-    if(p.step)parts.push('→ '+p.step);
-    if(!p.options||!p.options.length){if(p.question)parts.push(p.question);}
+    const gClean=(s)=>stripDash((s||'').trim());
+    if(p.reflection)parts.push(gClean(p.reflection));
+    if(p.structure)parts.push(gClean(p.structure));
+    if(p.step)parts.push('→ '+gClean(p.step));
+    if(!p.options||!p.options.length){if(p.question)parts.push(gClean(p.question));}
     await gStream(curr,parts.join('\n\n'));
     if(p.check_in===true){
       setTimeout(ganyRitual,2000);
     }else if(!gHasKey()&&gExchangeCount>=G_FREE_LIMIT){
       if(opts)opts.innerHTML='';
-      setTimeout(ganyGate,2200);
+      stillnessGate();
     }else{
       if(Array.isArray(p.options)&&p.options.length===3)setTimeout(()=>showCandles(p.options,p.context||''),1100);
     }
@@ -2426,17 +2433,18 @@ async function sendGany(){
     if(dots)dots.classList.remove('show');
     // Build one clean continuous text block
     const parts=[];
-    if(p.reflection)parts.push(p.reflection.trim());
-    if(p.structure)parts.push(p.structure.trim());
-    if(p.step)parts.push('→ '+p.step.trim());
-    if(!p.options||!p.options.length){if(p.question)parts.push(p.question.trim());}
+    const gClean2=(s)=>stripDash((s||'').trim());
+    if(p.reflection)parts.push(gClean2(p.reflection));
+    if(p.structure)parts.push(gClean2(p.structure));
+    if(p.step)parts.push('→ '+gClean2(p.step));
+    if(!p.options||!p.options.length){if(p.question)parts.push(gClean2(p.question));}
     const fullText=parts.join('\n\n');
     await gStream(curr,fullText);
     if(p.check_in===true){
       setTimeout(ganyRitual,2000);
     }else if(!gHasKey()&&gExchangeCount>=G_FREE_LIMIT){
       if(opts)opts.innerHTML='';
-      setTimeout(ganyGate,2200);
+      stillnessGate();
     }else{
       const options=Array.isArray(p.options)&&p.options.length===3?p.options:null;
       if(options)setTimeout(()=>showCandles(options,p.context||''),1100);
@@ -2485,6 +2493,20 @@ const G_FREE_LIMIT=3;
 function gHasKey(){try{return localStorage.getItem('temenos_sigil_key')==='1';}catch(e){return false;}}
 function gGrantKey(){try{localStorage.setItem('temenos_sigil_key','1');}catch(e){}}
 /* Ganymede's closing has already streamed. The cave now asks for the Key. */
+function stillnessGate(){
+  // Silence: oracle done. Nothing happens.
+  // 4s → "The cave remembers." fades in
+  // 3s hold → fades out
+  // Then gate emerges
+  const still=document.getElementById('g-stillness');
+  setTimeout(()=>{
+    if(still){still.style.opacity='1';}
+    setTimeout(()=>{
+      if(still){still.style.transition='opacity 1.8s ease';still.style.opacity='0';}
+      setTimeout(ganyGate,2000);
+    },3200);
+  },4000);
+}
 function ganyGate(){
   const gate=document.getElementById('g-gate');if(!gate)return;
   const gi=document.getElementById('gi');const gb=document.getElementById('gb');
@@ -2708,7 +2730,7 @@ async function submitSacredContract(btn,fields){
       grimBtn.className='gc-grimoire-btn';
       grimBtn.textContent='\u2736 Seal in Grimoire';
       grimBtn.style.cssText='display:block;margin:2.8rem auto 0;opacity:0;transition:opacity 2s ease;';
-      grimBtn.onclick=openGrimoire;
+      grimBtn.onclick=()=>openGrimoire('ganymede');
 
       const contBtn=document.createElement('button');
       contBtn.textContent='I want to go deeper';
@@ -3151,13 +3173,13 @@ function initCouncil(){
       const ql=document.getElementById('psyche-label');
       if(pl)pl.style.opacity='1';
       if(ql)ql.style.opacity='1';
-      // auto-focus: blinking cursor signals "type here"
-      // staggered reveal: Welcome home → then input field
+      // 3-beat temple voice: Welcome home → subtitle question → input
       setTimeout(()=>{const wl=document.getElementById('fc-welcome');if(wl)wl.style.opacity='1';},600);
+      setTimeout(()=>{const st=document.getElementById('fc-subtitle');if(st)st.style.opacity='1';},2200);
       setTimeout(()=>{
         const ib=document.getElementById('fc-inp-block');if(ib)ib.style.opacity='1';
         const inp2=document.getElementById('fc-inp');if(inp2)inp2.focus();
-      },1800);
+      },3600);
       // EVENT: foyer fully loaded and council revealed
       if(window.trackTempleEvent) trackTempleEvent('foyer_loaded');
     },2800);
