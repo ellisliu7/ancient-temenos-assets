@@ -2061,6 +2061,23 @@ let _chInscriptionReady=false;
 let _chTikkunText='';
 
 // ── Canvas inscription renderer ───────────────────────────────────────────────
+//
+// COMPOSITION NOTES — floor placement:
+// The threshold slab in the render sits slightly left of centre, occupying
+// roughly the bottom 30% of the frame. The inscription is anchored at
+// cx: 48% (follows the slab's natural position), baseY: 71% (top of inscription).
+// Font sizes, line gaps, and letter-spacing are tuned to read as stone carving
+// at the scale of this specific chamber — not web typography scaled to a viewport.
+//
+// Three layout variables to tune during composition review:
+//   CH_CX    — horizontal centre of slab as fraction of canvas width (try 0.46–0.52)
+//   CH_BY    — top of inscription block as fraction of canvas height (try 0.68–0.76)
+//   CH_SCALE — master size scalar; 1.0 = default (try 0.85–1.15)
+//
+const CH_CX    = 0.48;
+const CH_BY    = 0.71;
+const CH_SCALE = 1.0;
+
 function _chInitCanvas(){
   const canvas=document.getElementById('ch-canvas');
   if(!canvas)return;
@@ -2079,140 +2096,108 @@ function _chDrawInscription(){
   const ctx=canvas.getContext('2d');
   ctx.clearRect(0,0,W,H);
 
-  // All text centred on the horizontal axis, positioned in the lower third.
-  // The inscription sits on the floor slab visible in the render.
-  // Vertical anchor: ~76% down the screen (floor stone).
-  const cx=W*0.5;
-  const baseY=H*0.76;
-  const lineH=Math.round(H*0.048); // ~line height unit
+  // ── Layout anchors ─────────────────────────────────────────────────────────
+  const cx    = W * CH_CX;
+  const baseY = H * CH_BY;
+  const S     = CH_SCALE;
 
-  // Text definitions — three layers of meaning, one visual surface
-  const BENEDICTION=CH_BENEDICTION;
-  const TIKKUN=_chTikkunText;
-  const CTA='Keep the Chalice';
+  // Line rhythm — scaled to chamber proportions, not viewport.
+  // These feel like stone spacing: generous, unhurried.
+  const u = H * 0.032 * S; // base unit; all spacing derives from this
 
-  // Font sizes scaled to canvas resolution
-  const fBen=Math.round(H*0.022); // benediction: italic Cormorant
-  const fTik=Math.round(H*0.019); // tikkun: italic Cormorant, slightly smaller
-  const fCta=Math.round(H*0.013); // CTA: small Cinzel caps
+  // Font sizes — each layer a different mason's hand
+  const fBen = Math.round(H * 0.020 * S); // benediction: Cinzel small caps, oldest layer
+  const fTik = Math.round(H * 0.019 * S); // tikkun: Cormorant italic, second layer
+  const fCta = Math.round(H * 0.012 * S); // CTA: Cinzel, smallest, most recent
 
-  // ── STONE BASE — the engraving as it looks without light ──────────────────
-  // Very dark warm tone, as if old gold leaf has oxidised into the stone.
+  // Max carve width — constrains tikkun line-wrapping to slab width
+  const maxW = W * 0.30 * S;
+
+  // ── Compute tikkun wrap now so total block height is known ─────────────────
+  ctx.font=`italic ${fTik}px "Cormorant Garamond", Cormorant, serif`;
+  const tikLines=_chWrapText(ctx,_chTikkunText,maxW);
+
+  // ── Y positions for each element ───────────────────────────────────────────
+  // Benediction may split across two short lines at the natural caesura.
+  // We split manually so it reads like two carved lines, not one long one.
+  const benLines=[
+    'Some gifts cannot be given.',
+    'Only remembered.'
+  ];
+  const benTotalH = benLines.length * u * 1.1;
+
+  const y_ben0  = baseY;                              // first benediction line
+  const y_ben1  = baseY + u * 1.1;                   // second benediction line
+  const y_sep1  = y_ben1  + u * 1.0;                 // hairline after benediction
+  const y_tik0  = y_sep1  + u * 0.9;                 // first tikkun line
+  const tikH    = tikLines.length * u * 1.15;
+  const y_sep2  = y_tik0  + tikH + u * 0.7;          // hairline after tikkun
+  const y_cta   = y_sep2  + u * 0.85;                // KEEP THE CHALICE
+
+  // ── Stone base — engraving as it exists without light ─────────────────────
+  // The goal: warm oxidised gold inside carved grooves, barely perceptible.
+  // At a glance: just a texture variation in the stone.
+  // On inspection: letters.
+  const stoneGold = 'rgba(105,78,28,0.28)';
+  const stoneRule = 'rgba(105,78,28,0.14)';
+
   ctx.save();
   ctx.textAlign='center';
   ctx.textBaseline='middle';
 
-  // Benediction
-  ctx.font=`italic ${fBen}px "Cormorant Garamond", Cormorant, serif`;
-  ctx.fillStyle='rgba(90,68,24,0.22)';
-  ctx.fillText(BENEDICTION,cx,baseY);
-
-  // Hairline separator — a single pixel rule, same stone tone
-  const sepW=Math.round(W*0.06);
-  ctx.strokeStyle='rgba(90,68,24,0.14)';
-  ctx.lineWidth=dpr*0.5;
-  ctx.beginPath();
-  ctx.moveTo(cx-sepW/2,baseY+lineH*1.15);
-  ctx.lineTo(cx+sepW/2,baseY+lineH*1.15);
-  ctx.stroke();
-
-  // Tikkun
-  // Wrap if long (max ~42 chars per line at this size)
-  const tikLines=_chWrapText(ctx,TIKKUN,W*0.52);
-  ctx.font=`italic ${fTik}px "Cormorant Garamond", Cormorant, serif`;
-  ctx.fillStyle='rgba(90,68,24,0.20)';
-  tikLines.forEach((line,i)=>{
-    ctx.fillText(line,cx,baseY+lineH*1.9+i*lineH*1.2);
-  });
-
-  // CTA separator
-  const ctaSepY=baseY+lineH*(1.9+tikLines.length*1.2+0.8);
-  ctx.strokeStyle='rgba(90,68,24,0.10)';
-  ctx.beginPath();
-  ctx.moveTo(cx-sepW/2*0.6,ctaSepY);
-  ctx.lineTo(cx+sepW/2*0.6,ctaSepY);
-  ctx.stroke();
-
-  // CTA
-  ctx.font=`${fCta}px Cinzel, serif`;
-  ctx.letterSpacing='0.38em';
-  ctx.fillStyle='rgba(90,68,24,0.18)';
-  const ctaY=ctaSepY+lineH*0.9;
-  ctx.fillText(CTA.toUpperCase(),cx,ctaY);
+  // Benediction — Cinzel, widest spacing, oldest layer
+  ctx.font=`${fBen}px Cinzel, serif`;
+  ctx.fillStyle=stoneGold;
+  // Letter-spacing via transform: slight horizontal scale to open the caps
+  ctx.save();
+  ctx.translate(cx, y_ben0);
+  ctx.scale(1.04, 1);
+  ctx.fillText(benLines[0].toUpperCase(), 0, 0);
+  ctx.restore();
+  ctx.save();
+  ctx.translate(cx, y_ben1);
+  ctx.scale(1.04, 1);
+  ctx.fillText(benLines[1].toUpperCase(), 0, 0);
   ctx.restore();
 
-  // ── LIGHT REVEAL — warm radial lifts the gold where the visitor is present ─
-  // Light position follows cursor (lerped). Parks at floor centre by default.
-  const lx=_chLightX*W;
-  const ly=_chLightY*H;
+  // Hairline — single pixel, centred on slab
+  const ruleW = W * 0.055 * S;
+  ctx.strokeStyle=stoneRule;
+  ctx.lineWidth=dpr * 0.6;
+  _chHairline(ctx, cx, y_sep1, ruleW);
 
-  // Light radius: generous — this is atmosphere, not a flashlight
-  const rInner=W*0.18;
-  const rOuter=W*0.46;
-
-  // We use a temporary offscreen canvas so we can mask the glow to text only.
-  const off=document.createElement('canvas');
-  off.width=W;off.height=H;
-  const octx=off.getContext('2d');
-  octx.textAlign='center';
-  octx.textBaseline='middle';
-
-  // Draw text in gold on the offscreen canvas
-  octx.font=`italic ${fBen}px "Cormorant Garamond", Cormorant, serif`;
-  octx.fillStyle='rgba(238,210,140,0.88)';
-  octx.fillText(BENEDICTION,cx,baseY);
-
-  octx.strokeStyle='rgba(220,185,100,0.55)';
-  octx.lineWidth=dpr*0.5;
-  octx.beginPath();
-  octx.moveTo(cx-sepW/2,baseY+lineH*1.15);
-  octx.lineTo(cx+sepW/2,baseY+lineH*1.15);
-  octx.stroke();
-
-  octx.font=`italic ${fTik}px "Cormorant Garamond", Cormorant, serif`;
-  octx.fillStyle='rgba(238,210,140,0.80)';
+  // Tikkun — Cormorant italic, second mason's hand
+  ctx.font=`italic ${fTik}px "Cormorant Garamond", Cormorant, serif`;
+  ctx.fillStyle='rgba(105,78,28,0.24)';
   tikLines.forEach((line,i)=>{
-    octx.fillText(line,cx,baseY+lineH*1.9+i*lineH*1.2);
+    ctx.fillText(line, cx, y_tik0 + i * u * 1.15);
   });
 
-  octx.strokeStyle='rgba(220,185,100,0.38)';
-  octx.beginPath();
-  octx.moveTo(cx-sepW*0.3,ctaSepY);
-  octx.lineTo(cx+sepW*0.3,ctaSepY);
-  octx.stroke();
+  // Hairline
+  ctx.strokeStyle=stoneRule;
+  _chHairline(ctx, cx, y_sep2, ruleW * 0.65);
 
-  octx.font=`${fCta}px Cinzel, serif`;
-  octx.fillStyle='rgba(238,210,140,0.82)';
-  octx.fillText(CTA.toUpperCase(),cx,ctaY);
+  // CTA — Cinzel, smallest, most recent carving
+  ctx.font=`${fCta}px Cinzel, serif`;
+  ctx.fillStyle='rgba(105,78,28,0.22)';
+  ctx.save();
+  ctx.translate(cx, y_cta);
+  ctx.scale(1.04, 1);
+  ctx.fillText('KEEP THE CHALICE', 0, 0);
+  ctx.restore();
 
-  // Mask the gold layer with a radial gradient centred on the cursor
-  // destination-in: only where the gradient is opaque will the gold show
-  const grad=octx.createRadialGradient(lx,ly,rInner*0.1,lx,ly,rOuter);
-  grad.addColorStop(0,'rgba(255,220,120,0.82)');
-  grad.addColorStop(0.35,'rgba(255,200,80,0.54)');
-  grad.addColorStop(0.62,'rgba(255,180,60,0.22)');
-  grad.addColorStop(0.82,'rgba(255,160,40,0.06)');
-  grad.addColorStop(1,'rgba(0,0,0,0)');
-  octx.globalCompositeOperation='destination-in';
-  octx.fillStyle=grad;
-  octx.fillRect(0,0,W,H);
+  ctx.restore();
 
-  // Composite the gold-lit layer onto the main canvas
-  ctx.drawImage(off,0,0);
+  // Store CTA y for hit-zone positioning (used when interaction is wired)
+  canvas._ctaY = y_cta;
+  canvas._dpr  = dpr;
+}
 
-  // Position the invisible hit zone over the CTA line
-  const hit=document.getElementById('ch-floor-hit');
-  if(hit){
-    const hitH=lineH*1.4;
-    const hitW=W*0.36;
-    hit.style.bottom='';
-    hit.style.left=(cx/dpr-hitW/dpr/2)+'px';
-    hit.style.top=(ctaY/dpr-hitH/dpr/2)+'px';
-    hit.style.width=(hitW/dpr)+'px';
-    hit.style.height=(hitH/dpr)+'px';
-    hit.style.transform='none';
-    hit.style.position='absolute';
-  }
+function _chHairline(ctx, cx, y, halfW){
+  ctx.beginPath();
+  ctx.moveTo(cx - halfW, y);
+  ctx.lineTo(cx + halfW, y);
+  ctx.stroke();
 }
 
 function _chWrapText(ctx,text,maxW){
@@ -2286,9 +2271,13 @@ function openChaliceReveal(){
     // 1. Room fades in — the visitor steps through the threshold
     setTimeout(()=>{if(env)env.style.opacity='1';},800);
 
-    // COMPOSITION PASS — inscription suppressed so environment reads cleanly.
-    // Restore the setTimeout block below once composition is approved.
-    // setTimeout(()=>{ _chInscriptionReady=true; ... },3800);
+    // COMPOSITION PASS — inscription placed at base stone opacity, no interaction yet.
+    // Cursor-reveal interaction added once placement is approved.
+    setTimeout(()=>{
+      _chInscriptionReady=true;
+      _chDrawInscription();
+      if(canvas)canvas.style.opacity='1';
+    },3200);
   }));
 
   if(window.trackTempleEvent)trackTempleEvent('chalice_reveal_opened',{chamber:'ganymede'});
