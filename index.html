@@ -1246,14 +1246,6 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   text-shadow:0 1px 28px rgba(0,0,0,0.65);
 }
 
-/* 2. "GANYMEDE · CHAMBER OF BUILDING" */
-#ch-eyebrow {
-  font-family:'Cinzel',serif; font-size:8px; letter-spacing:.52em;
-  text-transform:uppercase; color:rgba(196,158,72,0.62);
-  margin:0 0 1rem;
-  opacity:0; transition:opacity 2.2s ease;
-}
-
 /* Hairline rule */
 #ch-sep {
   width:clamp(36px,6vw,56px); height:1px;
@@ -1286,7 +1278,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 }
 #ch-insc-id {
   font-family:'Cinzel',serif; font-size:6.5px; letter-spacing:.32em;
-  text-transform:uppercase; color:rgba(196,158,72,0.26);
+  text-transform:uppercase; color:rgba(196,158,72,0.14);
   margin-top:.28rem; display:block;
 }
 
@@ -1318,6 +1310,11 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .ch-btn:hover {
   color:rgba(238,220,168,1);
   border-color:rgba(196,158,72,0.65);
+}
+/* Primary relic action — slightly warmer border and colour to carry natural gravity */
+.ch-btn:first-child {
+  color:rgba(238,220,168,0.90);
+  border-color:rgba(196,158,72,0.52);
 }
 
 /* Mobile: stack buttons below 480px */
@@ -2338,7 +2335,7 @@ function openChaliceReveal(){
     };
     _chaliceCurrent=c;
     if(dateEl)dateEl.textContent=c.date;
-    if(idEl)idEl.textContent='CHALICE '+c.id;
+    if(idEl)idEl.textContent=c.id.split('-').pop();
   }
 
   // Reset: all text invisible, video invisible
@@ -2352,14 +2349,14 @@ function openChaliceReveal(){
   if(cv){try{cv.muted=true;cv.currentTime=0;const pp=cv.play();if(pp&&pp.catch)pp.catch(()=>{});}catch(e){}}
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     ov.classList.add('show');
-    // Chalice materialises from cave — 3.2s fade so it feels discovered not revealed
-    setTimeout(()=>{if(cv)cv.style.opacity='1';},500);
-    // Nearly 3s of silence before any word. The object holds the space alone.
+    // Chalice materialises from cave — scene exists in darkness first, then the object appears
+    setTimeout(()=>{if(cv)cv.style.opacity='1';},1300);
+    // The object holds the space alone before any word arrives
     setTimeout(()=>{const el=document.getElementById('ch-consecration');if(el)el.style.opacity='1';},3200);
-    setTimeout(()=>{const el=document.getElementById('ch-sep');if(el)el.style.opacity='1';},5000);
-    setTimeout(()=>{const el=document.getElementById('ch-inscription');if(el)el.style.opacity='1';},5800);
-    setTimeout(()=>{const el=document.getElementById('ch-carry-line');if(el)el.style.opacity='1';},7000);
-    setTimeout(()=>{const el=document.getElementById('ch-actions');if(el)el.style.opacity='1';},7800);
+    setTimeout(()=>{const el=document.getElementById('ch-sep');if(el)el.style.opacity='1';},6500);
+    setTimeout(()=>{const el=document.getElementById('ch-inscription');if(el)el.style.opacity='1';},7500);
+    setTimeout(()=>{const el=document.getElementById('ch-carry-line');if(el)el.style.opacity='1';},9000);
+    setTimeout(()=>{const el=document.getElementById('ch-actions');if(el)el.style.opacity='1';},9800);
   }));
   if(window.trackTempleEvent)trackTempleEvent('chalice_reveal_opened',{chamber:'ganymede'});
 }
@@ -2982,17 +2979,12 @@ function gGrantKey(){try{localStorage.setItem('temenos_sigil_key','1');}catch(e)
 /* Ganymede's closing has already streamed. The cave now asks for the Key. */
 function stillnessGate(){
   // Direction C: quiet consecration.
-  // 4s silence → consecration line fades in → holds → fades out → Chalice appears.
+  // 4s silence (no words) → darkness holds → Chalice opens.
+  // The first words the visitor reads are on the Chalice screen itself.
   const still=document.getElementById('g-stillness');
-  const stillText=document.getElementById('g-stillness-text');
-  // Set the consecration line now, before it appears
-  if(stillText)stillText.textContent=_ganyConsecrationLine();
   setTimeout(()=>{
-    if(still)still.style.opacity='1';
-    setTimeout(()=>{
-      if(still){still.style.transition='opacity 2s ease';still.style.opacity='0';}
-      setTimeout(()=>openChaliceReveal(),2400);
-    },4000);
+    if(still){still.style.transition='opacity 2s ease';still.style.opacity='0';}
+    setTimeout(()=>openChaliceReveal(),2400);
   },4200);
 }
 function ganyGate(){
