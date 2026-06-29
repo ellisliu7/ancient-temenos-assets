@@ -11,12 +11,15 @@
 
 After multiple refinement sprints on individual screens, a larger pattern became clear: Ancient Temenos sometimes still feels like pages with components rather than inhabitable scenes. Polishing individual elements without a shared design foundation produces diminishing returns.
 
-**Next sprint priority:** Before any further screen-level work, create two foundational documents:
+**Core insight:** In a product, the interface is the thing. In a sanctuary, the world is the thing, and the interface is only how the world lets you touch it. Every design decision — light, space, motion, type, transitions, relics — flows from this distinction.
 
-- `DESIGN_PRINCIPLES.md` — the philosophical and emotional rules that govern every design decision in Ancient Temenos. What a scene is. What silence means. What the temple is allowed to do. What it never does. These are not aesthetic preferences — they are load-bearing constraints.
-- `DESIGN_LANGUAGE.md` — the concrete technical vocabulary that implements those principles. Typography scales, colour values, motion timing, spatial rhythm, layer architecture, the difference between a background and an atmosphere.
+**Design foundations (DRAFT — 29 June 2026):**
+- `DESIGN_PRINCIPLES.md` — the philosophy of immersive digital sanctuaries; transferable to any world El builds, with Ancient Temenos as the first proving ground. Covers: scenes vs pages, what makes something a sanctuary, the twelve grammar laws of presence, the sanctuary filter, and the seven-question scene test.
+- `DESIGN_LANGUAGE.md` — the method for instantiating that philosophy into a world's concrete language. Covers: scene composition, light/darkness, color (with AT canonical palette), typography (locked roles), spacing, motion/timing table, transitions, chamber anatomy, oracle staging, relic presentation, action language, what to avoid, good/bad worked examples.
 
-These documents exist so that every future sprint — whether building Persephone, adding a relic, or refining the foyer — starts from the same understood language rather than rediscovering it chamber by chamber.
+**Status of both docs:** DRAFT. The palette hex values and timing curves are proposed canon — reconcile against the live `index.html` CSS once and then `DESIGN_LANGUAGE.md` becomes the canonical number source. `BIBLE.md` keeps the poetry; `DESIGN_LANGUAGE.md` holds the values.
+
+**Relic asset standard — locked inside DESIGN_LANGUAGE.md:** Every relic is rendered as a transparent WebM (VP9, alpha) or a full-scene render. Never an MP4 with a baked background. The Chalice V1 and Sigil Key are the two re-export candidates when assets are revisited.
 
 ---
 
@@ -63,29 +66,7 @@ This is the reason the Chalice screen reads as "an MP4 on a page" rather than "a
 
 **This is not a CSS problem. It is an asset problem.**
 
-### Options for future relic refinement
-
-**Option A — Re-export Chalice as transparent WebM (recommended for all future relics)**
-Render the rotating Chalice on a transparent/alpha channel. Export as WebM with VP9 codec (the only browser-supported video format with alpha transparency). The relic then genuinely floats over the CSS cave scene. This is the correct long-term solution.
-
-Export settings for reference:
-- Codec: VP9
-- Container: WebM
-- Alpha channel: enabled
-- Dimensions: same as current MP4
-- Frame rate: same as current MP4
-
-**Option B — Full-scene render**
-Render the Chalice rotating inside a full cave scene (stone walls, amber light, atmosphere) as a single MP4. The video itself becomes the complete environment. No CSS cave-building needed. Tradeoff: the scene is fixed — the CSS cannot adapt it.
-
-**Option C — CSS colour match (current approach)**
-Tune the CSS background gradient to match the MP4's own background colour precisely. Works best when the MP4 background is a neutral near-black. Fragile across different screen brightness and colour profiles.
-
-### Design implication for all future relics
-
-Every future chamber relic (Persephone → Pomegranate Seed, Psyche → the Lamp) should be planned from the start as either a transparent WebM or a full-scene render. The Sigil Key has the same limitation — it is also an MP4 with a baked background.
-
-**Decision to make before next relic is built:** Establish a standard relic asset format so all relics feel like they belong to the same world and the same technical approach.
+**Resolution:** Re-export as transparent WebM (VP9, alpha) when assets are revisited. Standard locked in `DESIGN_LANGUAGE.md`.
 
 ---
 
@@ -93,10 +74,10 @@ Every future chamber relic (Persephone → Pomegranate Seed, Psyche → the Lamp
 
 | Chamber | Relic | Status |
 |---|---|---|
-| Venus | Sigil Key | LIVE — MP4, baked background |
-| Ganymede | Chalice of Ganymede | LIVE V1 — MP4, baked background |
-| Persephone | Pomegranate Seed | PLANNED — asset not yet created |
-| Psyche | The Lamp | PLANNED — asset not yet created |
+| Venus | Sigil Key | LIVE — MP4, baked background (re-export candidate) |
+| Ganymede | Chalice of Ganymede | LIVE V1 — MP4, baked background (re-export candidate) |
+| Persephone | Pomegranate Seed | PLANNED — asset not yet created; build as transparent WebM from first render |
+| Psyche | The Lamp | PLANNED — asset not yet created; build as transparent WebM from first render |
 
 The Sigil Key is the temple's gift — universal, about passage and permission.
 The Chalice is Ganymede's gift — personal, about capacity and responsibility.
@@ -119,11 +100,22 @@ The Lamp will be Psyche's gift — about courageous seeing.
 | Venus UX — key label reads `VEN` not `VENUS` | LOW | Cosmetic |
 | Venus UX — "Receive your first key" CTA auto-advances before user finishes reading | LOW | Timing |
 
-**Security audit is the next major sprint after design foundations are established.**
+---
+
+## Session log — 29 June 2026 (Design foundations sprint)
+
+Research and documentation only. No code shipped.
+
+- Studied immersive design grammar across: Active Theory, OHZI, Viverse (web-native pole); James Turrell (light as material, dissolved reference points, blackout-to-revelation threshold model); teamLab Borderless (one continuous world, no map, presence changes the work); Journey (radical subtraction, mountain-on-the-horizon navigation, no HUD, evil-twin proof via Sky degradation)
+- Core insight extracted: the grammar to borrow is presence, spatial continuity, dissolving frames, seduction over signage, silence as mechanism. The telos to refuse is spectacle, engagement metrics, and daily-active loops.
+- `DESIGN_PRINCIPLES.md` written — universal philosophy of immersive sanctuaries, 12 grammar laws, sanctuary filter, refusals, 7-question scene test. Transferable to any future world.
+- `DESIGN_LANGUAGE.md` written — method for instantiating the philosophy: scene composition, light/darkness, AT color palette (proposed canon), locked typography roles, spacing scale, timing table, chamber anatomy, oracle staging rules, relic asset standard (transparent WebM or full-scene render — locked), action language, avoid list, worked good/bad examples.
+- Both docs saved as DRAFT. Palette and timing values are proposed — reconcile against live CSS once to make DESIGN_LANGUAGE.md canonical.
+- Design foundations sprint paused here. Next: Ganymede cave stability + practical build sprint.
 
 ---
 
-## Session log — 29 June 2026 (Chalice polish + design direction)
+## Previous session log — 29 June 2026 (Chalice polish + design direction)
 
 Chalice refinements shipped across multiple passes:
 - Chalice HTML/CSS rebuilt as single-scene composition (absolute-positioned children, no layout zones)
@@ -167,11 +159,12 @@ Chalice V1 paused here. Good enough as working first version. The blocking const
 
 ## Next sprints — in order
 
-1. **`DESIGN_PRINCIPLES.md` + `DESIGN_LANGUAGE.md`** — establish the scene-based design foundation before any further screen work
+1. **Ganymede cave stability** — finish and stabilise the current Ganymede experience (practical build sprint, next)
 2. **Security hardening** — gate `window.__test*`, clamp model/max_tokens server-side, address XSS, add CSP headers, disable `?mock=*` in production
 3. **Venus UX polish** — key label, CTA timing, oracle position jump (three issues, single session)
-4. **Persephone integration** into `index.html` (waiting on visual assets)
-5. **Collective Memory** — POST endpoint, fragment input in Grimoire, accumulate invisibly
+4. **DESIGN_LANGUAGE.md palette/timing reconciliation** — reconcile proposed values against live CSS; make canonical
+5. **Persephone integration** into `index.html` (waiting on visual assets)
+6. **Collective Memory** — POST endpoint, fragment input in Grimoire, accumulate invisibly
 
 ---
 
@@ -185,3 +178,4 @@ Chalice V1 paused here. Good enough as working first version. The blocking const
 - **Mock routes:** `?mock=venus`, `?mock=ganymede`, `?mock=ganychalice`, `?mock=key`, `?mock=ganygrimoire`, `?dev=1`, `?sigil=1`
 - **Typography:** Cinzel (structure, labels) · Cormorant Garamond (body, oracle, poetry) · Almendra (character names)
 - **Relic assets:** `Sigil_Key.mp4`, `Chalice.mp4` — both raw.githubusercontent.com CDN
+- **Design docs:** `DESIGN_PRINCIPLES.md`, `DESIGN_LANGUAGE.md` — DRAFT, in repo root
