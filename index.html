@@ -1062,312 +1062,88 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 <div id="chaliceReveal">
 <style>
 
-/* ════════════════════════════════════════════════════════════════════
-   SCENE — the whole screen is the cave.
-   Nothing here is a "layout". All children are position:absolute.
-   The background is a colour-accurate extension of the MP4's own glow.
-   ════════════════════════════════════════════════════════════════════ */
+/* ═══════════════════════════════════════════════════════════════════
+   CHALICE CHAMBER — the browser is a window, not a page.
+   The video IS the room. Nothing is layered on top of it except
+   the inscription canvas and two minimal controls.
+   ═══════════════════════════════════════════════════════════════════ */
 
 #chaliceReveal {
   position:fixed; inset:0; z-index:95;
   display:none; opacity:0;
   overflow:hidden;
-  transition:opacity 1.8s ease;
-
-  /*
-    THREE background layers — single warm light source above centre.
-
-    Layer 1  LIGHT SOURCE
-    Warm amber radial anchored at 50% 30% — exactly where the Chalice
-    glow comes from in the MP4. When the mask dissolves the video edges,
-    the page underneath is already this colour. No visible boundary.
-    Peak: rgba(52,30,8) — same family as the MP4 ambient.
-
-    Layer 2  CAVE WALLS
-    Broader warm-umber fill — the stone in mid-distance.
-
-    Layer 3  DEEP BASE
-    Near-black. Ensures no browser default bleeds through at the edges.
-  */
-  background:
-    radial-gradient(ellipse 68% 52% at 50% 30%,
-      rgba(52,30,8,0.76) 0%,
-      rgba(28,15,4,0.52) 28%,
-      rgba(10,5,1,0.18) 52%,
-      transparent       70%),
-    radial-gradient(ellipse 120% 80% at 50% 25%,
-      rgba(22,12,3,0.88) 0%,
-      rgba(9,5,1,0.95)   45%,
-      rgba(3,1,0,0.99)   100%),
-    radial-gradient(ellipse 200% 200% at 50% 50%,
-      rgba(6,3,1,1) 0%,
-      rgba(2,1,0,1) 100%);
+  background:#080401;
+  transition:opacity 2.2s ease;
 }
 #chaliceReveal.show { opacity:1; }
 
-
-/* ── NOISE  stone texture at 2.2% — felt, not seen ── */
-#ch-noise {
+/* Environment — fullscreen, no CSS behind it; the video is the cave */
+#ch-env {
   position:absolute; inset:0; z-index:1;
-  pointer-events:none; opacity:0.022;
-}
-
-
-/* ── VIGNETTE  darkens all four edges; heaviest at top and bottom ── */
-#ch-vignette {
-  position:absolute; inset:0; z-index:2; pointer-events:none;
-  background:
-    linear-gradient(to bottom,
-      rgba(2,1,0,0.72) 0%,
-      transparent       14%,
-      transparent       72%,
-      rgba(2,1,0,0.82) 100%),
-    radial-gradient(ellipse 100% 80% at 50% 42%,
-      transparent        30%,
-      rgba(2,1,0,0.24)   62%,
-      rgba(2,1,0,0.72)   88%,
-      rgba(2,1,0,0.92)   100%);
-}
-
-
-/* ── RELIC  the MP4, absolute, centred, masked into the cave ──
-
-   Size: clamp(280px, 42vw, 580px) wide.
-   On a 1440px desktop: 42vw = 605px wide. After the mask removes
-   the outer feather, the visible Chalice body reads at ~35-40vh tall.
-
-   Position: top:2vh centres the glow zone in the upper 55% of screen.
-   left:50% + translateX(-50%) keeps it horizontally centred.
-
-   MASK STRATEGY (from Phase 2 plan):
-   — ellipse 120% 80%: wider than the element so horizontal edges
-     dissolve before reaching the element boundary. Safari can clip
-     masks to the bounding box, so the 120% width is critical here.
-   — Six opacity stops: sharp centre (0%→28%), then gradual dissolution
-     through four stops to transparent at 85%.
-   — anchor: 50% 52% — fractionally below centre so the feather
-     is heavier at the top where the glow spills, preserving the
-     Chalice base which sits lower in the frame.
-── */
-#ch-video {
-  position:absolute;
-  top:2vh; left:50%;
-  transform:translateX(-50%);
-  z-index:3;
+  width:100%; height:100%;
+  object-fit:cover;
   display:block;
-  width:clamp(220px,30vw,440px);
-  height:auto;
-  object-fit:contain;
-  background:transparent;
   opacity:0;
-  transition:opacity 3.2s ease;
-
-  -webkit-mask-image: radial-gradient(
-    ellipse 120% 80% at 50% 52%,
-    black                 0%,
-    black                 28%,
-    rgba(0,0,0,0.88)      42%,
-    rgba(0,0,0,0.55)      56%,
-    rgba(0,0,0,0.18)      70%,
-    transparent           85%
-  );
-  mask-image: radial-gradient(
-    ellipse 120% 80% at 50% 52%,
-    black                 0%,
-    black                 28%,
-    rgba(0,0,0,0.88)      42%,
-    rgba(0,0,0,0.55)      56%,
-    rgba(0,0,0,0.18)      70%,
-    transparent           85%
-  );
+  transition:opacity 3.6s ease;
 }
 
-#ch-video-fallback {
-  position:absolute;
-  top:2vh; left:50%;
-  transform:translateX(-50%);
-  z-index:3;
-  display:none;
-  align-items:center; justify-content:center;
-  width:clamp(220px,30vw,440px);
-  height:clamp(220px,30vw,440px);
-}
-#ch-video-fallback span {
-  font-size:88px;
-  color:rgba(196,158,72,0.50);
-  text-shadow:0 0 52px rgba(196,158,72,0.28);
-  animation:chFloat 8s ease-in-out infinite;
-}
-
-
-/* ── EYEBROW  top-left corner, barely there ── */
-#ch-brand {
-  position:absolute; top:1.6rem; left:2rem; z-index:10;
-  font-family:'Cinzel',serif; font-size:8px; letter-spacing:.48em;
-  text-transform:uppercase; color:rgba(196,158,72,0.36);
+/* Inscription canvas — sits above the video, covers the full scene */
+#ch-canvas {
+  position:absolute; inset:0; z-index:2;
+  width:100%; height:100%;
   pointer-events:none;
+  opacity:0;
+  transition:opacity 3s ease;
 }
 
-
-/* ── CLOSE  top-right, barely there ── */
-#ch-close {
-  position:absolute; top:1.4rem; right:1.8rem; z-index:10;
-  font-family:'Cinzel',serif; font-size:7.5px; letter-spacing:.46em;
-  text-transform:uppercase; color:rgba(196,158,72,0.30);
-  background:transparent; border:none; cursor:pointer;
-  transition:color .5s;
-}
-#ch-close:hover { color:rgba(196,158,72,0.62); }
-
-
-/* ── TEXT ZONE  absolute, lower 46% of screen, centred ──
-
-   Begins at top:54vh — directly below the Chalice's visual base.
-   All text is centred on the same vertical axis as the Chalice.
-   Each element sits in its own pool of silence.
-── */
-#ch-text {
-  position:absolute;
-  top:62vh; left:0; right:0; bottom:0;
-  z-index:4;
-  display:flex; flex-direction:column;
-  align-items:center; text-align:center;
-  padding:0 clamp(1.4rem,6vw,3rem) clamp(1.6rem,4vh,3rem);
-  overflow:hidden;
-}
-
-/* 1. CONSECRATION — primary voice, largest text on screen */
-#ch-consecration {
-  font-family:'Cormorant Garamond',serif; font-style:italic;
-  font-size:clamp(18px,2vw,26px);
-  color:rgba(238,220,168,0.90);
-  line-height:1.7; margin:0 0 1.4rem; max-width:26ch;
-  opacity:0; transition:opacity 3s ease;
-  text-shadow:0 1px 28px rgba(0,0,0,0.65);
-}
-
-/* Hairline rule */
-#ch-sep {
-  width:clamp(36px,6vw,56px); height:1px;
-  background:rgba(196,158,72,0.16);
-  margin:0 auto 1.4rem;
-  opacity:0; transition:opacity 2s ease;
+/* The floor zone where "KEEP THE CHALICE" lives gets a pointer */
+#ch-floor-hit {
+  position:absolute; z-index:3;
+  bottom:6%; left:50%;
+  transform:translateX(-50%);
+  width:clamp(200px,32vw,420px);
+  height:clamp(32px,4vh,52px);
+  cursor:pointer;
+  background:transparent;
   border:none;
 }
 
-/* 3+4. INSCRIPTION — "What you carry" label + tikkun line */
-#ch-inscription {
-  opacity:0; transition:opacity 2.2s ease;
-  text-align:center; margin:0 0 1.6rem;
+/* Close — top right, barely there */
+#ch-close {
+  position:absolute; top:1.4rem; right:1.8rem; z-index:10;
+  font-family:'Cinzel',serif; font-size:7.5px; letter-spacing:.46em;
+  text-transform:uppercase; color:rgba(196,158,72,0.28);
+  background:transparent; border:none; cursor:pointer;
+  transition:color .6s;
 }
-#ch-tikkun-label {
-  font-family:'Cinzel',serif; font-size:7px; letter-spacing:.52em;
-  text-transform:uppercase; color:rgba(196,158,72,0.70);
-  margin:0 0 .6rem; display:block;
-}
-#ch-tikkun-line {
-  font-family:'Cormorant Garamond',serif; font-style:italic;
-  font-size:clamp(15px,1.7vw,20px);
-  color:rgba(238,220,168,0.80);
-  line-height:1.7; margin:0; max-width:36ch;
-}
-#ch-insc-date {
-  font-family:'Cinzel',serif; font-size:7px; letter-spacing:.38em;
-  text-transform:uppercase; color:rgba(196,158,72,0.42);
-  margin-top:.85rem; display:block;
-}
-#ch-insc-id {
-  font-family:'Cinzel',serif; font-size:6.5px; letter-spacing:.32em;
-  text-transform:uppercase; color:rgba(196,158,72,0.14);
-  margin-top:.28rem; display:block;
-}
+#ch-close:hover { color:rgba(196,158,72,0.58); }
 
-/* 5. "✦  CARRY THIS  ✦"  ceremonial marker, not a CTA */
-#ch-carry-line {
-  font-family:'Cinzel',serif; font-size:10px; letter-spacing:.5em;
-  text-transform:uppercase; color:rgba(238,220,168,0.62);
-  margin:1.8rem 0 1.6rem; pointer-events:none;
-  opacity:0; transition:opacity 2.2s ease;
+/* Brand — top left, barely there */
+#ch-brand {
+  position:absolute; top:1.6rem; left:2rem; z-index:10;
+  font-family:'Cinzel',serif; font-size:8px; letter-spacing:.48em;
+  text-transform:uppercase; color:rgba(196,158,72,0.28);
+  pointer-events:none;
 }
-
-/* 6. ACTION BUTTONS  side by side, bordered, equal width */
-#ch-actions {
-  display:flex; gap:clamp(.8rem,3vw,1.6rem);
-  justify-content:center; align-items:center;
-  opacity:0; transition:opacity 2.2s ease;
-}
-.ch-btn {
-  font-family:'Cinzel',serif; font-size:8.5px; letter-spacing:.3em;
-  text-transform:uppercase;
-  color:rgba(238,220,168,0.78);
-  background:transparent;
-  border:.5px solid rgba(196,158,72,0.30);
-  padding:.75rem clamp(1.2rem,3vw,2rem);
-  cursor:pointer;
-  transition:color .5s, border-color .5s;
-  white-space:nowrap;
-}
-.ch-btn:hover {
-  color:rgba(238,220,168,1);
-  border-color:rgba(196,158,72,0.65);
-}
-/* Primary relic action — slightly warmer border and colour to carry natural gravity */
-.ch-btn:first-child {
-  color:rgba(238,220,168,0.90);
-  border-color:rgba(196,158,72,0.52);
-}
-
-/* Mobile: stack buttons below 480px */
-@media(max-width:480px){
-  #ch-actions { flex-direction:column; gap:.75rem; }
-  .ch-btn { width:min(280px,78vw); text-align:center; }
-}
-
-@keyframes chFloat { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-9px)} }
 
 </style>
 
-<!-- Noise texture -->
-<svg id="ch-noise" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
-  <filter id="ch-noise-filter">
-    <feTurbulence type="fractalNoise" baseFrequency="0.68" numOctaves="4" stitchTiles="stitch"/>
-    <feColorMatrix type="saturate" values="0"/>
-  </filter>
-  <rect width="100%" height="100%" filter="url(#ch-noise-filter)"/>
-</svg>
-
-<!-- Vignette -->
-<div id="ch-vignette"></div>
-
-<!-- Brand — top left -->
-<span id="ch-brand">Ancient Temenos</span>
-
-<!-- Close — top right -->
-<button id="ch-close" onclick="closeChaliceReveal()">&#x2715; Close</button>
-
-<!-- Relic — absolute, centred, feathered into the cave -->
-<video id="ch-video" autoplay muted loop playsinline preload="auto" crossorigin="anonymous"
-       onerror="this.style.display='none';document.getElementById('ch-video-fallback').style.display='flex';">
+<!-- Cave environment — the room itself -->
+<video id="ch-env" autoplay muted loop playsinline preload="auto" crossorigin="anonymous">
   <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Chalice.mp4" type="video/mp4">
 </video>
-<div id="ch-video-fallback"><span>&#x2767;</span></div>
 
-<!-- Text zone — lower portion of scene -->
-<div id="ch-text">
-  <p id="ch-consecration"></p>
-  <hr id="ch-sep">
-  <div id="ch-inscription">
-    <span id="ch-tikkun-label">What you carry</span>
-    <p id="ch-tikkun-line"></p>
-    <span id="ch-insc-date"></span>
-    <span id="ch-insc-id"></span>
-  </div>
-  <p id="ch-carry-line">&#x2736;&nbsp;&nbsp;Carry this&nbsp;&nbsp;&#x2736;</p>
-  <div id="ch-actions">
-    <button class="ch-btn" onclick="keepChalice()">Keep the Chalice</button>
-    <button class="ch-btn" onclick="closeChaliceReveal()">Return to the Temple</button>
-  </div>
-</div>
+<!-- Inscription canvas — the floor engraving, revealed by presence -->
+<canvas id="ch-canvas"></canvas>
+
+<!-- Invisible hit zone for KEEP THE CHALICE -->
+<button id="ch-floor-hit" onclick="keepChalice()" aria-label="Keep the Chalice"></button>
+
+<!-- Close -->
+<button id="ch-close" onclick="closeChaliceReveal()">&#x2715; Close</button>
+
+<!-- Brand -->
+<span id="ch-brand">Ancient Temenos</span>
 
 </div>
 
@@ -2247,26 +2023,11 @@ Return ONLY valid JSON, no markdown, no fences:
 // ── CHALICE OF GANYMEDE ────────────────────────────────────────────────────
 
 // Five consecration lines. Direction C register: recognition, not reward.
-// Brit Marling-adjacent — a sentence someone keeps thinking about days later.
-const _CONSECRATION_LINES = [
-  'What you have been carrying has already begun to take form.',
-  'You are further along than you allowed yourself to believe.',
-  'The work chose you before you chose it.',
-  'Something in you already knows how to hold this.',
-  'You arrived uncertain. You leave responsible.'
-];
+// ── CHALICE CHAMBER ─────────────────────────────────────────────────────────
 
-function _ganyConsecrationLine(){
-  // Pick by hashing the tikkun text — same session = same line. Feels fated.
-  try{
-    const t=_ganyTikkunLine()||'';
-    let h=0;for(let i=0;i<t.length;i++)h=(h*31+t.charCodeAt(i))%_CONSECRATION_LINES.length;
-    return _CONSECRATION_LINES[Math.abs(h)%_CONSECRATION_LINES.length];
-  }catch(e){return _CONSECRATION_LINES[0];}
-}
+const CH_BENEDICTION = 'Some gifts cannot be given. Only remembered.';
 
 function _ganyTikkunLine(){
-  // Extract tikkun_line from the final Ganymede response
   try{
     for(let i=gHistory.length-1;i>=0;i--){
       const m=gHistory[i];
@@ -2274,7 +2035,6 @@ function _ganyTikkunLine(){
         try{
           const p=JSON.parse(m.content.replace(/```json|```/g,'').trim());
           if(p.tikkun_line&&p.tikkun_line.trim())return stripDash(p.tikkun_line.trim());
-          // Fallback: use the first sentence of the reflection
           if(p.reflection&&p.reflection.trim()){
             const first=p.reflection.trim().split(/\.\s+/)[0];
             return stripDash((first||'').trim());
@@ -2286,16 +2046,6 @@ function _ganyTikkunLine(){
   return 'You are now capable of carrying what once felt too heavy.';
 }
 
-function _ganyChaliceDateStamp(){
-  const d=new Date();
-  return d.getFullYear()+''+String(d.getMonth()+1).padStart(2,'0')+String(d.getDate()).padStart(2,'0');
-}
-function _ganyChalicePrettyDate(){
-  return new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long',year:'numeric'});
-}
-function _ganyChaliceRand(){
-  return Math.random().toString(36).slice(2,6).toUpperCase();
-}
 function _getGanyChalice(){
   try{const a=JSON.parse(localStorage.getItem('temenos_relics')||'{}');return a.ganymede||null;}catch(e){return null;}
 }
@@ -2304,117 +2054,339 @@ function _saveGanyChalice(c){
 }
 
 let _chaliceCurrent=null;
+let _chRaf=null;
+let _chMouseX=0.5,_chMouseY=0.85; // normalised; default parks light at floor centre
+let _chLightX=0.5,_chLightY=0.85; // lerped position
+let _chInscriptionReady=false;
+let _chTikkunText='';
 
+// ── Canvas inscription renderer ───────────────────────────────────────────────
+function _chInitCanvas(){
+  const canvas=document.getElementById('ch-canvas');
+  if(!canvas)return;
+  const dpr=window.devicePixelRatio||1;
+  canvas.width=window.innerWidth*dpr;
+  canvas.height=window.innerHeight*dpr;
+  canvas.style.width=window.innerWidth+'px';
+  canvas.style.height=window.innerHeight+'px';
+}
+
+function _chDrawInscription(){
+  const canvas=document.getElementById('ch-canvas');
+  if(!canvas||!_chInscriptionReady)return;
+  const dpr=window.devicePixelRatio||1;
+  const W=canvas.width,H=canvas.height;
+  const ctx=canvas.getContext('2d');
+  ctx.clearRect(0,0,W,H);
+
+  // All text centred on the horizontal axis, positioned in the lower third.
+  // The inscription sits on the floor slab visible in the render.
+  // Vertical anchor: ~76% down the screen (floor stone).
+  const cx=W*0.5;
+  const baseY=H*0.76;
+  const lineH=Math.round(H*0.048); // ~line height unit
+
+  // Text definitions — three layers of meaning, one visual surface
+  const BENEDICTION=CH_BENEDICTION;
+  const TIKKUN=_chTikkunText;
+  const CTA='Keep the Chalice';
+
+  // Font sizes scaled to canvas resolution
+  const fBen=Math.round(H*0.022); // benediction: italic Cormorant
+  const fTik=Math.round(H*0.019); // tikkun: italic Cormorant, slightly smaller
+  const fCta=Math.round(H*0.013); // CTA: small Cinzel caps
+
+  // ── STONE BASE — the engraving as it looks without light ──────────────────
+  // Very dark warm tone, as if old gold leaf has oxidised into the stone.
+  ctx.save();
+  ctx.textAlign='center';
+  ctx.textBaseline='middle';
+
+  // Benediction
+  ctx.font=`italic ${fBen}px "Cormorant Garamond", Cormorant, serif`;
+  ctx.fillStyle='rgba(90,68,24,0.22)';
+  ctx.fillText(BENEDICTION,cx,baseY);
+
+  // Hairline separator — a single pixel rule, same stone tone
+  const sepW=Math.round(W*0.06);
+  ctx.strokeStyle='rgba(90,68,24,0.14)';
+  ctx.lineWidth=dpr*0.5;
+  ctx.beginPath();
+  ctx.moveTo(cx-sepW/2,baseY+lineH*1.15);
+  ctx.lineTo(cx+sepW/2,baseY+lineH*1.15);
+  ctx.stroke();
+
+  // Tikkun
+  // Wrap if long (max ~42 chars per line at this size)
+  const tikLines=_chWrapText(ctx,TIKKUN,W*0.52);
+  ctx.font=`italic ${fTik}px "Cormorant Garamond", Cormorant, serif`;
+  ctx.fillStyle='rgba(90,68,24,0.20)';
+  tikLines.forEach((line,i)=>{
+    ctx.fillText(line,cx,baseY+lineH*1.9+i*lineH*1.2);
+  });
+
+  // CTA separator
+  const ctaSepY=baseY+lineH*(1.9+tikLines.length*1.2+0.8);
+  ctx.strokeStyle='rgba(90,68,24,0.10)';
+  ctx.beginPath();
+  ctx.moveTo(cx-sepW/2*0.6,ctaSepY);
+  ctx.lineTo(cx+sepW/2*0.6,ctaSepY);
+  ctx.stroke();
+
+  // CTA
+  ctx.font=`${fCta}px Cinzel, serif`;
+  ctx.letterSpacing='0.38em';
+  ctx.fillStyle='rgba(90,68,24,0.18)';
+  const ctaY=ctaSepY+lineH*0.9;
+  ctx.fillText(CTA.toUpperCase(),cx,ctaY);
+  ctx.restore();
+
+  // ── LIGHT REVEAL — warm radial lifts the gold where the visitor is present ─
+  // Light position follows cursor (lerped). Parks at floor centre by default.
+  const lx=_chLightX*W;
+  const ly=_chLightY*H;
+
+  // Light radius: generous — this is atmosphere, not a flashlight
+  const rInner=W*0.18;
+  const rOuter=W*0.46;
+
+  // We use a temporary offscreen canvas so we can mask the glow to text only.
+  const off=document.createElement('canvas');
+  off.width=W;off.height=H;
+  const octx=off.getContext('2d');
+  octx.textAlign='center';
+  octx.textBaseline='middle';
+
+  // Draw text in gold on the offscreen canvas
+  octx.font=`italic ${fBen}px "Cormorant Garamond", Cormorant, serif`;
+  octx.fillStyle='rgba(238,210,140,0.88)';
+  octx.fillText(BENEDICTION,cx,baseY);
+
+  octx.strokeStyle='rgba(220,185,100,0.55)';
+  octx.lineWidth=dpr*0.5;
+  octx.beginPath();
+  octx.moveTo(cx-sepW/2,baseY+lineH*1.15);
+  octx.lineTo(cx+sepW/2,baseY+lineH*1.15);
+  octx.stroke();
+
+  octx.font=`italic ${fTik}px "Cormorant Garamond", Cormorant, serif`;
+  octx.fillStyle='rgba(238,210,140,0.80)';
+  tikLines.forEach((line,i)=>{
+    octx.fillText(line,cx,baseY+lineH*1.9+i*lineH*1.2);
+  });
+
+  octx.strokeStyle='rgba(220,185,100,0.38)';
+  octx.beginPath();
+  octx.moveTo(cx-sepW*0.3,ctaSepY);
+  octx.lineTo(cx+sepW*0.3,ctaSepY);
+  octx.stroke();
+
+  octx.font=`${fCta}px Cinzel, serif`;
+  octx.fillStyle='rgba(238,210,140,0.82)';
+  octx.fillText(CTA.toUpperCase(),cx,ctaY);
+
+  // Mask the gold layer with a radial gradient centred on the cursor
+  // destination-in: only where the gradient is opaque will the gold show
+  const grad=octx.createRadialGradient(lx,ly,rInner*0.1,lx,ly,rOuter);
+  grad.addColorStop(0,'rgba(255,220,120,0.82)');
+  grad.addColorStop(0.35,'rgba(255,200,80,0.54)');
+  grad.addColorStop(0.62,'rgba(255,180,60,0.22)');
+  grad.addColorStop(0.82,'rgba(255,160,40,0.06)');
+  grad.addColorStop(1,'rgba(0,0,0,0)');
+  octx.globalCompositeOperation='destination-in';
+  octx.fillStyle=grad;
+  octx.fillRect(0,0,W,H);
+
+  // Composite the gold-lit layer onto the main canvas
+  ctx.drawImage(off,0,0);
+
+  // Position the invisible hit zone over the CTA line
+  const hit=document.getElementById('ch-floor-hit');
+  if(hit){
+    const hitH=lineH*1.4;
+    const hitW=W*0.36;
+    hit.style.bottom='';
+    hit.style.left=(cx/dpr-hitW/dpr/2)+'px';
+    hit.style.top=(ctaY/dpr-hitH/dpr/2)+'px';
+    hit.style.width=(hitW/dpr)+'px';
+    hit.style.height=(hitH/dpr)+'px';
+    hit.style.transform='none';
+    hit.style.position='absolute';
+  }
+}
+
+function _chWrapText(ctx,text,maxW){
+  if(!text)return[''];
+  const words=text.split(' ');
+  const lines=[];let line='';
+  for(let i=0;i<words.length;i++){
+    const test=line?line+' '+words[i]:words[i];
+    if(ctx.measureText(test).width>maxW&&line){lines.push(line);line=words[i];}
+    else line=test;
+  }
+  if(line)lines.push(line);
+  return lines.length?lines:[''];
+}
+
+function _chRafLoop(){
+  // Lerp light toward cursor — slow and atmospheric
+  const ease=0.032;
+  const dx=_chMouseX-_chLightX;
+  const dy=_chMouseY-_chLightY;
+  if(Math.abs(dx)>0.0008||Math.abs(dy)>0.0008){
+    _chLightX+=dx*ease;
+    _chLightY+=dy*ease;
+    _chDrawInscription();
+  }
+  _chRaf=requestAnimationFrame(_chRafLoop);
+}
+
+function _chOnMouseMove(e){
+  _chMouseX=e.clientX/window.innerWidth;
+  _chMouseY=e.clientY/window.innerHeight;
+}
+function _chOnTouchMove(e){
+  if(e.touches&&e.touches[0]){
+    _chMouseX=e.touches[0].clientX/window.innerWidth;
+    _chMouseY=e.touches[0].clientY/window.innerHeight;
+  }
+}
+
+// ── openChaliceReveal ─────────────────────────────────────────────────────────
 function openChaliceReveal(){
   const ov=document.getElementById('chaliceReveal');if(!ov)return;
+
+  // Resolve tikkun
   const existing=_getGanyChalice();
   const tikkun=existing?existing.tikkun:_ganyTikkunLine();
-  const consecration=existing?existing.consecration:_ganyConsecrationLine();
+  _chTikkunText=tikkun;
 
-  // Populate text
-  const consEl=document.getElementById('ch-consecration');
-  const tikkEl=document.getElementById('ch-tikkun-line');
-  const dateEl=document.getElementById('ch-insc-date');
-  const idEl=document.getElementById('ch-insc-id');
-
-  if(consEl)consEl.textContent=consecration;
-  if(tikkEl)tikkEl.textContent=tikkun;
-
-  if(existing){
+  if(!existing){
+    _chaliceCurrent={tikkun:tikkun,collectedAt:new Date().toISOString()};
+  } else {
     _chaliceCurrent=existing;
-    if(dateEl)dateEl.textContent=existing.date;
-    if(idEl)idEl.textContent='CHALICE '+existing.id;
-  }else{
-    const c={
-      id:'GANYMEDE-'+_ganyChaliceDateStamp()+'-'+_ganyChaliceRand(),
-      chamber:'ganymede',
-      date:_ganyChalicePrettyDate(),
-      tikkun:tikkun,
-      consecration:consecration,
-      collectedAt:new Date().toISOString()
-    };
-    _chaliceCurrent=c;
-    if(dateEl)dateEl.textContent=c.date;
-    if(idEl)idEl.textContent=c.id.split('-').pop();
   }
 
-  // Reset: all text invisible, video invisible
-  ['ch-consecration','ch-inscription','ch-sep','ch-carry-line','ch-actions'].forEach(id=>{
-    const el=document.getElementById(id);if(el)el.style.opacity='0';
-  });
-  const cv=document.getElementById('ch-video');
-  if(cv)cv.style.opacity='0';
+  // Prepare canvas
+  _chInitCanvas();
+  _chInscriptionReady=false;
+  const canvas=document.getElementById('ch-canvas');
+  const env=document.getElementById('ch-env');
 
-  ov.style.display='block'; // block — all children position:absolute
-  if(cv){try{cv.muted=true;cv.currentTime=0;const pp=cv.play();if(pp&&pp.catch)pp.catch(()=>{});}catch(e){}}
+  if(canvas)canvas.style.opacity='0';
+  if(env)env.style.opacity='0';
+
+  // Show the screen
+  ov.style.display='block';
+  if(env){try{env.muted=true;env.currentTime=0;const pp=env.play();if(pp&&pp.catch)pp.catch(()=>{});}catch(e){}}
+
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     ov.classList.add('show');
-    // Chalice materialises from cave — scene exists in darkness first, then the object appears
-    setTimeout(()=>{if(cv)cv.style.opacity='1';},1300);
-    // The object holds the space alone before any word arrives
-    setTimeout(()=>{const el=document.getElementById('ch-consecration');if(el)el.style.opacity='1';},3200);
-    setTimeout(()=>{const el=document.getElementById('ch-sep');if(el)el.style.opacity='1';},6500);
-    setTimeout(()=>{const el=document.getElementById('ch-inscription');if(el)el.style.opacity='1';},7500);
-    setTimeout(()=>{const el=document.getElementById('ch-carry-line');if(el)el.style.opacity='1';},9000);
-    setTimeout(()=>{const el=document.getElementById('ch-actions');if(el)el.style.opacity='1';},9800);
+
+    // 1. Room fades in — the visitor steps through the threshold
+    setTimeout(()=>{if(env)env.style.opacity='1';},800);
+
+    // 2. Inscription emerges from the stone — almost invisible at first
+    //    The canvas shows before the light, so the stone-carved base is seen first
+    setTimeout(()=>{
+      _chInscriptionReady=true;
+      _chDrawInscription();
+      if(canvas)canvas.style.opacity='1';
+      // Start the RAF loop driving cursor-based gold reveal
+      if(_chRaf)cancelAnimationFrame(_chRaf);
+      _chRaf=requestAnimationFrame(_chRafLoop);
+      // Wire mouse/touch
+      window.addEventListener('mousemove',_chOnMouseMove,{passive:true});
+      window.addEventListener('touchmove',_chOnTouchMove,{passive:true});
+      // On mobile: slow pulse to draw attention without cursor
+      _chStartMobilePulse();
+    },3800);
   }));
+
   if(window.trackTempleEvent)trackTempleEvent('chalice_reveal_opened',{chamber:'ganymede'});
+}
+
+// Mobile: park light at inscription centre and breathe it gently
+let _chMobilePulse=null;
+let _chMobilePulseT=0;
+function _chStartMobilePulse(){
+  if(window.matchMedia('(hover:none)').matches){
+    _chMobilePulseT=0;
+    function pulse(){
+      _chMobilePulseT+=0.008;
+      // Gentle horizontal drift — not animation, barely perceptible breathing
+      _chMouseX=0.5+Math.sin(_chMobilePulseT)*0.04;
+      _chMouseY=0.78+Math.cos(_chMobilePulseT*0.7)*0.02;
+      _chMobilePulse=requestAnimationFrame(pulse);
+    }
+    if(_chMobilePulse)cancelAnimationFrame(_chMobilePulse);
+    _chMobilePulse=requestAnimationFrame(pulse);
+  }
 }
 
 function closeChaliceReveal(){
   const ov=document.getElementById('chaliceReveal');if(!ov)return;
+  // Clean up RAF and listeners
+  if(_chRaf){cancelAnimationFrame(_chRaf);_chRaf=null;}
+  if(_chMobilePulse){cancelAnimationFrame(_chMobilePulse);_chMobilePulse=null;}
+  window.removeEventListener('mousemove',_chOnMouseMove);
+  window.removeEventListener('touchmove',_chOnTouchMove);
+  _chInscriptionReady=false;
   ov.classList.remove('show');
-  setTimeout(()=>{ov.style.display='none';},1200);
+  setTimeout(()=>{ov.style.display='none';},1800);
 }
 
-async function keepChalice(){
-  const c=_chaliceCurrent||_getGanyChalice();if(!c)return;
-  // Save on first keep
+function keepChalice(){
+  const c=_chaliceCurrent;if(!c)return;
   if(!_getGanyChalice())_saveGanyChalice(c);
-  if(window.trackTempleEvent)trackTempleEvent('chalice_kept',{chamber:'ganymede',id:c.id});
-  const vid=document.getElementById('ch-video');
-  const draw=(withFrame)=>{
-    const W=900,H=1400;const cv=document.createElement('canvas');cv.width=W;cv.height=H;
-    const ctx=cv.getContext('2d');
-    ctx.fillStyle='#080503';ctx.fillRect(0,0,W,H);
-    if(withFrame&&vid&&vid.readyState>=2&&vid.videoWidth){
-      const th=H*0.58,vw=vid.videoWidth,vh=vid.videoHeight;
-      const scale=Math.max(W/vw,th/vh),dw=vw*scale,dh=vh*scale;
-      ctx.save();ctx.beginPath();ctx.rect(0,0,W,th);ctx.clip();
-      ctx.drawImage(vid,(W-dw)/2,(th-dh)/2,dw,dh);ctx.restore();
-      const fg=ctx.createLinearGradient(0,th*0.52,0,th);
-      fg.addColorStop(0,'rgba(8,5,3,0)');fg.addColorStop(1,'rgba(8,5,3,1)');
-      ctx.fillStyle=fg;ctx.fillRect(0,th*0.52,W,th*0.48);
-    }
-    ctx.textAlign='center';
-    ctx.fillStyle='rgba(196,158,72,0.75)';ctx.font='24px Cinzel, serif';
-    ctx.fillText('ANCIENT TEMENOS',W/2,H*0.64);
-    ctx.fillStyle='rgba(196,158,72,0.5)';ctx.font='13px Cinzel, serif';
-    ctx.fillText('WHAT YOU CARRY',W/2,H*0.695);
-    ctx.fillStyle='rgba(238,220,168,0.88)';ctx.font='italic 34px "Cormorant Garamond", serif';
-    _krWrap(ctx,c.tikkun,W/2,H*0.745,W*0.74,42);
-    ctx.fillStyle='rgba(196,158,72,0.62)';ctx.font='18px Cinzel, serif';
-    ctx.fillText('GANYMEDE \u00b7 CHAMBER OF BUILDING',W/2,H*0.852);
-    ctx.fillText(c.date.toUpperCase(),W/2,H*0.885);
-    ctx.fillStyle='rgba(196,158,72,0.35)';ctx.font='14px Cinzel, serif';
-    ctx.fillText('CHALICE '+c.id,W/2,H*0.918);
-    return cv;
-  };
-  let cv2=draw(true);
-  cv2.toBlob(b=>{
-    if(b)return _chDownload(b,c);
-    const cv3=draw(false);cv3.toBlob(b2=>{if(b2)_chDownload(b2,c);},'image/png');
+  if(window.trackTempleEvent)trackTempleEvent('chalice_kept',{chamber:'ganymede'});
+  // Download: cave frame + inscription
+  const env=document.getElementById('ch-env');
+  const W=1600,H=900;
+  const cv=document.createElement('canvas');cv.width=W;cv.height=H;
+  const ctx=cv.getContext('2d');
+  // Draw cave frame
+  ctx.fillStyle='#080401';ctx.fillRect(0,0,W,H);
+  if(env&&env.readyState>=2&&env.videoWidth){
+    const vw=env.videoWidth,vh=env.videoHeight;
+    const scale=Math.max(W/vw,H/vh);
+    const dw=vw*scale,dh=vh*scale;
+    ctx.drawImage(env,(W-dw)/2,(H-dh)/2,dw,dh);
+  }
+  // Overlay a subtle darkening so inscription reads on any frame
+  const dk=ctx.createLinearGradient(0,H*0.6,0,H);
+  dk.addColorStop(0,'rgba(4,2,0,0)');dk.addColorStop(1,'rgba(4,2,0,0.55)');
+  ctx.fillStyle=dk;ctx.fillRect(0,0,W,H);
+  // Inscription
+  ctx.textAlign='center';ctx.textBaseline='middle';
+  const baseY=H*0.76;const lineH=H*0.048;const cx=W*0.5;
+  const fBen=Math.round(H*0.032);const fTik=Math.round(H*0.027);const fCta=Math.round(H*0.018);
+  ctx.font=`italic ${fBen}px "Cormorant Garamond", serif`;
+  ctx.fillStyle='rgba(238,210,140,0.86)';
+  ctx.fillText(CH_BENEDICTION,cx,baseY);
+  const tikLines=_chWrapText(ctx,c.tikkun,W*0.52);
+  ctx.font=`italic ${fTik}px "Cormorant Garamond", serif`;
+  ctx.fillStyle='rgba(238,210,140,0.78)';
+  tikLines.forEach((line,i)=>{ctx.fillText(line,cx,baseY+lineH*1.9+i*lineH*1.2);});
+  ctx.font=`${fCta}px Cinzel, serif`;
+  ctx.fillStyle='rgba(196,158,72,0.72)';
+  ctx.fillText('KEEP THE CHALICE',cx,baseY+lineH*(1.9+tikLines.length*1.2+1.8));
+  cv.toBlob(b=>{
+    if(!b)return;
+    const url=URL.createObjectURL(b);const a=document.createElement('a');
+    a.href=url;a.download='AncientTemenos_Chalice.png';
+    document.body.appendChild(a);a.click();a.remove();
+    setTimeout(()=>URL.revokeObjectURL(url),2500);
   },'image/png');
 }
 
-function _chDownload(b,c){
-  const url=URL.createObjectURL(b);const a=document.createElement('a');
-  a.href=url;a.download='AncientTemenos_Chalice_'+c.id+'.png';
-  document.body.appendChild(a);a.click();a.remove();
-  setTimeout(()=>URL.revokeObjectURL(url),2500);
-  // Visitor stays on the Chalice screen — they use "Return to the Temple" to leave
-}
-// ── END CHALICE ────────────────────────────────────────────────────────────
+// Resize: reinitialise canvas if the room is open
+window.addEventListener('resize',()=>{
+  const ov=document.getElementById('chaliceReveal');
+  if(ov&&ov.classList.contains('show')){_chInitCanvas();_chDrawInscription();}
+},{ passive:true });
+
+// ── END CHALICE ───────────────────────────────────────────────────────────────
 
 // ── GRIMOIRE REMEMBRANCE ────────────────────────────────────────────────────
 function _grUUID(){
@@ -4604,7 +4576,7 @@ initFoyer=function(){
 
   if(_mock === 'ganychalice'){
     window.addEventListener('load', function(){
-      // Seed gHistory so _ganyTikkunLine() and _ganyConsecrationLine() resolve
+      // Seed gHistory so _ganyTikkunLine() resolves
       if(typeof gHistory !== 'undefined' && gHistory.length === 0){
         gHistory = [
           {role:'user', content:'I have been trying to build something for a long time.'},
