@@ -1130,7 +1130,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 
 <!-- Cave environment — the room itself -->
 <video id="ch-env" autoplay muted loop playsinline preload="auto" crossorigin="anonymous">
-  <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Chalice.mp4" type="video/mp4">
+  <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Chalice1.mp4" type="video/mp4">
 </video>
 
 <!-- Inscription canvas — the floor engraving, revealed by presence -->
@@ -2286,21 +2286,9 @@ function openChaliceReveal(){
     // 1. Room fades in — the visitor steps through the threshold
     setTimeout(()=>{if(env)env.style.opacity='1';},800);
 
-    // 2. Inscription emerges from the stone — almost invisible at first
-    //    The canvas shows before the light, so the stone-carved base is seen first
-    setTimeout(()=>{
-      _chInscriptionReady=true;
-      _chDrawInscription();
-      if(canvas)canvas.style.opacity='1';
-      // Start the RAF loop driving cursor-based gold reveal
-      if(_chRaf)cancelAnimationFrame(_chRaf);
-      _chRaf=requestAnimationFrame(_chRafLoop);
-      // Wire mouse/touch
-      window.addEventListener('mousemove',_chOnMouseMove,{passive:true});
-      window.addEventListener('touchmove',_chOnTouchMove,{passive:true});
-      // On mobile: slow pulse to draw attention without cursor
-      _chStartMobilePulse();
-    },3800);
+    // COMPOSITION PASS — inscription suppressed so environment reads cleanly.
+    // Restore the setTimeout block below once composition is approved.
+    // setTimeout(()=>{ _chInscriptionReady=true; ... },3800);
   }));
 
   if(window.trackTempleEvent)trackTempleEvent('chalice_reveal_opened',{chamber:'ganymede'});
