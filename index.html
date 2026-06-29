@@ -1129,6 +1129,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 </style>
 
 <!-- Cave environment — the room itself -->
+<!-- NOTE: sits inside display:none parent; JS forces load() on page init so it buffers before reveal -->
 <video id="ch-env" autoplay muted loop playsinline preload="auto" crossorigin="anonymous">
   <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Chalice1.mp4" type="video/mp4">
 </video>
@@ -2268,8 +2269,8 @@ function openChaliceReveal(){
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     ov.classList.add('show');
 
-    // 1. Room fades in — the visitor steps through the threshold
-    setTimeout(()=>{if(env)env.style.opacity='1';},800);
+    // 1. Room fades in — delay gives video time to buffer from GitHub CDN
+    setTimeout(()=>{if(env)env.style.opacity='1';},2000);
 
     // COMPOSITION PASS — inscription placed at base stone opacity, no interaction yet.
     // Cursor-reveal interaction added once placement is approved.
@@ -4550,6 +4551,12 @@ initFoyer=function(){
       setTimeout(function(){ if(typeof openKeyReveal==='function') openKeyReveal(); }, 400);
     });
   }
+
+  // Force Chalice environment video to buffer even while parent is display:none
+  (function(){
+    var cv=document.getElementById('ch-env');
+    if(cv){try{cv.load();}catch(e){}}
+  })();
 
   if(_mock === 'ganychalice'){
     window.addEventListener('load', function(){
