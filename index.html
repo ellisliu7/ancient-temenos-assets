@@ -2076,7 +2076,7 @@ let _chTikkunText='';
 //   CH_SCALE — master size scalar; 1.0 = default (try 0.85–1.15)
 //
 const CH_CX    = 0.48;
-const CH_BY    = 0.71;
+const CH_BY    = 0.76;
 const CH_SCALE = 1.0;
 
 function _chInitCanvas(){
@@ -2139,8 +2139,8 @@ function _chDrawInscription(){
   // The goal: warm oxidised gold inside carved grooves, barely perceptible.
   // At a glance: just a texture variation in the stone.
   // On inspection: letters.
-  const stoneGold = 'rgba(105,78,28,0.28)';
-  const stoneRule = 'rgba(105,78,28,0.14)';
+  const stoneGold = 'rgba(180,145,65,0.55)'; // REVIEW MODE — reduce to 0.28 after placement approved
+  const stoneRule = 'rgba(180,145,65,0.30)'; // REVIEW MODE
 
   ctx.save();
   ctx.textAlign='center';
@@ -2169,7 +2169,7 @@ function _chDrawInscription(){
 
   // Tikkun — Cormorant italic, second mason's hand
   ctx.font=`italic ${fTik}px "Cormorant Garamond", Cormorant, serif`;
-  ctx.fillStyle='rgba(105,78,28,0.24)';
+  ctx.fillStyle='rgba(180,145,65,0.50)'; // REVIEW MODE
   tikLines.forEach((line,i)=>{
     ctx.fillText(line, cx, y_tik0 + i * u * 1.15);
   });
@@ -2180,7 +2180,7 @@ function _chDrawInscription(){
 
   // CTA — Cinzel, smallest, most recent carving
   ctx.font=`${fCta}px Cinzel, serif`;
-  ctx.fillStyle='rgba(105,78,28,0.22)';
+  ctx.fillStyle='rgba(180,145,65,0.48)'; // REVIEW MODE
   ctx.save();
   ctx.translate(cx, y_cta);
   ctx.scale(1.04, 1);
