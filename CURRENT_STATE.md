@@ -5,21 +5,74 @@
 
 ---
 
-## Strategic direction — set 29 June 2026
+## Session log — 29 June 2026 (Ganymede ending: environmental installation sprint)
 
-### The scene problem
+### The fundamental shift
 
-After multiple refinement sprints on individual screens, a larger pattern became clear: Ancient Temenos sometimes still feels like pages with components rather than inhabitable scenes. Polishing individual elements without a shared design foundation produces diminishing returns.
+The Ganymede ending has been architecturally retired and rebuilt from the ground up.
 
-**Core insight:** In a product, the interface is the thing. In a sanctuary, the world is the thing, and the interface is only how the world lets you touch it. Every design decision — light, space, motion, type, transitions, relics — flows from this distinction.
+**What was there before:** A webpage-style ending — CSS cave background layers, masked Chalice MP4 floating inside a text zone, staggered HTML elements fading in at timed intervals, two equal-weight buttons. Interface assembled to simulate an environment.
 
-**Design foundations (DRAFT — 29 June 2026):**
-- `DESIGN_PRINCIPLES.md` — the philosophy of immersive digital sanctuaries; transferable to any world El builds, with Ancient Temenos as the first proving ground. Covers: scenes vs pages, what makes something a sanctuary, the twelve grammar laws of presence, the sanctuary filter, and the seven-question scene test.
-- `DESIGN_LANGUAGE.md` — the method for instantiating that philosophy into a world's concrete language. Covers: scene composition, light/darkness, color (with AT canonical palette), typography (locked roles), spacing, motion/timing table, transitions, chamber anatomy, oracle staging, relic presentation, action language, what to avoid, good/bad worked examples.
+**What is there now:** The browser is a window into a chamber. `Chalice1.mp4` — a full 16:9 cave render with the Chalice on its plinth, architecture, god rays, and foreground stone floor — fills the entire viewport. Nothing is simulated in CSS. The room itself carries the emotional weight.
 
-**Status of both docs:** DRAFT. The palette hex values and timing curves are proposed canon — reconcile against the live `index.html` CSS once and then `DESIGN_LANGUAGE.md` becomes the canonical number source. `BIBLE.md` keeps the poetry; `DESIGN_LANGUAGE.md` holds the values.
+**This is not a visual polish change. It is a structural decision about what kind of experience the ending is.**
 
-**Relic asset standard — locked inside DESIGN_LANGUAGE.md:** Every relic is rendered as a transparent WebM (VP9, alpha) or a full-scene render. Never an MP4 with a baked background. The Chalice V1 and Sigil Key are the two re-export candidates when assets are revisited.
+The previous architecture (3-layer CSS radial gradient, SVG noise, vignette, masked MP4, `#ch-text` zone with 7 children, staggered setTimeout sequence) has been removed entirely. The new architecture is: one fullscreen `<video>`, one `<canvas>` for the inscription, two minimal controls (close, brand). The DOM shrank from ~36 lines to ~8 visible elements.
+
+---
+
+### Decisions locked in this sprint — do not revisit without strong reason
+
+**The room is the experience.** The empty cave, the silence before anything appears, the Chalice waiting in the light — these are not placeholders. They are the content. Do not fill the space with interface.
+
+**The environment is the hero.** `Chalice1.mp4` should never be cropped, masked, constrained to a zone, or overlaid with decorative CSS. It fills the browser. The browser disappears.
+
+**Silence is structural.** The 2-second pause before anything appears, and the 3-second pause before the inscription emerges, are not loading states. They are the threshold. Protect them.
+
+**The inscription belongs to the architecture, not the interface.** It will be rendered on a canvas, positioned to sit on the foreground floor slab of the specific render, anchored to the stone rather than centred in the viewport. This decision is irreversible — going back to HTML elements fading over video would immediately read as a webpage again.
+
+**Metadata has been removed permanently.** No artifact IDs, no dates, no chamber labels, no "Chalice of Ganymede" headers, no download metadata. The relic is the experience. The inscription is the only text in the room.
+
+**The benediction is fixed.** *"Some gifts cannot be given. Only remembered."* This line is set. It does not explain, it does not instruct, it holds space for the visitor's own meaning. Do not change it without El's explicit decision.
+
+---
+
+### Current implementation state
+
+**What is working:**
+- `Chalice1.mp4` loads and fills the viewport as a fullscreen environment
+- Video buffers on page init via `cv.load()` even while parent is `display:none` — solves the black screen problem
+- Canvas inscription renders with three layers: benediction (two lines, Cinzel), tikkun (Cormorant italic, generated from conversation), KEEP THE CHALICE (Cinzel, smallest)
+- Inscription positioned at `CH_CX: 0.48, CH_BY: 0.76` — slightly left of viewport centre, lower third, following the floor slab in the render
+- `stillnessGate()` simplified: 4-second silence only, no text in the transition; first words land on the Chalice screen
+- Mock route `?mock=ganychalice` working
+
+**What is in review — not final:**
+- Inscription placement (`CH_CX`, `CH_BY`, `CH_SCALE`) is a composition pass only. Position, scale, and perspective are not approved.
+- Inscription is currently at elevated opacity (`0.55`) for placement review. Final opacity will be much lower — almost imperceptible without the gold reveal.
+- No cursor interaction wired yet. The gold-reveal mechanic (cursor proximity lifts tarnished gold out of the carved stone) is designed but not implemented.
+- "KEEP THE CHALICE" is not yet a functional interaction in the new architecture. The invisible hit zone (`#ch-floor-hit`) exists but needs to be positioned programmatically against the canvas CTA line.
+
+**Three tuning constants — the only numbers to touch during placement review:**
+```javascript
+const CH_CX    = 0.48;  // horizontal centre (0.44–0.52)
+const CH_BY    = 0.76;  // top of inscription block (0.68–0.80)
+const CH_SCALE = 1.0;   // master size scalar (0.85–1.15)
+```
+
+---
+
+### Open questions for next sprint — in order
+
+1. **Final inscription placement.** Is `CH_CX: 0.48, CH_BY: 0.76` correct? Does it sit on the stone or float above it? Does the scale feel appropriate for the chamber? Answer this with eyes before touching code.
+
+2. **Copy hierarchy.** The benediction splits across two lines. Does this feel right carved in stone, or would one line read better? The tikkun wraps at `maxW: W * 0.30` — is this the right line length for the slab?
+
+3. **The gold-reveal mechanic.** Once placement is approved, wire the cursor-proximity interaction. The design is: cursor drifts toward the lower frame, a broad warm radial (not a spotlight) slowly lifts tarnished gold from inside the carved grooves. The offscreen canvas / `destination-in` compositing architecture is already written in the JS — it just needs to be activated. Key constraint: it must feel like atmospheric light response, not a UI effect. Easing: `0.032` lerp per frame. Radius: generous.
+
+4. **KEEP THE CHALICE as architecture.** The last line of the inscription is the action. The invisible hit zone (`#ch-floor-hit`) needs to be positioned against `canvas._ctaY` after each draw. The cursor should change to `pointer` only over that zone, with no visible button.
+
+5. **Continue removing.** After the gold reveal is wired, do one more pass asking: what else can be removed? The close button and brand label are the only remaining interface elements. Do they need to be there from the start, or can they appear only on interaction?
 
 ---
 
@@ -29,153 +82,60 @@ After multiple refinement sprints on individual screens, a larger pattern became
 |---|---|---|
 | Threshold | LIVE | Answer: love |
 | Foyer — council debate | LIVE | 4-archetype debate, API-powered |
-| Foyer — greeting sequence | LIVE | "Welcome home." + placeholder at higher opacity; ellipses removed from all oracle inputs |
+| Foyer — greeting sequence | LIVE | "Welcome home." sequence |
 | Venus chamber | LIVE | Full oracle, video corridor, artwork card |
-| Venus — Sigil Key reveal | LIVE | Key screen opens after oracle; artwork image as visual; download as canvas PNG |
-| Venus — Grimoire | LIVE | Sealed to Venus chamber specifically (forceMode fix applied) |
+| Venus — Sigil Key reveal | LIVE | Key screen, canvas PNG download |
+| Venus — Grimoire | LIVE | Sealed to Venus chamber specifically |
 | Ganymede chamber | LIVE | Full oracle, cave video, god rays |
-| Ganymede — em dash stripping | LIVE | stripDash() applied to all Ganymede output fields |
-| Ganymede — stillness ending | LIVE | stillnessGate(): 4s silence → consecration line → Chalice reveal |
-| Ganymede — Chalice of Ganymede | LIVE (V1) | Full screen relic reveal — see status notes below |
+| Ganymede — Chalice ending | LIVE (composition review) | New environmental architecture; placement not final |
 | Persephone | PROTOTYPE ONLY | Standalone persephone-oracle.html; not in index.html |
 | Psyche | NOT BUILT | — |
-| Collective Memory | NOT BUILT | Architecture designed, no code |
-| Plausible analytics | NOT ACTIVATED | Single script tag when ready |
+| Collective Memory | NOT BUILT | — |
 
 ---
 
-## Chalice of Ganymede — V1 status and known limitations
+## Asset reference
 
-### What is working
-- Full relic reveal screen triggered by `stillnessGate()` after Ganymede's final exchange
-- Consecration line drawn from 5 session-seeded options; chosen by hashing the visitor's tikkun
-- Tikkun inscription: "What you carry" label + visitor's specific soul correction from `tikkun_line` JSON field
-- "✦ Carry this ✦" arrives as a ceremonial line, not a CTA
-- "Keep the Chalice" downloads a canvas-generated PNG relic with inscribed tikkun and date
-- "Return to the Temple" closes the screen
-- Cave atmosphere: 3-layer CSS radial gradient background, SVG noise texture at 2.2% opacity, vignette
-- Chalice MP4 masked with `radial-gradient(ellipse 120% 80%)` — 6-stop feather dissolves edges
-- Mock testing: `?mock=ganychalice` works on live site
-- Grimoire: passes `'ganymede'` explicitly so Venus artwork never appears in Ganymede seal
-
-### Known limitation — MP4 has a baked dark background
-
-The Chalice MP4 was rendered with a solid dark background. CSS masking dissolves the edges of that rectangle into the page, but the interior of the video — including its own background colour — remains a distinct visible surface. No amount of CSS masking can make a video with a solid background feel like a floating object inside a separately-built environment.
-
-This is the reason the Chalice screen reads as "an MP4 on a page" rather than "a relic inside a cave." The CSS cave atmosphere exists behind the video, but the video's own dark interior prevents it from being visible.
-
-**This is not a CSS problem. It is an asset problem.**
-
-**Resolution:** Re-export as transparent WebM (VP9, alpha) when assets are revisited. Standard locked in `DESIGN_LANGUAGE.md`.
-
----
-
-## Relic system — design decisions locked
-
-| Chamber | Relic | Status |
+| Asset | File | Status |
 |---|---|---|
-| Venus | Sigil Key | LIVE — MP4, baked background (re-export candidate) |
-| Ganymede | Chalice of Ganymede | LIVE V1 — MP4, baked background (re-export candidate) |
-| Persephone | Pomegranate Seed | PLANNED — asset not yet created; build as transparent WebM from first render |
-| Psyche | The Lamp | PLANNED — asset not yet created; build as transparent WebM from first render |
-
-The Sigil Key is the temple's gift — universal, about passage and permission.
-The Chalice is Ganymede's gift — personal, about capacity and responsibility.
-The Pomegranate Seed will be Persephone's gift — about irreversible knowledge.
-The Lamp will be Psyche's gift — about courageous seeing.
+| Ganymede ending environment | `Chalice1.mp4` | CANONICAL — pushed 29 June 2026. Full 16:9 cave render with Chalice, architecture, god rays. |
+| Previous Chalice asset | `Chalice.mp4` | RETIRED. Spinning Chalice on baked dark background. No longer referenced in code. |
+| Sigil Key | `Sigil.mp4` | LIVE — re-export candidate (baked background) |
 
 ---
 
-## Open technical issues (not yet fixed)
+## Open technical issues (unchanged from previous sprint)
 
 | Issue | Priority | Notes |
 |---|---|---|
-| Council routes to `enterVenusAltar()` instead of `enterVenusApproach()` | HIGH | 2-line fix at ~lines 3034 and 3181 in current file |
-| `window.__test*` shortcuts ungated in production | HIGH | Security audit item — any visitor can bypass Sigil Key |
-| `?key=1` and `?sigil=1` URL params grant access with no auth | HIGH | Security audit item |
-| Vercel proxy: client can supply `model`/`max_tokens`/system prompt | HIGH | Security audit item |
-| XSS vectors in `innerHTML` in oracle chat and Grimoire | MEDIUM | Security audit item |
-| No CSP headers | MEDIUM | Security audit item |
-| `?mock=*` params active in production | MEDIUM | Security audit item |
+| Council routes to `enterVenusAltar()` instead of `enterVenusApproach()` | HIGH | 2-line fix at ~lines 3034 and 3181 |
+| `window.__test*` shortcuts ungated in production | HIGH | Security |
+| `?key=1` and `?sigil=1` URL params grant access with no auth | HIGH | Security |
+| Vercel proxy: client can supply `model`/`max_tokens`/system prompt | HIGH | Security |
+| XSS vectors in `innerHTML` in oracle chat and Grimoire | MEDIUM | Security |
+| `?mock=*` params active in production | MEDIUM | Security |
 | Venus UX — key label reads `VEN` not `VENUS` | LOW | Cosmetic |
-| Venus UX — "Receive your first key" CTA auto-advances before user finishes reading | LOW | Timing |
-
----
-
-## Session log — 29 June 2026 (Design foundations sprint)
-
-Research and documentation only. No code shipped.
-
-- Studied immersive design grammar across: Active Theory, OHZI, Viverse (web-native pole); James Turrell (light as material, dissolved reference points, blackout-to-revelation threshold model); teamLab Borderless (one continuous world, no map, presence changes the work); Journey (radical subtraction, mountain-on-the-horizon navigation, no HUD, evil-twin proof via Sky degradation)
-- Core insight extracted: the grammar to borrow is presence, spatial continuity, dissolving frames, seduction over signage, silence as mechanism. The telos to refuse is spectacle, engagement metrics, and daily-active loops.
-- `DESIGN_PRINCIPLES.md` written — universal philosophy of immersive sanctuaries, 12 grammar laws, sanctuary filter, refusals, 7-question scene test. Transferable to any future world.
-- `DESIGN_LANGUAGE.md` written — method for instantiating the philosophy: scene composition, light/darkness, AT color palette (proposed canon), locked typography roles, spacing scale, timing table, chamber anatomy, oracle staging rules, relic asset standard (transparent WebM or full-scene render — locked), action language, avoid list, worked good/bad examples.
-- Both docs saved as DRAFT. Palette and timing values are proposed — reconcile against live CSS once to make DESIGN_LANGUAGE.md canonical.
-- Design foundations sprint paused here. Next: Ganymede cave stability + practical build sprint.
-
----
-
-## Previous session log — 29 June 2026 (Chalice polish + design direction)
-
-Chalice refinements shipped across multiple passes:
-- Chalice HTML/CSS rebuilt as single-scene composition (absolute-positioned children, no layout zones)
-- Video positioned `top:2vh; left:50%` at `clamp(220px,30vw,440px)` width
-- Mask: `radial-gradient(ellipse 120% 80%)` six-stop feather
-- Background: 3-layer radial gradients anchored at warm amber light source above centre
-- Text zone begins at `top:62vh`, centred, with ceremonial stagger timing
-- "Ganymede · Chamber of Building" label removed per El's direction
-- Consecration font reduced from `clamp(22px,2.6vw,32px)` to `clamp(18px,2vw,26px)`
-- "Carry this" demoted from button to ceremonial `<p>` element with `pointer-events:none`
-- "Keep the Chalice" → download trigger; "Return to the Temple" → close
-- After download, visitor stays on screen (no auto-close)
-
-Chalice V1 paused here. Good enough as working first version. The blocking constraint is the MP4's baked background — a CSS problem this is not.
-
-**Strategic decision:** Pause individual screen refinement. Next sprint establishes design foundations before further chamber work.
-
----
-
-## Previous session log — 28 June 2026 (Experience Polish Sprints I + II)
-
-### Shipped
-
-- Foyer: reverted fc-subtitle experiment; placeholder opacity lifted 0.78→0.88
-- All oracle input placeholders: ellipses removed ("You are safe to speak here", "Speak into the cave", "Ask your question")
-- Venus oracle input placeholder: opacity lifted 0.28→0.62
-- Ganymede input placeholder: opacity lifted 0.18→0.58
-- Venus Grimoire artwork fix: `openGrimoire(forceMode)` — Venus passes `'venus'`, Ganymede passes `'ganymede'`
-- Ganymede em dashes: `stripDash()` now applied to all Ganymede output fields before `gStream()`
-- Ganymede ending: `stillnessGate()` — 4s silence → consecration line → fades → Chalice opens
-- Chalice of Ganymede: full implementation (HTML, CSS, JS, download, mock route)
-- `?mock=ganychalice`: moved from dead `testKeyReveal` function to correct top-level load event
-- `tikkun_line` added to GSYS JSON schema
-- Five consecration lines seeded by tikkun hash
-- `_chDownload()` generates canvas PNG: video frame + tikkun inscription + date + Chalice ID
-- `_ganyTikkunLine()`: extracts tikkun_line from final Ganymede response; falls back to first reflection sentence
-- `_ganyConsecrationLine()`: deterministic selection from 5 lines via tikkun hash
-- `_getGanyChalice()` / `_saveGanyChalice()`: localStorage persistence in `temenos_relics` key
+| Venus UX — CTA auto-advances before user finishes reading | LOW | Timing |
 
 ---
 
 ## Next sprints — in order
 
-1. **Ganymede cave stability** — finish and stabilise the current Ganymede experience (practical build sprint, next)
-2. **Security hardening** — gate `window.__test*`, clamp model/max_tokens server-side, address XSS, add CSP headers, disable `?mock=*` in production
+1. **Ganymede ending: final placement + gold reveal** — approve inscription position, drop opacity to final stone treatment, wire cursor proximity reveal
+2. **Security hardening** — gate `window.__test*`, clamp model/max_tokens server-side, address XSS, disable `?mock=*` in production
 3. **Venus UX polish** — key label, CTA timing, oracle position jump (three issues, single session)
-4. **DESIGN_LANGUAGE.md palette/timing reconciliation** — reconcile proposed values against live CSS; make canonical
-5. **Persephone integration** into `index.html` (waiting on visual assets)
-6. **Collective Memory** — POST endpoint, fragment input in Grimoire, accumulate invisibly
+4. **Persephone integration** into `index.html` (waiting on visual assets)
+5. **Collective Memory** — POST endpoint, fragment input in Grimoire, accumulate invisibly
 
 ---
 
 ## Architecture reference
 
-- **File:** single `index.html`, ~4797 lines, all CSS/JS inline
+- **File:** single `index.html`, ~4738 lines, all CSS/JS inline
 - **Repo:** `ellisliu7/ancient-temenos-assets` (public, GitHub Pages)
 - **Domain:** `ancienttemenos.art`
 - **Oracle proxy:** `ancient-temenos-oracle.vercel.app/api/oracle` (private Vercel repo)
 - **Formspree:** `xkoakgkk` (collector enquiry)
 - **Mock routes:** `?mock=venus`, `?mock=ganymede`, `?mock=ganychalice`, `?mock=key`, `?mock=ganygrimoire`, `?dev=1`, `?sigil=1`
 - **Typography:** Cinzel (structure, labels) · Cormorant Garamond (body, oracle, poetry) · Almendra (character names)
-- **Relic assets:** `Sigil_Key.mp4`, `Chalice.mp4` — both raw.githubusercontent.com CDN
-- **Design docs:** `DESIGN_PRINCIPLES.md`, `DESIGN_LANGUAGE.md` — DRAFT, in repo root
+- **Design docs:** `DESIGN_PRINCIPLES.md`, `DESIGN_LANGUAGE.md` — in repo root
