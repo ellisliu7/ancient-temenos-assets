@@ -1793,9 +1793,9 @@ function vaRenderCard(data){
   // each paragraph reveal shifts the whole panel and reads as a jump.
   let anchorTop=0;
   if(vg){
-    requestAnimationFrame(()=>{anchorTop=d.offsetTop;vg.scrollTop=anchorTop;});
+    requestAnimationFrame(()=>{anchorTop=d.offsetTop;vg.scrollTop=Math.min(anchorTop,vg.scrollHeight-vg.clientHeight);});
   }
-  const pin=()=>{if(vg)vg.scrollTop=anchorTop;};
+  const pin=()=>{if(!vg)return;vg.scrollTop=Math.min(anchorTop,vg.scrollHeight-vg.clientHeight);};
   const mirrorEl=card.querySelector('.va-mirror');
   const paras=mirrorText.split(/\n\n+/).filter(p=>p.trim());
   // Pure opacity — no movement. Venus arrives, she does not shift.

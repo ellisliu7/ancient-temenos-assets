@@ -5,51 +5,24 @@
 
 ---
 
-## Session log — 30 June 2026 (Venus polish sprint #2: kybalion removed, key reveal cleared, Grimoire return fixed)
+## Session log — 30 June 2026 (Venus polish sprint #3: first-reply layout jump, surgical fix)
 
-Three small fixes from a second Venus playthrough, following directly from last session's polish pass. Nothing outside these three was touched.
+One bug, one fix. El reported the very first oracle reply still had a layout jump mid-stream — everything after that felt stable, only the first transition was off.
 
-**1. Kybalion line removed from Venus oracle replies.** Every Venus reply rendered mirror text → a one-line Kybalion quote → a question — three layers of text on every turn. Per El's instinct (and the BIBLE's own "whispers, never shouts" principle), the quote is gone. `VSYS`'s JSON schema no longer requests a `kybalion` field, and `vaRenderCard()` no longer renders one. Mirror now flows directly to the question. The separate "Teachings — 7 Hermetic Principles" feature elsewhere in the temple is untouched; this was only the per-message quote inside the live conversation.
+**Root cause:** `#va-glass` has `max-height:80vh; overflow-y:auto`. On the very first reply, the panel's content (invitation block + the still-short new card) starts out *shorter* than 80vh, so the container isn't scrollable yet — `scrollTop` is clamped to 0 no matter what value `vaRenderCard()`'s pinning logic tried to set it to. As the first reply's paragraphs streamed in and total content height crossed the 80vh threshold partway through, the container became scrollable for the first time mid-stream, and the previously-inert `scrollTop` assignment suddenly took effect — snapping the view to the pinned anchor in one visible jump, right as the visitor was reading. On every later reply, the container is already overflowing *before* the new card is even inserted, so the same pinning logic behaves consistently from the first reveal tick — which is why only the first message ever showed the jump.
 
-**2. Star glyph removed from the Sigil Key page.** Last sprint's fix for the Venus-artwork-blocking-the-key issue replaced the artwork with a floating glyph as the "hero" — but that glyph was itself sitting on top of `Sigil_Key.mp4`, which is already the actual key visual playing as the page's video background. The glyph was the new obstruction. Removed entirely; `#kr-key-wrap` is now just empty spacing above the headline, and the video is the only visual. The collection moment (`collectKey()`) no longer pulses a glyph — it now triggers a brief warmth-pulse on the video's scrim overlay instead, so collecting still has a felt confirmation without reintroducing a competing symbol.
+**Fix:** `vaRenderCard()`'s anchor-capture and `pin()` function both now clamp the target `scrollTop` to the container's actual scrollable range (`Math.min(anchorTop, scrollHeight - clientHeight)`) instead of setting `anchorTop` directly. This clamp evaluates near-zero while the panel is shorter than its max height (matching the natural `scrollTop:0` it would already be at) and converges smoothly to the real anchor as content grows past the viewport — so there is no longer a moment where scrolling silently "turns on" and snaps.
 
-**3. Grimoire Return fixed — one control, top-left, goes home.** The actual bug: the global top-left return button (z-index 100) stayed visible and clickable above the Grimoire overlay (z-index 95) while Grimoire was open, but clicking it only flashed back to the same underlying screen — it never closed the Grimoire panel itself, so the visitor appeared stuck behind it. Meanwhile the Grimoire's own working close button sat top-right, creating the duplicate-control confusion. Fixed by: hiding the global return button whenever Grimoire opens, moving the Grimoire's own Return control to top-left with the same arrow-icon style as the global nav, and removing the top-right placement. `closeGrimoire()` now restores the global return button correctly on the Ganymede-cave branch (where the normal screen-transition function isn't called) and continues to route Venus/council contexts home to the Foyer as fixed last sprint.
-
----
-
-### Decisions locked in this sprint
-
-**The Kybalion teaching stays a separate, optional feature — not part of the live conversational rhythm.** If a future sprint wants philosophical depth back inside the chamber, it should be considered as its own deliberate moment (perhaps offered once, not per-turn), not restored to every exchange by default.
-
-**The Sigil Key reveal has no floating symbol of any kind now.** Two sprints in a row removed a different "hero" visual sitting over the key (artwork, then glyph) — the video itself is the key. Any future addition to this screen should be weighed against this pattern before being added.
-
-**Grimoire always has exactly one Return control, and it always goes to the Foyer** (except mid-Ganymede-session, where it stays in the cave, matching the chamber's own pattern of keeping the visitor inside an unfinished conversation). This is now structurally enforced — the global nav button hides itself whenever Grimoire is open — not just a styling choice.
+**Scope:** two lines changed inside `vaRenderCard()`, nothing else. No pacing, typography, or layout changes, per request.
 
 ---
 
 ### Current implementation state
 
-**What changed this sprint (all in `index.html`):**
-- `VSYS` — `kybalion` field removed from schema (~line 1930)
-- `vaRenderCard()` — kybalion rendering removed, question reveal timing simplified (~line 1778)
-- `#kr-key-wrap` markup — glyph removed, now empty spacing div (~line 1032)
-- `#kr-scrim` — new `.pulse` class + `krScrimPulse` keyframe for collection feedback
-- `collectKey()` — pulse target changed from glyph to scrim (~line 3420)
-- `.gr-close` CSS — repositioned top-left, matched to global nav style, z-index raised to 100
-- Grimoire markup — close button now uses the same arrow-icon + "Return" pattern as the global nav
-- `openGrimoire()` — now hides global return button on open
-- `closeGrimoire()` — restores global return button on the Ganymede-cave branch
+**What changed this sprint:**
+- `vaRenderCard()` — `pin()` function and the initial `requestAnimationFrame` scroll-capture both now clamp `scrollTop` to `scrollHeight - clientHeight` (~line 1788)
 
-**Not touched this sprint (still open, carried forward):**
-- `window.__test*` shortcuts ungated in production
-- `?key=1` / `?sigil=1` URL params grant access with no auth
-- Vercel proxy accepts client-supplied model/max_tokens/system prompt unclamped
-- XSS vectors via `innerHTML` in oracle chat display and Grimoire
-- `?mock=*` params active in production
-- Ghost code: `sendVenus`/`renderVCard`/`addUserMsg`, `initVenusSculpture`/`_buildVenusSculpture` — still dead, not wired to any HTML. Note: these still reference `kybalion` in their data objects but are unreachable, so left as-is.
-- Mock-mode Venus cards and the `sendVenusNew` catch-error fallback still construct a `kybalion` field in their data objects — harmless since `vaRenderCard` no longer reads it, but flagged for a future cleanup pass if anyone wants the mock data fully tidied
-- `stillnessGate()` dead code, orphaned `#g-ritual` DOM (Ganymede)
-- `#kr-key-img` CSS rule — orphaned since last sprint, still unused, still harmless
+**Not touched this sprint:** everything else. All previously open items from sprint #1 and #2 carry forward unchanged (see below).
 
 ---
 
@@ -60,11 +33,11 @@ Three small fixes from a second Venus playthrough, following directly from last 
 | Threshold | LIVE | Answer: love |
 | Foyer — council debate | LIVE | 4-archetype debate, API-powered |
 | Foyer — greeting sequence | LIVE | "Welcome home." sequence |
-| Venus chamber | LIVE | This sprint: kybalion line removed from replies, simpler mirror→question rhythm |
-| Venus — Sigil Key reveal | LIVE | No floating symbol of any kind now — video is the sole key visual |
+| Venus chamber | LIVE | First-reply scroll jump fixed this sprint. Considered complete by El pending this verification. |
+| Venus — Sigil Key reveal | LIVE | No floating symbol of any kind — video is the sole key visual |
 | Venus — Grimoire | LIVE | Single Return control, top-left, reliably routes to Foyer |
 | Ganymede chamber | LIVE | Full oracle, cave video, god rays |
-| Ganymede — Chalice ending | LIVE | Unchanged this sprint |
+| Ganymede — Chalice ending | LIVE | Unchanged |
 | Persephone | PROTOTYPE ONLY | Standalone persephone-oracle.html; not in index.html |
 | Psyche | NOT BUILT | — |
 | Collective Memory | NOT BUILT | — |
@@ -77,7 +50,7 @@ Three small fixes from a second Venus playthrough, following directly from last 
 |---|---|---|
 | Ganymede ending environment | `Chalice1.mp4` | CANONICAL. No longer loops. |
 | Previous Chalice asset | `Chalice.mp4` | RETIRED. |
-| Sigil Key | `Sigil_Key.mp4` | LIVE — now the sole visual on the key reveal page (no glyph or artwork layered over it) |
+| Sigil Key | `Sigil_Key.mp4` | LIVE — sole visual on the key reveal page |
 | Venus_Artwork.jpg | — | Not referenced in the key reveal. Still used elsewhere (foyer altar, Venus corridor). |
 | Portal chime | `portal-chime.mp3` | DISABLED (`SOUND_ENABLED = false`). |
 
@@ -94,8 +67,8 @@ Three small fixes from a second Venus playthrough, following directly from last 
 | XSS vectors in `innerHTML` in oracle chat and Grimoire | MEDIUM | Security |
 | `?mock=*` params active in production | MEDIUM | Security |
 | `stillnessGate()` dead code, orphaned `#g-ritual` DOM | LOW | Ganymede — not urgent |
-| `#kr-key-img` CSS rule orphaned | LOW | Since prior sprint, harmless |
-| Mock cards / error-fallback `kybalion` fields now inert | LOW | New this sprint, harmless — data exists but is never rendered |
+| `#kr-key-img` CSS rule orphaned | LOW | Since two sprints ago, harmless |
+| Mock cards / error-fallback `kybalion` fields inert | LOW | Data exists but is never rendered |
 | Ghost code: `sendVenus`/`renderVCard`/`addUserMsg`, `initVenusSculpture`/`_buildVenusSculpture` | LOW | Still dead, not wired to any HTML |
 
 ---
