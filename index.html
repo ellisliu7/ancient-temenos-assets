@@ -1087,6 +1087,19 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   transition:opacity 3.6s ease;
 }
 
+/* Warmth pulse — the only feedback when the gift is accepted.
+   A very soft, brief warming of the room's own light, centred low
+   (where the inscription lives), then settling back to nothing.
+   Not a flash, not a checkmark — closer to a held breath being let go. */
+#ch-warmth {
+  position:absolute; inset:0; z-index:1.5;
+  pointer-events:none;
+  opacity:0;
+  background:radial-gradient(ellipse 60% 45% at 50% 78%, rgba(214,176,90,0.22), rgba(214,176,90,0) 70%);
+  transition:opacity 2.8s ease;
+}
+#ch-warmth.pulse { opacity:1; }
+
 /* Inscription canvas — sits above the video, covers the full scene */
 #ch-canvas {
   position:absolute; inset:0; z-index:2;
@@ -1183,6 +1196,9 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 <video id="ch-env" autoplay muted playsinline preload="auto" crossorigin="anonymous">
   <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Chalice1.mp4" type="video/mp4">
 </video>
+
+<!-- Warmth pulse — fires once, when the gift is accepted -->
+<div id="ch-warmth"></div>
 
 <!-- Inscription canvas — the floor engraving, revealed by presence -->
 <canvas id="ch-canvas"></canvas>
@@ -2110,6 +2126,7 @@ function _saveGanyChalice(c){
 
 let _chaliceCurrent=null;
 let _chRaf=null;
+let _chKept=false; // true once the visitor has accepted the gift — inscription settles permanently
 let _chMouseX=0.5,_chMouseY=0.85; // normalised; default parks light at floor centre
 let _chLightX=0.5,_chLightY=0.85; // lerped position
 let _chInscriptionReady=false;
@@ -2213,10 +2230,13 @@ function _chDrawInscription(){
     c.strokeStyle=rule;
     _chHairline(c,cx,y_sep2,ruleW*0.65);
 
-    // CTA
-    c.font=`${fCta}px Cinzel, serif`;
-    c.fillStyle=gold;
-    c.save(); c.translate(cx,y_cta); c.scale(1.04,1); c.fillText('KEEP THE CHALICE',0,0); c.restore();
+    // CTA — omitted once the gift has been accepted. There is nothing
+    // left to invite; the line simply stops being part of the inscription.
+    if(!_chKept){
+      c.font=`${fCta}px Cinzel, serif`;
+      c.fillStyle=gold;
+      c.save(); c.translate(cx,y_cta); c.scale(1.04,1); c.fillText('KEEP THE CHALICE',0,0); c.restore();
+    }
 
     c.restore();
   }
@@ -2253,22 +2273,30 @@ function _chDrawInscription(){
   // Draw the fully-revealed gold inscription on offscreen canvas
   _drawGlyphs(offCtx, 0.88, 0.55);
 
-  // Mask it: destination-in clips offscreen to only where the gradient is opaque.
-  // The gradient peak is 0.78 (not 1.0) — even under direct light, gold is
-  // partly absorbed by the stone. Full brightness would read as UI.
-  offCtx.globalCompositeOperation = 'destination-in';
-  const grad = offCtx.createRadialGradient(lx, ly, 0, lx, ly, lightR);
-  grad.addColorStop(0,   'rgba(255,255,255,0.78)'); // centre of light cone
-  grad.addColorStop(0.22,'rgba(255,255,255,0.52)'); // warm falloff begins
-  grad.addColorStop(0.58,'rgba(255,255,255,0.18)'); // edge of readable zone
-  grad.addColorStop(0.82,'rgba(255,255,255,0.04)'); // feathered outer edge
-  grad.addColorStop(1.0, 'rgba(255,255,255,0.0)');  // complete fade
-  offCtx.fillStyle = grad;
-  offCtx.fillRect(0, 0, W, H);
+  if(_chKept){
+    // The gift has been accepted. The gold no longer needs to be found —
+    // it simply stays, settled, the way something remembered doesn't
+    // need to be searched for twice. No mask, no cursor dependency.
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.drawImage(off, 0, 0);
+  } else {
+    // Mask it: destination-in clips offscreen to only where the gradient is opaque.
+    // The gradient peak is 0.78 (not 1.0) — even under direct light, gold is
+    // partly absorbed by the stone. Full brightness would read as UI.
+    offCtx.globalCompositeOperation = 'destination-in';
+    const grad = offCtx.createRadialGradient(lx, ly, 0, lx, ly, lightR);
+    grad.addColorStop(0,   'rgba(255,255,255,0.78)'); // centre of light cone
+    grad.addColorStop(0.22,'rgba(255,255,255,0.52)'); // warm falloff begins
+    grad.addColorStop(0.58,'rgba(255,255,255,0.18)'); // edge of readable zone
+    grad.addColorStop(0.82,'rgba(255,255,255,0.04)'); // feathered outer edge
+    grad.addColorStop(1.0, 'rgba(255,255,255,0.0)');  // complete fade
+    offCtx.fillStyle = grad;
+    offCtx.fillRect(0, 0, W, H);
 
-  // Composite reveal layer onto main canvas
-  ctx.globalCompositeOperation = 'source-over';
-  ctx.drawImage(off, 0, 0);
+    // Composite reveal layer onto main canvas
+    ctx.globalCompositeOperation = 'source-over';
+    ctx.drawImage(off, 0, 0);
+  }
 
   // Store CTA y for hit-zone positioning
   canvas._ctaY = y_cta;
@@ -2283,7 +2311,14 @@ function _chDrawInscription(){
 // accounting for DPR. The cursor changes to pointer only over this zone.
 function _chPositionHitZone(canvas){
   const hz = document.getElementById('ch-floor-hit');
-  if(!hz||!canvas._ctaY)return;
+  if(!hz)return;
+  if(_chKept){
+    // The gesture is complete. Nothing left to discover or click.
+    hz.style.display='none';
+    return;
+  }
+  if(!canvas._ctaY)return;
+  hz.style.display='';
   const dpr = canvas._dpr || 1;
   const vpY = canvas._ctaY / dpr; // convert from canvas pixels to CSS pixels
   hz.style.top = (vpY - 20) + 'px';
@@ -2313,6 +2348,7 @@ function _chWrapText(ctx,text,maxW){
 }
 
 function _chRafLoop(){
+  if(_chKept){ _chRaf=null; return; } // settled — no more chasing the cursor
   // Lerp light toward cursor — slow and atmospheric
   const ease=0.032;
   const dx=_chMouseX-_chLightX;
@@ -2350,8 +2386,10 @@ function openChaliceReveal(){
 
   if(!existing){
     _chaliceCurrent={tikkun:tikkun,collectedAt:new Date().toISOString()};
+    _chKept=false; // fresh gift — not yet accepted, light must be found
   } else {
     _chaliceCurrent=existing;
+    _chKept=true; // already accepted in a previous visit — settled from the start
   }
 
   // Prepare canvas
@@ -2422,6 +2460,9 @@ function _chStartMobilePulse(){
   }
 }
 
+// Closing the Chalice completes the pilgrimage. The visitor does not
+// return to the finished conversation — they return home, to the Foyer,
+// the same way every other chamber's return journey works.
 function closeChaliceReveal(){
   const ov=document.getElementById('chaliceReveal');if(!ov)return;
   // Clean up RAF and listeners
@@ -2430,57 +2471,47 @@ function closeChaliceReveal(){
   window.removeEventListener('mousemove',_chOnMouseMove);
   window.removeEventListener('touchmove',_chOnTouchMove);
   _chInscriptionReady=false;
-  ov.classList.remove('show');
-  // Restore global nav controls
+
+  // Restore global nav controls before the flash, so they're ready
+  // to render normally once the Foyer is in place.
   const _chRB=document.getElementById('returnBtn');
   const _chTB=document.getElementById('teachingsBtn');
   if(_chRB)_chRB.style.display='';
   if(_chTB)_chTB.style.display='';
-  setTimeout(()=>{ov.style.display='none';},1800);
+
+  // flashTo carries the transition weight (dark flash, ~1.2s).
+  // The Chalice overlay is hidden directly underneath the flash rather
+  // than fading on its own separate timeline — one dark moment, not two.
+  flashTo(()=>{
+    ov.classList.remove('show');
+    ov.style.display='none';
+    showScreen('foyer');
+    councilReset();
+  });
 }
 
+// Keeping the Chalice is not a download. It is the visitor accepting
+// what was left for them. The gold that was found by searching now
+// simply stays — the inscription settles, the hit zone disappears,
+// and the room warms once, briefly, the way a room warms when
+// someone exhales after holding their breath. Nothing to open
+// afterward, nothing to save to disk. The relic already lives in
+// the Grimoire; this gesture is what makes it feel kept.
 function keepChalice(){
   const c=_chaliceCurrent;if(!c)return;
+  if(_chKept)return; // already accepted — nothing left to do
   if(!_getGanyChalice())_saveGanyChalice(c);
   if(window.trackTempleEvent)trackTempleEvent('chalice_kept',{chamber:'ganymede'});
-  // Download: cave frame + inscription
-  const env=document.getElementById('ch-env');
-  const W=1600,H=900;
-  const cv=document.createElement('canvas');cv.width=W;cv.height=H;
-  const ctx=cv.getContext('2d');
-  // Draw cave frame
-  ctx.fillStyle='#080401';ctx.fillRect(0,0,W,H);
-  if(env&&env.readyState>=2&&env.videoWidth){
-    const vw=env.videoWidth,vh=env.videoHeight;
-    const scale=Math.max(W/vw,H/vh);
-    const dw=vw*scale,dh=vh*scale;
-    ctx.drawImage(env,(W-dw)/2,(H-dh)/2,dw,dh);
+
+  _chKept=true;
+  _chDrawInscription(); // settles the gold permanently, removes the CTA line, hides the hit zone
+
+  // The warmth pulse — the only feedback. Rises slowly, holds, releases.
+  const warmth=document.getElementById('ch-warmth');
+  if(warmth){
+    warmth.classList.add('pulse');
+    setTimeout(()=>{ warmth.classList.remove('pulse'); }, 3400);
   }
-  // Overlay a subtle darkening so inscription reads on any frame
-  const dk=ctx.createLinearGradient(0,H*0.6,0,H);
-  dk.addColorStop(0,'rgba(4,2,0,0)');dk.addColorStop(1,'rgba(4,2,0,0.55)');
-  ctx.fillStyle=dk;ctx.fillRect(0,0,W,H);
-  // Inscription
-  ctx.textAlign='center';ctx.textBaseline='middle';
-  const baseY=H*0.76;const lineH=H*0.048;const cx=W*0.5;
-  const fBen=Math.round(H*0.032);const fTik=Math.round(H*0.027);const fCta=Math.round(H*0.018);
-  ctx.font=`italic ${fBen}px "Cormorant Garamond", serif`;
-  ctx.fillStyle='rgba(238,210,140,0.86)';
-  ctx.fillText(CH_BENEDICTION,cx,baseY);
-  const tikLines=_chWrapText(ctx,c.tikkun,W*0.52);
-  ctx.font=`italic ${fTik}px "Cormorant Garamond", serif`;
-  ctx.fillStyle='rgba(238,210,140,0.78)';
-  tikLines.forEach((line,i)=>{ctx.fillText(line,cx,baseY+lineH*1.9+i*lineH*1.2);});
-  ctx.font=`${fCta}px Cinzel, serif`;
-  ctx.fillStyle='rgba(196,158,72,0.72)';
-  ctx.fillText('KEEP THE CHALICE',cx,baseY+lineH*(1.9+tikLines.length*1.2+1.8));
-  cv.toBlob(b=>{
-    if(!b)return;
-    const url=URL.createObjectURL(b);const a=document.createElement('a');
-    a.href=url;a.download='AncientTemenos_Chalice.png';
-    document.body.appendChild(a);a.click();a.remove();
-    setTimeout(()=>URL.revokeObjectURL(url),2500);
-  },'image/png');
 }
 
 // Resize: reinitialise canvas if the room is open
@@ -2954,7 +2985,7 @@ async function sendGany(){
     const gClean=(s)=>stripDash((s||'').trim());
     if(p.reflection)parts.push(gClean(p.reflection));
     if(p.structure)parts.push(gClean(p.structure));
-    if(p.step)parts.push('→ '+gClean(p.step));
+    if(p.step)parts.push(G_WEIGHT_SENTINEL+gClean(p.step));
     if(!p.options||!p.options.length){if(p.question)parts.push(gClean(p.question));}
     await gStream(curr,parts.join('\n\n'));
     if(p.check_in===true){
@@ -2996,7 +3027,7 @@ async function sendGany(){
     const gClean2=(s)=>stripDash((s||'').trim());
     if(p.reflection)parts.push(gClean2(p.reflection));
     if(p.structure)parts.push(gClean2(p.structure));
-    if(p.step)parts.push('→ '+gClean2(p.step));
+    if(p.step)parts.push(G_WEIGHT_SENTINEL+gClean2(p.step));
     if(!p.options||!p.options.length){if(p.question)parts.push(gClean2(p.question));}
     const fullText=parts.join('\n\n');
     await gStream(curr,fullText);
@@ -3142,18 +3173,17 @@ function ganyKeyWelcome(){
   },11000);
 }
 // ── ganyRitual ────────────────────────────────────────────────────────────────
-// The closing of a Ganymede session. No new screen, no ceremony, no form.
-// Ganymede's final reflection has already streamed normally. What follows
-// is two more lines, spoken exactly like the rest of his dialogue, then
-// silence, then the Chalice — automatically. The visitor makes no decision
-// here. Agency lives inside the Chalice chamber itself (KEEP THE CHALICE).
+// The closing of a Ganymede session. No new screen, no ceremony, no form,
+// no re-statement of what was already said. Ganymede's final reflection
+// has already streamed normally and is still sitting on screen — we do
+// not touch it, shift it, or repeat it. Two short lines follow it directly,
+// in the same voice, then silence, then the Chalice — automatically.
 //
 // Pacing (do not compress):
-//   input disappears instantly (no fade — the conversation is simply over)
+//   2.6s silence after his last reflection
+//   "Let it rest there."              — streamed via gStream, normal voice
 //   2.6s silence
-//   "Then we're finished here."        — streamed via gStream, normal voice
-//   2.6s silence
-//   "I've left something for you."     — streamed via gStream, normal voice
+//   "Something has been left for you." — streamed via gStream, normal voice
 //   5.5s held silence — nothing renders, nothing moves
 //   openChaliceReveal() — automatic
 function ganyRitual(){
@@ -3165,38 +3195,23 @@ function ganyRitual(){
   if(inputWrap){inputWrap.classList.remove('show');inputWrap.style.opacity='0';}
 
   const curr=document.getElementById('g-curr-text');
-  const prev=document.getElementById('g-prev-text');
   const opts=document.getElementById('g-options');
   if(opts)opts.innerHTML='';
 
-  function shiftToPrev(then){
-    if(curr&&prev){
-      prev.style.transition='opacity .8s ease';
-      prev.style.opacity='0';
-      setTimeout(()=>{
-        prev.textContent=curr.textContent;
-        prev.style.opacity='1';
-        curr.textContent='';
-        then();
-      },300);
-    } else { then(); }
-  }
-
+  // The two closing lines append to whatever Ganymede already said —
+  // they do not replace it, shift it, or restate it. gStream appends
+  // new paragraphs the same way his multi-paragraph replies always have.
   setTimeout(()=>{
-    shiftToPrev(()=>{
-      gStream(curr,"Then we\u2019re finished here.").then(()=>{
-        setTimeout(()=>{
-          shiftToPrev(()=>{
-            gStream(curr,"I\u2019ve left something for you.").then(()=>{
-              // Held silence — nothing renders, nothing moves.
-              setTimeout(()=>{
-                stopCaveAmbient();
-                openChaliceReveal();
-              },5500);
-            });
-          });
-        },2600);
-      });
+    gStreamAppend(curr,"Let it rest there.").then(()=>{
+      setTimeout(()=>{
+        gStreamAppend(curr,"Something has been left for you.").then(()=>{
+          // Held silence — nothing renders, nothing moves.
+          setTimeout(()=>{
+            stopCaveAmbient();
+            openChaliceReveal();
+          },5500);
+        });
+      },2600);
     });
   },2600);
 }
@@ -3206,6 +3221,12 @@ function ganyRitual(){
 // rather than throwing a ReferenceError. The Grimoire simply omits this section now.
 let gSacredContractData={building:'',next:''};
 
+// gStream renders paragraphs with the temple's standard fade/rise motion.
+// A line beginning with the sentinel "\u2756" is rendered as the carved
+// suggestion — slightly larger, warmer, more letter-spaced — the one
+// sentence Ganymede hopes the visitor carries out. No arrow, no bullet.
+// The sentinel itself is stripped before display.
+const G_WEIGHT_SENTINEL = '\u2756';
 function gStream(el,text){
   return new Promise(res=>{
     if(!el){res();return;}
@@ -3213,9 +3234,41 @@ function gStream(el,text){
     const lines=text.split('\n\n').filter(Boolean);
     if(!lines.length){res();return;}
     lines.forEach((ln,i)=>{
+      const weighted = ln.startsWith(G_WEIGHT_SENTINEL);
+      const clean = weighted ? ln.slice(G_WEIGHT_SENTINEL.length).trim() : ln;
       const d=document.createElement('div');
-      d.textContent=ln;
-      d.style.cssText='opacity:0;transform:translateY(7px);transition:opacity 3s ease,transform 3s ease;'+(i<lines.length-1?'margin-bottom:2.2em;':'');
+      d.textContent=clean;
+      const baseStyle='opacity:0;transform:translateY(7px);transition:opacity 3s ease,transform 3s ease;'+(i<lines.length-1?'margin-bottom:2.2em;':'');
+      d.style.cssText = weighted
+        ? baseStyle+'font-size:1.12em;letter-spacing:.02em;color:rgba(244,228,182,0.94);'
+        : baseStyle;
+      el.appendChild(d);
+      setTimeout(()=>{
+        d.style.opacity='1';d.style.transform='translateY(0)';
+        const gl=document.getElementById('g-glass');if(gl)gl.scrollTop=gl.scrollHeight;
+        if(i===lines.length-1)setTimeout(res,3200);
+      },600+i*2600);
+    });
+  });
+}
+
+// gStreamAppend behaves like gStream but does not clear the element first.
+// Used for the closing lines, which should follow Ganymede's last reflection
+// on screen rather than replacing or restating it.
+function gStreamAppend(el,text){
+  return new Promise(res=>{
+    if(!el){res();return;}
+    const lines=text.split('\n\n').filter(Boolean);
+    if(!lines.length){res();return;}
+    lines.forEach((ln,i)=>{
+      const weighted = ln.startsWith(G_WEIGHT_SENTINEL);
+      const clean = weighted ? ln.slice(G_WEIGHT_SENTINEL.length).trim() : ln;
+      const d=document.createElement('div');
+      d.textContent=clean;
+      const baseStyle='opacity:0;transform:translateY(7px);transition:opacity 3s ease,transform 3s ease;margin-top:2.2em;'+(i<lines.length-1?'margin-bottom:2.2em;':'');
+      d.style.cssText = weighted
+        ? baseStyle+'font-size:1.12em;letter-spacing:.02em;color:rgba(244,228,182,0.94);'
+        : baseStyle;
       el.appendChild(d);
       setTimeout(()=>{
         d.style.opacity='1';d.style.transform='translateY(0)';
