@@ -995,7 +995,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     #keyReveal>.kr-eyebrow,#keyReveal>#kr-headline,#keyReveal>#kr-collect,#keyReveal>#kr-inscription,#keyReveal>#kr-after,#keyReveal>#kr-offer{position:relative;z-index:2;}
     #kr-key-wrap{position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:1.6rem;min-height:clamp(170px,30vh,290px);}
     #kr-key-img{width:clamp(150px,28vh,260px);height:auto;filter:drop-shadow(0 0 26px rgba(214,178,104,0.45)) drop-shadow(0 0 60px rgba(196,158,72,0.22));animation:krFloat 5.5s ease-in-out infinite, krGlow 4.2s ease-in-out infinite;will-change:transform,filter;}
-    #kr-key-img.pulse{animation:krFloat 5.5s ease-in-out infinite, krPulse 1.5s ease-out;}
+    #kr-key-fallback.pulse{animation:krFloat 5.5s ease-in-out infinite, krPulse 1.5s ease-out;}
     @keyframes krFloat{0%,100%{transform:translateY(0) rotate(-1.4deg);}50%{transform:translateY(-16px) rotate(1.4deg);}}
     @keyframes krGlow{0%,100%{filter:drop-shadow(0 0 22px rgba(214,178,104,0.35)) drop-shadow(0 0 50px rgba(196,158,72,0.2));}50%{filter:drop-shadow(0 0 34px rgba(214,178,104,0.6)) drop-shadow(0 0 82px rgba(196,158,72,0.34));}}
     @keyframes krPulse{0%{filter:drop-shadow(0 0 22px rgba(214,178,104,0.4));}28%{filter:drop-shadow(0 0 62px rgba(255,236,190,0.92)) drop-shadow(0 0 130px rgba(214,178,104,0.72));}100%{filter:drop-shadow(0 0 26px rgba(214,178,104,0.45)) drop-shadow(0 0 60px rgba(196,158,72,0.25));}}
@@ -1030,10 +1030,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
   <div id="kr-video-fallback"><span>✦</span></div>
   <button id="kr-close" onclick="closeKeyReveal()" style="position:absolute;top:1.4rem;right:1.8rem;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.44em;text-transform:uppercase;color:rgba(196,158,72,0.42);background:transparent;border:none;cursor:pointer;transition:color .5s;z-index:4;" onmouseover="this.style.color='rgba(196,158,72,0.8)'" onmouseout="this.style.color='rgba(196,158,72,0.42)'">✕ Close</button>
   <div id="kr-key-wrap">
-    <img id="kr-key-img" src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Artwork.jpg"
-         onerror="this.style.display='none';document.getElementById('kr-key-fallback').style.display='block';"
-         alt="Venus Key" style="width:clamp(120px,22vh,200px);height:auto;border-radius:4px;opacity:0.82;filter:drop-shadow(0 0 26px rgba(214,178,104,0.45)) drop-shadow(0 0 60px rgba(196,158,72,0.22));animation:krFloat 5.5s ease-in-out infinite, krGlow 4.2s ease-in-out infinite;will-change:transform,filter;">
-    <div id="kr-key-fallback" style="display:none;font-size:96px;color:rgba(214,178,104,0.85);text-shadow:0 0 44px rgba(214,178,104,0.6);animation:krFloat 5.5s ease-in-out infinite, krGlow 4.2s ease-in-out infinite;">✦</div>
+    <div id="kr-key-fallback" style="display:block;font-size:96px;color:rgba(214,178,104,0.85);text-shadow:0 0 44px rgba(214,178,104,0.6);animation:krFloat 5.5s ease-in-out infinite, krGlow 4.2s ease-in-out infinite;">✦</div>
   </div>
   <p id="kr-headline">The temple offers you its first Key.</p>
   <button id="kr-collect" onclick="collectKey()">✦ Collect this Key</button>
@@ -1786,11 +1783,17 @@ function vaRenderCard(data){
   card.innerHTML='<div class="va-mirror"></div>';
   if(kybalionText){const k=document.createElement('div');k.className='va-kybalion';k.style.cssText='opacity:0;transition:opacity 3s ease;margin-top:1.6rem;';k.textContent=kybalionText;card.appendChild(k);}
   if(questionText){const q=document.createElement('div');q.className='va-question';q.style.cssText='opacity:0;transition:opacity 3s ease;margin-top:1.8rem;';q.textContent=questionText;card.appendChild(q);}
-  // Scroll glass to bottom ONCE before revealing — so text fades in where it lives
   const vg=document.getElementById('va-glass');
   d.appendChild(who);d.appendChild(card);t.appendChild(d);
-  // Scroll to top so visitor sees the beginning of Venus's response
-  if(vg)requestAnimationFrame(()=>vg.scrollTop=0);
+  // Anchor the panel to this card's top the moment it enters the DOM, then
+  // re-pin to that same anchor after every reveal step — #va-glass is
+  // bottom-fixed and grows upward as content fades in, so without re-pinning
+  // each paragraph reveal shifts the whole panel and reads as a jump.
+  let anchorTop=0;
+  if(vg){
+    requestAnimationFrame(()=>{anchorTop=d.offsetTop;vg.scrollTop=anchorTop;});
+  }
+  const pin=()=>{if(vg)vg.scrollTop=anchorTop;};
   const mirrorEl=card.querySelector('.va-mirror');
   const paras=mirrorText.split(/\n\n+/).filter(p=>p.trim());
   // Pure opacity — no movement. Venus arrives, she does not shift.
@@ -1799,11 +1802,11 @@ function vaRenderCard(data){
     sp.style.cssText='opacity:0;transition:opacity 3s ease;'+(i<paras.length-1?'margin:0 0 1.6em;':'margin:0;');
     sp.textContent=para;
     mirrorEl.appendChild(sp);
-    setTimeout(()=>{sp.style.opacity='1';},400+i*2600);
+    setTimeout(()=>{sp.style.opacity='1';pin();},400+i*2600);
   });
   const total=400+Math.max(0,paras.length-1)*2600+3000;
   const k=card.querySelector('.va-kybalion');
-  if(k)setTimeout(()=>{k.style.opacity='1';},total+800);
+  if(k)setTimeout(()=>{k.style.opacity='1';pin();},total+800);
   const q=card.querySelector('.va-question');
   if(q)setTimeout(()=>{q.style.opacity='1';if(vg)vg.scrollTop=vg.scrollHeight;},total+(k?2800:800));
 }
@@ -1827,11 +1830,11 @@ function vaMaybeShowClosing(){
         const keyCta=document.getElementById('va-key-cta');
         const acts=document.getElementById('va-closing-actions');
         const sep=document.getElementById('va-closing-sep');
-        // Ceremonial reveal: reflection → separator breath → actions → key
+        // Ceremonial reveal: reflection → separator breath → key → actions
         setTimeout(()=>{if(line)line.style.opacity='1';},1200);
         setTimeout(()=>{if(sep)sep.style.opacity='1';},3200);
-        setTimeout(()=>{if(acts)acts.style.opacity='1';},6000);
-        setTimeout(()=>{if(keyCta)keyCta.style.opacity='1';},10000);
+        setTimeout(()=>{if(keyCta)keyCta.style.opacity='1';},6000);
+        setTimeout(()=>{if(acts)acts.style.opacity='1';},9200);
       },5000);
     }
   }
@@ -1861,7 +1864,9 @@ async function sendVenusNew(){
     if(btn){btn.classList.remove('loading');btn.innerHTML='✦';}
     const idx=Math.min(vHistory.filter(m=>m.role==='user').length-1,mockCards.length-1);
     const p=mockCards[idx];
-    vHistory.push({role:'assistant',content:JSON.stringify(p)});vaRenderCard(p);vaMaybeShowClosing();
+    vHistory.push({role:'assistant',content:JSON.stringify(p)});
+    if(vHistory.filter(m=>m.role==='user').length>=2)p={...p,question:''};
+    vaRenderCard(p);vaMaybeShowClosing();
     return;
   }
   try{
@@ -1871,7 +1876,9 @@ async function sendVenusNew(){
     if(th)th.textContent='';
     if(btn){btn.classList.remove('loading');btn.innerHTML='✦';}
     let p;try{const start=raw.indexOf('{'),end=raw.lastIndexOf('}');const clean=start>-1&&end>start?raw.slice(start,end+1):raw;p=JSON.parse(clean);}catch(e){p={principle:'Venus speaks',mirror:raw.replace(/\{[\s\S]*\}/,'').trim()||raw,kybalion:'"She is always here."',question:'What did you come to say?',actions:[]};}
-    vHistory.push({role:'assistant',content:raw});vaRenderCard(p);vaMaybeShowClosing();
+    vHistory.push({role:'assistant',content:raw});
+    if(vHistory.filter(m=>m.role==='user').length>=2)p={...p,question:''};
+    vaRenderCard(p);vaMaybeShowClosing();
   }catch(e){
     if(th)th.textContent='';
     if(btn){btn.classList.remove('loading');btn.innerHTML='✦';}
@@ -2607,7 +2614,13 @@ async function grRemember(){
 }
 // ── /GRIMOIRE REMEMBRANCE ────────────────────────────────────────────────────
 
-function closeGrimoire(){document.getElementById('grimoireScreen').style.display='none';if(currentScreen==='ganymedeScreen'){/* stays in cave */}/* Venus: stays in venusApproach — conversation remains open */}
+function closeGrimoire(){
+  document.getElementById('grimoireScreen').style.display='none';
+  if(currentScreen==='ganymedeScreen')return; // stays in cave
+  // Venus / council: Grimoire is the end of the chamber arc — Return takes the
+  // visitor home rather than leaving them stranded on a finished conversation.
+  flashTo(()=>{showScreen('foyer');councilReset();});
+}
 function copyGrimoire(){const inv=document.getElementById('grInvocationSection');const text=`ANCIENT TEMENOS · Grimoire\n${document.getElementById('grDate').textContent}\n\n${inv?inv.innerText.replace(/\n{3,}/g,'\n\n'):''}\n\nancienttemenos.com`;navigator.clipboard.writeText(text).then(()=>{const h=document.getElementById('grCopyHint');h.style.color='rgba(196,158,72,0.65)';setTimeout(()=>h.style.color='rgba(196,158,72,0)',2500);});}
 function sharePortal(){navigator.clipboard.writeText('https://ellisliu7.github.io/ancient-temenos-assets/').then(()=>{const h=document.getElementById('grShareHint');h.style.color='rgba(196,158,72,0.65)';setTimeout(()=>h.style.color='rgba(196,158,72,0)',2500);});}
 
@@ -3410,7 +3423,7 @@ function collectKey(){
   const k={id:'VENUS-'+_keyDateStamp()+'-'+_keyShortRand(),number:_keyNextNumber(),chamber:'venus',date:_keyPrettyDate(),line:_venusSessionLine(),collectedAt:new Date().toISOString()};
   _saveVenusKey(k);_keyCurrent=k;
   if(window.trackTempleEvent)trackTempleEvent('key_collected',{chamber:'venus',id:k.id});
-  const img=document.getElementById('kr-key-img');if(img){img.classList.remove('pulse');void img.offsetWidth;img.classList.add('pulse');}
+  const img=document.getElementById('kr-key-fallback');if(img){img.classList.remove('pulse');void img.offsetWidth;img.classList.add('pulse');}
   const collect=document.getElementById('kr-collect');if(collect)collect.style.display='none';
   const head=document.getElementById('kr-headline');if(head)head.textContent='The Key is yours. It remembers this moment.';
   _renderInscription(k);
