@@ -1167,7 +1167,8 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 
 <!-- Cave environment — the room itself -->
 <!-- NOTE: sits inside display:none parent; JS forces load() on page init so it buffers before reveal -->
-<video id="ch-env" autoplay muted loop playsinline preload="auto" crossorigin="anonymous">
+<!-- No loop — video plays once and settles on the final frame. The room comes to rest. -->
+<video id="ch-env" autoplay muted playsinline preload="auto" crossorigin="anonymous">
   <source src="https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Chalice1.mp4" type="video/mp4">
 </video>
 
@@ -2112,7 +2113,7 @@ let _chTikkunText='';
 //   CH_BY    — top of inscription block as fraction of canvas height (try 0.68–0.76)
 //   CH_SCALE — master size scalar; 1.0 = default (try 0.85–1.15)
 //
-const CH_CX    = 0.48;
+const CH_CX    = 0.50;  // centred on plinth — was 0.48
 const CH_BY    = 0.76;
 const CH_SCALE = 1.0;
 
@@ -2323,10 +2324,13 @@ function _chOnTouchMove(e){
 function openChaliceReveal(){
   const ov=document.getElementById('chaliceReveal');if(!ov)return;
 
-  // Resolve tikkun
-  const existing=_getGanyChalice();
-  const tikkun=existing?existing.tikkun:_ganyTikkunLine();
-  _chTikkunText=tikkun;
+  // Resolve tikkun — always prefer the live conversation over saved data.
+  // If gHistory has content, this is an active session; derive tikkun fresh.
+  // Only fall back to a saved relic if gHistory is empty (returning visitor).
+  const hasActiveSession = typeof gHistory !== 'undefined' && gHistory.length > 0;
+  const existing = hasActiveSession ? null : _getGanyChalice();
+  const tikkun = existing ? existing.tikkun : _ganyTikkunLine();
+  _chTikkunText = tikkun;
 
   if(!existing){
     _chaliceCurrent={tikkun:tikkun,collectedAt:new Date().toISOString()};
@@ -2345,7 +2349,20 @@ function openChaliceReveal(){
 
   // Show the screen
   ov.style.display='block';
-  if(env){try{env.muted=true;env.currentTime=0;const pp=env.play();if(pp&&pp.catch)pp.catch(()=>{});}catch(e){}}
+  if(env){
+    try{
+      env.muted=true;env.currentTime=0;
+      // Pause on final frame — the room settles, it does not loop.
+      env.onended=()=>{ try{env.pause();}catch(e){} };
+      const pp=env.play();if(pp&&pp.catch)pp.catch(()=>{});
+    }catch(e){}
+  }
+
+  // Hide global nav controls so they don't overlap the chamber UI
+  const _chReturnBtn=document.getElementById('returnBtn');
+  const _chTeachBtn=document.getElementById('teachingsBtn');
+  if(_chReturnBtn)_chReturnBtn.style.display='none';
+  if(_chTeachBtn)_chTeachBtn.style.display='none';
 
   requestAnimationFrame(()=>requestAnimationFrame(()=>{
     ov.classList.add('show');
@@ -2398,6 +2415,11 @@ function closeChaliceReveal(){
   window.removeEventListener('touchmove',_chOnTouchMove);
   _chInscriptionReady=false;
   ov.classList.remove('show');
+  // Restore global nav controls
+  const _chRB=document.getElementById('returnBtn');
+  const _chTB=document.getElementById('teachingsBtn');
+  if(_chRB)_chRB.style.display='';
+  if(_chTB)_chTB.style.display='';
   setTimeout(()=>{ov.style.display='none';},1800);
 }
 
@@ -2923,7 +2945,8 @@ async function sendGany(){
       setTimeout(ganyRitual,2000);
     }else if(!gHasKey()&&gExchangeCount>=G_FREE_LIMIT){
       if(opts)opts.innerHTML='';
-      stillnessGate();
+      // Route through ganyRitual so Sacred Contract completes before Chalice
+      setTimeout(ganyRitual,2000);
     }else{
       if(Array.isArray(p.options)&&p.options.length===3)setTimeout(()=>showCandles(p.options,p.context||''),1100);
     }
@@ -2965,7 +2988,8 @@ async function sendGany(){
       setTimeout(ganyRitual,2000);
     }else if(!gHasKey()&&gExchangeCount>=G_FREE_LIMIT){
       if(opts)opts.innerHTML='';
-      stillnessGate();
+      // Route through ganyRitual so Sacred Contract completes before Chalice opens
+      setTimeout(ganyRitual,2000);
     }else{
       const options=Array.isArray(p.options)&&p.options.length===3?p.options:null;
       if(options)setTimeout(()=>showCandles(options,p.context||''),1100);
@@ -3271,6 +3295,12 @@ async function submitSacredContract(btn,fields){
         const gl=document.getElementById('g-glass');
         if(gl)gl.scrollTop=gl.scrollHeight;
       },300);
+
+      // After the Sacred Contract is witnessed, the Chalice opens.
+      // 6s delay: visitor reads the closing stanzas, sees the Grimoire button,
+      // then the room deepens and the Chalice appears.
+      // The Sacred Contract gives the Chalice its tikkun text.
+      setTimeout(()=>stillnessGate(),6000);
     }
   },1800);
 }
