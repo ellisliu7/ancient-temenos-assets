@@ -1118,6 +1118,18 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 }
 #ch-close:hover { color:rgba(196,158,72,0.58); }
 
+/* Grimoire — sits beside Close, same register, same restraint.
+   The only remaining path to the Ganymede Grimoire now that the
+   Sacred Contract form is gone. Not a CTA — a footnote. */
+#ch-grimoire-link {
+  position:absolute; top:1.4rem; right:5.4rem; z-index:10;
+  font-family:'Cinzel',serif; font-size:7.5px; letter-spacing:.46em;
+  text-transform:uppercase; color:rgba(196,158,72,0.28);
+  background:transparent; border:none; cursor:pointer;
+  transition:color .6s;
+}
+#ch-grimoire-link:hover { color:rgba(196,158,72,0.58); }
+
 /* Brand — top left, barely there */
 #ch-brand {
   position:absolute; top:1.6rem; left:2rem; z-index:10;
@@ -1180,6 +1192,9 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 
 <!-- Close -->
 <button id="ch-close" onclick="closeChaliceReveal()">&#x2715; Close</button>
+
+<!-- Grimoire — quiet footnote, not a CTA -->
+<button id="ch-grimoire-link" onclick="openGrimoire('ganymede')">&#x2736; Grimoire</button>
 
 <!-- Brand -->
 <span id="ch-brand">Ancient Temenos</span>
@@ -1262,7 +1277,8 @@ const GANY_GLB='https://raw.githubusercontent.com/ellisliu7/ancient-temenos-asse
 const FRAME_PNG=CDN+'Portal%20Frame.png';
 
 // == SOUND V0.5 — portal chime experiment ==
-const SOUND_ENABLED = true; // set false to disable instantly
+// Disabled per sprint note: remove the wind chime audio.
+const SOUND_ENABLED = false; // was true — set back to true to restore
 let _chimeAudio = null;
 function playPortalChime(){
   if(!SOUND_ENABLED) return;
@@ -3037,7 +3053,9 @@ function showCandles(options,context){
 const G_FREE_LIMIT=3;
 function gHasKey(){try{return localStorage.getItem('temenos_sigil_key')==='1';}catch(e){return false;}}
 function gGrantKey(){try{localStorage.setItem('temenos_sigil_key','1');}catch(e){}}
-/* Ganymede's closing has already streamed. The cave now asks for the Key. */
+/* UNUSED as of this sprint — ganyRitual() now opens the Chalice directly
+   after its own two closing lines. Kept in case a future flow needs a
+   standalone silence-then-Chalice transition without the closing dialogue. */
 function stillnessGate(){
   // Direction C: quiet consecration.
   // 4s silence (no words) → darkness holds → Chalice opens.
@@ -3123,187 +3141,70 @@ function ganyKeyWelcome(){
     if(gi)gi.disabled=false;if(gb)gb.disabled=false;
   },11000);
 }
+// ── ganyRitual ────────────────────────────────────────────────────────────────
+// The closing of a Ganymede session. No new screen, no ceremony, no form.
+// Ganymede's final reflection has already streamed normally. What follows
+// is two more lines, spoken exactly like the rest of his dialogue, then
+// silence, then the Chalice — automatically. The visitor makes no decision
+// here. Agency lives inside the Chalice chamber itself (KEEP THE CHALICE).
+//
+// Pacing (do not compress):
+//   input disappears instantly (no fade — the conversation is simply over)
+//   2.6s silence
+//   "Then we're finished here."        — streamed via gStream, normal voice
+//   2.6s silence
+//   "I've left something for you."     — streamed via gStream, normal voice
+//   5.5s held silence — nothing renders, nothing moves
+//   openChaliceReveal() — automatic
 function ganyRitual(){
-  const ritual=document.getElementById('g-ritual');const words=document.getElementById('g-ritual-words');const gold=document.getElementById('g-gold-bg');
-  if(!ritual)return;
   const gi=document.getElementById('gi');const gb=document.getElementById('gb');
   if(gi)gi.disabled=true;if(gb)gb.disabled=true;
-  ritual.style.pointerEvents='all';
-  const raysC=document.getElementById('g-rays-canvas');
-  const dustC=document.getElementById('g-dust-canvas');
-  if(raysC){raysC.style.transition='opacity 3s ease';raysC.style.opacity='0';}
-  if(dustC){dustC.style.transition='opacity 3s ease';dustC.style.opacity='0';}
-  setTimeout(()=>ritual.classList.add('dim'),600);
-  setTimeout(()=>{
-    if(gold){gold.style.opacity='0.8';}
-    if(window._gRaysSetIntensity)window._gRaysSetIntensity(1.5);
-    if(raysC)raysC.style.opacity='0.6';
-  },4500);
-  setTimeout(()=>{if(words)words.classList.add('show');},6500);
-  setTimeout(()=>{
-    if(words){words.style.transition='opacity 2s ease';words.style.opacity='0';}
-    ritual.classList.add('black');
-    stopCaveAmbient();
-  },10000);
-  setTimeout(()=>{
-    ritual.classList.remove('dim','black');ritual.style.background='rgba(3,2,1,0)';
-    if(gold)gold.style.opacity='0';
-    if(raysC){raysC.style.transition='';raysC.style.opacity='1';}
-    if(dustC){dustC.style.transition='';dustC.style.opacity='1';}
-    ritual.style.pointerEvents='none';
-    const glass=document.getElementById('g-glass');
-    if(glass)glass.classList.remove('sunk');
-    showSacredContract();
-  },12500);
-}
 
-let gSacredContractData={building:'',next:''};
+  // The input simply disappears. No transition — the conversation is over.
+  const inputWrap=document.getElementById('g-input-wrap');
+  if(inputWrap){inputWrap.classList.remove('show');inputWrap.style.opacity='0';}
 
-function showSacredContract(){
   const curr=document.getElementById('g-curr-text');
   const prev=document.getElementById('g-prev-text');
   const opts=document.getElementById('g-options');
-  const inputWrap=document.getElementById('g-input-wrap');
-  if(curr)curr.textContent='';
-  if(prev)prev.textContent='';
   if(opts)opts.innerHTML='';
-  if(inputWrap)inputWrap.style.opacity='0';
 
-  // Three copy blocks — paragraph fade-in via reusing gStream visual pattern
-  const copyLines=[
-    'For a while, you thought the question was whether you could do it.\n\nBut that was never really the question.\n\nThe question was whether you would.',
-    'Strange, isn\u2019t it?\n\nHow a thing can call to you for years \u2014 waiting patiently.\n\nNot asking to be finished. Only asking to be continued.',
-    'Before you go, leave a record.\n\nNot for us.\n\nFor the version of you who will stand here again someday.'
-  ];
-
-  const wrap=document.createElement('div');
-  wrap.style.cssText='width:100%;text-align:center;';
-
-  copyLines.forEach((block,bi)=>{
-    const p=document.createElement('p');
-    p.className='sc-copy';
-    // Render line breaks within each block
-    p.innerHTML=block.replace(/\n\n/g,'<br><br>');
-    p.style.marginBottom = bi < copyLines.length-1 ? '1.6rem' : '0';
-    wrap.appendChild(p);
-  });
-
-  if(curr){
-    curr.innerHTML='';
-    curr.appendChild(wrap);
+  function shiftToPrev(then){
+    if(curr&&prev){
+      prev.style.transition='opacity .8s ease';
+      prev.style.opacity='0';
+      setTimeout(()=>{
+        prev.textContent=curr.textContent;
+        prev.style.opacity='1';
+        curr.textContent='';
+        then();
+      },300);
+    } else { then(); }
   }
 
-  // Stagger each copy block in
-  const copyEls=wrap.querySelectorAll('.sc-copy');
-  let delay=400;
-  copyEls.forEach((el,i)=>{
-    setTimeout(()=>el.classList.add('show'), delay);
-    delay+=2400;
-  });
-
-  // Fields appear after all copy has settled
-  const fieldsDelay=delay+800;
   setTimeout(()=>{
-    const fields=document.createElement('div');
-    fields.className='sc-fields';
-    fields.innerHTML=
-      '<label class="sc-label">What are you building?</label>'+
-      '<textarea class="sc-textarea" id="sc-building" placeholder="Speak plainly. The cave will remember." rows="2" spellcheck="false"></textarea>'+
-      '<label class="sc-label" style="margin-top:.4rem;">What is asking to happen next?</label>'+
-      '<textarea class="sc-textarea" id="sc-next" placeholder="The next stone. However small." rows="2" spellcheck="false"></textarea>';
-
-    const submitBtn=document.createElement('button');
-    submitBtn.className='sc-submit';
-    submitBtn.textContent='Witness this';
-
-    submitBtn.onclick=()=>submitSacredContract(submitBtn,fields);
-
-    if(opts){
-      opts.innerHTML='';
-      opts.appendChild(fields);
-      opts.appendChild(submitBtn);
-      const gl=document.getElementById('g-glass');
-      if(gl)setTimeout(()=>gl.scrollTop=gl.scrollHeight,100);
-      requestAnimationFrame(()=>{
+    shiftToPrev(()=>{
+      gStream(curr,"Then we\u2019re finished here.").then(()=>{
         setTimeout(()=>{
-          fields.classList.add('show');
-          submitBtn.style.opacity='1';
-        },100);
+          shiftToPrev(()=>{
+            gStream(curr,"I\u2019ve left something for you.").then(()=>{
+              // Held silence — nothing renders, nothing moves.
+              setTimeout(()=>{
+                stopCaveAmbient();
+                openChaliceReveal();
+              },5500);
+            });
+          });
+        },2600);
       });
-    }
-  },fieldsDelay);
+    });
+  },2600);
 }
 
-async function submitSacredContract(btn,fields){
-  const bEl=document.getElementById('sc-building');
-  const nEl=document.getElementById('sc-next');
-  const building=(bEl?.value||'').trim();
-  const next=(nEl?.value||'').trim();
-  if(!building&&!next)return;
-
-  // Store for grimoire
-  gSacredContractData={building,next};
-
-  // Fade out fields and button
-  fields.style.transition='opacity 1.6s ease';
-  fields.style.opacity='0';
-  btn.style.transition='opacity 1.2s ease';
-  btn.style.opacity='0';
-
-  const curr=document.getElementById('g-curr-text');
-  const opts=document.getElementById('g-options');
-
-  setTimeout(async()=>{
-    if(opts)opts.innerHTML='';
-    if(curr)curr.innerHTML='';
-
-    // Final ceremonial lines as two paragraphs — slow fade-in via gStream
-    const closing=[
-      'Perhaps what you\u2019re building is also building you.\n\nStone by stone.\n\nChoice by choice.',
-      'Then it has begun.\n\nGo on.'
-    ].join('\n\n \n\n');  // spacer between the two stanzas
-
-    await gStream(curr,closing);
-
-    // Reveal seal + ghost option
-    if(opts){
-      const grimBtn=document.createElement('button');
-      grimBtn.className='gc-grimoire-btn';
-      grimBtn.textContent='\u2736 Seal in Grimoire';
-      grimBtn.style.cssText='display:block;margin:2.8rem auto 0;opacity:0;transition:opacity 2s ease;';
-      grimBtn.onclick=()=>openGrimoire('ganymede');
-
-      const contBtn=document.createElement('button');
-      contBtn.textContent='I want to go deeper';
-      contBtn.style.cssText='display:block;margin:1rem auto 0;background:transparent;border:none;cursor:pointer;font-family:\'Cinzel\',serif;font-size:7px;letter-spacing:.4em;color:rgba(196,158,72,0.22);text-transform:uppercase;padding:.4rem 0;opacity:0;transition:opacity 2s ease,color .4s ease;';
-      contBtn.onmouseover=()=>contBtn.style.color='rgba(196,158,72,0.55)';
-      contBtn.onmouseout=()=>contBtn.style.color='rgba(196,158,72,0.22)';
-      contBtn.onclick=()=>{
-        opts.innerHTML='';
-        if(curr)curr.innerHTML='';
-        const gi=document.getElementById('gi');const gb=document.getElementById('gb');
-        if(gi){gi.disabled=false;gi.focus();}if(gb)gb.disabled=false;
-        const inputWrap=document.getElementById('g-input-wrap');
-        if(inputWrap)inputWrap.style.opacity='1';
-      };
-
-      opts.appendChild(grimBtn);
-      opts.appendChild(contBtn);
-      setTimeout(()=>{
-        grimBtn.style.opacity='1';
-        contBtn.style.opacity='1';
-        const gl=document.getElementById('g-glass');
-        if(gl)gl.scrollTop=gl.scrollHeight;
-      },300);
-
-      // After the Sacred Contract is witnessed, the Chalice opens.
-      // 6s delay: visitor reads the closing stanzas, sees the Grimoire button,
-      // then the room deepens and the Chalice appears.
-      // The Sacred Contract gives the Chalice its tikkun text.
-      setTimeout(()=>stillnessGate(),6000);
-    }
-  },1800);
-}
+// Sacred Contract form removed from the Ganymede ending (see ganyRitual).
+// Declaration kept — empty — so the Grimoire's defensive checks resolve safely
+// rather than throwing a ReferenceError. The Grimoire simply omits this section now.
+let gSacredContractData={building:'',next:''};
 
 function gStream(el,text){
   return new Promise(res=>{
