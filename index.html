@@ -1780,30 +1780,40 @@ function vaRenderCard(data){
   const d=document.createElement('div');d.className='msg msg-v';
   const who=document.createElement('span');who.className='who';who.textContent='Venus';
   const card=document.createElement('div');card.className='vcard';
-  const cleanText=(s)=>stripDash((s||'').replace(/^[\s\-–—•]+/gm,'').trim());
+  const cleanText=(s)=>stripDash((s||'').replace(/^[ \t\-–—•]+/gm,'').trim());
   const mirrorText=cleanText(data.mirror||'');
   const questionText=cleanText(data.question||'');
   card.innerHTML='<div class="va-mirror"></div>';
-  if(questionText){const q=document.createElement('div');q.className='va-question';q.style.cssText='opacity:0;transition:opacity 3s ease;margin-top:1.8rem;';q.textContent=questionText;card.appendChild(q);}
-  const vg=document.getElementById('va-glass');
-  d.appendChild(who);d.appendChild(card);t.appendChild(d);
-  // Anchor the panel to this card's top the moment it enters the DOM, then
-  // re-pin to that same anchor after every reveal step — #va-glass is
-  // bottom-fixed and grows upward as content fades in, so without re-pinning
-  // each paragraph reveal shifts the whole panel and reads as a jump.
-  let anchorTop=0;
-  if(vg){
-    requestAnimationFrame(()=>{anchorTop=d.offsetTop;vg.scrollTop=Math.min(anchorTop,vg.scrollHeight-vg.clientHeight);});
-  }
-  const pin=()=>{if(!vg)return;vg.scrollTop=Math.min(anchorTop,vg.scrollHeight-vg.clientHeight);};
   const mirrorEl=card.querySelector('.va-mirror');
   const paras=mirrorText.split(/\n\n+/).filter(p=>p.trim());
-  // Pure opacity — no movement. Venus arrives, she does not shift.
+  // Build every paragraph and the question block BEFORE the card enters the
+  // document, so the appendChild below is the only layout-affecting DOM
+  // mutation for this card.
   paras.forEach((para,i)=>{
     const sp=document.createElement('p');
     sp.style.cssText='opacity:0;transition:opacity 3s ease;'+(i<paras.length-1?'margin:0 0 1.6em;':'margin:0;');
     sp.textContent=para;
     mirrorEl.appendChild(sp);
+  });
+  if(questionText){const q=document.createElement('div');q.className='va-question';q.style.cssText='opacity:0;transition:opacity 3s ease;margin-top:1.8rem;';q.textContent=questionText;card.appendChild(q);}
+  const vg=document.getElementById('va-glass');
+  d.appendChild(who);d.appendChild(card);t.appendChild(d);
+  // Force a synchronous reflow immediately after insertion (reading
+  // offsetHeight forces the browser to compute layout right now, rather than
+  // deferring it to the next paint). Without this, scrollHeight/clientHeight
+  // read in the same tick as appendChild can be stale and undersized — on
+  // the very first reply that stale read produced an undersized scroll
+  // ceiling, silently corrected ~400ms later when the first paragraph's
+  // reveal timeout called pin() again with now-current geometry, and that
+  // late correction was the visible jump. Forcing the reflow here guarantees
+  // the very first pin already uses final geometry, in one write.
+  void d.offsetHeight;
+  const anchorTop=d.offsetTop;
+  const pin=()=>{if(!vg)return;vg.scrollTop=Math.min(anchorTop,vg.scrollHeight-vg.clientHeight);};
+  pin();
+  // Pure opacity — no movement. Venus arrives, she does not shift.
+  paras.forEach((para,i)=>{
+    const sp=mirrorEl.children[i];
     setTimeout(()=>{sp.style.opacity='1';pin();},400+i*2600);
   });
   const total=400+Math.max(0,paras.length-1)*2600+3000;
