@@ -582,7 +582,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 
 <!-- ══ THRESHOLD ══ -->
 <div class="screen active visible" id="threshold">
-  <div class="t-video-wrap"><video autoplay muted loop playsinline preload="auto">    <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@latest/Main_Page.mp4" type="video/mp4">
+  <div class="t-video-wrap"><video autoplay muted loop playsinline preload="auto">    <source src="https://cdn.jsdelivr.net/gh/ellisliu7/ancient-temenos-assets@main/Main_Page.mp4" type="video/mp4">
 </video></div>
   <div class="t-vignette"></div>
   <div class="t-content">
@@ -1304,6 +1304,34 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 </div>
 
 <script>
+/* ── DEV GATE ──────────────────────────────────────────────────────────────
+   Developer utilities (?mock / ?dev / ?key / ?sigil / ?skip URL params and the
+   window.__test* console toolkit) must never fire for a real visitor. They
+   unlock only when this browser has been keyed, or on localhost.
+   To unlock on the live site: open the console once (per browser) and run
+     localStorage.setItem('temenos_atelier','1')
+   To relock: localStorage.removeItem('temenos_atelier')
+   For a locked visitor the dev params are stripped from the URL up front, so
+   every downstream reader simply finds nothing. */
+window.__temenosDev = (function(){
+  try{
+    return localStorage.getItem('temenos_atelier') === '1'
+        || location.hostname === 'localhost'
+        || location.hostname === '127.0.0.1';
+  }catch(e){ return false; }
+})();
+if(!window.__temenosDev){
+  try{
+    var _tu = new URLSearchParams(location.search), _ts = false;
+    ['mock','dev','key','sigil','skip'].forEach(function(k){
+      if(_tu.has(k)){ _tu.delete(k); _ts = true; }
+    });
+    if(_ts){
+      var _tc = _tu.toString();
+      history.replaceState(null, '', location.pathname + (_tc ? ('?'+_tc) : '') + location.hash);
+    }
+  }catch(e){}
+}
 const ORACLE_ENDPOINT='https://ancient-temenos-oracle.vercel.app/api/oracle';
 // Strip em-dashes from AI output — replace with comma+space or just space
 const stripDash=(s)=>(s||'').replace(/—\s*/g,', ').replace(/\s*—/g,',').replace(/,,+/g,',').trim();
@@ -2635,8 +2663,8 @@ function closeGrimoire(){
   // visitor home rather than leaving them stranded on a finished conversation.
   flashTo(()=>{showScreen('foyer');councilReset();});
 }
-function copyGrimoire(){const inv=document.getElementById('grInvocationSection');const text=`ANCIENT TEMENOS · Grimoire\n${document.getElementById('grDate').textContent}\n\n${inv?inv.innerText.replace(/\n{3,}/g,'\n\n'):''}\n\nancienttemenos.com`;navigator.clipboard.writeText(text).then(()=>{const h=document.getElementById('grCopyHint');h.style.color='rgba(196,158,72,0.65)';setTimeout(()=>h.style.color='rgba(196,158,72,0)',2500);});}
-function sharePortal(){navigator.clipboard.writeText('https://ellisliu7.github.io/ancient-temenos-assets/').then(()=>{const h=document.getElementById('grShareHint');h.style.color='rgba(196,158,72,0.65)';setTimeout(()=>h.style.color='rgba(196,158,72,0)',2500);});}
+function copyGrimoire(){const inv=document.getElementById('grInvocationSection');const text=`ANCIENT TEMENOS · Grimoire\n${document.getElementById('grDate').textContent}\n\n${inv?inv.innerText.replace(/\n{3,}/g,'\n\n'):''}\n\nancienttemenos.art`;navigator.clipboard.writeText(text).then(()=>{const h=document.getElementById('grCopyHint');h.style.color='rgba(196,158,72,0.65)';setTimeout(()=>h.style.color='rgba(196,158,72,0)',2500);});}
+function sharePortal(){navigator.clipboard.writeText('https://ancienttemenos.art').then(()=>{const h=document.getElementById('grShareHint');h.style.color='rgba(196,158,72,0.65)';setTimeout(()=>h.style.color='rgba(196,158,72,0)',2500);});}
 
 // == VENUS SCULPTURE ==
 let venusSculptureInited=false;
@@ -4484,6 +4512,7 @@ initFoyer=function(){
      ════════════════════════════════════════════════════════════════════════════ -->
 <script>
 (function(){
+  if(!window.__temenosDev) return; // dev toolkit locked for real visitors
 
   // -- SHARED MOCK DATA -------------------------------------------------------
 
