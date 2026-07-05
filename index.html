@@ -702,6 +702,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
       <div id="va-invitation">
         <p id="va-inv-line2">She knew you would come.</p>
         <p id="va-inv-line3" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,1.4vw,17px);color:rgba(238,220,168,0.48);line-height:1.8;margin:.9rem 0 0;letter-spacing:.04em;opacity:0;transition:opacity 2.2s ease 1.2s;">What brought you here today?</p>
+        <p id="va-inv-vow" style="font-family:'Cormorant',serif;font-style:italic;font-size:clamp(11px,1.1vw,13px);color:rgba(238,220,168,0.34);line-height:1.7;margin:1.6rem 0 0;letter-spacing:.05em;opacity:0;transition:opacity 2.4s ease;">What you share with the oracle is not kept by this temple, nor visible to its keeper.</p>
       </div>
       <div id="va-vthread"></div>
       <div id="va-closing-new">
@@ -1797,6 +1798,7 @@ function vaOpenConversation(){
   const inv=document.getElementById('va-invitation');if(inv)inv.classList.add('show');
   // Question line fades in via CSS delay (1.2s). Input appears after question is visible.
   const line3=document.getElementById('va-inv-line3');if(line3)setTimeout(()=>line3.style.opacity='1',1400);
+  const vow=document.getElementById('va-inv-vow');if(vow)setTimeout(()=>vow.style.opacity='1',1900);
   setTimeout(()=>{
     const inp=document.getElementById('va-input-wrap');if(inp)inp.classList.add('show');
     const qi=document.getElementById('va-qi');if(qi)qi.focus();

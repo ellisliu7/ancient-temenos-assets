@@ -1,8 +1,31 @@
 # Ancient Temenos — Current State
 **Last updated:** 5 July 2026
-**Status:** V1 live with private testers. Genuine emotional resonance confirmed. Canonical next build: **Rite of Departure** (Venus first) — gated behind the factual privacy audit of the oracle architecture.
+**Status:** V1 live with private testers. Privacy audit of the oracle architecture is **CLOSED** (see entry below). Threshold vow shipped. Canonical next build: **Rite of Departure** (Venus first) — no longer gated; clear to proceed.
 **Source of truth:** `https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/index.html`
 **Live URL:** `https://ancienttemenos.art`
+
+---
+
+## 5 July 2026 (evening) — Privacy audit closed · threshold vow shipped
+
+**Audit verdict (verified in code + verified live + verified via Anthropic Console):**
+- Browser: oracle conversation lives in memory only (`vHistory`), never written to `localStorage`. Gone on refresh/close.
+- Proxy (`ancient-temenos-oracle` / `api/oracle.js`): zero logging statements, zero storage of any kind, only outbound call is to Anthropic. Confirmed live — a real oracle exchange produced no entry in Vercel Logs. No Log Drain exists (Hobby plan).
+- Anthropic: org default retention is ON, 30 days; model-training/feedback sharing is OFF.
+- `/api/remember` (Grimoire "Remembrance"): client-side trigger is dead code (`#gr-email` doesn't exist in the live DOM, `grRemember` has no call site). The server endpoint exists and would relay to Resend/your inbox if it ever fired — never Vercel logs, never a database. Flagged for a later hygiene pass (delete both sides); not urgent, not a live risk.
+- **Net result:** nothing is stored by the temple, anywhere, and El has no dashboard or log that shows any visitor's oracle words. Anthropic's own 30-day backend window is the only place an exchange exists after the reply returns, and it is not used to train the model.
+
+**Threshold vow — shipped this session (Venus, live path):**
+> "What you share with the oracle is not kept by this temple, nor visible to its keeper."
+
+- One line, Cormorant italic, quieter register than the invitation copy above it.
+- Lives in `#va-invitation`, as a new `<p id="va-inv-vow">` immediately after `#va-inv-line3` (the "What brought you here today?" line).
+- Fires once per chamber entry, from inside `vaOpenConversation()` — fades in at 1900ms, strictly between the existing line3 reveal (1400ms) and the existing input-wrap reveal (2600ms). Neither existing timing was changed.
+- Cannot repeat mid-conversation: `vaOpenConversation()` is still guarded by `if(venusConvOpen)return;`, untouched. It can only fire again on a genuinely fresh threshold arrival (`venusConvOpen` reset when the visitor returns to `venusApproach`), never while a conversation is open.
+- Scope: Venus only, for V1. Ganymede's rite gets the same treatment, same beat, when his rite is built — not done tonight.
+- **Deliberately deferred (logged, not built):** the fuller factual disclosure — Anthropic's 30-day retention window, no-training confirmation, standard safety-review exception — behind a small "Privacy" link/overlay. This is a real trust/policy item for before public launch, just not part of tonight's minimal change.
+
+**Full audit trail** (proxy source review, Vercel dashboard inspection, Anthropic Console check, wording stress-test) lives in the session transcript; this entry is the durable summary.
 
 ---
 
