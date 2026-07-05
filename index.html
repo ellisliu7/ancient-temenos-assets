@@ -477,6 +477,8 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #va-input-wrap input::placeholder{color:rgba(196,158,72,0.62);font-style:italic;}
 #va-input-wrap button{background:transparent;border:.5px solid rgba(196,158,72,0.22);border-radius:50%;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .3s;}
 #va-input-wrap button:hover{border-color:rgba(196,158,72,0.5);}
+#va-vow-note{text-align:center;font-family:'Cormorant',serif;font-style:italic;font-size:clamp(11px,1.1vw,13px);color:rgba(238,220,168,0.42);line-height:1.6;letter-spacing:.05em;margin:1.3rem 0 0;opacity:0;transition:opacity 1.4s ease;}
+#va-vow-note.show{opacity:1;}
 @keyframes vaCtaBreath{0%,100%{opacity:.72;text-shadow:0 0 6px rgba(196,158,72,0.15);}50%{opacity:1;text-shadow:0 0 18px rgba(196,158,72,0.45);}}
 .va-cta-btn{animation:vaCtaBreath 3.2s ease-in-out infinite;}
 .va-cta-btn:hover{animation:none;opacity:1 !important;color:rgba(196,158,72,0.9) !important;text-shadow:0 0 16px rgba(196,158,72,0.4);}
@@ -702,7 +704,6 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
       <div id="va-invitation">
         <p id="va-inv-line2">She knew you would come.</p>
         <p id="va-inv-line3" style="font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(14px,1.4vw,17px);color:rgba(238,220,168,0.48);line-height:1.8;margin:.9rem 0 0;letter-spacing:.04em;opacity:0;transition:opacity 2.2s ease 1.2s;">What brought you here today?</p>
-        <p id="va-inv-vow" style="font-family:'Cormorant',serif;font-style:italic;font-size:clamp(11px,1.1vw,13px);color:rgba(238,220,168,0.34);line-height:1.7;margin:1.6rem 0 0;letter-spacing:.05em;opacity:0;transition:opacity 2.4s ease;">What you share with the oracle is not kept by this temple, nor visible to its keeper.</p>
       </div>
       <div id="va-vthread"></div>
       <div id="va-closing-new">
@@ -719,6 +720,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
         <input id="va-qi" type="text" placeholder="You are safe to speak here" autocomplete="off" spellcheck="false"/>
         <button id="va-qb" onclick="sendVenusNew()" style="background:transparent;border:none;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:rgba(196,158,72,0.5);font-size:17px;transition:color .5s ease,text-shadow .5s ease;" onmouseover="this.style.color='rgba(196,158,72,0.9)';this.style.textShadow='0 0 14px rgba(196,158,72,0.35)'" onmouseout="this.style.color='rgba(196,158,72,0.5)';this.style.textShadow='none'">✦</button>
       </div>
+      <p id="va-vow-note">What you share with the oracle is not kept by this temple, nor visible to its keeper.</p>
       <p class="thinking" id="va-thinking"></p>
     </div>
   </div>
@@ -1798,9 +1800,9 @@ function vaOpenConversation(){
   const inv=document.getElementById('va-invitation');if(inv)inv.classList.add('show');
   // Question line fades in via CSS delay (1.2s). Input appears after question is visible.
   const line3=document.getElementById('va-inv-line3');if(line3)setTimeout(()=>line3.style.opacity='1',1400);
-  const vow=document.getElementById('va-inv-vow');if(vow)setTimeout(()=>vow.style.opacity='1',1900);
   setTimeout(()=>{
     const inp=document.getElementById('va-input-wrap');if(inp)inp.classList.add('show');
+    const vow=document.getElementById('va-vow-note');if(vow)vow.classList.add('show');
     const qi=document.getElementById('va-qi');if(qi)qi.focus();
   },2600);
 }
