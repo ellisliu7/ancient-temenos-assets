@@ -1,5 +1,5 @@
 # Ancient Temenos — Future Temple
-**Living document · Last updated: 3 July 2026 · Guardian: Creative Director**
+**Living document · Last updated: 5 July 2026 · Guardian: Creative Director**
 
 > One of four living documents. This is the vault where every dream is kept safe — so none are lost, and none distract from today's work.
 
@@ -54,12 +54,14 @@ Everything below is arranged by category, with: its **essence**, the **emotional
 - **Horizon:** Sonic *identity* — Year 1–2. A *label* — Year 3+.
 - **Preconditions:** A composer/collaborator aligned with the voice; start with identity, never enterprise.
 - **Guardian flag:** Sound design has been scoped and reverted before. Only commit when the result would meet the standard — no stock cues, no "meditation-app" sonic clichés.
+- **Status (5 Jul 2026):** Long-form Ancient Temenos sound world in active **Creative R&D** — exploration, not commitment (per Temple Compass, Production vs. Creative R&D). Distinct from, and not to be conflated with, interaction-consequence sound — an architectural question tracked in CURRENT_STATE open signals (Oliver, n=1; the rite's single bell is its first test). Mixing note from the field: the ambient bed must survive real rooms — a tester's drone vanished under an air conditioner. Dynamics, not more material.
 
 ### The Atelier (El's hand as sacred content)
 - **Essence:** A slow, silent, beautiful stream/series of El *creating* the artwork — the atelier itself as content.
 - **Emotional job:** The ultimate "human, not AI" signal (decisive as AI floods the space); un-fakeable authorship; process as sacred. teamLab and Meow Wolf *cannot* do this — they're faceless. El's hand is precisely what they lack.
 - **Horizon:** Year 1–2 (a natural companion to the altar-layer timelapse).
 - **Preconditions:** Willingness to be visible as the maker; the atelier framed as sacred, not "behind-the-scenes."
+- **Status (5 Jul 2026):** Elevated from idea to **validated architectural hypothesis**. Two-way bridge designed (daylight door ↔ temple: art discovery → Atelier → "this artwork has a world?" → temple; and temple → chamber → "this world began with a real artwork?" → physical work). Three-page shell built (Atelier landing / Venus / Ganymede & the Eagle). Venus edition concept specified: faithful reproduction on etching paper, gold acrylic repainted by El's own hand, same material logic as the original, signed and numbered, small honest edition. **Deliberately not promoted above the Rite of Departure.** Unlock condition: the rite has shipped and the exit pattern is confirmed healed. Guardian flag: the Atelier must remain a door, never a store.
 
 ---
 

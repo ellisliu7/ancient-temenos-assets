@@ -1,5 +1,5 @@
 # Ancient Temenos — The One Thing
-**Living document · Last updated: 3 July 2026 · Guardian: Creative Director**
+**Living document · Last updated: 5 July 2026 · Guardian: Creative Director**
 
 > One of four living documents. This one holds the discipline of *focus*: at every stage there is exactly **one** thing that matters most. Everything else — however exciting — is either noise, or too early, or waiting its turn in **Future Temple**.
 
@@ -15,24 +15,22 @@ Awe is the entry. Return is the proof. Revenue, reach, and features are conseque
 
 ---
 
-## The current One Thing (as of 3 July 2026)
+## The current One Thing (as of 5 July 2026)
 
-> **Learn whether V1 produces genuine emotional resonance in real visitors — while protecting creator energy and leaving room for creative exploration.**
+> **The temple must learn how to say goodbye. Build the Rite of Departure — Venus first — gated behind the factual privacy audit, so that a moved visitor leaves lighter, not emptied, carrying one true thing.**
 
-V1 has shipped to the first private testers. The oracle security patch is complete and deployed. Feedback is beginning to arrive. The work now is not building — it is **listening**, patiently and without defensiveness, for whether the temple actually does what it was built to do. A light real-device pass remains valuable, but it is no longer the highest creative priority; it happens when the feedback calls for it, not on a checklist.
+Stage 0's question is answered: V1 produces genuine emotional resonance in real strangers — tears, existential questions, completed arcs, voluntarily shared Grimoires. The same evidence revealed the one structural absence: four of six testers were moved, then lost, at exactly the same point — after the peak. The temple can move people; it does not yet know how to release them. The next stone is not the entrance (altar layer) but the exit.
 
-Held alongside that listening, and just as legitimate: a deliberate window of **ecosystem exploration**, including a Creative R&D prototype of the Healing Chambers concept — not to launch anything, but to learn about atmosphere, ritual, and long-form presence using the world that already exists. This is not a distraction from the One Thing. Protecting El's creative energy and curiosity *is* part of the One Thing, explicitly, by design.
+The composition is approved and canonical (see CURRENT_STATE, 5 July): recognition → release → agency. One truth chosen, carried in the key; the flame extinguished by her own hand; the ember is the goodbye. The only gate before building is truth: the privacy audit of the oracle architecture, so the threshold vow states only what is technically true.
 
 **Ignore, for now:**
-- Reacting to every individual piece of tester feedback as if it demands an immediate fix. Look for the pattern first.
-- Assuming the free altar layer is automatically next. It's the leading candidate, not a locked decision — see "A deliberate pause" below.
-- Growth, marketing, audience-building, or "how do we get more people." Nobody outside the private testers should be arriving yet.
-- Treating Creative R&D exploration as scope creep. It isn't — see Temple Compass → Production vs. Creative R&D.
+- The Atelier build-out. The shell exists and the hypothesis is validated; it waits its turn behind the rite.
+- The long-form sound world (Creative R&D — protected as exploration, not commitment).
+- Any interaction-sound system beyond the rite's single bell (Oliver's signal is n=1; the bell is its first test).
+- Wass's circle's "how does this make money" — outside-the-experience pressure, not visitor signal.
+- Treating any remaining single tester comment as a mandate.
 
-**Why this and nothing else:** the temple has just met real strangers for the first time. That is the single richest, least-repeatable source of truth we will get about whether the awe lands. Rushing past it into the next build — even a well-chosen one — would trade signal for motion. And a studio that burns its founder out chasing the next milestone doesn't reach Year 10 at all; protecting El's capacity to keep making original work is not separate from the mission, it *is* the mission's foundation.
-
-### A deliberate pause before the next major build
-El wants a few days of genuine exploration across the wider ecosystem — including prototyping Healing Chambers as Creative R&D — before locking whatever comes after V1. If, after that exploration, the free altar layer still looks like the highest-leverage next build, we commit to it with confidence. If something else emerges as truer, we follow that instead. The point of this pause is to choose deliberately rather than default by assumption.
+**Why this and nothing else:** the resonance is real and the break is uniform. Shipping anything else first — even the altar layer — would pour more strangers into a temple that abandons them at their most open moment. The exit is upstream of everything: the visitor's trust, the Grimoire's meaning, the key's function, and eventually every daylight door.
 
 ---
 
@@ -40,13 +38,18 @@ El wants a few days of genuine exploration across the wider ecosystem — includ
 
 Each stage has one dominant objective. We do not advance until the prior One Thing is genuinely true — not "shipped," but *true* (a stranger actually felt it).
 
-### Stage 0 — Does the awe land, for real strangers? *(now)*
+### Stage 0 — Does the awe land, for real strangers? *(COMPLETE — resonance confirmed 5 Jul 2026)*
 **One Thing:** V1 has met its first real testers; learn — patiently, without defensiveness — whether the reveal produces genuine emotional resonance, while protecting El's energy and leaving room to explore.
 **Too early:** committing to the altar layer build (or any specific next build) before the exploration window closes; Sigil Key; Persephone integration as production.
 **Emotionally exciting but hold:** starting a YouTube channel; treating any single tester comment as a mandate to rebuild something. **Legitimate and encouraged right now:** Creative R&D prototyping (e.g. Healing Chambers atmosphere/ritual exploration) — see Temple Compass for how this differs from Production.
 
+### Stage 0.5 — The temple knows how to say goodbye *(now)*
+**One Thing:** Build the Rite of Departure (Venus first, Ganymede second), gated behind the factual privacy audit. A moved visitor is released — one truth carried in the key, the flame extinguished by her own hand, the ember as goodbye.
+**Too early:** the altar layer; promoting the Atelier; any interaction-sound system beyond the rite's single bell.
+**Exciting but hold:** the Atelier shell (built, validated, waiting); the long-form sound world (stays Creative R&D).
+
 ### Stage 1 — Awe *before the door*, for free
-**One Thing:** *(pending confirmation)* — most likely the free altar layer, making a stranger feel the world before anything is asked of them. This stage is provisional until the current exploration window resolves it. If exploration surfaces a truer next stone, this stage gets rewritten around that instead.
+**One Thing:** *(provisional)* — most likely the free altar layer, making a stranger feel the world before anything is asked of them. The altar layer resumes candidacy only after the Rite of Departure ships and the exit pattern is confirmed healed. If the post-rite evidence surfaces a truer next stone, this stage gets rewritten around that instead.
 **Too early:** turning on payments; the app; collectibles.
 **Exciting but hold:** the book, prints, journals. (They're for people who've *already* fallen in love. First make them fall in love.)
 
@@ -108,3 +111,4 @@ Each stage has one dominant objective. We do not advance until the prior One Thi
 ### Decision log
 - **2 Jul 2026** — Established the One Thing as Stage 0 (awe at the reveal, on a stranger's phone). Explicitly holding: YouTube, altar-layer build, Sigil Key, Persephone integration, and everything physical. Reason: nothing downstream matters until a stranger feels awe, unaided, at the reveal.
 - **3 Jul 2026** — V1 shipped to private testers; oracle security patch deployed. Updated the One Thing to: learn whether V1 produces genuine emotional resonance in real visitors, while protecting creator energy and leaving room for exploration. Opened a deliberate pause before committing to the altar layer as "next" — El is exploring the wider ecosystem, including a Creative R&D prototype of Healing Chambers, before locking the following build. Stage 1 marked provisional until that exploration resolves.
+- **5 Jul 2026** — First tester evidence in (six testers). Resonance confirmed; Stage 0 true. Repeated pattern discovered: no composed exit — the temple moves people but does not know how to release them. Canonized the Rite of Departure (recognition → release → agency; one truth into the key; visitor extinguishes the flame; the ember is the goodbye). Moved the privacy vow to the oracle threshold — consent before vulnerability, not after confession. Gated all rite work behind a factual privacy audit of the oracle architecture. Altar-layer-as-next-stone explicitly superseded. Atelier preserved as validated hypothesis + existing shell, not promoted above the rite. Long-form sound world confirmed Creative R&D; Oliver's interaction-sound note held separately as an unconfirmed but coherent architectural signal.

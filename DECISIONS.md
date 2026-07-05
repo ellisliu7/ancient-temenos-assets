@@ -92,6 +92,16 @@ Prevents re-litigating resolved questions.
 
 ---
 
+## Endings
+
+### Rite of Departure (5 Jul 2026)
+**Decision:** Every chamber ends with a composed rite: the visitor chooses one truth from no more than three fragments of her own oracle-reflected words → it enters the key → she extinguishes the candle herself → the chamber falls to darkness → the key remains faintly lit with what she carries. Three ritual lines only: ONE IS YOURS TO KEEP. / THE REST, YOU MAY LEAVE HERE. / WHEN YOU ARE READY, THE FLAME IS YOURS. Ritual grammar: recognition → release → agency. Governing principle: the temple can witness her; only she can complete the crossing.
+**Why:** The first tester cohort (July 2026) proved genuine resonance but broke uniformly after the emotional peak — the temple could move people but not release them. The ending must be *performed by the visitor*, not announced by the system: agency, not comfort. "The rest, you may leave here" chosen over "the rest stays here" to avoid implying the temple retains what was spoken. Ritual language is poetic; internal documentation stays factually agnostic about retention/deletion until the privacy audit completes.
+**Rejected:** any final button, redirect, recap, share prompt, or invitation; telling the visitor she is done; explaining the experience at the end. Fallback locked in advance: if the ending tests heavy, cut the *choice* (auto-distill the affirmation) — never the flame.
+**Gate:** the privacy vow at the oracle threshold (consent before vulnerability, spoken once as the glass rises) must state only what the audited architecture makes true. No rite code before the audit.
+
+---
+
 ## What Was Tried and Rejected
 
 ### Equal-width four-column foyer

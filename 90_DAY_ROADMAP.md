@@ -69,6 +69,7 @@ If, after this exploration, the altar layer still looks like the highest-leverag
 ---
 
 ## Movement II — Prove awe, and build the surface that shows it (Weeks 4–7)
+> **Status note (5 Jul 2026):** Superseded pending the Rite of Departure — tester evidence confirmed resonance and located the break at the *exit*, not the entrance; see THE_ONE_THING (Stage 0.5) and CURRENT_STATE (5 July). This Movement will be rewritten after the privacy audit and the rite ship.
 *Theme: does a stranger feel something in the first 90 seconds — and can they see the beauty before they are asked for anything?*
 *Status: provisional. This Movement assumes the altar layer emerges as the highest-leverage next build after the exploration window above. If exploration points somewhere else, this Movement gets rewritten — not forced.*
 

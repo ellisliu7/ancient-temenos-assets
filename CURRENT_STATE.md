@@ -1,6 +1,6 @@
 # Ancient Temenos — Current State
-**Last updated:** 1 July 2026
-**Status:** Version 1 — launch-readiness pass in progress. First round of pre-share fixes shipped this session (see below). One backend fix (oracle proxy hardening) is written and awaiting review before deploy. Not yet shared.
+**Last updated:** 5 July 2026
+**Status:** V1 live with private testers. Genuine emotional resonance confirmed. Canonical next build: **Rite of Departure** (Venus first) — gated behind the factual privacy audit of the oracle architecture.
 **Source of truth:** `https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/index.html`
 **Live URL:** `https://ancienttemenos.art`
 
@@ -11,6 +11,54 @@
 Single `index.html`, ~4910 lines, all CSS/JS inline, deployed via GitHub Pages. No build step. El pushes via GitHub Desktop after each session. **Always fetch the live file** from `raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/index.html` — never trust a local copy. Navigate via `grep -n` + line-range reads, never a full read.
 
 **NEW this session — developer tools are now gated (see "Dev unlock" below).** If your `?mock=*`, `?key=1`, `?dev=1`, or `window.__test*` shortcuts appear to "stop working" on the live site, that is expected: you must unlock the browser first. This is intentional, not a regression.
+
+---
+
+## 5 July 2026 — First tester evidence · Rite of Departure canonized (strategy session, no code)
+
+No code was written this session. V1 met its first six real testers; the evidence below supersedes the open questions of 1–3 July. (Note: oracle proxy hardening C1 was deployed 3 July per THE_ONE_THING decision log — the "awaiting deploy" status in the 1 July entry below is historical.)
+
+### Tester evidence (verbatim signal, six testers)
+- **Lanna** — became genuinely emotional; asked the oracle "What kind of legacy can I leave behind?"; later admitted holding back because she didn't know whether chats were logged or readable by El. Suggested an explicit privacy disclaimer.
+- **Mauvis** — completed the full arc, claimed the key ("got my key!"), and voluntarily pasted his entire Grimoire afterward, unprompted.
+- **Wass** — delighted by the key as gift ("oh cool, I get a gift!") then did not know what to do next. Called it a "digital sanctuary"; imagined many women spending hours there; not personally for him. His circle asked "how does this make money?" — outside-the-experience signal, logged as such, not visitor signal.
+- **Michelle** — unsure what happens after the chats, what the objective of speaking with the gods is, and whether she had "chatted enough."
+- **AK** — reached the Chalice page and asked what happens afterward.
+- **Oliver** — "very relaxing"; wanted sound feedback on interactions (entering a chamber, scroll-walking the corridor); the ambient drone disappeared under his air conditioner; confused about which areas were accessible and why only one artwork purchase link appeared. Also: "no matter what stupid thing I said it had a positive reply."
+
+### Validated patterns (repeated, independent)
+1. **V1 produces genuine emotional resonance.** Confirmed — tears, existential questions, completed arcs, voluntary artifact-sharing. The Stage 0 question is answered.
+2. **The temple has no composed exit.** Four of six testers broke at the same point: after the emotional peak (post-key / post-Chalice). People are moved, then abandoned. This is the discovery of the tester window.
+3. **Gift grammar works; carry-away is the desire.** The key-as-gift landed. Mauvis's unprompted Grimoire-sharing is behavioral proof that the visitor's own reflected words are the treasured artifact — a miniature, pre-commerce validation of reflection-sealed provenance.
+
+### Canonical decision — the Rite of Departure (approved composition; do not re-litigate)
+Governing principle: **the temple can witness her; only she can complete the crossing.** Ritual grammar: **recognition → release → agency.** Venus first, Ganymede second (same arc, his register — closing in the direction of "The first stone is placed. Go and build it.").
+
+Sequence:
+1. After the key is received, the chamber dims by degrees to a single candle. No text. (~15s)
+2. **ONE IS YOURS TO KEEP.** — no more than three fragments of *her own* oracle-reflected words rise, unlabeled. She chooses one. No new content, no menu grammar, no wrong answer.
+3. **THE REST, YOU MAY LEAVE HERE.** — the unchosen fragments dissolve upward. The Grimoire seals silently in the background. The chosen truth sinks into the key (Chalice-settle treatment — absorbed, never engraved-UI) with the temple's single consequence-sound: one bell. The only such sound in the temple.
+4. **WHEN YOU ARE READY, THE FLAME IS YOURS.** (appears only after ~10s of stillness) — she extinguishes the candle herself. The chamber falls to darkness; **the key remains faintly lit** with what she carries. No final copy, no button, no redirect, no invitation. The ember is the goodbye.
+
+Permanent refusals inside the rite: no recap, no share prompt, no "return to foyer," no mention of sealed chambers or the Atelier, no explanation of the experience.
+Fallback, locked in advance: if testing shows the ending heavy, cut the *choice* (auto-distill the affirmation) — never the flame. Departure, not selection, is the wound being healed.
+Note on ritual vs. fact: "leave here" / "dissolve" is ritual language. What technically happens to unchosen fragments and session transcripts is determined by the privacy audit below — internal documentation stays factually agnostic until then.
+
+### Consent separated from ceremony (canonical)
+The privacy vow moves to the **oracle threshold** — one Cormorant line as the glass rises, before the first question is asked. Spoken once, never repeated, never legalese. Safety is the floor the visitor walks in on, not the climax of the rite.
+
+### Immediate integrity gate (blocks the build)
+**Privacy audit — factual, before any vow is written.** Inspect the actual architecture: Vercel function logs on `ancient-temenos-oracle` (what is retained, for how long, who can read it), Anthropic API retention, anything client-side (localStorage, the Grimoire). The vow's wording is determined by what is *true*. If exchanges are retained, either change the retention or change the line. The temple does not promise what it cannot keep. **No rite code and no threshold vow until this audit is complete.**
+
+### Open signals (unconfirmed — hold, do not build yet)
+- **Interaction sound as consequence architecture** (Oliver, n=1): a handful of hand-chosen sounds at signature moments may be missing world-structure rather than polish. The rite's single bell is the first test of this thesis. Revisit after it ships. Distinct from the long-form sound world (Creative R&D — see FUTURE_TEMPLE).
+- **Oracle affirmation-drift** (Oliver, n=1): "positive reply no matter what stupid thing I said." Schedule one cold adversarial audit of Venus's voice under low-effort/hostile input. Not urgent; do not soften her rules preemptively.
+- **Ambiguous:** whether "relaxing" = awe or pleasant-spa; whether Wass's "not for me" marks the true audience boundary.
+
+### Superseded (from the 1–3 July assumptions)
+- "Does V1 produce resonance?" — answered **yes**; no longer the open question.
+- "Free altar layer is the leading candidate next stone" — **superseded**. The evidence located the break at the exit, not the entrance. The altar layer returns to candidate status *after* the rite ships.
+- The Atelier: elevated to *validated architectural hypothesis* with an existing three-page shell — deliberately **not** promoted above the Rite of Departure (see FUTURE_TEMPLE).
 
 ---
 
@@ -113,8 +161,9 @@ Every live call site uses `enterVenusApproach()`. `enterVenusAltar()` is dormant
 
 ## Next steps
 
-1. **Push this session's `index.html` + this `CURRENT_STATE.md`** (one commit — message provided).
-2. **Review `oracle-hardened.js`, then deploy C1** to the private Vercel repo. Until then the proxy is open/billable — this is the last true launch blocker after mobile.
-3. **Walk the full journey on a real iPhone and Android** (homework #1). This gates the share.
-4. After mobile is clean and C1 is deployed: send V1 to the five.
-5. Everything in the technical-debt table is post-launch / after real feedback.
+1. **Push this `CURRENT_STATE.md` + updated living docs** (one commit; no `index.html` change this session).
+2. **Privacy audit** (El + Claude, next session): Vercel logs, Anthropic retention, client-side storage. This gates the threshold vow and the rite build.
+3. **Finalize the threshold vow wording** from what the audit proves true.
+4. **Build the Rite of Departure — Venus only**, one session, one commit. Composition is canon (above); only wiring remains.
+5. Ganymede's rite second. Altar layer resumes candidacy after the exit pattern is confirmed healed.
+6. Everything in the technical-debt table remains post-rite.
