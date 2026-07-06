@@ -1,6 +1,27 @@
 # Ancient Temenos — Current State
-**Last updated:** 6 July 2026
+**Last updated:** 6 July 2026 (second session)
+
 ---
+
+## 6 July 2026 (second session) — Four rite polish fixes, no new features
+
+Four surgical fixes to the Venus Rite of Departure following El's first live walkthrough. No new screens, no new storage, no scope expansion. The rite's core (fade to black, three fragments, choice, chosen truth on the key) is confirmed working and untouched.
+
+**1 — Privacy vow contrast.** `rgba(238,220,168,0.42)` → `0.72` in `#va-vow-note` CSS. Trust copy reads at comfortable contrast now. One character change.
+
+**2 — Input-as-closing-gesture (seam fix, second pass).** The timer-cascade closing (`vaMaybeShowClosing` + `va-closing-new` / `va-key-cta`) was removed as the transition mechanism. After Venus's second response, the input placeholder shifts to "When you are ready, receive your Key." — after her final words fully arrive, never interrupting them. The visitor controls the moment; sending anything (Enter or ✦) opens the key reveal. `sendVenusNew` is guarded by `vaReadyToReceive` so the original DOMContentLoaded `addEventListener` binding cannot double-fire. The reset path restores original placeholder and wiring on re-entry. `va-closing-new`, `va-closing-line`, `va-key-cta` etc. remain in the DOM but are never shown in the new flow — available for future re-use if needed.
+
+**3 — Departure line placement.** `#kr-rite-depart` moved from between `#kr-rite-fragments` and `#kr-ember` into the bottom of `#kr-inscription`. The departure instruction now sits below the chosen truth and chamber/date metadata — instruction and key object form one visual unit. Stacking-group CSS rule updated accordingly (it's now a grandchild, not a direct child of `#keyReveal`).
+
+**4 — Ember auto-close.** After `riteDepart()`, the ember appears at +2600ms and holds for 4500ms, then `closeKeyReveal()` fires automatically. The overlay fades out and the visitor returns to the Venus chamber. She is not left in darkness with an unexplained dot.
+
+**Explicitly not touched:** rite composition, fragment logic, bell slot, Grimoire, Ganymede, anything outside the Venus key-reveal overlay.
+
+**Next test to run:** walk the full arc — two oracle exchanges, read Venus's words at a slow pace, confirm placeholder shifts only after her final words are fully visible, send "When you are ready, receive your Key.", confirm rite proceeds, ember appears and overlay closes cleanly.
+
+---
+
+## 6 July 2026
 **Status:** V1 live with private testers. Privacy audit CLOSED, threshold vow shipped. **The Rite of Departure (Venus) is now built and ready to push** — see entry below. Ganymede's rite, the return-recognition moment, and any Grimoire persistence remain explicitly out of scope for this build.
 **Source of truth:** `https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/index.html`
 **Live URL:** `https://ancienttemenos.art`
