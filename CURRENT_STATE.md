@@ -272,5 +272,3 @@ Every live call site uses `enterVenusApproach()`. `enterVenusAltar()` is dormant
 4. **Build the Rite of Departure — Venus only**, one session, one commit. Composition is canon (above); only wiring remains.
 5. Ganymede's rite second. Altar layer resumes candidacy after the exit pattern is confirmed healed.
 6. Everything in the technical-debt table remains post-rite.
-
-<!-- trigger fresh Pages deploy -->
