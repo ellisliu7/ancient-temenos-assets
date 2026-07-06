@@ -1000,7 +1000,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     #kr-video-fallback{position:absolute;inset:0;z-index:0;display:none;align-items:center;justify-content:center;}
     #kr-video-fallback span{font-size:110px;color:rgba(214,178,104,0.85);text-shadow:0 0 50px rgba(214,178,104,0.65);animation:krFloat 5.5s ease-in-out infinite, krGlow 4.2s ease-in-out infinite;}
     #keyReveal{justify-content:flex-end;padding-bottom:clamp(2.6rem,8vh,5rem);}
-    #keyReveal>.kr-eyebrow,#keyReveal>#kr-headline,#keyReveal>#kr-collect,#keyReveal>#kr-inscription,#keyReveal>#kr-after,#keyReveal>#kr-offer{position:relative;z-index:2;}
+    #keyReveal>.kr-eyebrow,#keyReveal>#kr-headline,#keyReveal>#kr-collect,#keyReveal>#kr-inscription,#keyReveal>#kr-after,#keyReveal>#kr-offer,#keyReveal>#kr-rite-fragments,#keyReveal>#kr-rite-instruction,#keyReveal>#kr-rite-depart{position:relative;z-index:2;}
     #kr-key-wrap{position:relative;display:flex;align-items:center;justify-content:center;margin-bottom:1.6rem;min-height:clamp(170px,30vh,290px);}
     #kr-key-img{width:clamp(150px,28vh,260px);height:auto;filter:drop-shadow(0 0 26px rgba(214,178,104,0.45)) drop-shadow(0 0 60px rgba(196,158,72,0.22));animation:krFloat 5.5s ease-in-out infinite, krGlow 4.2s ease-in-out infinite;will-change:transform,filter;}
     #kr-scrim.pulse{animation:krScrimPulse 1.6s ease-out;}
@@ -1030,6 +1030,15 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     #kr-eth{font-family:'Cinzel',serif;font-size:7px;letter-spacing:.22em;text-transform:uppercase;color:rgba(196,158,72,0.32);word-break:break-all;cursor:pointer;text-align:center;line-height:1.7;padding:.3rem 0;transition:color .3s;}
     #kr-eth:hover{color:rgba(196,158,72,0.6);}
     #kr-eth-hint{font-family:'Cinzel',serif;font-size:6.5px;letter-spacing:.3em;text-transform:uppercase;color:rgba(196,158,72,0.22);margin-top:-.2rem;transition:color .3s;}
+    /* ══ Rite of Departure (Venus) — compressed composition ══ */
+    #kr-rite-fragments{display:flex;flex-direction:column;align-items:center;gap:1.3rem;margin:.4rem 0 1rem;}
+    .kr-fragment{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(16px,1.8vw,20px);color:rgba(238,220,168,0.85);text-align:center;max-width:34ch;line-height:1.6;opacity:0;cursor:pointer;transform:translateY(8px);transition:opacity 1.6s ease,transform 1.6s ease,color .4s ease,text-shadow .4s ease;padding:.3rem .6rem;}
+    .kr-fragment:hover{color:#fff;text-shadow:0 0 16px rgba(214,178,104,0.4);}
+    .kr-fragment-fade{opacity:0!important;transform:translateY(-22px)!important;pointer-events:none;transition:opacity 2.2s ease,transform 2.2s ease!important;}
+    .kr-fragment-chosen{color:#fff;}
+    #kr-rite-instruction{font-family:'Cinzel',serif;font-size:9px;letter-spacing:.42em;text-transform:uppercase;color:rgba(196,158,72,0.6);text-align:center;opacity:0;transition:opacity 1.6s ease;margin:0 0 .8rem;}
+    #kr-rite-depart{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(13px,1.5vw,16px);color:rgba(238,220,168,0.5);text-align:center;opacity:0;transition:opacity 2s ease;margin-top:1.6rem;letter-spacing:.02em;cursor:pointer;}
+    #kr-ember{position:absolute;left:50%;top:50%;width:5px;height:5px;border-radius:50%;background:rgba(214,178,104,0.92);box-shadow:0 0 16px 6px rgba(214,178,104,0.5);transform:translate(-50%,-50%);opacity:0;transition:opacity 2.4s ease;pointer-events:none;z-index:3;}
   </style>
   <p class="kr-eyebrow">Ancient Temenos</p>
   <video id="kr-video" autoplay muted loop playsinline preload="auto" crossorigin="anonymous" onerror="this.style.display='none';document.getElementById('kr-video-fallback').style.display='flex';">
@@ -1047,6 +1056,10 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
     <p class="kr-insc-meta" id="kr-insc-date"></p>
     <p id="kr-insc-id"></p>
   </div>
+  <p id="kr-rite-instruction">One is yours to keep.</p>
+  <div id="kr-rite-fragments"></div>
+  <p id="kr-rite-depart">When you are ready, touch the Key and leave with what is yours.</p>
+  <div id="kr-ember"></div>
   <div id="kr-offer">
     <p class="kr-offer-line">This was always yours to receive.<br>If you wish, you may leave something behind.</p>
     <a id="kr-stripe" href="https://buy.stripe.com/dRmfZhegNawC60V5IT5kk00" target="_blank" rel="noopener">Offer to the temple →</a>
@@ -1709,7 +1722,7 @@ document.getElementById('foyer').addEventListener('click',initFoyerAudio,{once:t
 document.getElementById('foyer').addEventListener('touchstart',initFoyerAudio,{once:true});
 
 // == VENUS ==
-let vHistory=[],venusOracleOpened=false,venusConvOpen=false;
+let vHistory=[],venusOracleOpened=false,venusConvOpen=false,vaCardDoneAt=0;
 let lastPrinciple='The Principle of Cause and Effect',lastMirror='';
 
 
@@ -1851,6 +1864,11 @@ function vaRenderCard(data){
   const total=400+Math.max(0,paras.length-1)*2600+3000;
   const q=card.querySelector('.va-question');
   if(q)setTimeout(()=>{q.style.opacity='1';if(vg)vg.scrollTop=vg.scrollHeight;},total+800);
+  // Seam: the closing rite must never open while her final words are still
+  // arriving. Record the real moment this card finishes revealing (paragraph
+  // fade, then the question's own fade if present) so vaMaybeShowClosing can
+  // wait for true silence rather than a fixed timer.
+  vaCardDoneAt=Date.now()+(questionText?total+800+3000:total);
 }
 
 function vaAddUserMsg(text){
@@ -1865,6 +1883,10 @@ function vaMaybeShowClosing(){
   if(vHistory.filter(m=>m.role==='user').length>=2){
     const c=document.getElementById('va-closing-new');
     if(c&&c.style.display!=='block'){
+      // Wait for her final words to actually finish arriving, plus one
+      // breath — never a fixed timer. vaCardDoneAt is set by vaRenderCard.
+      const breath=2500;
+      const wait=Math.max(breath,(vaCardDoneAt||0)-Date.now()+breath);
       setTimeout(()=>{
         c.style.display='block';
         const vg=document.getElementById('va-glass');if(vg)setTimeout(()=>vg.scrollTop=vg.scrollHeight,500);
@@ -1877,7 +1899,7 @@ function vaMaybeShowClosing(){
         setTimeout(()=>{if(sep)sep.style.opacity='1';},3200);
         setTimeout(()=>{if(keyCta)keyCta.style.opacity='1';},6000);
         setTimeout(()=>{if(acts)acts.style.opacity='1';},9200);
-      },5000);
+      },wait);
     }
   }
 }
@@ -3428,6 +3450,26 @@ function _venusSessionLine(){
 function _keyNextNumber(){try{const a=JSON.parse(localStorage.getItem('temenos_keys')||'[]');return a.length+1;}catch(e){return 1;}}
 function _getVenusKey(){try{const a=JSON.parse(localStorage.getItem('temenos_keys')||'[]');return a.find(k=>k.chamber==='venus')||null;}catch(e){return null;}}
 function _saveVenusKey(k){try{const a=JSON.parse(localStorage.getItem('temenos_keys')||'[]');a.push(k);localStorage.setItem('temenos_keys',JSON.stringify(a));}catch(e){}}
+function _updateVenusKey(k){try{const a=JSON.parse(localStorage.getItem('temenos_keys')||'[]');const i=a.findIndex(x=>x.id===k.id);if(i>-1)a[i]=k;else a.push(k);localStorage.setItem('temenos_keys',JSON.stringify(a));}catch(e){}}
+// Fragments of her own oracle-reflected words — never invented copy. Most
+// recent first, deduped, capped at three. Affirmation before principle,
+// since affirmation is already first-person present tense — the "yours to
+// keep" grammar the rite needs.
+function _venusFragments(){
+  const seen=new Set();const out=[];
+  for(let i=vHistory.length-1;i>=0&&out.length<3;i--){
+    const m=vHistory[i];if(m.role!=='assistant')continue;
+    try{
+      const p=JSON.parse(m.content.replace(/```json|```/g,'').trim());
+      const cand=[p.affirmation,p.principle].map(s=>(s||'').trim()).filter(Boolean);
+      for(const c of cand){
+        const key=c.toLowerCase();
+        if(!seen.has(key)){seen.add(key);out.push(stripDash(c));if(out.length>=3)break;}
+      }
+    }catch(e){}
+  }
+  return out;
+}
 function _renderInscription(k){
   const set=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
   set('kr-insc-line','\u201c'+k.line+'\u201d');
@@ -3443,6 +3485,20 @@ function openKeyReveal(){
   const insc=document.getElementById('kr-inscription');
   const offer=document.getElementById('kr-offer');
   const head=document.getElementById('kr-headline');
+  // Defensive reset — normally each chamber entry is a fresh page load, but
+  // this guards against the overlay being reopened mid-page-life.
+  const vid=document.getElementById('kr-video');
+  const eyebrow=document.querySelector('#keyReveal .kr-eyebrow');
+  const frags=document.getElementById('kr-rite-fragments');
+  const instr=document.getElementById('kr-rite-instruction');
+  const depart=document.getElementById('kr-rite-depart');
+  const ember=document.getElementById('kr-ember');
+  if(vid){vid.style.transition='';vid.style.opacity='';vid.onclick=null;vid.style.cursor='';}
+  if(eyebrow){eyebrow.style.transition='';eyebrow.style.opacity='';}
+  if(frags)frags.innerHTML='';
+  if(instr)instr.style.opacity='0';
+  if(depart){depart.style.opacity='0';depart.onclick=null;}
+  if(ember)ember.style.opacity='0';
   if(existing){
     _keyCurrent=existing;_renderInscription(existing);
     if(collect)collect.style.display='none';
@@ -3466,16 +3522,95 @@ function openKeyReveal(){
 function closeKeyReveal(){const ov=document.getElementById('keyReveal');if(!ov)return;ov.classList.remove('show');setTimeout(()=>{ov.style.display='none';},900);}
 function collectKey(){
   if(_getVenusKey())return;
-  const k={id:'VENUS-'+_keyDateStamp()+'-'+_keyShortRand(),number:_keyNextNumber(),chamber:'venus',date:_keyPrettyDate(),line:_venusSessionLine(),collectedAt:new Date().toISOString()};
+  const k={id:'VENUS-'+_keyDateStamp()+'-'+_keyShortRand(),number:_keyNextNumber(),chamber:'venus',date:_keyPrettyDate(),line:'',collectedAt:new Date().toISOString()};
   _saveVenusKey(k);_keyCurrent=k;
   if(window.trackTempleEvent)trackTempleEvent('key_collected',{chamber:'venus',id:k.id});
   const scrim=document.getElementById('kr-scrim');if(scrim){scrim.classList.remove('pulse');void scrim.offsetWidth;scrim.classList.add('pulse');}
   const collect=document.getElementById('kr-collect');if(collect)collect.style.display='none';
-  const head=document.getElementById('kr-headline');if(head)head.textContent='The Key is yours. It remembers this moment.';
-  _renderInscription(k);
-  setTimeout(()=>{const insc=document.getElementById('kr-inscription');if(insc)insc.style.opacity='1';},400);
-  // Offering block hidden (sprint Jun 25) — reintroduce after key adoption validated
-  setTimeout(()=>{const after=document.getElementById('kr-after');if(after)after.style.display='flex';},2800);
+  // No inscription and no headline yet — the key has not remembered
+  // anything until she chooses what it keeps. The Rite of Departure begins.
+  riteBegin();
+}
+
+// ══ RITE OF DEPARTURE (Venus) — compressed composition, approved 6 July 2026 ══
+// final words land -> one breath -> pulse decays into darkness -> up to
+// three fragments rise -> ONE IS YOURS TO KEEP -> she chooses -> the others
+// dissolve -> the chosen truth sinks into the key -> one bell (silent slot,
+// no synthesized sound) -> darkness, key faintly lit -> she touches the key
+// to leave. The key is the flame. No candle exists in this rite.
+function riteBegin(){
+  const vid=document.getElementById('kr-video');
+  const eyebrow=document.querySelector('#keyReveal .kr-eyebrow');
+  const head=document.getElementById('kr-headline');
+  [vid,eyebrow,head].forEach(el=>{if(el)el.style.transition='opacity 4.5s ease,filter 4.5s ease';});
+  if(vid)vid.style.opacity='0.1';
+  if(eyebrow)eyebrow.style.opacity='0';
+  if(head)head.style.opacity='0';
+  setTimeout(riteRise,4500);
+}
+function riteRise(){
+  const frags=_venusFragments();
+  const wrap=document.getElementById('kr-rite-fragments');if(!wrap)return;
+  wrap.innerHTML='';
+  if(frags.length<=1){
+    // Locked fallback: nothing genuine to choose between. Skip the choice
+    // entirely and auto-distill — never invent a second fragment just to
+    // force a decision.
+    riteSink(frags[0]||'You already know what to do with this.');
+    return;
+  }
+  frags.forEach((f,i)=>{
+    const p=document.createElement('p');p.className='kr-fragment';p.textContent='\u201c'+f+'\u201d';
+    p.onclick=()=>riteChoose(f,wrap);
+    wrap.appendChild(p);
+    setTimeout(()=>{p.style.opacity='1';p.style.transform='translateY(0)';},300+i*1200);
+  });
+  const instr=document.getElementById('kr-rite-instruction');
+  setTimeout(()=>{if(instr)instr.style.opacity='1';},300+frags.length*1200+400);
+}
+function riteChoose(text,wrap){
+  const instr=document.getElementById('kr-rite-instruction');if(instr)instr.style.opacity='0';
+  const els=[...wrap.querySelectorAll('.kr-fragment')];
+  const chosenEl=els.find(el=>el.textContent==='\u201c'+text+'\u201d');
+  els.forEach(el=>{el.onclick=null;if(el!==chosenEl)el.classList.add('kr-fragment-fade');});
+  if(chosenEl)chosenEl.classList.add('kr-fragment-chosen');
+  // The unchosen dissolve first; the chosen lingers a beat before it, too,
+  // sinks from view into the key.
+  setTimeout(()=>{if(chosenEl)chosenEl.classList.add('kr-fragment-fade');riteSink(text);},2200);
+}
+function riteSink(text){
+  const k=_keyCurrent||_getVenusKey();
+  if(k){k.line=text;_updateVenusKey(k);}
+  _renderInscription(k||{line:text,date:_keyPrettyDate(),number:''});
+  const vid=document.getElementById('kr-video');
+  if(vid){vid.style.transition='opacity 2.3s ease,filter 2.3s ease';vid.style.opacity='0.32';}
+  riteBell();
+  setTimeout(()=>{const insc=document.getElementById('kr-inscription');if(insc)insc.style.opacity='1';},600);
+  setTimeout(riteShowDeparture,2300+5500);
+}
+function riteBell(){
+  // The temple's one consequence-sound. Wired, not synthesized — this stays
+  // silent until a real bell asset is provided. Do not add an oscillator or
+  // placeholder tone here.
+  try{document.dispatchEvent(new CustomEvent('temenos:bell'));}catch(e){}
+  if(typeof window.__temenosBell==='function'){try{window.__temenosBell();}catch(e){}}
+}
+function riteShowDeparture(){
+  const line=document.getElementById('kr-rite-depart');
+  const vid=document.getElementById('kr-video');
+  if(line){line.style.opacity='1';line.onclick=riteDepart;}
+  if(vid){vid.style.cursor='pointer';vid.onclick=riteDepart;}
+}
+function riteDepart(){
+  const vid=document.getElementById('kr-video');
+  const insc=document.getElementById('kr-inscription');
+  const line=document.getElementById('kr-rite-depart');
+  const ember=document.getElementById('kr-ember');
+  if(window.trackTempleEvent)trackTempleEvent('rite_departure_completed',{chamber:'venus'});
+  if(vid){vid.onclick=null;vid.style.cursor='default';vid.style.transition='opacity 3s ease';vid.style.opacity='0';}
+  if(line){line.onclick=null;line.style.transition='opacity 1.4s ease';line.style.opacity='0';}
+  if(insc){insc.style.transition='opacity 2.6s ease';insc.style.opacity='0';}
+  setTimeout(()=>{if(ember)ember.style.opacity='1';},2600);
 }
 function _krWrap(ctx,text,x,y,maxW,lh){const words=text.split(' ');let line='';let yy=y;for(let n=0;n<words.length;n++){const test=line+words[n]+' ';if(ctx.measureText(test).width>maxW&&n>0){ctx.fillText(line.trim(),x,yy);line=words[n]+' ';yy+=lh;}else{line=test;}}ctx.fillText(line.trim(),x,yy);return yy;}
 async function keepKey(){

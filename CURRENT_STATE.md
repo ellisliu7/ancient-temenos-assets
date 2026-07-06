@@ -1,8 +1,50 @@
 # Ancient Temenos — Current State
-**Last updated:** 5 July 2026
-**Status:** V1 live with private testers. Privacy audit of the oracle architecture is **CLOSED** (see entry below). Threshold vow shipped. Canonical next build: **Rite of Departure** (Venus first) — no longer gated; clear to proceed.
+**Last updated:** 6 July 2026
+**Status:** V1 live with private testers. Privacy audit CLOSED, threshold vow shipped. **The Rite of Departure (Venus) is now built and ready to push** — see entry below. Ganymede's rite, the return-recognition moment, and any Grimoire persistence remain explicitly out of scope for this build.
 **Source of truth:** `https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/index.html`
 **Live URL:** `https://ancienttemenos.art`
+
+---
+
+## 6 July 2026 — Rite of Departure (Venus) built — compressed composition, code ready to push
+
+**Diagnosis this session was built on:** tester evidence (5 July) showed four of six testers breaking after the emotional peak — the temple had no composed exit. The fix is not more lore or explanation; it's a single ritual that lets the visitor herself close the conversation.
+
+**Composition — approved after one round of compression against over-ritualization:**
+final words fully land → one breath → collection pulse decays into darkness (no candle, no 15s empty wait) → up to three fragments of her own oracle-reflected words rise → **ONE IS YOURS TO KEEP** → she chooses → the others dissolve → the chosen truth sinks into the key (one silent bell slot) → stillness → **"When you are ready, touch the Key and leave with what is yours."** → she touches the key → the light gutters down → darkness, one faint ember remains in the key. Nothing follows — no button, no recap, no redirect.
+
+**Key decision this session:** the candle was cut entirely, not deferred. *The key is the flame.* It already carries the light curve from collection-flash through to ember; a separate candle prop would have been decorative. Both gestures from the canonical rite were kept (choosing the truth, and now touching the key to close) — the canon's own fallback rule ("cut the choice, never the flame") made the case for compressing everything else instead.
+
+**What shipped in `index.html` this session:**
+
+1. **Seam fix (`vaRenderCard` / `vaMaybeShowClosing`, ~line 1712, ~1826, ~1863).** The closing reveal previously fired on a fixed 5000ms timer, which could open while Venus's final card was still visually revealing. `vaRenderCard` now records the real completion time of its own paragraph + question fade (`vaCardDoneAt`); `vaMaybeShowClosing` waits for that moment plus one breath (2500ms) instead of a flat timer. This was treated as part of the rite's seam, not a separate polish item — a ritual can't feel inevitable if its doorway interrupts the conversation it's meant to complete.
+
+2. **`collectKey()` rewritten (~line 3477).** No longer writes an inscription or shows Keep/Close immediately. Creates the key record with an empty `line` and hands off to `riteBegin()`. The key has not remembered anything until she chooses what it keeps.
+
+3. **New rite functions, all in the Venus key-ritual block (~line 3477–3560):**
+   - `riteBegin()` — dims video/eyebrow/headline to near-black over 4.5s (no fixed 15s empty beat — the compressed version).
+   - `_venusFragments()` — pulls up to three deduped fragments from `vHistory` (affirmation, then principle), most recent first. Never invents copy.
+   - `riteRise()` — fragments rise staggered ~1.2s apart; "One is yours to keep" fades in after. **Locked fallback preserved:** if fewer than two genuine fragments exist, the choice is skipped entirely and the rite auto-distills straight to `riteSink()` — never fabricates a second fragment to force a decision.
+   - `riteChoose(text, wrap)` — unchosen fragments dissolve upward (`.kr-fragment-fade`); the chosen fragment lingers one beat, then also dissolves into the key.
+   - `riteSink(text)` — writes the chosen truth into the key record via new `_updateVenusKey()` (updates the existing record in `temenos_keys`, no new storage system), re-renders the inscription onto the now-faintly-relit key, and calls `riteBell()`.
+   - `riteBell()` — **wired silent, not synthesized.** Dispatches a `temenos:bell` custom event and calls `window.__temenosBell` if defined; no oscillator, no placeholder tone. Silent until a real bell asset exists.
+   - `riteShowDeparture()` — after ~5.5s stillness, fades in the departure line and makes the key (the `#kr-video` surface itself) clickable.
+   - `riteDepart()` — the key's light gutters down over 3s to darkness; a small `#kr-ember` div remains faintly lit. No button, no recap, no redirect. The existing recessive `✕ Close` stays available throughout, untouched.
+
+4. **`openKeyReveal()` (~line 3438)** now defensively resets all rite elements (video/eyebrow opacity, fragments, instruction, departure line, ember) on open — guards against a mid-rite state surviving a re-open in the same page life. The existing "you already hold this key" branch (Keep/Close buttons) is untouched.
+
+5. **Markup/CSS additions** inside `#keyReveal` (~line 1004, ~1041): `.kr-fragment` (rising/dissolving text), `#kr-rite-instruction`, `#kr-rite-depart`, `#kr-ember`. No new screens, no new overlays — everything lives inside the existing key-reveal surface.
+
+**Explicitly not touched, per this session's scope:**
+- No Grimoire storage of any kind — the compressed composition dropped the "Grimoire seals silently in background" line entirely, so no false-storage implication exists in copy or code.
+- No candle asset, no CSS ember-as-candle — cut, not deferred.
+- No synthesized bell sound — slot only.
+- No Ganymede rite, no return-recognition moment, no fragment thread across visits.
+- Dead code (`_venusSessionLine`, `enterVenusAltar`) left alone — not in scope.
+
+**Testing before push:** `?sigil=1` / `window.testKeyReveal()` exercises the rite with one seeded fragment (auto-distill path). To test the multi-fragment choice path, seed `vHistory` with 2–3 assistant turns first (each with a distinct `affirmation`), then call `openKeyReveal()`.
+
+**Next session, not started:** El's eyes should walk the live rite once pushed — confirm the dim/fragment/sink/departure timing reads as intended on a real device, and confirm the departure line lands as inevitable rather than instructive. Ganymede's version of this rite (same arc, his register — "the first stone is placed, go and build it") is the next candidate stone after that, not before.
 
 ---
 
