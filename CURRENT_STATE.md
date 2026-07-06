@@ -1,5 +1,23 @@
 # Ancient Temenos — Current State
-**Last updated:** 6 July 2026 (second session)
+**Last updated:** 6 July 2026 (third session)
+
+---
+
+## 6 July 2026 (third session) — Jump fix, departure revert, vow refinement
+
+Four changes, one commit. The rite's core (fade, fragments, choice, ember auto-close, departure line placement) is untouched.
+
+**1 — First-response jump fixed.** On the first card, `#va-vthread` grows from zero height to full card height in one insertion. `anchorTop` (computed immediately after insertion) is unreliable in this state — the pin scroll was overcorrecting and producing a visible jump. Fix: detect first card (`vHistory.filter(role==='assistant').length===1`) and scroll to bottom instead of pinning to anchor. Subsequent cards continue to pin as before. Same stable strategy used by `vaAddUserMsg`, no new mechanism.
+
+**2 — Automatic departure transition restored.** The input-as-gate mechanic (`vaReadyToReceive`, `vaCloseToRite`, `sendVenusNew` guard) has been removed entirely. `vaMaybeShowClosing` is restored to the `vaCardDoneAt`-seamed timed cascade: after her final words fully arrive + one breath, `va-closing-new` becomes visible and the closing line / separator / key CTA / actions cascade in. The cinematic automatic transition was confirmed stronger by El. Reset block also cleaned — no more input rewiring needed.
+
+**3 — Departure line placement and ember auto-close preserved.** Both from the previous session. `#kr-rite-depart` remains inside `#kr-inscription`. `closeKeyReveal()` fires 4500ms after the ember appears.
+
+**4 — Privacy vow.** Three CSS changes on `#va-vow-note`: `letter-spacing:.05em` removed (was stretching the line and compressing legibility at small italic sizes); opacity softened from `0.72` back to `0.55` (readable without demanding attention); `border-top:.5px solid rgba(196,158,72,0.08)` and `padding-top:1.2rem` added (a hairline separator that visually detaches the vow from the input above — it reads as its own quiet line, not as UI copy competing with the input field).
+
+---
+
+## 6 July 2026 (second session)
 
 ---
 

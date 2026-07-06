@@ -477,7 +477,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #va-input-wrap input::placeholder{color:rgba(196,158,72,0.62);font-style:italic;}
 #va-input-wrap button{background:transparent;border:.5px solid rgba(196,158,72,0.22);border-radius:50%;width:32px;height:32px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:border-color .3s;}
 #va-input-wrap button:hover{border-color:rgba(196,158,72,0.5);}
-#va-vow-note{text-align:center;font-family:'Cormorant',serif;font-style:italic;font-size:clamp(11px,1.1vw,13px);color:rgba(238,220,168,0.72);line-height:1.6;letter-spacing:.05em;margin:1.3rem 0 0;opacity:0;transition:opacity 1.4s ease;}
+#va-vow-note{text-align:center;font-family:'Cormorant',serif;font-style:italic;font-size:clamp(11px,1.1vw,13px);color:rgba(238,220,168,0.55);line-height:1.7;margin:1.6rem 0 0;padding-top:1.2rem;border-top:.5px solid rgba(196,158,72,0.08);opacity:0;transition:opacity 1.4s ease;}
 #va-vow-note.show{opacity:1;}
 @keyframes vaCtaBreath{0%,100%{opacity:.72;text-shadow:0 0 6px rgba(196,158,72,0.15);}50%{opacity:1;text-shadow:0 0 18px rgba(196,158,72,0.45);}}
 .va-cta-btn{animation:vaCtaBreath 3.2s ease-in-out infinite;}
@@ -1799,13 +1799,9 @@ function enterVenusApproach(){
   const _hs=document.getElementById('va-hint-secondary');if(_hs){_hs.style.opacity='0';setTimeout(()=>{if(!vaScrub.hinted)_hs.style.opacity='1';},2500);}
   // Reset conversation state
   const vg=document.getElementById('va-glass');if(vg){vg.classList.remove('show');}
-  venusConvOpen=false;vHistory=[];venusOracleOpened=false;vaReadyToReceive=false;vaCardDoneAt=0;
+  venusConvOpen=false;vHistory=[];venusOracleOpened=false;vaCardDoneAt=0;
   const vth=document.getElementById('va-vthread');if(vth)vth.innerHTML='';
-  // Restore input to its original wiring (placeholder and handlers may have
-  // been repurposed as the key-gate on a previous visit in the same page life).
-  const _qi=document.getElementById('va-qi');const _qb=document.getElementById('va-qb');
-  if(_qi){_qi.placeholder='You are safe to speak here';_qi.disabled=false;_qi.onkeydown=e=>{if(e.key==='Enter')sendVenusNew();};}
-  if(_qb)_qb.onclick=sendVenusNew;
+  const _qi=document.getElementById('va-qi');if(_qi){_qi.placeholder='You are safe to speak here';_qi.disabled=false;}
   const vcl=document.getElementById('va-closing-new');if(vcl){vcl.style.display='none';const cl=document.getElementById('va-closing-line');if(cl)cl.style.opacity='0';const ca=document.getElementById('va-closing-actions');if(ca)ca.style.opacity='0';}
   const vinv=document.getElementById('va-invitation');if(vinv)vinv.classList.remove('show');
   const vinp=document.getElementById('va-input-wrap');if(vinp)vinp.classList.remove('show');
@@ -1859,7 +1855,14 @@ function vaRenderCard(data){
   // the very first pin already uses final geometry, in one write.
   void d.offsetHeight;
   const anchorTop=d.offsetTop;
-  const pin=()=>{if(!vg)return;vg.scrollTop=Math.min(anchorTop,vg.scrollHeight-vg.clientHeight);};
+  const isFirstCard=vHistory.filter(m=>m.role==='assistant').length===1;
+  const pin=()=>{if(!vg)return;
+    // On the first card, anchorTop is calculated against a vthread that
+    // just grew from zero height — the geometry is unstable and produces a
+    // visible jump. Scroll to bottom instead, which always settles correctly.
+    if(isFirstCard){vg.scrollTop=vg.scrollHeight;return;}
+    vg.scrollTop=Math.min(anchorTop,vg.scrollHeight-vg.clientHeight);
+  };
   pin();
   // Pure opacity — no movement. Venus arrives, she does not shift.
   paras.forEach((para,i)=>{
@@ -1884,45 +1887,32 @@ function vaAddUserMsg(text){
   const vg=document.getElementById('va-glass');if(vg)vg.scrollTop=vg.scrollHeight;
 }
 
-// vaReadyToReceive — set true once the input has become the key-gate.
-// Guards against the placeholder shifting more than once per session.
-let vaReadyToReceive=false;
-
 function vaMaybeShowClosing(){
-  if(vHistory.filter(m=>m.role==='user').length>=2&&!vaReadyToReceive){
-    vaReadyToReceive=true;
-    // The visitor controls the transition — no timer, no scroll detection.
-    // After Venus's second response, the input's placeholder quietly shifts
-    // to invite the closing gesture. Sending anything (or pressing Enter on
-    // an empty field) opens the key reveal. The system waits on her.
-    const inp=document.getElementById('va-qi');
-    const btn=document.getElementById('va-qb');
-    if(inp){
-      // Wait for her final words to finish arriving before the placeholder shifts.
-      const delay=Math.max(2500,(vaCardDoneAt||0)-Date.now()+2500);
+  if(vHistory.filter(m=>m.role==='user').length>=2){
+    const c=document.getElementById('va-closing-new');
+    if(c&&c.style.display!=='block'){
+      // Wait for her final words to finish arriving, then one breath.
+      // vaCardDoneAt is set by vaRenderCard to the real completion time.
+      const breath=2500;
+      const wait=Math.max(breath,(vaCardDoneAt||0)-Date.now()+breath);
       setTimeout(()=>{
-        inp.placeholder='When you are ready, receive your Key.';
-        inp.style.transition='opacity .8s ease';
-        // Rewire send: any submission now opens the rite, not the oracle.
-        inp.onkeydown=e=>{if(e.key==='Enter'){e.preventDefault();vaCloseToRite();}};
-        if(btn)btn.onclick=vaCloseToRite;
-      },delay);
+        c.style.display='block';
+        const vg=document.getElementById('va-glass');if(vg)setTimeout(()=>vg.scrollTop=vg.scrollHeight,500);
+        const line=document.getElementById('va-closing-line');
+        const keyCta=document.getElementById('va-key-cta');
+        const acts=document.getElementById('va-closing-actions');
+        const sep=document.getElementById('va-closing-sep');
+        setTimeout(()=>{if(line)line.style.opacity='1';},1200);
+        setTimeout(()=>{if(sep)sep.style.opacity='1';},3200);
+        setTimeout(()=>{if(keyCta)keyCta.style.opacity='1';},6000);
+        setTimeout(()=>{if(acts)acts.style.opacity='1';},9200);
+      },wait);
     }
   }
 }
 
-function vaCloseToRite(){
-  // Prevent double-fire.
-  const inp=document.getElementById('va-qi');
-  const btn=document.getElementById('va-qb');
-  if(inp){inp.onkeydown=null;inp.disabled=true;}
-  if(btn)btn.onclick=null;
-  openKeyReveal();
-}
-
 
 async function sendVenusNew(){
-  if(vaReadyToReceive)return; // input is now the key-gate; vaCloseToRite handles it
   const inp=document.getElementById('va-qi');if(!inp)return;
   const q=inp.value.trim();if(!q)return;
   if(window.trackTempleEvent) trackTempleEvent('oracle_question_submitted',{chamber:'venus'});
