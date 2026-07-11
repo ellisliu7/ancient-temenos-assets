@@ -1,0 +1,975 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<!-- PREVIEW BUILD — not for public promotion.
+     Robots blocked until final photography is installed and El promotes the page. -->
+<meta name="robots" content="noindex, nofollow">
+
+<title>Ellis Liu — Available Works</title>
+
+<!-- ============================================================
+     IMAGE DIRECTORY — images/ folder beside this file.
+     ------------------------------------------------------------
+     Each work below has an `images` array. The entry marked
+     type:"original" is always used as the grid thumbnail and is
+     always shown first in the detail overlay. Any type:"interior"
+     entries appear only inside the detail overlay's gallery, with
+     the caption "Shown in an interior setting".
+
+     Confirmed files (all present in this build):
+       images/birth-and-beginnings-original.jpg
+       images/birth-and-beginnings-interior-01.jpg
+       images/divine-feminine-and-masculine-original.jpg   (formerly "Union of the Divine Masculine & Feminine")
+       images/divine-feminine-and-masculine-interior-01.jpg
+       images/dreamscape-original.jpg
+       images/dreamscape-interior-01.jpg
+       images/evolution-and-growth-original.jpg
+       images/evolution-and-growth-interior-01.jpg
+       images/eye-of-cleopatra-original.jpg
+       images/eye-of-cleopatra-interior-01.jpg
+       images/lemuria-awakening-original.jpg               (formerly "Fragments of the Infinite" — see note in WORKS array)
+       images/lemuria-awakening-interior-01.jpg
+       images/portal-of-infinite-reflections-original.jpg
+       images/portal-of-infinite-reflections-interior-01.jpg
+       images/the-glitch-between-realms-original.jpg       (single image — no carousel)
+
+     Two inferred renames in this build, both flagged inline in WORKS
+     below — confirm or correct:
+       "Union of the Divine Masculine & Feminine" -> "Divine Feminine and Masculine"
+       "Fragments of the Infinite" -> "Lemuria Awakening"
+     onerror/onload swap shows a composed "Photography forthcoming"
+     placeholder tile in its place, in the grid and in the carousel.
+     ============================================================ -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --ivory:      #FBF8F2;
+    --ivory-deep: #F3EDE1;
+    --ink:        #2A2420;
+    --ink-body:   #3A342C;
+    --ink-soft:   #8A8175;
+    --gold:       #B8985A;
+    --gold-soft:  rgba(184,152,90,0.28);
+    --line:       rgba(42,36,32,0.12);
+    --shadow:     rgba(42,36,32,0.10);
+    --measure:    36rem;
+  }
+
+  *{ box-sizing:border-box; margin:0; padding:0; }
+  html{ scroll-behavior:smooth; }
+
+  body{
+    background:var(--ivory);
+    color:var(--ink);
+    font-family:'Cormorant Garamond', Georgia, serif;
+    font-size:18px;
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+  }
+
+  ::selection{ background:var(--gold-soft); }
+
+  /* ---------- header + nav ---------- */
+  header{
+    max-width:70rem;
+    margin:0 auto;
+    padding:9vh 2rem 0;
+    text-align:center;
+  }
+  .wordmark{
+    font-family:'Cinzel', serif;
+    font-weight:500;
+    font-size:26px;
+    letter-spacing:.28em;
+    text-indent:.28em;
+    color:var(--ink);
+  }
+
+  .topnav{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:.7rem;
+    flex-wrap:wrap;
+    margin-top:1.1rem;
+  }
+  .nav-link{
+    font-family:'Inter', sans-serif;
+    font-weight:500;
+    font-size:11px;
+    letter-spacing:.05em;
+    color:var(--ink-soft);
+    text-decoration:none;
+    padding-bottom:2px;
+    border-bottom:1px solid transparent;
+    transition:color .3s ease, border-color .3s ease;
+  }
+  .nav-link:hover, .nav-link:focus-visible{ color:var(--ink); border-bottom-color:var(--gold); }
+  .nav-sep{ font-family:'Inter', sans-serif; font-size:11px; color:var(--ink-soft); }
+
+  .rule{
+    width:40px;
+    height:1px;
+    background:var(--gold);
+    opacity:.7;
+    margin:2rem auto 0;
+    border:0;
+  }
+
+  /* ---------- collection ---------- */
+  .collection{
+    max-width:72rem;
+    margin:7vh auto 0;
+    padding:0 2rem 4vh;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    column-gap:5rem;
+    row-gap:6rem;
+  }
+
+  .year-marker{
+    grid-column:1 / -1;
+    font-family:'Inter', sans-serif;
+    font-weight:500;
+    font-size:12px;
+    letter-spacing:.28em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    text-align:left;
+    margin-top:5.5rem;
+    margin-bottom:-1.5rem;
+  }
+  .year-marker.first{ margin-top:0; }
+
+  figure.work{
+    margin:0;
+    opacity:0;
+    transform:translateY(18px);
+    transition:opacity .7s ease, transform .7s ease;
+  }
+  figure.work.in{ opacity:1; transform:none; }
+
+  .frame{
+    position:relative;
+    width:100%;
+    aspect-ratio:1 / 1;
+    background:var(--ivory-deep);
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+    cursor:pointer;
+  }
+  .slide{ position:relative; width:100%; height:100%; display:flex; align-items:center; justify-content:center; }
+  .slide img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    display:block;
+    filter:drop-shadow(0 16px 30px var(--shadow));
+    transition:transform 1s cubic-bezier(.2,.7,.2,1);
+  }
+  .frame:hover .slide img{ transform:scale(1.02); }
+
+  .placeholder{
+    position:absolute; inset:0;
+    display:flex; flex-direction:column;
+    align-items:center; justify-content:center;
+    text-align:center;
+    padding:2rem;
+    background:radial-gradient(120% 120% at 50% 40%, #F8F3E9 0%, var(--ivory-deep) 70%);
+  }
+  .placeholder::before{
+    content:"";
+    width:26px; height:1px;
+    background:var(--gold); opacity:.55;
+    margin-bottom:1.1rem;
+  }
+  .placeholder .pname{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    font-style:italic;
+    font-size:17px;
+    color:#5c5445;
+    line-height:1.5;
+    max-width:15rem;
+  }
+  .placeholder .pending{
+    font-family:'Inter', sans-serif;
+    font-size:10.5px;
+    letter-spacing:.1em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    margin-top:.8rem;
+  }
+
+  figcaption{ padding-top:1.2rem; }
+  .work-title{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500;
+    font-style:normal;
+    font-size:21px;
+    line-height:1.3;
+    color:var(--ink);
+  }
+  .work-meta{
+    font-family:'Inter', sans-serif;
+    font-weight:400;
+    font-size:11.5px;
+    letter-spacing:.03em;
+    color:var(--ink-soft);
+    margin-top:.45rem;
+  }
+  .work-foot{
+    display:flex;
+    align-items:baseline;
+    justify-content:space-between;
+    gap:1rem;
+    margin-top:.8rem;
+  }
+  .work-price{
+    font-family:'Inter', sans-serif;
+    font-weight:500;
+    font-size:14px;
+    color:var(--ink);
+  }
+  .work-status{
+    font-family:'Inter', sans-serif;
+    font-weight:500;
+    font-size:10.5px;
+    letter-spacing:.14em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .enquire{
+    background:none; border:0; padding:0;
+    cursor:pointer;
+    font-family:'Inter', sans-serif;
+    font-weight:500;
+    font-size:11px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+    color:var(--ink-soft);
+    position:relative;
+  }
+  .enquire::after{
+    content:"";
+    position:absolute; left:0; bottom:-4px;
+    width:100%; height:1px;
+    background:var(--gold);
+    transform:scaleX(0);
+    transform-origin:left;
+    transition:transform .4s ease;
+  }
+  .enquire:hover, .enquire:focus-visible{ color:var(--ink); }
+  .enquire:hover::after, .enquire:focus-visible::after{ transform:scaleX(1); }
+
+  /* ---------- footer ---------- */
+  footer{
+    max-width:var(--measure);
+    margin:12vh auto 0;
+    padding:0 2rem 12vh;
+    text-align:center;
+    color:var(--ink-soft);
+  }
+  footer .promise{
+    font-family:'Cormorant Garamond', serif;
+    font-size:17px; font-style:italic; color:var(--ink-body);
+  }
+  footer .contact{
+    font-family:'Cormorant Garamond', serif;
+    margin-top:1.2rem; font-size:16px;
+  }
+  footer .contact a{ color:var(--ink); text-decoration:none; border-bottom:1px solid var(--gold-soft); }
+  footer .contact a:hover{ border-bottom-color:var(--gold); }
+  footer .links{
+    margin-top:1.8rem;
+    font-family:'Inter', sans-serif;
+    font-weight:500;
+    font-size:10.5px;
+    letter-spacing:.18em;
+    text-transform:uppercase;
+  }
+  footer .links a{ color:var(--ink-soft); text-decoration:none; margin:0 .8rem; }
+  footer .links a:hover{ color:var(--gold); }
+  footer .copyright{
+    margin-top:2rem;
+    font-family:'Inter', sans-serif;
+    font-size:10.5px;
+    letter-spacing:.04em;
+    color:#a49a8b;
+  }
+
+  /* ============ overlays ============ */
+  .overlay{
+    position:fixed; inset:0;
+    background:rgba(30,26,21,0.36);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
+    display:none;
+    align-items:center; justify-content:center;
+    padding:2rem;
+    z-index:100;
+    opacity:0;
+    transition:opacity .35s ease;
+  }
+  .overlay.show{ display:flex; }
+  .overlay.visible{ opacity:1; }
+
+  .close-x{
+    position:absolute; top:1.4rem; right:1.6rem;
+    background:none; border:0; cursor:pointer;
+    font-size:1.3rem; line-height:1; color:var(--ink-soft);
+    transition:color .3s ease;
+    z-index:5;
+  }
+  .close-x:hover{ color:var(--ink); }
+
+  .detail-card{
+    position:relative;
+    background:var(--ivory);
+    max-width:58rem;
+    width:100%;
+    max-height:90vh;
+    overflow-y:auto;
+    padding:3.2rem;
+    display:grid;
+    grid-template-columns:1.05fr .95fr;
+    gap:3rem;
+    box-shadow:0 40px 90px rgba(30,26,21,0.26);
+  }
+
+  .detail-figure-wrap{ position:relative; }
+  .detail-figure{
+    position:relative;
+    background:var(--ivory-deep);
+    width:100%;
+    min-height:20rem;
+    max-height:60vh;
+    display:flex; align-items:center; justify-content:center;
+    overflow:hidden;
+  }
+  .detail-figure .slide img{
+    width:auto; height:auto;
+    max-width:100%; max-height:60vh;
+    object-fit:contain;
+    filter:drop-shadow(0 14px 26px var(--shadow));
+  }
+
+  .detail-nav{
+    position:absolute; top:50%; transform:translateY(-50%);
+    width:34px; height:34px;
+    border-radius:50%;
+    background:rgba(251,248,242,0.72);
+    display:none; align-items:center; justify-content:center;
+    border:0; cursor:pointer;
+    font-family:'Inter', sans-serif;
+    font-size:16px;
+    color:var(--ink-soft);
+    transition:background .3s ease, color .3s ease;
+  }
+  .detail-nav:hover{ background:rgba(251,248,242,0.95); color:var(--ink); }
+  .detail-prev{ left:.6rem; }
+  .detail-next{ right:.6rem; }
+
+  .detail-counter{
+    position:absolute; right:.7rem; bottom:.6rem;
+    font-family:'Inter', sans-serif;
+    font-size:10px; letter-spacing:.06em;
+    color:var(--ink-soft);
+    background:rgba(251,248,242,0.72);
+    padding:.2rem .5rem;
+    display:none;
+  }
+  .detail-caption{
+    margin-top:.7rem;
+    text-align:center;
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-size:13.5px;
+    color:var(--ink-soft);
+    display:none;
+  }
+
+  .detail-body{ align-self:center; }
+  .detail-body .work-title{ font-size:24px; }
+  .detail-body .work-meta{ margin-top:.6rem; }
+  .detail-note{
+    font-family:'Cormorant Garamond', serif;
+    margin-top:1.4rem;
+    font-size:16.5px;
+    line-height:1.62;
+    color:var(--ink-body);
+  }
+  .detail-foot{
+    margin-top:1.6rem;
+    padding-top:1.3rem;
+    border-top:1px solid var(--line);
+    display:flex; align-items:baseline; justify-content:space-between; gap:1rem;
+  }
+  .detail-cta{
+    font-family:'Inter', sans-serif;
+    font-weight:500;
+    font-size:10.5px; letter-spacing:.18em; text-transform:uppercase;
+    background:none; border:1px solid var(--gold); color:var(--ink);
+    padding:.65rem 1.3rem; cursor:pointer;
+    transition:background .4s ease, color .4s ease;
+  }
+  .detail-cta:hover{ background:var(--gold); color:var(--ivory); }
+
+  .enquiry-card{
+    position:relative;
+    background:var(--ivory);
+    max-width:32rem; width:100%;
+    padding:3rem 2.8rem;
+    box-shadow:0 40px 90px rgba(30,26,21,0.26);
+  }
+  .enquiry-card .eyebrow{
+    display:block; text-align:center;
+    font-family:'Inter', sans-serif;
+    font-weight:500;
+    font-size:10.5px; letter-spacing:.24em; text-transform:uppercase;
+    color:var(--ink-soft);
+  }
+  .enquiry-card h3{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:500; font-style:italic;
+    font-size:1.6rem; text-align:center; margin-top:.7rem;
+    color:var(--ink);
+  }
+  .enquiry-card .sub{
+    text-align:center; font-size:15px; color:var(--ink-soft);
+    margin-top:.5rem; line-height:1.5;
+    font-family:'Cormorant Garamond', serif;
+  }
+  .field{ margin-top:1.4rem; }
+  .field label{
+    display:block;
+    font-family:'Inter', sans-serif;
+    font-weight:500;
+    font-size:10px; letter-spacing:.14em; text-transform:uppercase;
+    color:var(--ink-soft); margin-bottom:.45rem;
+  }
+  .field input, .field textarea{
+    width:100%;
+    background:var(--ivory-deep);
+    border:1px solid var(--line);
+    padding:.75rem .85rem;
+    font-family:'Cormorant Garamond', serif;
+    font-size:16px; color:var(--ink);
+    transition:border-color .3s ease;
+  }
+  .field input:focus, .field textarea:focus{ outline:none; border-color:var(--gold); }
+  .field textarea{ resize:vertical; min-height:4.2rem; }
+  .send-btn{
+    width:100%; margin-top:1.6rem;
+    background:var(--ink); color:var(--ivory);
+    border:0; padding:.85rem;
+    font-family:'Inter', sans-serif;
+    font-weight:500;
+    font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+    cursor:pointer;
+    transition:background .4s ease;
+  }
+  .send-btn:hover{ background:var(--gold); }
+  .send-btn:disabled{ opacity:.5; cursor:default; }
+
+  .form-state{ text-align:center; padding:.8rem 0; }
+  .form-state p{ font-family:'Cormorant Garamond', serif; font-size:16px; line-height:1.6; color:var(--ink-body); }
+  .form-state .lead{ font-style:italic; font-size:1.3rem; color:var(--ink); margin-bottom:.7rem; }
+  .form-state a{ color:var(--gold); }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation:none !important; transition:none !important; scroll-behavior:auto !important; }
+    figure.work{ opacity:1; transform:none; }
+  }
+
+  /* ---------- mobile ---------- */
+  @media (max-width: 760px){
+    body{ font-size:17px; }
+    header{ padding-top:7vh; }
+    .wordmark{ font-size:20px; letter-spacing:.22em; text-indent:.22em; }
+    .topnav{ gap:.55rem; margin-top:.9rem; }
+    .nav-link, .nav-sep{ font-size:10.5px; }
+    .grid{ grid-template-columns:1fr; row-gap:4rem; }
+    .collection{ margin-top:6vh; }
+    .year-marker{ font-size:11px; letter-spacing:.22em; margin-top:4rem; margin-bottom:-1rem; }
+    .year-marker.first{ margin-top:0; }
+    .work-title{ font-size:19px; }
+    .work-price{ font-size:13.5px; }
+    .work-foot{ margin-top:.9rem; }
+    .detail-card{
+      grid-template-columns:1fr;
+      padding:2.2rem 1.5rem;
+      gap:1.4rem;
+      max-height:92vh;
+    }
+    .detail-figure{ max-height:46vh; }
+    .detail-figure .slide img{ max-height:46vh; }
+    .detail-body .work-title{ font-size:21px; }
+    .enquiry-card{ padding:2.4rem 1.5rem; }
+    .overlay{ padding:1rem; align-items:flex-start; }
+    footer .links a{ display:inline-block; margin:.4rem .6rem; }
+  }
+</style>
+</head>
+
+<body>
+
+  <header>
+    <h1 class="wordmark">ELLIS&nbsp;LIU</h1>
+    <nav class="topnav" aria-label="Primary">
+      <a href="#collection" class="nav-link">Original Artworks</a>
+      <span class="nav-sep">·</span>
+      <a href="https://ancienttemenos.art" target="_blank" rel="noopener" class="nav-link">Ancient Temenos</a>
+    </nav>
+    <hr class="rule">
+  </header>
+
+  <main class="collection" id="collection">
+    <div class="grid" id="grid"></div>
+  </main>
+
+  <footer>
+    <p class="promise">Enquiries are answered personally within 48 hours.</p>
+    <p class="contact"><a href="mailto:ellisliu91@gmail.com">ellisliu91@gmail.com</a></p>
+    <p class="links">
+      <a href="https://ellisliu.art" target="_blank" rel="noopener">Portfolio</a>
+      <a href="https://ancienttemenos.art" target="_blank" rel="noopener">Ancient Temenos</a>
+    </p>
+    <p class="copyright">© Ellis Liu 2026</p>
+  </footer>
+
+
+  <!-- detail overlay -->
+  <div class="overlay" id="detailOverlay" role="dialog" aria-modal="true" aria-label="Artwork detail">
+    <div class="detail-card">
+      <button class="close-x" aria-label="Close" data-close>✕</button>
+
+      <div class="detail-figure-wrap">
+        <div class="detail-figure" id="detailFigure"></div>
+        <button class="detail-nav detail-prev" id="detailPrev" aria-label="Previous image">‹</button>
+        <button class="detail-nav detail-next" id="detailNext" aria-label="Next image">›</button>
+        <span class="detail-counter" id="detailCounter"></span>
+        <p class="detail-caption" id="detailCaption"></p>
+      </div>
+
+      <div class="detail-body">
+        <div class="work-title" id="detailTitle"></div>
+        <div class="work-meta" id="detailMeta"></div>
+        <p class="detail-note" id="detailNote"></p>
+        <div class="detail-foot">
+          <span class="work-price" id="detailPrice"></span>
+          <button class="detail-cta" id="detailEnquire">Enquire</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- enquiry overlay -->
+  <div class="overlay" id="enquiryOverlay" role="dialog" aria-modal="true" aria-label="Enquiry">
+    <div class="enquiry-card">
+      <button class="close-x" aria-label="Close" data-close>✕</button>
+
+      <div id="enquiryForm">
+        <span class="eyebrow">Private enquiry</span>
+        <h3 id="enquiryTitle">Enquire</h3>
+        <p class="sub" id="enquirySub">Share your details and El will reply personally within 48 hours.</p>
+
+        <div class="field">
+          <label for="eqName">Name</label>
+          <input type="text" id="eqName" autocomplete="name">
+        </div>
+        <div class="field">
+          <label for="eqEmail">Email</label>
+          <input type="email" id="eqEmail" autocomplete="email">
+        </div>
+        <div class="field">
+          <label for="eqMsg">What drew you to this work?</label>
+          <textarea id="eqMsg" rows="3"></textarea>
+        </div>
+        <button class="send-btn" id="eqSend">Send enquiry</button>
+      </div>
+
+      <div class="form-state" id="enquirySent" style="display:none;">
+        <p class="lead">Your enquiry has been received.</p>
+        <p id="sentBody"></p>
+        <p style="margin-top:1rem;">El will reply personally within 48 hours.</p>
+      </div>
+
+      <div class="form-state" id="enquiryError" style="display:none;">
+        <p class="lead">Something went wrong.</p>
+        <p>Please try again, or write to El directly at
+          <a href="mailto:ellisliu91@gmail.com">ellisliu91@gmail.com</a></p>
+      </div>
+    </div>
+  </div>
+
+
+<script>
+/* ============================================================
+   WORKS — the single source of truth, in display order.
+   The page groups entries by `year` automatically, in the order
+   given here. Each work has an `images` array; the entry marked
+   type:"original" is used as the grid thumbnail and is shown
+   first in the detail overlay. type:"interior" entries appear
+   only in the detail overlay carousel, with their caption.
+   ============================================================ */
+const WORKS = [
+  // ---- 2026 — Ancient Temenos ----
+  { id:'venus', title:'Venus', year:'2026',
+    medium:'Graphite, charcoal & gold on paper', dims:'38.5 × 56.5 cm',
+    price:'Price on enquiry', status:'enquiry',
+    images:[
+      { src:'https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Artwork.jpg', type:'original', alt:'Venus, original artwork' }
+    ],
+    note:'Venus is a study in receiving, softness and self-worth — the first work to inhabit Ancient Temenos, a living digital sanctuary built around this practice. The original resides beyond the chamber. One exists.' },
+
+  { id:'ganymede', title:'Ganymede', year:'2026',
+    medium:null, dims:null,
+    price:'Price on enquiry', status:'enquiry',
+    images:[
+      { src:'https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_Artwork.jpg', type:'original', alt:'Ganymede, original artwork' }
+    ],
+    note:'Ganymede grounds vision into form — devotion, structure, the first stone placed. The second work to inhabit the temple.' },
+
+  // ---- 2025 ----
+  { id:'portal-of-infinite-reflections',
+    title:'Portal of Infinite Reflections', year:'2025',
+    medium:'Oil & resin on canvas', dims:'80 cm diameter',
+    price:'S$4,777', status:'available',
+    images:[
+      { src:'images/portal-of-infinite-reflections-original.jpg', type:'original', alt:'Portal of Infinite Reflections, original artwork' },
+      { src:'images/portal-of-infinite-reflections-interior-01.jpg', type:'interior', alt:'Portal of Infinite Reflections shown in an interior setting', caption:'Shown in an interior setting' }
+    ],
+    note:'A figure floats in calm surrender, meeting her own reflection in another life. The water is the portal; each ripple a doorway to a different self. The rose is the beauty that stays constant across every version of us.' },
+
+  { id:'lemuria-awakening',
+    /* INFERRED RENAME — was "Fragments of the Infinite" in the Wasuka catalogue.
+       Your images/ list has 8 filename groups matching this page's 8 catalogue
+       works exactly, with "Lemuria Awakening" in this work's place and no
+       "fragments-of-the-infinite" files. Year/medium/dims/price/status carried
+       over unchanged from Fragments — only the title and filenames changed.
+       If this is actually a separate, new 9th work rather than a rename,
+       tell me and I'll split it back out and ask for its own record. */
+    title:'Lemuria Awakening', year:'2025',
+    medium:'Oil & resin on canvas', dims:'80 cm diameter',
+    price:'S$4,777', status:'available',
+    images:[
+      { src:'images/lemuria-awakening-original.jpg', type:'original', alt:'Lemuria Awakening, original artwork' },
+      { src:'images/lemuria-awakening-interior-01.jpg', type:'interior', alt:'Lemuria Awakening shown in an interior setting', caption:'Shown in an interior setting' }
+    ],
+    note:'Her gaze returns to the viewer like a mirror. We are more than our past, and more than the roles we have worn. Beside her stand the butterfly, the wolf and the swallow — transformation, instinct, freedom. Identity is never fixed; a new path can open at any moment.' },
+
+  { id:'eye-of-cleopatra',
+    title:'Eye of Cleopatra', year:'2025',
+    medium:'Oil on canvas', dims:'40 cm diameter',
+    price:'S$2,222', status:'available',
+    images:[
+      { src:'images/eye-of-cleopatra-original.jpg', type:'original', alt:'Eye of Cleopatra, original artwork' },
+      { src:'images/eye-of-cleopatra-interior-01.jpg', type:'interior', alt:'Eye of Cleopatra shown in an interior setting', caption:'Shown in an interior setting' }
+    ],
+    note:'A study of vision and sovereignty. At its centre, a Merkaba that grew out of the Flower of Life in my sketches, held between the Eye of Horus and the presence of Cleopatra. A portrait of quiet feminine power, and of the many timelines we carry within us.' },
+
+  { id:'divine-feminine-and-masculine',
+    title:'Divine Feminine and Masculine', year:'2025',
+    medium:'Oil on canvas', dims:'40 cm diameter',
+    price:'S$2,222', status:'available',
+    images:[
+      { src:'images/divine-feminine-and-masculine-original.jpg', type:'original', alt:'Divine Feminine and Masculine, original artwork' },
+      { src:'images/divine-feminine-and-masculine-interior-01.jpg', type:'interior', alt:'Divine Feminine and Masculine shown in an interior setting', caption:'Shown in an interior setting' }
+    ],
+    note:'Two energies meeting in balance — a reminder that we are, together, one. The Flower of Life is woven behind them; the ouroboros circles them, the serpent consuming its own tail: beginning, ending, beginning again. Everything you seek is already within.' },
+
+  { id:'dreamscape',
+    title:'Dreamscape', year:'2025',
+    medium:'Oil on canvas', dims:'40 cm diameter',
+    price:'S$2,222', status:'available',
+    images:[
+      { src:'images/dreamscape-original.jpg', type:'original', alt:'Dreamscape, original artwork' },
+      { src:'images/dreamscape-interior-01.jpg', type:'interior', alt:'Dreamscape shown in an interior setting', caption:'Shown in an interior setting' }
+    ],
+    note:'A tribute to Hathor, and to rest itself — the pause between moments of creation. For years I believed worth came only from constant output, and stillness arrived wrapped in guilt. The Seed of Life is woven in; all things grow from stillness. This painting is the unlearning of that belief.' },
+
+  { id:'the-glitch-between-realms',
+    title:'The Glitch Between Realms', year:'2025',
+    medium:'Oil & resin on canvas', dims:'80 cm diameter',
+    price:null, status:'private',
+    images:[
+      { src:'images/the-glitch-between-realms-original.jpg', type:'original', alt:'The Glitch Between Realms, original artwork' }
+    ],
+    note:'Hidden symbols are layered through the composition, held together by Metatron\u2019s Cube — the pattern that runs from the smallest atom to the largest galaxy, carrying protection, clarity and truth. Every element was placed with intention, and left open for your own reading.' },
+
+  // ---- 2024 ----
+  { id:'birth-and-beginnings',
+    title:'Birth and Beginnings', year:'2024',
+    medium:'Oil on canvas', dims:'46 × 46 cm',
+    price:'S$1,500', status:'available',
+    images:[
+      { src:'images/birth-and-beginnings-original.jpg', type:'original', alt:'Birth and Beginnings, original artwork' },
+      { src:'images/birth-and-beginnings-interior-01.jpg', type:'interior', alt:'Birth and Beginnings shown in an interior setting', caption:'Shown in an interior setting' }
+    ],
+    note:'A reflection on beginnings, held in a child\u2019s wide eyes. The gecko arrived through friends who told me that seeing one in hard times reassured them they were on the right path — a small sign of guidance. It sheds its skin and begins again.' },
+
+  { id:'evolution-and-growth',
+    title:'Evolution and Growth', year:'2024',
+    medium:'Oil on canvas', dims:'46 × 46 cm',
+    price:'S$1,500', status:'available',
+    images:[
+      { src:'images/evolution-and-growth-original.jpg', type:'original', alt:'Evolution and Growth, original artwork' },
+      { src:'images/evolution-and-growth-interior-01.jpg', type:'interior', alt:'Evolution and Growth shown in an interior setting', caption:'Shown in an interior setting' }
+    ],
+    note:'The gaze has shifted — discernment earned through experience. The cat is my spirit animal and, to me, a form of Isis: wisdom, protection, intuition. A portrait of the clarity that comes from meeting life\u2019s challenges rather than turning away from them.' },
+
+];
+
+const FORMSPREE = 'https://formspree.io/f/xkoakgkk';
+
+/* ---------- render helpers ---------- */
+function metaLine(w){
+  return [w.year, w.medium, w.dims].filter(Boolean).join(' · ');
+}
+function getOriginalImage(work){
+  return work.images.find(im => im.type === 'original') || work.images[0];
+}
+
+function makeSlide(work, imgObj){
+  const slide = document.createElement('div');
+  slide.className = 'slide';
+
+  const ph = document.createElement('div');
+  ph.className = 'placeholder';
+  ph.innerHTML = `<div class="pname">${work.title}</div><div class="pending">Photography forthcoming</div>`;
+
+  const img = document.createElement('img');
+  img.alt = imgObj.alt || work.title;
+  img.loading = 'lazy';
+  img.onerror = () => { img.style.display = 'none'; ph.style.display = 'flex'; };
+  img.onload  = () => { ph.style.display = 'none'; };
+  img.src = imgObj.src;
+
+  slide.appendChild(img);
+  slide.appendChild(ph);
+  return slide;
+}
+
+/* ---------- collection grid, grouped by year in array order ---------- */
+const grid = document.getElementById('grid');
+let lastYear = null;
+let firstMarker = true;
+
+WORKS.forEach(w => {
+  if(w.year !== lastYear){
+    const marker = document.createElement('div');
+    marker.className = 'year-marker' + (firstMarker ? ' first' : '');
+    marker.textContent = w.year;
+    grid.appendChild(marker);
+    lastYear = w.year;
+    firstMarker = false;
+  }
+
+  const fig = document.createElement('figure');
+  fig.className = 'work';
+
+  const frame = document.createElement('div');
+  frame.className = 'frame';
+  frame.appendChild(makeSlide(w, getOriginalImage(w)));
+  frame.addEventListener('click', () => openDetail(w));
+
+  const cap = document.createElement('figcaption');
+  const foot = w.status === 'private'
+    ? `<div class="work-foot"><span class="work-status">Private collection</span></div>`
+    : `<div class="work-foot">
+         <span class="work-price">${w.price}</span>
+         <button class="enquire" data-id="${w.id}">Enquire</button>
+       </div>`;
+  cap.innerHTML = `
+    <div class="work-title">${w.title}</div>
+    <div class="work-meta">${metaLine(w)}</div>
+    ${foot}`;
+
+  fig.appendChild(frame);
+  fig.appendChild(cap);
+  grid.appendChild(fig);
+
+  const btn = cap.querySelector('.enquire');
+  if(btn) btn.addEventListener('click', e => { e.stopPropagation(); openEnquiry(w); });
+});
+
+/* ---------- scroll reveal ---------- */
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(en => { if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
+}, { threshold:0.12, rootMargin:'0px 0px -8% 0px' });
+document.querySelectorAll('figure.work').forEach(el => io.observe(el));
+
+/* ---------- overlays ---------- */
+function showOverlay(el){
+  el.classList.add('show');
+  requestAnimationFrame(() => el.classList.add('visible'));
+  document.body.style.overflow = 'hidden';
+}
+function hideOverlay(el){
+  el.classList.remove('visible');
+  setTimeout(() => {
+    el.classList.remove('show');
+    if(!document.querySelector('.overlay.show')) document.body.style.overflow = '';
+  }, 350);
+}
+
+/* ---------- detail overlay + carousel ---------- */
+const detailOverlay  = document.getElementById('detailOverlay');
+const detailFigureEl = document.getElementById('detailFigure');
+const detailPrevBtn  = document.getElementById('detailPrev');
+const detailNextBtn  = document.getElementById('detailNext');
+const detailCounter  = document.getElementById('detailCounter');
+const detailCaption  = document.getElementById('detailCaption');
+
+let detailWork = null;
+let detailImages = [];
+let detailIndex = 0;
+
+function openDetail(work){
+  detailWork = work;
+  detailImages = work.images;
+  detailIndex = 0;
+  renderDetailSlide();
+
+  document.getElementById('detailTitle').textContent = work.title;
+  document.getElementById('detailMeta').textContent  = metaLine(work);
+  document.getElementById('detailNote').textContent  = work.note || '';
+
+  const priceEl = document.getElementById('detailPrice');
+  const ctaEl   = document.getElementById('detailEnquire');
+  if(work.status === 'private'){
+    priceEl.textContent = 'Private collection';
+    ctaEl.style.display = 'none';
+  } else {
+    priceEl.textContent = work.price;
+    ctaEl.style.display = '';
+    ctaEl.onclick = () => { hideOverlay(detailOverlay); setTimeout(() => openEnquiry(work), 320); };
+  }
+  showOverlay(detailOverlay);
+}
+
+function renderDetailSlide(){
+  detailFigureEl.innerHTML = '';
+  const imgObj = detailImages[detailIndex];
+  detailFigureEl.appendChild(makeSlide(detailWork, imgObj));
+
+  const multi = detailImages.length > 1;
+  detailPrevBtn.style.display = multi ? 'flex' : 'none';
+  detailNextBtn.style.display = multi ? 'flex' : 'none';
+  detailCounter.style.display = multi ? 'block' : 'none';
+  if(multi) detailCounter.textContent = `${detailIndex + 1} / ${detailImages.length}`;
+
+  if(imgObj.type === 'interior' && imgObj.caption){
+    detailCaption.textContent = imgObj.caption;
+    detailCaption.style.display = 'block';
+  } else {
+    detailCaption.style.display = 'none';
+  }
+}
+
+function stepDetail(delta){
+  if(detailImages.length <= 1) return;
+  detailIndex = (detailIndex + delta + detailImages.length) % detailImages.length;
+  renderDetailSlide();
+}
+
+detailPrevBtn.addEventListener('click', e => { e.stopPropagation(); stepDetail(-1); });
+detailNextBtn.addEventListener('click', e => { e.stopPropagation(); stepDetail(1); });
+
+/* swipe support */
+let touchStartX = null;
+detailFigureEl.addEventListener('touchstart', e => { touchStartX = e.changedTouches[0].clientX; }, { passive:true });
+detailFigureEl.addEventListener('touchend', e => {
+  if(touchStartX === null) return;
+  const dx = e.changedTouches[0].clientX - touchStartX;
+  if(Math.abs(dx) > 40){ stepDetail(dx < 0 ? 1 : -1); }
+  touchStartX = null;
+}, { passive:true });
+
+/* enquiry */
+const enquiryOverlay = document.getElementById('enquiryOverlay');
+let currentWork = null;
+function resetEnquiry(){
+  document.getElementById('enquiryForm').style.display = '';
+  document.getElementById('enquirySent').style.display = 'none';
+  document.getElementById('enquiryError').style.display = 'none';
+  const btn = document.getElementById('eqSend');
+  btn.disabled = false; btn.textContent = 'Send enquiry';
+}
+function openEnquiry(w){
+  currentWork = w;
+  resetEnquiry();
+  document.getElementById('enquiryTitle').textContent = `Enquire — ${w.title}`;
+  document.getElementById('enquirySub').textContent =
+    'Share your details and El will reply personally within 48 hours.';
+  showOverlay(enquiryOverlay);
+}
+
+document.getElementById('eqSend').addEventListener('click', async () => {
+  const name  = document.getElementById('eqName').value.trim();
+  const email = document.getElementById('eqEmail').value.trim();
+  const msg   = document.getElementById('eqMsg').value.trim();
+  const btn   = document.getElementById('eqSend');
+
+  if(!email || !/.+@.+\..+/.test(email)){
+    document.getElementById('eqEmail').focus();
+    document.getElementById('eqEmail').style.borderColor = '#B8985A';
+    return;
+  }
+  btn.disabled = true; btn.textContent = 'Sending…';
+
+  try{
+    const res = await fetch(FORMSPREE, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json', 'Accept':'application/json' },
+      body: JSON.stringify({
+        _subject: `Collection enquiry — ${currentWork.title}`,
+        work: currentWork.title,
+        name: name || '(not given)',
+        email: email,
+        message: msg || '(none)'
+      })
+    });
+    if(res.ok){
+      document.getElementById('enquiryForm').style.display = 'none';
+      document.getElementById('sentBody').textContent =
+        `Thank you for your interest in ${currentWork.title}.`;
+      document.getElementById('enquirySent').style.display = '';
+    } else { throw new Error('bad response'); }
+  } catch(err){
+    document.getElementById('enquiryForm').style.display = 'none';
+    document.getElementById('enquiryError').style.display = '';
+  }
+});
+
+/* close handlers */
+document.querySelectorAll('[data-close]').forEach(b =>
+  b.addEventListener('click', () => hideOverlay(b.closest('.overlay'))));
+document.querySelectorAll('.overlay').forEach(ov =>
+  ov.addEventListener('click', e => { if(e.target === ov) hideOverlay(ov); }));
+
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape'){
+    document.querySelectorAll('.overlay.show').forEach(hideOverlay);
+  }
+  if(detailOverlay.classList.contains('show')){
+    if(e.key === 'ArrowLeft')  stepDetail(-1);
+    if(e.key === 'ArrowRight') stepDetail(1);
+  }
+});
+</script>
+</body>
+</html>
