@@ -20,24 +20,31 @@
      the caption "Shown in an interior setting".
 
      Confirmed files (all present in this build):
-       images/birth-and-beginnings-original.jpg
-       images/birth-and-beginnings-interior-01.jpg
-       images/divine-feminine-and-masculine-original.jpg   (formerly "Union of the Divine Masculine & Feminine")
-       images/divine-feminine-and-masculine-interior-01.jpg
-       images/dreamscape-original.jpg
-       images/dreamscape-interior-01.jpg
-       images/evolution-and-growth-original.jpg
-       images/evolution-and-growth-interior-01.jpg
-       images/eye-of-cleopatra-original.jpg
-       images/eye-of-cleopatra-interior-01.jpg
-       images/lemuria-awakening-original.jpg               (formerly "Fragments of the Infinite" — see note in WORKS array)
-       images/lemuria-awakening-interior-01.jpg
-       images/portal-of-infinite-reflections-original.jpg
-       images/portal-of-infinite-reflections-interior-01.jpg
-       images/the-glitch-between-realms-original.jpg       (single image — no carousel)
+       images/divine-feminine-and-masculine-original.png   (formerly "Union of the Divine Masculine & Feminine")
+       images/divine-feminine-and-masculine-interior-01.png
+       images/dreamscape-original.jpg                      (note: .jpg — the one original NOT using .png)
+       images/dreamscape-interior-01.png
+       images/evolution-and-growth-interior-01.png
+       images/eye-of-cleopatra-original.png
+       images/eye-of-cleopatra-interior-01.png
+       images/lemuria-awakening-original.png               (formerly "Fragments of the Infinite" — see note in WORKS array)
+       images/lemuria-awakening-interior-01.png
+       images/portal-of-infinite-reflections-original.png
+       images/portal-of-infinite-reflections-interior-01.png
+       images/the-glitch-between-realms-original.png       (single image — no carousel)
+
+     EXTENSION NOT YET CONFIRMED — do not guess, do not assume .png:
+       birth-and-beginnings-original    (extension unknown, Finder was hiding it)
+       birth-and-beginnings-interior-01 (extension unknown, Finder was hiding it)
+       evolution-and-growth-original    (extension unknown, Finder was hiding it)
+     These three currently point at an intentionally-invalid sentinel path
+     (images/PENDING-EXTENSION-...) so DEBUG_IMAGES shows an unmistakable
+     "pending" tile rather than a plausible wrong guess. Once El confirms
+     the real extension, update the two WORKS entries below and remove
+     the PENDING-EXTENSION- prefix.
 
      Two inferred renames in this build, both flagged inline in WORKS
-     below — confirm or correct:
+     below — confirmed by El:
        "Union of the Divine Masculine & Feminine" -> "Divine Feminine and Masculine"
        "Fragments of the Infinite" -> "Lemuria Awakening"
      onerror/onload swap shows a composed "Photography forthcoming"
@@ -649,8 +656,8 @@ const WORKS = [
     medium:'Oil & resin on canvas', dims:'80 cm diameter',
     price:'S$4,777', status:'available',
     images:[
-      { src:'images/portal-of-infinite-reflections-original.jpg', type:'original', alt:'Portal of Infinite Reflections, original artwork' },
-      { src:'images/portal-of-infinite-reflections-interior-01.jpg', type:'interior', alt:'Portal of Infinite Reflections shown in an interior setting', caption:'Shown in an interior setting' }
+      { src:'images/portal-of-infinite-reflections-original.png', type:'original', alt:'Portal of Infinite Reflections, original artwork' },
+      { src:'images/portal-of-infinite-reflections-interior-01.png', type:'interior', alt:'Portal of Infinite Reflections shown in an interior setting', caption:'Shown in an interior setting' }
     ],
     note:'A figure floats in calm surrender, meeting her own reflection in another life. The water is the portal; each ripple a doorway to a different self. The rose is the beauty that stays constant across every version of us.' },
 
@@ -666,8 +673,8 @@ const WORKS = [
     medium:'Oil & resin on canvas', dims:'80 cm diameter',
     price:'S$4,777', status:'available',
     images:[
-      { src:'images/lemuria-awakening-original.jpg', type:'original', alt:'Lemuria Awakening, original artwork' },
-      { src:'images/lemuria-awakening-interior-01.jpg', type:'interior', alt:'Lemuria Awakening shown in an interior setting', caption:'Shown in an interior setting' }
+      { src:'images/lemuria-awakening-original.png', type:'original', alt:'Lemuria Awakening, original artwork' },
+      { src:'images/lemuria-awakening-interior-01.png', type:'interior', alt:'Lemuria Awakening shown in an interior setting', caption:'Shown in an interior setting' }
     ],
     note:'Her gaze returns to the viewer like a mirror. We are more than our past, and more than the roles we have worn. Beside her stand the butterfly, the wolf and the swallow — transformation, instinct, freedom. Identity is never fixed; a new path can open at any moment.' },
 
@@ -676,8 +683,8 @@ const WORKS = [
     medium:'Oil on canvas', dims:'40 cm diameter',
     price:'S$2,222', status:'available',
     images:[
-      { src:'images/eye-of-cleopatra-original.jpg', type:'original', alt:'Eye of Cleopatra, original artwork' },
-      { src:'images/eye-of-cleopatra-interior-01.jpg', type:'interior', alt:'Eye of Cleopatra shown in an interior setting', caption:'Shown in an interior setting' }
+      { src:'images/eye-of-cleopatra-original.png', type:'original', alt:'Eye of Cleopatra, original artwork' },
+      { src:'images/eye-of-cleopatra-interior-01.png', type:'interior', alt:'Eye of Cleopatra shown in an interior setting', caption:'Shown in an interior setting' }
     ],
     note:'A study of vision and sovereignty. At its centre, a Merkaba that grew out of the Flower of Life in my sketches, held between the Eye of Horus and the presence of Cleopatra. A portrait of quiet feminine power, and of the many timelines we carry within us.' },
 
@@ -686,8 +693,8 @@ const WORKS = [
     medium:'Oil on canvas', dims:'40 cm diameter',
     price:'S$2,222', status:'available',
     images:[
-      { src:'images/divine-feminine-and-masculine-original.jpg', type:'original', alt:'Divine Feminine and Masculine, original artwork' },
-      { src:'images/divine-feminine-and-masculine-interior-01.jpg', type:'interior', alt:'Divine Feminine and Masculine shown in an interior setting', caption:'Shown in an interior setting' }
+      { src:'images/divine-feminine-and-masculine-original.png', type:'original', alt:'Divine Feminine and Masculine, original artwork' },
+      { src:'images/divine-feminine-and-masculine-interior-01.png', type:'interior', alt:'Divine Feminine and Masculine shown in an interior setting', caption:'Shown in an interior setting' }
     ],
     note:'Two energies meeting in balance — a reminder that we are, together, one. The Flower of Life is woven behind them; the ouroboros circles them, the serpent consuming its own tail: beginning, ending, beginning again. Everything you seek is already within.' },
 
@@ -697,7 +704,7 @@ const WORKS = [
     price:'S$2,222', status:'available',
     images:[
       { src:'images/dreamscape-original.jpg', type:'original', alt:'Dreamscape, original artwork' },
-      { src:'images/dreamscape-interior-01.jpg', type:'interior', alt:'Dreamscape shown in an interior setting', caption:'Shown in an interior setting' }
+      { src:'images/dreamscape-interior-01.png', type:'interior', alt:'Dreamscape shown in an interior setting', caption:'Shown in an interior setting' }
     ],
     note:'A tribute to Hathor, and to rest itself — the pause between moments of creation. For years I believed worth came only from constant output, and stillness arrived wrapped in guilt. The Seed of Life is woven in; all things grow from stillness. This painting is the unlearning of that belief.' },
 
@@ -706,7 +713,7 @@ const WORKS = [
     medium:'Oil & resin on canvas', dims:'80 cm diameter',
     price:null, status:'private',
     images:[
-      { src:'images/the-glitch-between-realms-original.jpg', type:'original', alt:'The Glitch Between Realms, original artwork' }
+      { src:'images/the-glitch-between-realms-original.png', type:'original', alt:'The Glitch Between Realms, original artwork' }
     ],
     note:'Hidden symbols are layered through the composition, held together by Metatron\u2019s Cube — the pattern that runs from the smallest atom to the largest galaxy, carrying protection, clarity and truth. Every element was placed with intention, and left open for your own reading.' },
 
@@ -716,8 +723,11 @@ const WORKS = [
     medium:'Oil on canvas', dims:'46 × 46 cm',
     price:'S$1,500', status:'available',
     images:[
-      { src:'images/birth-and-beginnings-original.jpg', type:'original', alt:'Birth and Beginnings, original artwork' },
-      { src:'images/birth-and-beginnings-interior-01.jpg', type:'interior', alt:'Birth and Beginnings shown in an interior setting', caption:'Shown in an interior setting' }
+      /* EXTENSION NOT YET CONFIRMED — Finder was hiding it. Do not guess.
+         Once El confirms, change the two paths below to the real extension
+         (e.g. .jpg or .png) and remove this comment. */
+      { src:'images/PENDING-EXTENSION-birth-and-beginnings-original', type:'original', alt:'Birth and Beginnings, original artwork' },
+      { src:'images/PENDING-EXTENSION-birth-and-beginnings-interior-01', type:'interior', alt:'Birth and Beginnings shown in an interior setting', caption:'Shown in an interior setting' }
     ],
     note:'A reflection on beginnings, held in a child\u2019s wide eyes. The gecko arrived through friends who told me that seeing one in hard times reassured them they were on the right path — a small sign of guidance. It sheds its skin and begins again.' },
 
@@ -726,14 +736,23 @@ const WORKS = [
     medium:'Oil on canvas', dims:'46 × 46 cm',
     price:'S$1,500', status:'available',
     images:[
-      { src:'images/evolution-and-growth-original.jpg', type:'original', alt:'Evolution and Growth, original artwork' },
-      { src:'images/evolution-and-growth-interior-01.jpg', type:'interior', alt:'Evolution and Growth shown in an interior setting', caption:'Shown in an interior setting' }
+      /* Original's extension not yet confirmed — do not guess. Interior is confirmed .png. */
+      { src:'images/PENDING-EXTENSION-evolution-and-growth-original', type:'original', alt:'Evolution and Growth, original artwork' },
+      { src:'images/evolution-and-growth-interior-01.png', type:'interior', alt:'Evolution and Growth shown in an interior setting', caption:'Shown in an interior setting' }
     ],
     note:'The gaze has shifted — discernment earned through experience. The cat is my spirit animal and, to me, a form of Isis: wisdom, protection, intuition. A portrait of the clarity that comes from meeting life\u2019s challenges rather than turning away from them.' },
 
 ];
 
 const FORMSPREE = 'https://formspree.io/f/xkoakgkk';
+
+/* ============================================================
+   DEBUG MODE — set to false before promoting the page live.
+   While true, a failed image shows its exact attempted path
+   directly on the tile (not just "Photography forthcoming"),
+   and every failure is logged to the browser console.
+   ============================================================ */
+const DEBUG_IMAGES = true;
 
 /* ---------- render helpers ---------- */
 function metaLine(w){
@@ -754,7 +773,17 @@ function makeSlide(work, imgObj){
   const img = document.createElement('img');
   img.alt = imgObj.alt || work.title;
   img.loading = 'lazy';
-  img.onerror = () => { img.style.display = 'none'; ph.style.display = 'flex'; };
+  img.onerror = () => {
+    img.style.display = 'none';
+    ph.style.display = 'flex';
+    console.error(`[image failed] "${work.title}" — tried to load: ${imgObj.src}`);
+    if(DEBUG_IMAGES){
+      const dbg = document.createElement('div');
+      dbg.style.cssText = 'margin-top:.6rem;font-family:monospace;font-size:9.5px;color:#B8985A;word-break:break-all;max-width:15rem;';
+      dbg.textContent = imgObj.src;
+      ph.appendChild(dbg);
+    }
+  };
   img.onload  = () => { ph.style.display = 'none'; };
   img.src = imgObj.src;
 
