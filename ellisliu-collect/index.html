@@ -131,15 +131,25 @@
     margin:7vh auto 0;
     padding:0 2rem 4vh;
   }
+
+  .year-section{ margin-top:5.5rem; }
+  .year-section.first{ margin-top:0; }
+
   .grid{
     display:grid;
-    grid-template-columns:repeat(2, 1fr);
-    column-gap:5rem;
-    row-gap:6rem;
+    grid-template-columns:repeat(3, 1fr);
+    column-gap:3.5rem;
+    row-gap:5.5rem;
+  }
+
+  /* Ancient Temenos (2026) reads as more monumental/narrative: fewer
+     columns, more air — desktop only. Tablet/mobile fall through to the
+     same shared .grid rules as every other section (unchanged below). */
+  @media (min-width: 1025px){
+    .grid--temenos{ grid-template-columns:repeat(2, 1fr); column-gap:6rem; row-gap:8rem; }
   }
 
   .year-marker{
-    grid-column:1 / -1;
     font-family:'Inter', sans-serif;
     font-weight:500;
     font-size:12px;
@@ -147,10 +157,8 @@
     text-transform:uppercase;
     color:var(--ink-soft);
     text-align:left;
-    margin-top:5.5rem;
-    margin-bottom:-1.5rem;
+    margin-bottom:1.8rem;
   }
-  .year-marker.first{ margin-top:0; }
 
   figure.work{
     margin:0;
@@ -495,6 +503,11 @@
     figure.work{ opacity:1; transform:none; }
   }
 
+  /* ---------- tablet ---------- */
+  @media (max-width: 1024px){
+    .grid{ grid-template-columns:repeat(2, 1fr); column-gap:4rem; row-gap:6rem; }
+  }
+
   /* ---------- mobile ---------- */
   @media (max-width: 760px){
     body{ font-size:17px; }
@@ -504,8 +517,9 @@
     .nav-link, .nav-sep{ font-size:10.5px; }
     .grid{ grid-template-columns:1fr; row-gap:4rem; }
     .collection{ margin-top:6vh; }
-    .year-marker{ font-size:11px; letter-spacing:.22em; margin-top:4rem; margin-bottom:-1rem; }
-    .year-marker.first{ margin-top:0; }
+    .year-section{ margin-top:4rem; }
+    .year-section.first{ margin-top:0; }
+    .year-marker{ font-size:11px; letter-spacing:.22em; margin-bottom:1.2rem; }
     .work-title{ font-size:19px; }
     .work-price{ font-size:13.5px; }
     .work-foot{ margin-top:.9rem; }
@@ -538,7 +552,7 @@
   </header>
 
   <main class="collection" id="collection">
-    <div class="grid" id="grid"></div>
+    <div id="sections"></div>
   </main>
 
   <footer>
@@ -674,15 +688,14 @@ const WORKS = [
     ],
     note:'Her gaze returns to the viewer like a mirror. We are more than our past, and more than the roles we have worn. Beside her stand the butterfly, the wolf and the swallow — transformation, instinct, freedom. Identity is never fixed; a new path can open at any moment.' },
 
-  { id:'eye-of-cleopatra',
-    title:'Eye of Cleopatra', year:'2025',
-    medium:'Oil on canvas', dims:'40 cm diameter',
-    price:'S$2,222', status:'available',
+  { id:'the-glitch-between-realms',
+    title:'The Glitch Between Realms', year:'2025',
+    medium:'Oil & resin on canvas', dims:'80 cm diameter',
+    price:null, status:'private',
     images:[
-      { src:'images/eye-of-cleopatra-original.png', type:'original', alt:'Eye of Cleopatra, original artwork' },
-      { src:'images/eye-of-cleopatra-interior-01.png', type:'interior', alt:'Eye of Cleopatra shown in an interior setting', caption:'Shown in an interior setting' }
+      { src:'images/the-glitch-between-realms-original.png', type:'original', alt:'The Glitch Between Realms, original artwork' }
     ],
-    note:'A study of vision and sovereignty. At its centre, a Merkaba that grew out of the Flower of Life in my sketches, held between the Eye of Horus and the presence of Cleopatra. A portrait of quiet feminine power, and of the many timelines we carry within us.' },
+    note:'Hidden symbols are layered through the composition, held together by Metatron\u2019s Cube — the pattern that runs from the smallest atom to the largest galaxy, carrying protection, clarity and truth. Every element was placed with intention, and left open for your own reading.' },
 
   { id:'divine-feminine-and-masculine',
     title:'Divine Feminine and Masculine', year:'2025',
@@ -704,14 +717,15 @@ const WORKS = [
     ],
     note:'A tribute to Hathor, and to rest itself — the pause between moments of creation. For years I believed worth came only from constant output, and stillness arrived wrapped in guilt. The Seed of Life is woven in; all things grow from stillness. This painting is the unlearning of that belief.' },
 
-  { id:'the-glitch-between-realms',
-    title:'The Glitch Between Realms', year:'2025',
-    medium:'Oil & resin on canvas', dims:'80 cm diameter',
-    price:null, status:'private',
+  { id:'eye-of-cleopatra',
+    title:'Eye of Cleopatra', year:'2025',
+    medium:'Oil on canvas', dims:'40 cm diameter',
+    price:'S$2,222', status:'available',
     images:[
-      { src:'images/the-glitch-between-realms-original.png', type:'original', alt:'The Glitch Between Realms, original artwork' }
+      { src:'images/eye-of-cleopatra-original.png', type:'original', alt:'Eye of Cleopatra, original artwork' },
+      { src:'images/eye-of-cleopatra-interior-01.png', type:'interior', alt:'Eye of Cleopatra shown in an interior setting', caption:'Shown in an interior setting' }
     ],
-    note:'Hidden symbols are layered through the composition, held together by Metatron\u2019s Cube — the pattern that runs from the smallest atom to the largest galaxy, carrying protection, clarity and truth. Every element was placed with intention, and left open for your own reading.' },
+    note:'A study of vision and sovereignty. At its centre, a Merkaba that grew out of the Flower of Life in my sketches, held between the Eye of Horus and the presence of Cleopatra. A portrait of quiet feminine power, and of the many timelines we carry within us.' },
 
   // ---- 2024 ----
   { id:'birth-and-beginnings',
@@ -784,19 +798,31 @@ function makeSlide(work, imgObj){
   return slide;
 }
 
-/* ---------- collection grid, grouped by year in array order ---------- */
-const grid = document.getElementById('grid');
+/* ---------- collection, grouped into one section per year ----------
+   Ancient Temenos (2026) gets the 2-column "temenos" grid treatment;
+   every other year uses the standard 3-column gallery grid. ---------- */
+const sectionsRoot = document.getElementById('sections');
 let lastYear = null;
-let firstMarker = true;
+let currentGrid = null;
+let firstSection = true;
 
 WORKS.forEach(w => {
   if(w.year !== lastYear){
+    const section = document.createElement('section');
+    section.className = 'year-section' + (firstSection ? ' first' : '');
+
     const marker = document.createElement('div');
-    marker.className = 'year-marker' + (firstMarker ? ' first' : '');
+    marker.className = 'year-marker';
     marker.textContent = w.year;
-    grid.appendChild(marker);
+    section.appendChild(marker);
+
+    currentGrid = document.createElement('div');
+    currentGrid.className = 'grid' + (w.year === '2026' ? ' grid--temenos' : '');
+    section.appendChild(currentGrid);
+
+    sectionsRoot.appendChild(section);
     lastYear = w.year;
-    firstMarker = false;
+    firstSection = false;
   }
 
   const fig = document.createElement('figure');
@@ -821,7 +847,7 @@ WORKS.forEach(w => {
 
   fig.appendChild(frame);
   fig.appendChild(cap);
-  grid.appendChild(fig);
+  currentGrid.appendChild(fig);
 
   const btn = cap.querySelector('.enquire');
   if(btn) btn.addEventListener('click', e => { e.stopPropagation(); openEnquiry(w); });
