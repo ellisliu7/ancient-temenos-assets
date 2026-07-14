@@ -19,32 +19,26 @@
      entries appear only inside the detail overlay's gallery, with
      the caption "Shown in an interior setting".
 
-     Confirmed files (all present in this build):
+     Confirmed files (all 17 present in this build):
+       images/birth-and-beginnings-original.jpg
+       images/birth-and-beginnings-interior-01.jpg
        images/divine-feminine-and-masculine-original.png   (formerly "Union of the Divine Masculine & Feminine")
        images/divine-feminine-and-masculine-interior-01.png
-       images/dreamscape-original.jpg                      (note: .jpg — the one original NOT using .png)
+       images/dreamscape-original.jpg
        images/dreamscape-interior-01.png
+       images/evolution-and-growth-original.jpg
        images/evolution-and-growth-interior-01.png
        images/eye-of-cleopatra-original.png
        images/eye-of-cleopatra-interior-01.png
+       images/ganymede-interior.png                        (Ganymede's original still loads from the temple repo)
        images/lemuria-awakening-original.png               (formerly "Fragments of the Infinite" — see note in WORKS array)
        images/lemuria-awakening-interior-01.png
        images/portal-of-infinite-reflections-original.png
        images/portal-of-infinite-reflections-interior-01.png
        images/the-glitch-between-realms-original.png       (single image — no carousel)
+       images/venus-interior.png                           (Venus's original still loads from the temple repo)
 
-     EXTENSION NOT YET CONFIRMED — do not guess, do not assume .png:
-       birth-and-beginnings-original    (extension unknown, Finder was hiding it)
-       birth-and-beginnings-interior-01 (extension unknown, Finder was hiding it)
-       evolution-and-growth-original    (extension unknown, Finder was hiding it)
-     These three currently point at an intentionally-invalid sentinel path
-     (images/PENDING-EXTENSION-...) so DEBUG_IMAGES shows an unmistakable
-     "pending" tile rather than a plausible wrong guess. Once El confirms
-     the real extension, update the two WORKS entries below and remove
-     the PENDING-EXTENSION- prefix.
-
-     Two inferred renames in this build, both flagged inline in WORKS
-     below — confirmed by El:
+     Two confirmed renames, both flagged inline in WORKS below:
        "Union of the Divine Masculine & Feminine" -> "Divine Feminine and Masculine"
        "Fragments of the Infinite" -> "Lemuria Awakening"
      onerror/onload swap shows a composed "Photography forthcoming"
@@ -638,7 +632,8 @@ const WORKS = [
     medium:'Graphite, charcoal & gold on paper', dims:'38.5 × 56.5 cm',
     price:'Price on enquiry', status:'enquiry',
     images:[
-      { src:'https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Artwork.jpg', type:'original', alt:'Venus, original artwork' }
+      { src:'https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Artwork.jpg', type:'original', alt:'Venus, original artwork' },
+      { src:'images/venus-interior.png', type:'interior', alt:'Venus shown in an interior setting', caption:'Shown in an interior setting' }
     ],
     note:'Venus is a study in receiving, softness and self-worth — the first work to inhabit Ancient Temenos, a living digital sanctuary built around this practice. The original resides beyond the chamber. One exists.' },
 
@@ -646,7 +641,8 @@ const WORKS = [
     medium:null, dims:null,
     price:'Price on enquiry', status:'enquiry',
     images:[
-      { src:'https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_Artwork.jpg', type:'original', alt:'Ganymede, original artwork' }
+      { src:'https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_Artwork.jpg', type:'original', alt:'Ganymede, original artwork' },
+      { src:'images/ganymede-interior.png', type:'interior', alt:'Ganymede shown in an interior setting', caption:'Shown in an interior setting' }
     ],
     note:'Ganymede grounds vision into form — devotion, structure, the first stone placed. The second work to inhabit the temple.' },
 
@@ -723,11 +719,8 @@ const WORKS = [
     medium:'Oil on canvas', dims:'46 × 46 cm',
     price:'S$1,500', status:'available',
     images:[
-      /* EXTENSION NOT YET CONFIRMED — Finder was hiding it. Do not guess.
-         Once El confirms, change the two paths below to the real extension
-         (e.g. .jpg or .png) and remove this comment. */
-      { src:'images/PENDING-EXTENSION-birth-and-beginnings-original', type:'original', alt:'Birth and Beginnings, original artwork' },
-      { src:'images/PENDING-EXTENSION-birth-and-beginnings-interior-01', type:'interior', alt:'Birth and Beginnings shown in an interior setting', caption:'Shown in an interior setting' }
+      { src:'images/birth-and-beginnings-original.jpg', type:'original', alt:'Birth and Beginnings, original artwork' },
+      { src:'images/birth-and-beginnings-interior-01.jpg', type:'interior', alt:'Birth and Beginnings shown in an interior setting', caption:'Shown in an interior setting' }
     ],
     note:'A reflection on beginnings, held in a child\u2019s wide eyes. The gecko arrived through friends who told me that seeing one in hard times reassured them they were on the right path — a small sign of guidance. It sheds its skin and begins again.' },
 
@@ -736,8 +729,7 @@ const WORKS = [
     medium:'Oil on canvas', dims:'46 × 46 cm',
     price:'S$1,500', status:'available',
     images:[
-      /* Original's extension not yet confirmed — do not guess. Interior is confirmed .png. */
-      { src:'images/PENDING-EXTENSION-evolution-and-growth-original', type:'original', alt:'Evolution and Growth, original artwork' },
+      { src:'images/evolution-and-growth-original.jpg', type:'original', alt:'Evolution and Growth, original artwork' },
       { src:'images/evolution-and-growth-interior-01.png', type:'interior', alt:'Evolution and Growth shown in an interior setting', caption:'Shown in an interior setting' }
     ],
     note:'The gaze has shifted — discernment earned through experience. The cat is my spirit animal and, to me, a form of Isis: wisdom, protection, intuition. A portrait of the clarity that comes from meeting life\u2019s challenges rather than turning away from them.' },
@@ -752,7 +744,7 @@ const FORMSPREE = 'https://formspree.io/f/xkoakgkk';
    directly on the tile (not just "Photography forthcoming"),
    and every failure is logged to the browser console.
    ============================================================ */
-const DEBUG_IMAGES = true;
+const DEBUG_IMAGES = false;
 
 /* ---------- render helpers ---------- */
 function metaLine(w){
