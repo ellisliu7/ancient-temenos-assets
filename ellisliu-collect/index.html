@@ -19,7 +19,7 @@
      entries appear only inside the detail overlay's gallery, with
      the caption "Shown in an interior setting".
 
-     Confirmed files (all 17 present in this build):
+     Confirmed files (all 19 present in this build):
        images/birth-and-beginnings-original.jpg
        images/birth-and-beginnings-interior-01.jpg
        images/divine-feminine-and-masculine-original.png   (formerly "Union of the Divine Masculine & Feminine")
@@ -30,17 +30,26 @@
        images/evolution-and-growth-interior-01.png
        images/eye-of-cleopatra-original.png
        images/eye-of-cleopatra-interior-01.png
-       images/ganymede-interior.png                        (Ganymede's original still loads from the temple repo)
+       images/ganymede-original.jpg                        (master scan — Ganymede no longer loads from the temple repo)
+       images/ganymede-interior.png
        images/lemuria-awakening-original.png               (formerly "Fragments of the Infinite" — see note in WORKS array)
        images/lemuria-awakening-interior-01.png
        images/portal-of-infinite-reflections-original.png
        images/portal-of-infinite-reflections-interior-01.png
        images/the-glitch-between-realms-original.png       (single image — no carousel)
-       images/venus-interior.png                           (Venus's original still loads from the temple repo)
+       images/venus-original.jpg                           (master scan — Venus no longer loads from the temple repo)
+       images/venus-interior.png
 
      Two confirmed renames, both flagged inline in WORKS below:
        "Union of the Divine Masculine & Feminine" -> "Divine Feminine and Masculine"
        "Fragments of the Infinite" -> "Lemuria Awakening"
+
+     Works are grouped into three named collections (not by year):
+       Ancient Temenos   -> Venus, Ganymede            (2-col grid, desktop)
+       Mirrors & Portals -> the six 2025 catalogue works (3-col grid, desktop)
+       Metamorphosis     -> Birth and Beginnings, Evolution and Growth (2-col grid, desktop)
+     Each work's own year still appears in its metadata line beneath the
+     title — grouping by collection didn't remove that, see metaLine().
      onerror/onload swap shows a composed "Photography forthcoming"
      placeholder tile in its place, in the grid and in the carousel.
      ============================================================ -->
@@ -142,11 +151,17 @@
     row-gap:5.5rem;
   }
 
-  /* Ancient Temenos (2026) reads as more monumental/narrative: fewer
+  /* Ancient Temenos reads as more monumental/narrative: fewer
      columns, more air — desktop only. Tablet/mobile fall through to the
      same shared .grid rules as every other section (unchanged below). */
   @media (min-width: 1025px){
     .grid--temenos{ grid-template-columns:repeat(2, 1fr); column-gap:6rem; row-gap:8rem; }
+  }
+
+  /* Metamorphosis has only two works — a plain 2-column grid keeps the
+     same elegant spacing as the tablet breakpoint, desktop only. */
+  @media (min-width: 1025px){
+    .grid--pair{ grid-template-columns:repeat(2, 1fr); column-gap:4rem; row-gap:6rem; }
   }
 
   .year-marker{
@@ -282,6 +297,51 @@
   }
   .enquire:hover, .enquire:focus-visible{ color:var(--ink); }
   .enquire:hover::after, .enquire:focus-visible::after{ transform:scaleX(1); }
+
+  /* ---------- about ---------- */
+  .about-section{
+    max-width:72rem;
+    margin:16vh auto 0;
+    padding:0 2rem;
+  }
+  .about-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    column-gap:6rem;
+    align-items:center;
+  }
+  .about-portrait{
+    width:100%;
+    background:transparent;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    overflow:hidden;
+  }
+  .about-portrait img{
+    width:100%;
+    height:auto;
+    display:block;
+    object-fit:contain;
+    filter:drop-shadow(0 18px 34px var(--shadow));
+  }
+  .about-text{ max-width:26rem; }
+  .about-lead{
+    font-family:'Cormorant Garamond', serif;
+    font-weight:400;
+    font-size:19px;
+    line-height:1.6;
+    color:var(--ink-body);
+  }
+  .about-tagline{
+    font-family:'Cormorant Garamond', serif;
+    font-style:italic;
+    font-weight:400;
+    font-size:14px;
+    letter-spacing:.05em;
+    color:var(--ink-soft);
+    margin-top:1.6rem;
+  }
 
   /* ---------- footer ---------- */
   footer{
@@ -506,6 +566,8 @@
   /* ---------- tablet ---------- */
   @media (max-width: 1024px){
     .grid{ grid-template-columns:repeat(2, 1fr); column-gap:4rem; row-gap:6rem; }
+    .about-grid{ grid-template-columns:1fr; row-gap:3rem; }
+    .about-text{ max-width:none; }
   }
 
   /* ---------- mobile ---------- */
@@ -523,6 +585,9 @@
     .work-title{ font-size:19px; }
     .work-price{ font-size:13.5px; }
     .work-foot{ margin-top:.9rem; }
+    .about-section{ margin-top:10vh; }
+    .about-lead{ font-size:17px; }
+    .about-tagline{ font-size:13px; }
     .detail-card{
       grid-template-columns:1fr;
       padding:2.2rem 1.5rem;
@@ -546,6 +611,8 @@
     <nav class="topnav" aria-label="Primary">
       <a href="#collection" class="nav-link">Original Artworks</a>
       <span class="nav-sep">·</span>
+      <a href="#about" class="nav-link">About</a>
+      <span class="nav-sep">·</span>
       <a href="https://ancienttemenos.art" target="_blank" rel="noopener" class="nav-link">Ancient Temenos</a>
     </nav>
     <hr class="rule">
@@ -554,6 +621,18 @@
   <main class="collection" id="collection">
     <div id="sections"></div>
   </main>
+
+  <section class="about-section" id="about">
+    <div class="about-grid">
+      <div class="about-portrait">
+        <img src="images/about-portrait.jpg" alt="Portrait of Ellis Liu">
+      </div>
+      <div class="about-text">
+        <p class="about-lead">Ellis Liu is a contemporary artist working across painting, graphite and gold, and immersive digital environments.</p>
+        <p class="about-tagline">Hacking the matrix one myth at a time ✦</p>
+      </div>
+    </div>
+  </section>
 
   <footer>
     <p class="promise">Enquiries are answered personally within 48 hours.</p>
@@ -641,28 +720,28 @@
    only in the detail overlay carousel, with their caption.
    ============================================================ */
 const WORKS = [
-  // ---- 2026 — Ancient Temenos ----
-  { id:'venus', title:'Venus', year:'2026',
+  // ---- Ancient Temenos ----
+  { id:'venus', title:'Venus', year:'2026', collection:'Ancient Temenos',
     medium:'Graphite, charcoal & gold on paper', dims:'38.5 × 56.5 cm',
     price:'Price on enquiry', status:'enquiry',
     images:[
-      { src:'https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Venus_Artwork.jpg', type:'original', alt:'Venus, original artwork' },
+      { src:'images/venus-original.jpg', type:'original', alt:'Venus, original artwork' },
       { src:'images/venus-interior.png', type:'interior', alt:'Venus shown in an interior setting', caption:'Shown in an interior setting' }
     ],
     note:'Venus is a study in receiving, softness and self-worth — the first work to inhabit Ancient Temenos, a living digital sanctuary built around this practice. The original resides beyond the chamber. One exists.' },
 
-  { id:'ganymede', title:'Ganymede', year:'2026',
+  { id:'ganymede', title:'Ganymede', year:'2026', collection:'Ancient Temenos',
     medium:null, dims:null,
     price:'Price on enquiry', status:'enquiry',
     images:[
-      { src:'https://raw.githubusercontent.com/ellisliu7/ancient-temenos-assets/main/Ganymede_Artwork.jpg', type:'original', alt:'Ganymede, original artwork' },
+      { src:'images/ganymede-original.jpg', type:'original', alt:'Ganymede, original artwork' },
       { src:'images/ganymede-interior.png', type:'interior', alt:'Ganymede shown in an interior setting', caption:'Shown in an interior setting' }
     ],
     note:'Ganymede grounds vision into form — devotion, structure, the first stone placed. The second work to inhabit the temple.' },
 
-  // ---- 2025 ----
+  // ---- Mirrors & Portals ----
   { id:'portal-of-infinite-reflections',
-    title:'Portal of Infinite Reflections', year:'2025',
+    title:'Portal of Infinite Reflections', year:'2025', collection:'Mirrors & Portals',
     medium:'Oil & resin on canvas', dims:'80 cm diameter',
     price:'S$4,777', status:'available',
     images:[
@@ -679,7 +758,7 @@ const WORKS = [
        over unchanged from Fragments — only the title and filenames changed.
        If this is actually a separate, new 9th work rather than a rename,
        tell me and I'll split it back out and ask for its own record. */
-    title:'Lemuria Awakening', year:'2025',
+    title:'Lemuria Awakening', year:'2025', collection:'Mirrors & Portals',
     medium:'Oil & resin on canvas', dims:'80 cm diameter',
     price:'S$4,777', status:'available',
     images:[
@@ -689,7 +768,7 @@ const WORKS = [
     note:'Her gaze returns to the viewer like a mirror. We are more than our past, and more than the roles we have worn. Beside her stand the butterfly, the wolf and the swallow — transformation, instinct, freedom. Identity is never fixed; a new path can open at any moment.' },
 
   { id:'the-glitch-between-realms',
-    title:'The Glitch Between Realms', year:'2025',
+    title:'The Glitch Between Realms', year:'2025', collection:'Mirrors & Portals',
     medium:'Oil & resin on canvas', dims:'80 cm diameter',
     price:null, status:'private',
     images:[
@@ -698,7 +777,7 @@ const WORKS = [
     note:'Hidden symbols are layered through the composition, held together by Metatron\u2019s Cube — the pattern that runs from the smallest atom to the largest galaxy, carrying protection, clarity and truth. Every element was placed with intention, and left open for your own reading.' },
 
   { id:'divine-feminine-and-masculine',
-    title:'Divine Feminine and Masculine', year:'2025',
+    title:'Divine Feminine and Masculine', year:'2025', collection:'Mirrors & Portals',
     medium:'Oil on canvas', dims:'40 cm diameter',
     price:'S$2,222', status:'available',
     images:[
@@ -708,7 +787,7 @@ const WORKS = [
     note:'Two energies meeting in balance — a reminder that we are, together, one. The Flower of Life is woven behind them; the ouroboros circles them, the serpent consuming its own tail: beginning, ending, beginning again. Everything you seek is already within.' },
 
   { id:'dreamscape',
-    title:'Dreamscape', year:'2025',
+    title:'Dreamscape', year:'2025', collection:'Mirrors & Portals',
     medium:'Oil on canvas', dims:'40 cm diameter',
     price:'S$2,222', status:'available',
     images:[
@@ -718,7 +797,7 @@ const WORKS = [
     note:'A tribute to Hathor, and to rest itself — the pause between moments of creation. For years I believed worth came only from constant output, and stillness arrived wrapped in guilt. The Seed of Life is woven in; all things grow from stillness. This painting is the unlearning of that belief.' },
 
   { id:'eye-of-cleopatra',
-    title:'Eye of Cleopatra', year:'2025',
+    title:'Eye of Cleopatra', year:'2025', collection:'Mirrors & Portals',
     medium:'Oil on canvas', dims:'40 cm diameter',
     price:'S$2,222', status:'available',
     images:[
@@ -727,9 +806,9 @@ const WORKS = [
     ],
     note:'A study of vision and sovereignty. At its centre, a Merkaba that grew out of the Flower of Life in my sketches, held between the Eye of Horus and the presence of Cleopatra. A portrait of quiet feminine power, and of the many timelines we carry within us.' },
 
-  // ---- 2024 ----
+  // ---- Metamorphosis ----
   { id:'birth-and-beginnings',
-    title:'Birth and Beginnings', year:'2024',
+    title:'Birth and Beginnings', year:'2024', collection:'Metamorphosis',
     medium:'Oil on canvas', dims:'46 × 46 cm',
     price:'S$1,500', status:'available',
     images:[
@@ -739,7 +818,7 @@ const WORKS = [
     note:'A reflection on beginnings, held in a child\u2019s wide eyes. The gecko arrived through friends who told me that seeing one in hard times reassured them they were on the right path — a small sign of guidance. It sheds its skin and begins again.' },
 
   { id:'evolution-and-growth',
-    title:'Evolution and Growth', year:'2024',
+    title:'Evolution and Growth', year:'2024', collection:'Metamorphosis',
     medium:'Oil on canvas', dims:'46 × 46 cm',
     price:'S$1,500', status:'available',
     images:[
@@ -798,30 +877,35 @@ function makeSlide(work, imgObj){
   return slide;
 }
 
-/* ---------- collection, grouped into one section per year ----------
-   Ancient Temenos (2026) gets the 2-column "temenos" grid treatment;
-   every other year uses the standard 3-column gallery grid. ---------- */
+/* ---------- collection, grouped into one section per named collection ----------
+   Ancient Temenos gets the 2-column "temenos" grid; Metamorphosis gets a
+   plain 2-column "pair" grid (2 works only); Mirrors & Portals uses the
+   standard 3-column gallery grid. Each work's own year still appears in
+   its metadata line via metaLine(). ---------- */
 const sectionsRoot = document.getElementById('sections');
-let lastYear = null;
+let lastGroup = null;
 let currentGrid = null;
 let firstSection = true;
 
 WORKS.forEach(w => {
-  if(w.year !== lastYear){
+  if(w.collection !== lastGroup){
     const section = document.createElement('section');
     section.className = 'year-section' + (firstSection ? ' first' : '');
 
     const marker = document.createElement('div');
     marker.className = 'year-marker';
-    marker.textContent = w.year;
+    marker.textContent = w.collection;
     section.appendChild(marker);
 
     currentGrid = document.createElement('div');
-    currentGrid.className = 'grid' + (w.year === '2026' ? ' grid--temenos' : '');
+    let gridModifier = '';
+    if(w.collection === 'Ancient Temenos') gridModifier = ' grid--temenos';
+    else if(w.collection === 'Metamorphosis') gridModifier = ' grid--pair';
+    currentGrid.className = 'grid' + gridModifier;
     section.appendChild(currentGrid);
 
     sectionsRoot.appendChild(section);
-    lastYear = w.year;
+    lastGroup = w.collection;
     firstSection = false;
   }
 
