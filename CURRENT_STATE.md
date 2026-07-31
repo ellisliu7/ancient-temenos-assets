@@ -1,5 +1,78 @@
 # Ancient Temenos — Current State
-**Last updated:** 31 July 2026 (mobile production sprint)
+**Last updated:** 31 July 2026 (mobile production sprint, round 3)
+
+---
+
+## 31 July 2026 — Round 3: foyer panel, and one transport for every chamber
+
+45 checks in `test_mobile.js`, 15 in `test_corridor.js`. `index.html` only.
+
+### 1 — The foyer keeps its whole frame
+
+`0.5` was abandoned: it cropped away both busts, which are the figures the altar labels name. The rule is now stated as the thing that actually matters — **never crop away enough of the frame to lose a figure** (`FOYER_MAX_WIDTH_LOST = 0.12`). Where a full-bleed cover would cost more than that, the complete 16:9 frame is hung as a landscape panel spanning the full canvas width.
+
+Behind it, an ambient wash: the same frame rendered to a 64×36 offscreen canvas and scaled back up, so the blur *is* the upscale and costs almost nothing on a phone, refreshed every third frame. Settled toward `rgba(6,4,2,·)` with a vertical gradient so type stays legible, and the panel carries a soft shadow so it reads as hung rather than stranded.
+
+Measured at 402×874: panel `x=0 w=402 h=226 y=324`, 100% of the frame width, zero distortion. Venus, Ganymede and the portal all present simultaneously. 1440×900 stays full-bleed at `1600×900` (a cover costs 10%, under the threshold). Phone landscape and 1280×800 also stay full-bleed. iPad portrait gets the panel. Verified across 977 viewport sizes for distortion and horizontal overflow — none in either.
+
+The altars went back to the stylesheet. With a full-width panel the film's edges and the window's edges are the same line, so they need no geometry of their own and stay full height, independent of the media, which is what keeps the labels legible over the wash and the targets large.
+
+**Temporary.** This holds until a dedicated portrait foyer film exists.
+
+### 2 — One transport for every chamber
+
+All seven call sites now go through `oracleAsk`. The only remaining raw `fetch(ORACLE_ENDPOINT)` in the file is inside the transport itself, and a test asserts that.
+
+Venus · Ganymede · Pool/Timeline · Council · Grimoire invocation (both modes) · Wishing-well distillation · the dormant legacy Venus path.
+
+Duplicate submission now runs through one per-chamber registry (`oracleBegin`/`oracleEnd`) instead of three different mechanisms. The grimoire keeps its 25s leash via `timeoutMs`; everything else gets the 30s default where there was none.
+
+**Behavioural differences found while migrating:**
+
+- **Ganymede** pushed the visitor's turn into `gHistory` before the request and never popped it on failure. After one failure every subsequent request carried an unanswered user turn — a latent corruption that would have compounded silently. Now popped.
+- **Pool/Timeline** reset its button on failure and said *nothing at all*, so a failure was indistinguishable from never having pressed. Now says "The pool does not settle. Ask again." and keeps the question in the field.
+- **Council** fell back to a complete, fabricated four-voice debate and then auto-routed the visitor to Venus — indistinguishable from a real reading. **Removed.** A failed council now falls quiet: no substitute debate, no recommendation, no navigation. The four canned lines are gone from the file entirely. The visitor sees *"The council has fallen quiet. Your words remain here. Return when the connection is restored."* with a 44px try-again control that restores their question and asks again in place, no reload. The council request is a single stateless message, so a failed attempt leaves no history to contaminate. `window.__temenosCouncilFellBack` is retained for compatibility but now means *fell quiet*, never *fabricated*.
+- **Pool** was the only chamber that already preserved the visitor's words on failure. Venus and Ganymede cleared the input before the request; both now restore it.
+- **Grimoire invocation** held the only timeout anywhere in the file.
+- **Wishing-well distillation** silently fell back to the raw intention. Unchanged behaviour, now logged.
+
+### Not verified
+No real iPhone. Everything above comes from extracting the shipped functions and testing them, and from rendering the actual foyer film at 402×874 in a browser.
+
+---
+
+## 31 July 2026 — Mobile Production Fix, Round 2
+
+Two faults reported from a real iPhone after round 1 shipped. Both root causes found and fixed. `index.html` only. 37 regression checks across `test_corridor.js` (15) and `test_mobile.js` (22).
+
+### 1 — Foyer distortion
+
+**Root cause.** The foyer is painted to a canvas, not laid out — `#foyer-hall-video` is `display:none` — so `object-fit` was never in the chain at all. Line 1561 read `drawImage(vid, 0, 0, hallCanvas.width, hallCanvas.height)`, and the canvas is sized to `window.innerWidth × innerHeight`. That forces a 1280×720 film into whatever shape the window is. On a 402×874 phone it is a **3.87× vertical stretch**. Measured on the live site, not inferred.
+
+Desktop was distorted too, by 1.11× at 1440×900 — invisible enough to have gone unnoticed, but present at every window shape other than exactly 16:9.
+
+**Fix.** Geometry is now computed the way `keepKey()` already did further down the same file: scale uniformly, centre, crop. `foyerFilmRect()` caps the scale so a chosen fraction of the frame always survives, and the temple's black holds the remainder with the band edges dissolved into it. One constant governs it: `FOYER_MIN_WIDTH_VISIBLE`, currently `0.5`.
+
+Verified: 372 viewport sizes from 280px to 2560px wide, zero distortion at any of them. Desktop still fills the window edge to edge and is now a true cover rather than a stretch.
+
+**Altars.** The altar regions name figures that live inside the film but were positioned against the viewport. `layoutFoyerAltars()` now places them against the drawn film rectangle on viewports under 900px, clamped so a region never falls below 34vw and always stays tappable. Desktop geometry is left entirely to the stylesheet.
+
+**Open decision.** `0.5` was chosen against my description of what it would show, and my description was wrong. The two foreground busts — the figures the altar labels actually name — sit further out in the frame than I estimated and are cropped away at `0.5`. Keeping both busts needs roughly `0.95`–`1.0`, which is a ~230px band. Substantial image and both figures are mutually exclusive on a 9:19.5 screen; the real remedy is a portrait-framed foyer film. Shipped at `0.5` as instructed rather than silently changed.
+
+### 2 — Venus oracle returning the fallback
+
+**Not a backend fault.** The production proxy was tested directly with the exact payload the site builds and El's exact message: HTTP 200, valid Venus JSON, 5.8s, 302 in / 172 out. `claude-sonnet-4-6` resolves correctly. Endpoint, CORS, model string and proxy are all healthy.
+
+**Root cause.** `sendVenusNew()` had the network request *and* the rendering of the reply inside one `try`. Anything thrown while drawing the card surfaced to the visitor as "The connection stirs but does not hold tonight" — and the `catch` wrote nothing to the console, so a working oracle could report itself as broken with no way to tell the difference.
+
+**Fix.** Transport is isolated in `oracleAsk()`, which returns parsed content or throws an error carrying its real cause — HTTP status, non-JSON body, api error type, empty content, or timeout. Every failure is logged at the transport layer (not the call site, so no future chamber can lose one), tagged `[Temenos oracle]`, and kept on `window.__temenosOracleErrors` for inspection. Rendering happens outside the request, and a rendering fault is rethrown rather than dressed as a connection fault. 30s `AbortController` timeout where there was none.
+
+Also: a real in-flight flag replaces the button-class check for duplicate submission; the input is disabled during flight and the visitor's words are restored if the request fails, along with popping the orphaned history entry; and `--kb-inset` from `visualViewport` lifts the oracle panel above the iOS keyboard, which previously covered the send control because `position:fixed` stays anchored to the layout viewport.
+
+**Still to do:** Ganymede, Persephone and the council use the same old inline pattern. Only Venus was reported and only Venus was changed.
+
+### Not verified
+No real iPhone was available. Everything above was verified by extracting the shipped functions and testing them directly, by measuring against the live site, and by rendering the foyer film at 402×874 in a browser. Device testing — keyboard behaviour, rotation, private window, hard refresh — remains El's.
 
 ---
 

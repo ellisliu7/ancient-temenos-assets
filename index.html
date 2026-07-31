@@ -1498,12 +1498,97 @@ function initFoyer(){
   const pCanvas=document.getElementById('foyer-particles-canvas');
   const pCtx=pCanvas.getContext('2d');
 
+  /* ═══════════════════════════════════════════════════════════════════════
+     THE FILM KEEPS ITS PROPORTIONS
+
+     The foyer is painted to a canvas — the <video> is display:none — so no
+     amount of object-fit was ever going to govern it. The draw call used to be
+     drawImage(vid, 0, 0, canvas.width, canvas.height), which forces a 1280x720
+     film into whatever shape the window happens to be. On a 402x874 phone that
+     is a 3.87x vertical stretch: the figures, the architecture and the portal
+     all become tall and narrow.
+
+     Geometry is computed the way keepKey() already does it further down this
+     file — scale uniformly, centre, crop. A full cover on a phone would crop
+     74% of the frame away and take both figures with it, so the scale is
+     capped: at least FOYER_MIN_WIDTH_VISIBLE of the frame always survives, and
+     the temple's own black holds whatever is left over.
+
+     One number to tune. 1.0 shows the whole frame as a band; 0.5 shows the
+     middle half; low enough and it becomes an ordinary full-bleed cover.
+     ═══════════════════════════════════════════════════════════════════════ */
+  /* Venus, Ganymede and the portal all live inside this film, and they are
+     what the foyer is for. So the rule is stated as the thing that actually
+     matters: never crop away enough of the frame to lose a figure. Where a
+     full-bleed cover would cost more than this, the whole frame is hung as a
+     landscape panel instead, over an ambient wash drawn from the film itself.
+
+     At 1440x900 a cover costs 10% and the busts survive, so desktop keeps the
+     full-bleed it has always had. At 402x874 it would cost 74%, so the phone
+     gets the panel. */
+  const FOYER_MAX_WIDTH_LOST = 0.12;
+
+  let foyerFilm={x:0,y:0,w:0,h:0,panel:false};
+
+  function foyerFilmRect(cw,ch,vw,vh){
+    if(!vw||!vh)return{x:0,y:0,w:cw,h:ch,panel:false};
+    const widthKept=Math.min(1,(cw/ch)/(vw/vh));   // what a cover would leave
+    const panel=(1-widthKept)>FOYER_MAX_WIDTH_LOST;
+    // panel: exactly the canvas width, so there is nothing to overflow
+    const scale=panel?(cw/vw):Math.max(cw/vw,ch/vh);
+    const w=vw*scale,h=vh*scale;
+    return{x:(cw-w)/2,y:(ch-h)/2,w,h,panel};
+  }
+
+  /* The wash behind the panel. Drawn by scaling a deliberately tiny render of
+     the same frame back up — the blur is the upscale, which costs almost
+     nothing on a phone, and the colour is always the film's own. */
+  const foyerWash=document.createElement('canvas');
+  foyerWash.width=64;foyerWash.height=36;
+  const foyerWashCtx=foyerWash.getContext('2d');
+  let foyerWashTick=0;
+
+  function drawFoyerWash(ctx,cw,ch,v){
+    if((foyerWashTick++ % 3)===0){
+      try{foyerWashCtx.drawImage(v,0,0,foyerWash.width,foyerWash.height);}catch(e){}
+    }
+    const s=Math.max(cw/foyerWash.width,ch/foyerWash.height);
+    const w=foyerWash.width*s,h=foyerWash.height*s;
+    ctx.save();
+    ctx.imageSmoothingEnabled=true;
+    try{ctx.imageSmoothingQuality='high';}catch(e){}
+    try{ctx.filter='blur(14px) saturate(0.72)';}catch(e){}
+    ctx.drawImage(foyerWash,(cw-w)/2,(ch-h)/2,w,h);
+    ctx.restore();
+    // Settle it back toward the temple's own dark so type stays legible on top.
+    const g=ctx.createLinearGradient(0,0,0,ch);
+    g.addColorStop(0,'rgba(6,4,2,0.86)');
+    g.addColorStop(0.5,'rgba(6,4,2,0.66)');
+    g.addColorStop(1,'rgba(6,4,2,0.90)');
+    ctx.fillStyle=g;ctx.fillRect(0,0,cw,ch);
+  }
+
+  /* The panel spans the full width, so the film's edges and the window's edges
+     are the same line and the altars need no geometry of their own — they stay
+     with the stylesheet, full height, independent of the media, which is what
+     keeps their labels readable and their targets large. */
+  function layoutFoyerAltars(){
+    ['altar-venus','altar-ganymede'].forEach(id=>{
+      const el=document.getElementById(id);
+      if(el)el.style.left=el.style.right=el.style.width=el.style.top=el.style.height=el.style.bottom='';
+    });
+  }
+
   function resizeFC(){
     hallCanvas.width=pCanvas.width=window.innerWidth;
     hallCanvas.height=pCanvas.height=window.innerHeight;
+    foyerFilm=foyerFilmRect(hallCanvas.width,hallCanvas.height,vid.videoWidth,vid.videoHeight);
+    layoutFoyerAltars();
   }
   resizeFC();
   window.addEventListener('resize',resizeFC);
+  window.addEventListener('orientationchange',()=>setTimeout(resizeFC,120));
+  vid.addEventListener('loadedmetadata',resizeFC,{once:true});
 
   // -- VIDEO: just play and loop --
   vid.addEventListener('loadeddata',()=>{
@@ -1558,9 +1643,20 @@ function initFoyer(){
 
         hallCanvas.style.filter='brightness(1.0) saturate(1.0)';
         if(vid.readyState>=2){
-          hallCtx.drawImage(vid,0,0,hallCanvas.width,hallCanvas.height);
-          // dark overlay to kill the amber flash on bright video frames
-
+          if(!foyerFilm.w||foyerFilm.w<=0)foyerFilm=foyerFilmRect(hallCanvas.width,hallCanvas.height,vid.videoWidth,vid.videoHeight);
+          hallCtx.fillStyle='#030201';
+          hallCtx.fillRect(0,0,hallCanvas.width,hallCanvas.height);
+          if(foyerFilm.panel){
+            // The room the panel hangs in.
+            drawFoyerWash(hallCtx,hallCanvas.width,hallCanvas.height,vid);
+            hallCtx.save();
+            hallCtx.shadowColor='rgba(0,0,0,0.62)';
+            hallCtx.shadowBlur=46;
+            hallCtx.drawImage(vid,foyerFilm.x,foyerFilm.y,foyerFilm.w,foyerFilm.h);
+            hallCtx.restore();
+          }else{
+            hallCtx.drawImage(vid,foyerFilm.x,foyerFilm.y,foyerFilm.w,foyerFilm.h);
+          }
         }
         const wg=hallCtx.createRadialGradient(hallCanvas.width*.5,hallCanvas.height*.45,0,hallCanvas.width*.5,hallCanvas.height*.45,hallCanvas.width*.5);
         wg.addColorStop(0,'rgba(180,100,20,0.04)');wg.addColorStop(1,'rgba(0,0,0,0)');
@@ -1725,6 +1821,104 @@ function foyerEnter(side){
 
 document.getElementById('foyer').addEventListener('click',initFoyerAudio,{once:true});
 document.getElementById('foyer').addEventListener('touchstart',initFoyerAudio,{once:true});
+
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   ORACLE TRANSPORT
+
+   The old call put the network request and the rendering of the reply inside
+   one try block, so anything thrown while drawing the card — a missing node, a
+   malformed field — surfaced to the visitor as "the connection stirs but does
+   not hold", and nothing was written to the console. A working oracle could
+   report itself as a broken one, and there was no way to tell the difference.
+
+   Here the request is isolated. It either returns parsed content or throws an
+   error carrying its real cause, which is logged and kept on
+   window.__temenosOracleErrors for inspection. Rendering happens outside, and
+   a rendering fault is never dressed up as a connection fault.
+   ═══════════════════════════════════════════════════════════════════════════ */
+const ORACLE_TIMEOUT_MS = 30000;
+window.__temenosOracleErrors = [];
+
+function oracleLog(stage, err, extra){
+  const rec = {at:new Date().toISOString(), stage,
+               message: err && err.message ? err.message : String(err),
+               ...(extra||{})};
+  window.__temenosOracleErrors.push(rec);
+  console.error('[Temenos oracle] ' + stage + ':', err, extra || '');
+  return rec;
+}
+
+/* Returns the raw assistant text, or throws with a real reason. Every failure
+   is logged here rather than at the call site, so no caller can lose one. */
+async function oracleAsk(body, opts){
+  try{ return await oracleAttempt(body, opts); }
+  catch(e){ oracleLog('request', e, {model: body && body.model, chamber: opts && opts.chamber}); throw e; }
+}
+
+async function oracleAttempt(body, opts){
+  const ms = (opts && opts.timeoutMs) || ORACLE_TIMEOUT_MS;
+  const ctrl = new AbortController();
+  const timer = setTimeout(()=>ctrl.abort(), ms);
+  let res;
+  try{
+    res = await fetch(ORACLE_ENDPOINT,{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify(body), signal: ctrl.signal
+    });
+  }catch(e){
+    clearTimeout(timer);
+    throw new Error(e.name === 'AbortError'
+      ? 'request timed out after ' + (ms/1000) + 's'
+      : 'network unreachable: ' + e.message);
+  }
+  clearTimeout(timer);
+  const text = await res.text();
+  if(!res.ok) throw new Error('HTTP ' + res.status + ' — ' + text.slice(0,300));
+  let data;
+  try{ data = JSON.parse(text); }
+  catch(e){ throw new Error('response was not JSON — ' + text.slice(0,300)); }
+  if(data.error) throw new Error('api ' + (data.error.type||'error') + ' — ' + (data.error.message||''));
+  const raw = data.content && data.content.find(b=>b.type==='text');
+  if(!raw || !raw.text) throw new Error('no text block in response — ' + text.slice(0,300));
+  return raw.text;
+}
+
+/* One question at a time, per chamber. Previously each chamber guarded itself
+   differently — Ganymede with a flag, the pool with a CSS class on its button,
+   Venus with nothing at all. */
+const _oracleBusy = Object.create(null);
+function oracleBegin(key){ if(_oracleBusy[key])return false; _oracleBusy[key]=true; return true; }
+function oracleEnd(key){ _oracleBusy[key]=false; }
+
+/* Venus returns JSON in a text block; tolerate prose around it. */
+function oracleParseCard(raw){
+  const start = raw.indexOf('{'), end = raw.lastIndexOf('}');
+  const clean = (start>-1 && end>start) ? raw.slice(start,end+1) : raw;
+  try{ return JSON.parse(clean); }
+  catch(e){
+    oracleLog('parse', e, {rawHead: raw.slice(0,200)});
+    return {principle:'Venus speaks',
+            mirror: raw.replace(/\{[\s\S]*\}/,'').trim() || raw,
+            kybalion:'"She is always here."',
+            question:'What did you come to say?', actions:[]};
+  }
+}
+
+/* The iOS keyboard shrinks the visual viewport but leaves position:fixed
+   anchored to the layout viewport, which is how a send button ends up behind
+   the keyboard. Lift the panel by the difference while a field is focused. */
+(function(){
+  const vv = window.visualViewport;
+  if(!vv) return;
+  function lift(){
+    const gap = Math.max(0, window.innerHeight - vv.height - vv.offsetTop);
+    document.documentElement.style.setProperty('--kb-inset', gap + 'px');
+  }
+  vv.addEventListener('resize', lift);
+  vv.addEventListener('scroll', lift);
+  lift();
+})();
 
 // == VENUS ==
 let vHistory=[],venusOracleOpened=false,venusConvOpen=false,vaCardDoneAt=0;
@@ -2029,10 +2223,11 @@ function vaMaybeShowClosing(){
 async function sendVenusNew(){
   const inp=document.getElementById('va-qi');if(!inp)return;
   const q=inp.value.trim();if(!q)return;
+  if(!oracleBegin('venus'))return;           // one question at a time
   if(window.trackTempleEvent) trackTempleEvent('oracle_question_submitted',{chamber:'venus'});
   const btn=document.getElementById('va-qb');
-  if(btn&&btn.classList.contains('loading'))return;
   inp.value='';
+  inp.disabled=true;
   vHistory.push({role:'user',content:q});
   vaAddUserMsg(q);
   if(btn){btn.classList.add('loading');btn.innerHTML=spinSvg('rgba(196,158,72,0.5)');}
@@ -2054,20 +2249,39 @@ async function sendVenusNew(){
     vaRenderCard(p);vaMaybeShowClosing();
     return;
   }
+  // ── The request. Only genuine transport failures land in the catch. ──
+  let raw=null, failure=null;
   try{
-    const res=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:ORACLE_MODEL,max_tokens:700,system:VSYS,messages:vHistory})});
-    const data=await res.json();if(data.error)throw new Error(data.error.message);
-    const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
-    if(th)th.textContent='';
-    if(btn){btn.classList.remove('loading');btn.innerHTML='✦';}
-    let p;try{const start=raw.indexOf('{'),end=raw.lastIndexOf('}');const clean=start>-1&&end>start?raw.slice(start,end+1):raw;p=JSON.parse(clean);}catch(e){p={principle:'Venus speaks',mirror:raw.replace(/\{[\s\S]*\}/,'').trim()||raw,kybalion:'"She is always here."',question:'What did you come to say?',actions:[]};}
+    raw = await oracleAsk({model:ORACLE_MODEL,max_tokens:700,system:VSYS,messages:vHistory},{chamber:'venus'});
+  }catch(e){
+    failure = e;                 // already logged by oracleAsk
+  }
+
+  // ── Settle the interface either way, before anything is drawn. ──
+  oracleEnd('venus');
+  if(th)th.textContent='';
+  if(inp)inp.disabled=false;
+  if(btn){btn.classList.remove('loading');btn.innerHTML='✦';}
+
+  if(failure){
+    // Her words are not lost because the connection was.
+    vHistory.pop();
+    if(inp&&!inp.value)inp.value=q;
+    vaRenderCard({principle:'The veil',mirror:'The connection stirs but does not hold tonight. Return when you are ready.',kybalion:'"She is always here."',question:'What did you come to say?',actions:[]});
+    return;
+  }
+
+  // ── Rendering lives outside the request, so a drawing fault is reported as
+  //    a drawing fault and never as a broken connection. ──
+  try{
+    let p = oracleParseCard(raw);
     vHistory.push({role:'assistant',content:raw});
     if(vHistory.filter(m=>m.role==='user').length>=2)p={...p,question:''};
-    vaRenderCard(p);vaMaybeShowClosing();
+    vaRenderCard(p);
+    vaMaybeShowClosing();
   }catch(e){
-    if(th)th.textContent='';
-    if(btn){btn.classList.remove('loading');btn.innerHTML='✦';}
-    vaRenderCard({principle:'The veil',mirror:'The connection stirs but does not hold tonight. Return when you are ready.',kybalion:'"She is always here."',question:'What did you come to say?',actions:[]});
+    oracleLog('render', e, {chamber:'venus', rawHead:(raw||'').slice(0,200)});
+    throw e;   // a real fault, surfaced — not dressed as a failed connection
   }
 }
 document.addEventListener('DOMContentLoaded',()=>{
@@ -2126,9 +2340,7 @@ async function sendVenus(){
   const btn=document.getElementById('qb'),th=document.getElementById('vthinking');
   btn.classList.add('loading');btn.innerHTML=spinSvg('rgba(196,158,72,0.5)');th.textContent=vTh[Math.floor(Math.random()*vTh.length)];
   try{
-    const res=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:ORACLE_MODEL,max_tokens:700,system:VSYS,messages:vHistory})});
-    const data=await res.json();if(data.error)throw new Error(data.error.message);
-    const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
+    const raw=await oracleAsk({model:ORACLE_MODEL,max_tokens:700,system:VSYS,messages:vHistory},{chamber:'venus-legacy'});
     th.textContent='';resetVBtn();
     let p;try{const start=raw.indexOf('{'),end=raw.lastIndexOf('}');const clean=start>-1&&end>start?raw.slice(start,end+1):raw;p=JSON.parse(clean);}catch(e){p={principle:'Venus speaks',mirror:raw.replace(/\{[\s\S]*\}/,'').trim()||raw,kybalion:'"The fracture is not the wound. It is the door."',question:'What would you see if you stopped looking away?',actions:[]};}
     lastPrinciple=p.principle||lastPrinciple;lastMirror=p.mirror||lastMirror;
@@ -2244,21 +2456,14 @@ Return ONLY valid JSON, no markdown, no fences:
       <p class="gr-section-body" style="margin-bottom:1.8rem;">${gSacredContractData.building}</p>${gSacredContractData.next?`<p class="gr-section-body" style="margin-bottom:.6rem;font-style:normal;font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:rgba(196,158,72,0.38);">What is asking to happen next</p><p class="gr-section-body">${gSacredContractData.next}</p>`:''}`:''}`
   };
 
-  // 25s timeout — prevents grimoire hanging indefinitely if proxy stalls
-  const _grTimeout=new Promise((_,rej)=>setTimeout(()=>rej(new Error('timeout')),25000));
+  // 25s leash, as before — the grimoire must never hang on a stalled proxy.
   try{
-    const res=await Promise.race([fetch(ORACLE_ENDPOINT,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:ORACLE_MODEL,
-        max_tokens:600,
-        system:SYSTEMS[mode]||SYSTEMS.council,
-        messages:[{role:'user',content:INPUTS[mode]||INPUTS.council}]
-      })
-    }),_grTimeout]);
-    const data=await res.json();
-    const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
+    const raw=await oracleAsk({
+      model:ORACLE_MODEL,
+      max_tokens:600,
+      system:SYSTEMS[mode]||SYSTEMS.council,
+      messages:[{role:'user',content:INPUTS[mode]||INPUTS.council}]
+    },{chamber:'grimoire:'+mode, timeoutMs:25000});
     let p;try{const s=raw.indexOf('{'),e=raw.lastIndexOf('}');const c=s>-1&&e>s?raw.slice(s,e+1):raw;p=JSON.parse(c);}catch(e){p=null;}
     if(p&&Object.keys(p).length>0){
       inv.innerHTML=RENDERS[mode]?.(p)||'<p class="gr-section-body">The session is still settling.</p>';
@@ -3218,7 +3423,7 @@ function brightenCave(){
 }
 
 async function sendGany(){
-  if(gBusy)return;
+  if(gBusy||!oracleBegin('ganymede'))return;
   const inp=document.getElementById('gi');if(!inp)return;
   const q=inp.value.trim();if(!q)return;
   if(window.trackTempleEvent) trackTempleEvent('oracle_question_submitted',{chamber:'ganymede'});
@@ -3265,7 +3470,7 @@ async function sendGany(){
     }else{
       if(Array.isArray(p.options)&&p.options.length===3)setTimeout(()=>showCandles(p.options,p.context||''),1100);
     }
-    gBusy=false;
+    gBusy=false; oracleEnd('ganymede');
     return;
   }
   gBusy=true;inp.value='';
@@ -3283,10 +3488,21 @@ async function sendGany(){
   if(dots)dots.classList.add('show');
   gHistory.push({role:'user',content:q});
   brightenCave();
+  let raw=null, failure=null;
   try{
-    const res=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:ORACLE_MODEL,max_tokens:1000,system:GSYS,messages:gHistory})});
-    const data=await res.json();if(data.error)throw new Error(data.error.message);
-    const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
+    raw = await oracleAsk({model:ORACLE_MODEL,max_tokens:1000,system:GSYS,messages:gHistory},{chamber:'ganymede'});
+  }catch(e){ failure=e; }
+
+  if(failure){
+    if(dots)dots.classList.remove('show');
+    gHistory.pop();                       // an unanswered turn would poison the next request
+    if(inp&&!inp.value)inp.value=q;       // his words are not lost because the connection was
+    if(curr)curr.textContent='The cave listens. Speak again.';
+    gBusy=false; oracleEnd('ganymede');
+    return;
+  }
+
+  try{
     let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p={reflection:raw,options:[],question:'',check_in:false};}
     gHistory.push({role:'assistant',content:raw});
     if(dots)dots.classList.remove('show');
@@ -3309,8 +3525,13 @@ async function sendGany(){
       const options=Array.isArray(p.options)&&p.options.length===3?p.options:null;
       if(options)setTimeout(()=>showCandles(options,p.context||''),1100);
     }
-  }catch(e){if(dots)dots.classList.remove('show');if(curr)curr.textContent='The cave listens. Speak again.';}
-  gBusy=false;
+  }catch(e){
+    oracleLog('render', e, {chamber:'ganymede', rawHead:(raw||'').slice(0,200)});
+    if(dots)dots.classList.remove('show');
+    gBusy=false; oracleEnd('ganymede');
+    throw e;   // a drawing fault, surfaced — never dressed as a failed connection
+  }
+  gBusy=false; oracleEnd('ganymede');
 }
 
 function showCandles(options,context){
@@ -3555,19 +3776,38 @@ const _piEl=document.getElementById('pi');if(_piEl)_piEl.addEventListener('keydo
 async function askPool(){
   const inp=document.getElementById('pi'),q=inp.value.trim();
   if(!q||document.getElementById('pb').classList.contains('loading'))return;
+  if(!oracleBegin('pool'))return;
   const btn=document.getElementById('pb'),th=document.getElementById('pthinking');
   btn.classList.add('loading');btn.innerHTML=spinSvg('rgba(120,90,180,0.6)');th.textContent='The pool stirs...';
   document.getElementById('timelinesWrap').innerHTML='';document.getElementById('poolGanyQ').textContent='';
+  let raw=null, failure=null;
   try{
-    const res=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:ORACLE_MODEL,max_tokens:800,system:PSYS,messages:[{role:'user',content:q}]})});
-    const data=await res.json();const raw=data.content?.find(b=>b.type==='text')?.text||'{}';
+    raw = await oracleAsk({model:ORACLE_MODEL,max_tokens:800,system:PSYS,messages:[{role:'user',content:q}]},{chamber:'pool'});
+  }catch(e){ failure=e; }
+
+  if(failure){
+    // The old code reset the button and said nothing at all, so a failure was
+    // indistinguishable from the visitor never having pressed anything.
+    th.textContent='The pool does not settle. Ask again.';
+    btn.classList.remove('loading');btn.innerHTML=arrowSvg('rgba(120,90,180,0.8)');
+    oracleEnd('pool');
+    return;                               // the question stays in the field
+  }
+
+  try{
     th.textContent='';btn.classList.remove('loading');btn.innerHTML=arrowSvg('rgba(120,90,180,0.8)');
     let p;try{p=JSON.parse(raw.replace(/```json|```/g,'').trim());}catch(e){p={timelines:[{tone:'Expansion',vision:'The path opens.',lesson:'Trust.',principle:'Vibration'},{tone:'Depth',vision:'Inward first.',lesson:'Mastery.',principle:'Correspondence'},{tone:'Surrender',vision:'Release.',lesson:'Letting go is power.',principle:'Rhythm'}],closing_question:'Which one does your body already know?'};}
     const cols=['tl-amber','tl-violet','tl-white'];
     (p.timelines||[]).forEach((tl,i)=>{const c=document.createElement('div');c.className=`tl-card ${cols[i]}`;c.style.animationDelay=`${i*.15}s`;c.innerHTML=`<div class="tl-header"><div class="tl-flame"></div><p class="tl-tone">${tl.tone||''}</p></div><p class="tl-vision">${tl.vision||''}</p><p class="tl-lesson tl-${['amber','violet','white'][i]}">${tl.lesson||''}</p><p class="tl-principle">${tl.principle||''}</p>`;document.getElementById('timelinesWrap').appendChild(c);});
     if(p.closing_question)setTimeout(()=>document.getElementById('poolGanyQ').textContent=p.closing_question,400);
     inp.value='';
-  }catch(e){th.textContent='';btn.classList.remove('loading');btn.innerHTML=arrowSvg('rgba(120,90,180,0.8)');}
+  }catch(e){
+    oracleLog('render', e, {chamber:'pool', rawHead:(raw||'').slice(0,200)});
+    th.textContent='';btn.classList.remove('loading');btn.innerHTML=arrowSvg('rgba(120,90,180,0.8)');
+    oracleEnd('pool');
+    throw e;
+  }
+  oracleEnd('pool');
 }
 
 // == WELL ==
@@ -3800,7 +4040,7 @@ let sigilSeed=0;
 function buildSigil(intent){const clean=intent.toUpperCase().replace(/[^A-Z]/g,'');const seen=new Set();const letters=[];for(const c of clean){if(!seen.has(c)){seen.add(c);letters.push(c);}}sigilSeed=0;for(const c of intent)sigilSeed=(sigilSeed*31+c.charCodeAt(0))%999983;function rnd(){sigilSeed=(sigilSeed*16807+0)%2147483647;return(sigilSeed-1)/2147483646;}const sMap={A:[{t:'d'},{t:'h'}],B:[{t:'v'},{t:'c'}],C:[{t:'c'}],D:[{t:'v'},{t:'c'}],E:[{t:'v'},{t:'h'},{t:'h'}],F:[{t:'v'},{t:'h'}],G:[{t:'c'},{t:'h'}],H:[{t:'v'},{t:'v'},{t:'h'}],I:[{t:'v'},{t:'dot'}],J:[{t:'v'},{t:'c'}],K:[{t:'v'},{t:'d'},{t:'d'}],L:[{t:'v'},{t:'h'}],M:[{t:'v'},{t:'d'},{t:'d'},{t:'v'}],N:[{t:'v'},{t:'d'},{t:'v'}],O:[{t:'o'}],P:[{t:'v'},{t:'c'}],Q:[{t:'o'},{t:'d'}],R:[{t:'v'},{t:'c'},{t:'d'}],S:[{t:'c'},{t:'c'}],T:[{t:'v'},{t:'h'}],U:[{t:'c'}],V:[{t:'d'},{t:'d'}],W:[{t:'d'},{t:'d'},{t:'d'}],X:[{t:'d'},{t:'d'}],Y:[{t:'d'},{t:'d'},{t:'v'}],Z:[{t:'h'},{t:'d'},{t:'h'}]};const strokes=[];letters.slice(0,10).forEach(l=>{(sMap[l]||[{t:'dot'}]).forEach(p=>{strokes.push({...p,angle:rnd()*Math.PI*2,ox:(rnd()-.5)*.7,oy:(rnd()-.5)*.7,sc:.3+rnd()*.65});});});let border='circle';const pr=lastPrinciple.toLowerCase();if(pr.includes('rhythm')||pr.includes('polarity'))border='triangle';else if(pr.includes('vibration')||pr.includes('gender'))border='lemniscate';else if(pr.includes('cause'))border='hexagon';return{strokes,border,seed:sigilSeed};}
 function drawSigilFull(svgEl,sigil,size){const ns='http://www.w3.org/2000/svg';svgEl.setAttribute('viewBox',`0 0 ${size} ${size}`);svgEl.setAttribute('width',size);svgEl.setAttribute('height',size);const cx=size/2,cy=size/2,r=size*.38;const g=document.createElementNS(ns,'g');g.setAttribute('stroke','rgba(196,158,72,0.9)');g.setAttribute('stroke-width','1.2');g.setAttribute('fill','none');g.setAttribute('stroke-linecap','round');if(sigil.border==='circle'){const c=document.createElementNS(ns,'circle');c.setAttribute('cx',cx);c.setAttribute('cy',cy);c.setAttribute('r',r);c.setAttribute('stroke','rgba(196,158,72,0.5)');c.setAttribute('stroke-width','.8');g.appendChild(c);}else if(sigil.border==='triangle'){const pts=[[cx,cy-r],[cx+r*.866,cy+r*.5],[cx-r*.866,cy+r*.5]].map(p=>p.join(',')).join(' ');const tri=document.createElementNS(ns,'polygon');tri.setAttribute('points',pts);tri.setAttribute('stroke','rgba(196,158,72,0.5)');tri.setAttribute('stroke-width','.8');g.appendChild(tri);}else if(sigil.border==='lemniscate'){const lw=r*.65;const lem=document.createElementNS(ns,'path');lem.setAttribute('d',`M ${cx} ${cy} C ${cx+lw} ${cy-lw*.4} ${cx+lw} ${cy+lw*.4} ${cx} ${cy} C ${cx-lw} ${cy-lw*.4} ${cx-lw} ${cy+lw*.4} ${cx} ${cy}`);lem.setAttribute('stroke','rgba(196,158,72,0.5)');lem.setAttribute('stroke-width','.8');g.appendChild(lem);}else{const hexPts=Array.from({length:6},(_,i)=>{const a=i*Math.PI/3-Math.PI/6;return[cx+Math.cos(a)*r,cy+Math.sin(a)*r].join(',');}).join(' ');const hex=document.createElementNS(ns,'polygon');hex.setAttribute('points',hexPts);hex.setAttribute('stroke','rgba(196,158,72,0.5)');hex.setAttribute('stroke-width','.8');g.appendChild(hex);}sigil.strokes.forEach(s=>{const sr2=r*.5*s.sc;const ox=cx+s.ox*r*.45,oy=cy+s.oy*r*.45;const el=document.createElementNS(ns,'g');el.setAttribute('transform',`rotate(${s.angle*180/Math.PI} ${ox} ${oy})`);let path='';if(s.t==='v')path=`M ${ox} ${oy-sr2} L ${ox} ${oy+sr2}`;else if(s.t==='h')path=`M ${ox-sr2} ${oy} L ${ox+sr2} ${oy}`;else if(s.t==='d')path=`M ${ox-sr2} ${oy-sr2} L ${ox+sr2} ${oy+sr2}`;else if(s.t==='o')path=`M ${ox+sr2} ${oy} A ${sr2} ${sr2} 0 1 0 ${ox+sr2-.001} ${oy}`;else if(s.t==='c')path=`M ${ox-sr2} ${oy} Q ${ox} ${oy-sr2} ${ox+sr2} ${oy}`;else if(s.t==='dot'){const dot=document.createElementNS(ns,'circle');dot.setAttribute('cx',ox);dot.setAttribute('cy',oy);dot.setAttribute('r','2.5');dot.setAttribute('fill','rgba(196,158,72,0.8)');dot.setAttribute('stroke','none');g.appendChild(dot);return;}if(path){const pe=document.createElementNS(ns,'path');pe.setAttribute('d',path);el.appendChild(pe);}g.appendChild(el);});const dot=document.createElementNS(ns,'circle');dot.setAttribute('cx',cx);dot.setAttribute('cy',cy);dot.setAttribute('r','2.5');dot.setAttribute('fill','rgba(196,158,72,0.85)');dot.setAttribute('stroke','none');g.appendChild(dot);svgEl.appendChild(g);}
 function revealSigil(intention,sigil){document.getElementById('srInt').textContent='"'+intention+'"';document.getElementById('srPrin').textContent=lastPrinciple;document.getElementById('srSum').textContent='✦';const wrap=document.getElementById('sigilWrap');wrap.innerHTML='';const ns='http://www.w3.org/2000/svg';const svg=document.createElementNS(ns,'svg');drawSigilFull(svg,sigil,200);svg.querySelectorAll('path,circle,polygon').forEach((el,i)=>{if(el.tagName==='circle'&&el.getAttribute('r')==='2.5')return;try{const len=el.getTotalLength?el.getTotalLength():100;el.style.strokeDasharray=len;el.style.strokeDashoffset=len;el.style.transition=`stroke-dashoffset ${.6+i*.08}s ease ${i*.06}s`;setTimeout(()=>el.style.strokeDashoffset='0',50);}catch(e){}});wrap.appendChild(svg);generateDistilledIntention(intention);}
-async function generateDistilledIntention(intention){const sumEl=document.getElementById('srSum');let context=`Raw intention: "${intention}"`;if(vHistory.length>2){const ex=vHistory.slice(-4).map(m=>{if(m.role==='user')return`Seeker: ${m.content}`;try{const p=JSON.parse(m.content.replace(/```json|```/g,'').trim());return`Venus: ${p.mirror||''}`;}catch(e){return '';}}).filter(Boolean).join('\n');context=`Raw intention: "${intention}"\n\nConversation:\n${ex}`;}try{const res=await fetch(ORACLE_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({model:ORACLE_MODEL,max_tokens:80,system:'Distill the seeker intention into one perfect sentence. Present tense, first person, poetic but grounded. No preamble. 10-20 words maximum.',messages:[{role:'user',content:context}]})});const data=await res.json();const text=data.content?.find(b=>b.type==='text')?.text||intention;sumEl.style.transition='opacity 1.2s ease';sumEl.style.opacity='0';setTimeout(()=>{sumEl.textContent=text.replace(/^["']|["']$/g,'');sumEl.style.opacity='1';},400);}catch(e){sumEl.textContent=intention;}}
+async function generateDistilledIntention(intention){const sumEl=document.getElementById('srSum');let context=`Raw intention: "${intention}"`;if(vHistory.length>2){const ex=vHistory.slice(-4).map(m=>{if(m.role==='user')return`Seeker: ${m.content}`;try{const p=JSON.parse(m.content.replace(/```json|```/g,'').trim());return`Venus: ${p.mirror||''}`;}catch(e){return '';}}).filter(Boolean).join('\n');context=`Raw intention: "${intention}"\n\nConversation:\n${ex}`;}try{const text=(await oracleAsk({model:ORACLE_MODEL,max_tokens:80,system:'Distill the seeker intention into one perfect sentence. Present tense, first person, poetic but grounded. No preamble. 10-20 words maximum.',messages:[{role:'user',content:context}]},{chamber:'wishing-well'}))||intention;sumEl.style.transition='opacity 1.2s ease';sumEl.style.opacity='0';setTimeout(()=>{sumEl.textContent=text.replace(/^["']|["']$/g,'');sumEl.style.opacity='1';},400);}catch(e){sumEl.textContent=intention;}}
 function copyAddr(){navigator.clipboard.writeText('0x70F0082E7f47e3DC8cf62B2C7FA26100657297E9').then(()=>{const h=document.getElementById('copyHint');h.textContent='Copied ✦';h.classList.add('of-copied');setTimeout(()=>{h.textContent='Tap to copy address';h.classList.remove('of-copied');},2500);});}
 function saveSigil(){const wrap=document.getElementById('sigilWrap');const svg=wrap.querySelector('svg');if(!svg)return;const d=new XMLSerializer().serializeToString(svg);const b=new Blob([d],{type:'image/svg+xml'});const url=URL.createObjectURL(b);const a=document.createElement('a');a.href=url;a.download='ancient-temenos-sigil.svg';a.click();URL.revokeObjectURL(url);}
 
@@ -4107,6 +4347,11 @@ s.textContent=`
 #c-again{margin-top:2rem;display:block;margin-left:auto;margin-right:auto;background:transparent;border:none;cursor:pointer;font-family:'Cinzel',serif;font-size:7px;letter-spacing:.4em;color:rgba(196,158,72,0.38);text-transform:uppercase;transition:color .3s;}
 #c-again:hover{color:rgba(196,158,72,0.5);}
 #c-wait{text-align:center;padding:2rem 0;font-family:'Cormorant Garamond',serif;font-style:italic;font-size:15px;color:rgba(196,158,72,0.3);letter-spacing:.1em;}
+#c-quiet{text-align:center;padding:1.5rem 0 .5rem;}
+.c-quiet-line{font-family:'Cormorant Garamond',serif;font-style:italic;font-size:clamp(17px,1.7vw,21px);color:rgba(238,220,168,0.74);letter-spacing:.05em;line-height:1.7;margin:0 0 1rem;}
+.c-quiet-sub{font-family:'Cormorant',serif;font-style:italic;font-size:clamp(13px,1.3vw,15px);color:rgba(238,220,168,0.44);line-height:1.85;letter-spacing:.04em;margin:0;}
+#c-retry{margin-top:2rem;display:block;margin-left:auto;margin-right:auto;background:transparent;border:.5px solid rgba(196,158,72,0.28);border-radius:0;cursor:pointer;font-family:'Cinzel',serif;font-size:8px;letter-spacing:.4em;color:rgba(196,158,72,0.62);text-transform:uppercase;padding:.7rem 1.8rem;min-height:44px;transition:border-color .4s,color .4s;}
+#c-retry:hover{border-color:rgba(196,158,72,0.55);color:rgba(238,220,168,0.9);}
 `;
 document.head.appendChild(s);
 
@@ -4123,6 +4368,11 @@ document.body.insertAdjacentHTML('beforeend',`
       <span id="c-rec-soon" style="display:none">opening soon</span>
     </div>
     <button id="c-again" onclick="councilReset()" style="display:none">ask again</button>
+    <div id="c-quiet" style="display:none">
+      <p class="c-quiet-line">The council has fallen quiet.</p>
+      <p class="c-quiet-sub">Your words remain here.<br>Return when the connection is restored.</p>
+      <button id="c-retry" onclick="councilRetry()">try again</button>
+    </div>
   </div>
 </div>
 `);
@@ -4204,6 +4454,7 @@ const _mock=new URLSearchParams(window.location.search).get('mock');
   if(!inp)return;
   const q=inp.value.trim();
   if(!q)return;
+  if(!oracleBegin('council'))return;
   cBusy=true;
   lastCouncilInput=q;
   if(window.trackTempleEvent) trackTempleEvent('council_question_submitted');
@@ -4250,19 +4501,20 @@ RECOMMENDS: [Venus or Ganymede]`;
 
   let fullText='';
   try{
-    const res=await fetch(ORACLE_ENDPOINT,{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({model:ORACLE_MODEL,max_tokens:200,system:sys,messages:[{role:'user',content:q}]})
-    });
-    const data=await res.json();
-    fullText=(data.content?.find(b=>b.type==='text')?.text||'').trim();
+    fullText=(await oracleAsk(
+      {model:ORACLE_MODEL,max_tokens:200,system:sys,messages:[{role:'user',content:q}]},
+      {chamber:'council'})).trim();
   }catch(e){
-    fullText=`Venus: The heart already knows the answer.
-Persephone: Something beneath this is ready to move.
-Psyche: What if it was simpler than you think?
-Ganymede: Name the first step and take it.
-RECOMMENDS: Venus`;
+    /* The council does not improvise. A failed request produces no reading, no
+       recommendation and no journey onward — only an honest quiet, with the
+       visitor's words still theirs. oracleAsk has already logged the cause.
+
+       Nothing is written to any history here: the council sends a single
+       stateless message, so a failed attempt leaves no trace to contaminate
+       the next one. */
+    window.__temenosCouncilFellBack = true;   // retained; now means fell quiet, never fabricated
+    councilQuiet();
+    return;
   }
 
   // parse lines + recommendation
@@ -4335,6 +4587,35 @@ RECOMMENDS: Venus`;
   }
 };
 
+/* The council has nothing to say and says so. No lines are rendered, no
+   recommendation appears, nothing navigates, and the visitor's words are held
+   in lastCouncilInput until they choose to try again. */
+window.councilQuiet=function(){
+  const hide=id=>{const el=document.getElementById(id);if(el)el.style.display='none';};
+  hide('c-wait');
+  const lines=document.getElementById('c-debate-lines');
+  if(lines){lines.style.display='none';lines.innerHTML='';}
+  const recEl=document.getElementById('c-recommendation');
+  if(recEl){recEl.classList.remove('on');recEl.style.display='none';}
+  hide('c-again');
+  const qz=document.getElementById('c-quiet');
+  if(qz)qz.style.display='block';
+  cBusy=false; oracleEnd('council');
+};
+
+/* One tap returns their question to the field and asks again. If it fails a
+   second time they land back here, with their words still intact. */
+window.councilRetry=function(){
+  if(cBusy)return;                                   // no double retries
+  const qz=document.getElementById('c-quiet');
+  if(qz)qz.style.display='none';
+  const inp=document.getElementById('fc-inp');
+  if(inp&&lastCouncilInput)inp.value=lastCouncilInput;
+  const wait=document.getElementById('c-wait');
+  if(wait)wait.style.display='block';
+  window.sendCouncil();
+};
+
 window.councilReset=function(){
   document.getElementById('c-overlay').classList.remove('on');
   document.getElementById('c-debate').classList.remove('on');
@@ -4350,9 +4631,11 @@ window.councilReset=function(){
   if(againBtn)againBtn.style.display='none';
   const linesEl=document.getElementById('c-debate-lines');
   if(linesEl)linesEl.innerHTML='';
+  const qz=document.getElementById('c-quiet');
+  if(qz)qz.style.display='none';
   const cw=document.getElementById('foyer-council');
   if(cw){const inp=document.getElementById('fc-inp');if(inp)inp.value='';cw.style.transition='opacity .8s';cw.style.opacity='1';cw.style.pointerEvents='all';}
-  cBusy=false;
+  cBusy=false; oracleEnd('council');
 };
 
 })(); // end council module
@@ -5292,7 +5575,8 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeArtwork
   /* ── Panels ─────────────────────────────────────────────────────────────
      Wider on a narrow screen, and shorter than the small viewport so the
      input is never hidden beneath Safari's chrome. */
-  #va-glass{width:100%;padding-left:1.5rem;padding-right:1.5rem;max-height:80dvh;}
+  #va-glass{width:100%;padding-left:1.5rem;padding-right:1.5rem;max-height:80dvh;
+            bottom:var(--kb-inset,0px);max-height:calc(80dvh - var(--kb-inset,0px));}
   #g-glass{width:min(520px,94vw);padding:1.8rem 1.4rem 1.2rem;max-height:72dvh;bottom:calc(3% + env(safe-area-inset-bottom));}
 
   /* ── Hints ──────────────────────────────────────────────────────────────
