@@ -1,0 +1,7 @@
+# macOS Finder artefacts
+.DS_Store
+**/.DS_Store
+
+# Editor scratch
+*.swp
+*~

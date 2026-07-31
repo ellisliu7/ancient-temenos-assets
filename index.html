@@ -2,7 +2,7 @@
 <html lang="en" translate="no">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="google" content="notranslate">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
 <meta http-equiv="Pragma" content="no-cache">
@@ -11,7 +11,7 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant:ital,wght@0,300;0,400;1,300;1,400&family=Cormorant+Garamond:wght@300;400&family=Cinzel:wght@300;400&family=Almendra:ital,wght@0,400;1,400&family=Noto+Sans+Old+Italic&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-html,body{width:100%;height:100%;overflow:hidden;background:#060402;}
+html,body{width:100%;height:100%;overflow:hidden;background:#060402;-webkit-text-size-adjust:100%;text-size-adjust:100%;}
 body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 
 /* ── SCREENS ── */
@@ -448,7 +448,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 #va-scroll-hint.gone{opacity:0;}
 #va-oracle-glass{position:absolute;inset:0;z-index:8;background:rgba(3,2,1,0);pointer-events:none;transition:background 1.8s ease;}
 #va-oracle-glass.risen{background:rgba(3,2,1,0.72);}
-#va-glass{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(6px);width:min(560px,92vw);z-index:12;padding:2rem 2rem 3rem;background:linear-gradient(to bottom,transparent,rgba(8,4,2,0.65) 22%,rgba(6,3,1,0.80) 100%);backdrop-filter:none;border:none;border-radius:0;box-shadow:none;opacity:0;transition:opacity 2.4s ease,transform 2.4s ease;pointer-events:none;max-height:80vh;overflow-y:auto;}
+#va-glass{position:fixed;bottom:0;left:50%;transform:translateX(-50%) translateY(6px);width:min(560px,92vw);z-index:12;padding:2rem 2rem 3rem;background:linear-gradient(to bottom,transparent,rgba(8,4,2,0.65) 22%,rgba(6,3,1,0.80) 100%);backdrop-filter:none;border:none;border-radius:0;box-shadow:none;opacity:0;transition:opacity 2.4s ease,transform 2.4s ease;pointer-events:none;max-height:80vh;max-height:78dvh;overflow-y:auto;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain;}
 #va-glass::-webkit-scrollbar{width:0;}
 #va-glass.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:all;}
 /* Inside Venus corridor, cards are plain type — no box, no borders */
@@ -495,7 +495,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 .v-room-chev{font-size:18px;letter-spacing:0;line-height:.4;color:rgba(196,158,72,0.5);animation:gChevDrift 2.6s ease-in-out infinite;}
 #v-room-hint.show{opacity:1;animation:gHintBreathe 5s ease-in-out infinite;}
 #v-room-hint.gone{opacity:0!important;transition:opacity 1.4s ease;animation:none;}
-#g-glass{position:fixed;bottom:5%;left:50%;transform:translateX(-50%) translateY(10px);width:min(520px,90vw);max-height:80vh;overflow-y:auto;overflow-x:hidden;z-index:12;padding:2.4rem 2rem 1.5rem;background:linear-gradient(to bottom,rgba(30,20,8,0.20),rgba(14,9,3,0.30));backdrop-filter:blur(16px) saturate(1.15);-webkit-backdrop-filter:blur(16px) saturate(1.15);border:.5px solid rgba(196,158,72,0.08);border-radius:9px;box-shadow:0 18px 55px rgba(0,0,0,0.38);opacity:0;transition:opacity 2.2s ease,transform 2.2s ease;pointer-events:none;}
+#g-glass{position:fixed;bottom:5%;left:50%;transform:translateX(-50%) translateY(10px);width:min(520px,90vw);max-height:80vh;max-height:74dvh;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;touch-action:pan-y;overscroll-behavior:contain;z-index:12;padding:2.4rem 2rem 1.5rem;background:linear-gradient(to bottom,rgba(30,20,8,0.20),rgba(14,9,3,0.30));backdrop-filter:blur(16px) saturate(1.15);-webkit-backdrop-filter:blur(16px) saturate(1.15);border:.5px solid rgba(196,158,72,0.08);border-radius:9px;box-shadow:0 18px 55px rgba(0,0,0,0.38);opacity:0;transition:opacity 2.2s ease,transform 2.2s ease;pointer-events:none;}
 #g-glass.show{opacity:1;transform:translateX(-50%) translateY(0);pointer-events:all;}
 #g-glass.show.sunk{opacity:0;transform:translateX(-50%) translateY(46px);pointer-events:none;transition:opacity 1.4s ease,transform 1.4s ease;}
 #g-glass::-webkit-scrollbar{width:0;}
@@ -621,7 +621,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 
   <div class="foyer-altar" id="altar-venus"
     onmouseenter="foyerHover('venus')" onmouseleave="foyerLeave('venus')"
-    onclick="foyerEnter('venus')" ontouchend="foyerEnter('venus')">
+    onclick="foyerEnter('venus')">
     <div class="altar-glow-layer" id="venus-glow-layer"></div>
     <div class="altar-poem" id="venus-poem"><p>The chamber<br>of receiving.</p></div>
     <div class="altar-label" id="venus-label">
@@ -632,7 +632,7 @@ body{font-family:'Cormorant Garamond',serif;-webkit-font-smoothing:antialiased;}
 
   <div class="foyer-altar" id="altar-ganymede"
     onmouseenter="foyerHover('ganymede')" onmouseleave="foyerLeave('ganymede')"
-    onclick="foyerEnter('ganymede')" ontouchend="foyerEnter('ganymede')">
+    onclick="foyerEnter('ganymede')">
     <div class="altar-glow-layer" id="gany-glow-layer"></div>
     <div class="altar-poem" id="gany-poem"><p>The chamber<br>of becoming.</p></div>
     <div class="altar-label" id="gany-label">
@@ -1425,6 +1425,11 @@ function showScreen(id){
 }
 
 function goReturn(){
+  // A corridor's watchdogs belong to that visit only.
+  if(typeof corridorRelease==='function'){
+    if(typeof vaScrub!=='undefined')corridorRelease(vaScrub);
+    if(typeof gScrub!=='undefined')corridorRelease(gScrub);
+  }
   const prev={foyer:'threshold',venusApproach:'foyer',venusBreath:'foyer',venusOracle:'foyer',ganymedeScreen:'foyer'};
   const target=prev[currentScreen]||'foyer';
   if(currentScreen==='venusOracle'){hideCupid();resetVenusState();}
@@ -1726,16 +1731,123 @@ let vHistory=[],venusOracleOpened=false,venusConvOpen=false,vaCardDoneAt=0;
 let lastPrinciple='The Principle of Cause and Effect',lastMirror='';
 
 
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   CORRIDOR TRANSPORT — a corridor must never trap a visitor.
+
+   The approach corridors are scrubbed frame by frame from the visitor's touch.
+   That gesture only exists if the browser can actually seek the film, and on a
+   phone it frequently cannot: iOS will not buffer a video past its metadata
+   until play() has been called, and both corridor films are deliberately
+   all-keyframe encodes (Venus 8.5MB / 5.2s, Ganymede 15.4MB / 8.0s) so a cold
+   mobile connection can sit at readyState 1 for a long time.
+
+   The previous engine called preventDefault() on every touchmove until an
+   arrival condition that was only reachable through a seekable film. When the
+   film could not be scrubbed, every touch was swallowed and the temple froze.
+
+   Two rules now hold:
+     1. We only take the gesture when the gesture does something.
+     2. If the film cannot be scrubbed, it carries the visitor instead — it
+        plays itself as a slow approach and the chamber opens when it ends.
+   ═══════════════════════════════════════════════════════════════════════════ */
+const CORRIDOR_STALL_MS = 3200;   // grace period for the film to become seekable
+
+/* True only when scrubbing will actually move the film. */
+function corridorCanScrub(v,scrub){
+  return !!v && !scrub.arrived && !scrub.carried && scrub.dur>0 && v.readyState>=2;
+}
+
+/* A touch that begins inside an oracle panel belongs to that panel. */
+function corridorTouchIsOurs(e){
+  const t=e.target;
+  if(!t||!t.closest)return true;
+  return !t.closest('#va-glass,#g-glass,#grimoireScreen,#teachings,#keyReveal,input,textarea,button,a');
+}
+
+/* The film takes over and walks the visitor down the corridor itself. */
+const CORRIDOR_CARRY_RATE = 0.8;   // the film walks a little under speed
+
+function corridorCarry(v,scrub,arrive,isActive){
+  if(scrub.arrived||scrub.carried)return;
+  scrub.carried=true;
+  scrub.raf=null;
+  // Withdraw the invitation to scroll — we are no longer asking for it.
+  ['va-scroll-hint','g-scroll-hint','va-hint-secondary'].forEach(id=>{
+    const el=document.getElementById(id);
+    if(el){el.classList.add('gone');el.style.opacity='0';}
+  });
+  const land=()=>{ if(isActive()&&!scrub.arrived)arrive(); };
+  if(!v){land();return;}
+  v.muted=true;
+  v.addEventListener('ended',land,{once:true});
+  try{
+    v.playbackRate=CORRIDOR_CARRY_RATE;
+    const p=v.play();
+    if(p&&p.catch)p.catch(land);   // autoplay refused — open rather than strand
+  }catch(err){ land(); return; }
+  const d=(v.duration&&isFinite(v.duration)&&v.duration>0)?v.duration:8;
+  setTimeout(land,(d/CORRIDOR_CARRY_RATE+3)*1000);
+}
+
+/* Arms the stall watchdog and the hard ceiling for one corridor entry. */
+function corridorWatch(v,scrub,arrive,isActive){
+  clearTimeout(scrub._stallT);
+  // The only thing worth watching for is a film that never becomes seekable.
+  // A visitor moving slowly through a corridor is not stuck, and is left alone.
+  scrub._stallT=setTimeout(()=>{
+    if(!isActive()||scrub.arrived||scrub.carried)return;
+    if(!v||v.readyState<2||!(scrub.dur>0))corridorCarry(v,scrub,arrive,isActive);
+  },CORRIDOR_STALL_MS);
+  if(v)v.addEventListener('error',()=>{
+    if(isActive()&&!scrub.arrived)corridorCarry(null,scrub,arrive,isActive);
+  },{once:true});
+}
+
+/* iOS loads metadata only until play() is called. A muted playsinline video is
+   allowed to autoplay, so we start it and immediately pause: that single call
+   is what makes the corridor seekable at all on a phone. */
+function corridorPrime(v,scrub){
+  if(!v)return;
+  try{
+    const p=v.play();
+    if(p&&p.then)p.then(()=>{
+      if(!scrub.carried){ v.pause(); try{v.currentTime=0;}catch(e){} }
+    }).catch(()=>{});
+  }catch(e){}
+}
+
+function corridorRelease(scrub){
+  clearTimeout(scrub._stallT);
+}
+
 // ══ VENUS APPROACH — scroll-scrub corridor (same grammar as Ganymede) ══
-let vaScrub={target:0,current:0,dur:0,raf:null,arrived:false};
+let vaScrub={target:0,current:0,dur:5.2,raf:null,arrived:false,carried:false,_stallT:null};
 let vaTouchY=null;
 
 function vaVid(){return document.getElementById('va-video');}
 function vaScreenActive(){const s=document.getElementById('venusApproach');return s&&s.classList.contains('active');}
 
-function vaOnWheel(e){if(!vaScreenActive()||vaScrub.arrived)return;e.preventDefault();vaScrubBy(e.deltaY);}
-function vaOnTouchStart(e){if(!vaScreenActive()||vaScrub.arrived)return;vaTouchY=e.touches[0].clientY;}
-function vaOnTouchMove(e){if(!vaScreenActive()||vaScrub.arrived||vaTouchY===null)return;e.preventDefault();const y=e.touches[0].clientY;vaScrubBy((vaTouchY-y)*2.4);vaTouchY=y;}
+function vaOnWheel(e){
+  if(!vaScreenActive()||vaScrub.arrived||vaScrub.carried)return;
+  if(!corridorCanScrub(vaVid(),vaScrub))return;      // nothing to scrub — leave the gesture alone
+  if(e.cancelable)e.preventDefault();
+  vaScrubBy(e.deltaY);
+}
+function vaOnTouchStart(e){
+  if(!vaScreenActive()||vaScrub.arrived||vaScrub.carried){vaTouchY=null;return;}
+  if(!corridorTouchIsOurs(e)){vaTouchY=null;return;}
+  vaTouchY=e.touches[0].clientY;
+}
+function vaOnTouchMove(e){
+  if(!vaScreenActive()||vaScrub.arrived||vaScrub.carried||vaTouchY===null)return;
+  if(!corridorCanScrub(vaVid(),vaScrub)){vaTouchY=null;return;}   // never swallow a dead gesture
+  if(e.cancelable)e.preventDefault();
+  const y=e.touches[0].clientY;
+  vaScrubBy((vaTouchY-y)*2.4);
+  vaTouchY=y;
+}
+function vaOnTouchEnd(){vaTouchY=null;}
 
 function vaScrubBy(px){
   const k=vaScrub.dur>0?vaScrub.dur/1800:0.003; // slower scroll = longer ceremony
@@ -1743,19 +1855,21 @@ function vaScrubBy(px){
   if(!vaScrub.raf&&!vaScrub.arrived&&vaScreenActive())vaScrub.raf=requestAnimationFrame(vaScrubLoop);
 }
 function vaScrubLoop(){
-  if(!vaScreenActive()){vaScrub.raf=null;return;}
+  if(!vaScreenActive()||vaScrub.carried){vaScrub.raf=null;return;}
   if(!vaScrub.arrived){
     const v=vaVid();
     if(v&&v.readyState>=2){
       const next=vaScrub.current+(vaScrub.target-vaScrub.current)*0.08;
       if(Math.abs(next-vaScrub.current)>0.0008){vaScrub.current=next;try{v.currentTime=next;}catch(e){};}
-      if(vaScrub.dur>0&&vaScrub.current>=vaScrub.dur-0.08&&vaScrub.target>=vaScrub.dur-0.02){vaArrive();return;}
+      if(vaScrub.dur>0&&vaScrub.target>=vaScrub.dur-0.02&&vaScrub.current>=vaScrub.dur-0.25){vaArrive();return;}
     }
   }
   vaScrub.raf=requestAnimationFrame(vaScrubLoop);
 }
 function vaArrive(){
+  if(vaScrub.arrived)return;
   vaScrub.arrived=true;vaScrub.raf=null;
+  corridorRelease(vaScrub);
   const v=vaVid();if(v){try{v.currentTime=Math.max(0,vaScrub.dur-0.05);}catch(e){};}
   const h=document.getElementById('va-scroll-hint');if(h)h.classList.add('gone');
   // Deepen the corridor darkness — same gesture as Ganymede
@@ -1773,27 +1887,27 @@ function vaArrive(){
 window.addEventListener('wheel',vaOnWheel,{passive:false});
 window.addEventListener('touchstart',vaOnTouchStart,{passive:true});
 window.addEventListener('touchmove',vaOnTouchMove,{passive:false});
+window.addEventListener('touchend',vaOnTouchEnd,{passive:true});
+window.addEventListener('touchcancel',vaOnTouchEnd,{passive:true});
 
 function enterVenusApproach(){
   if(window.trackTempleEvent) trackTempleEvent('chamber_entered_venus');
   showScreen('venusApproach');
   foyerActive=false;
-  vaScrub={target:0,current:0,dur:0,raf:null,arrived:false};
+  corridorRelease(vaScrub);
+  vaScrub={target:0,current:0,dur:5.2,raf:null,arrived:false,carried:false,_stallT:null};
   vaTouchY=null;
   const v=vaVid();
   if(v){
-    v.currentTime=0;
-    const setDur=()=>{
-      if(v.duration&&isFinite(v.duration)){
-        vaScrub.dur=v.duration;
-      } else {
-        vaScrub.dur=8; // fallback
-      }
-    };
+    // dur is seeded from the known length of Venus.mp4 so the corridor is never
+    // gated on metadata that may never arrive; real duration refines it.
+    const setDur=()=>{if(v.duration&&isFinite(v.duration)&&v.duration>0)vaScrub.dur=v.duration;};
     if(v.readyState>=1){setDur();}else{v.addEventListener('loadedmetadata',setDur,{once:true});}
     v.pause();
-    v.currentTime=0;
+    try{v.currentTime=0;}catch(e){}
+    corridorPrime(v,vaScrub);
   }
+  corridorWatch(v,vaScrub,vaArrive,vaScreenActive);
   const h=document.getElementById('va-scroll-hint');if(h)h.classList.remove('gone');
   const gl=document.getElementById('va-oracle-glass');if(gl)gl.classList.remove('risen');
   const _hs=document.getElementById('va-hint-secondary');if(_hs){_hs.style.opacity='0';setTimeout(()=>{if(!vaScrub.hinted)_hs.style.opacity='1';},2500);}
@@ -2957,13 +3071,30 @@ function makeDust(initial){
 }
 
 /* == GANYMEDE — scroll-scrub approach engine == */
-let gScrub={target:0,current:0,dur:8,raf:null,arrived:false,hinted:false};
+let gScrub={target:0,current:0,dur:8,raf:null,arrived:false,hinted:false,carried:false,_stallT:null};
 let gTouchY=null;
 function gVid(){return document.getElementById('g-cave-video');}
 function gScreenActive(){const s=document.getElementById('ganymedeScreen');return s&&s.classList.contains('active');}
-function gOnWheel(e){if(!gScreenActive()||gScrub.arrived)return;e.preventDefault();gScrubBy(e.deltaY);}
-function gOnTouchStart(e){if(!gScreenActive()||gScrub.arrived)return;gTouchY=e.touches[0].clientY;}
-function gOnTouchMove(e){if(!gScreenActive()||gScrub.arrived||gTouchY===null)return;e.preventDefault();const y=e.touches[0].clientY;gScrubBy((gTouchY-y)*2.4);gTouchY=y;}
+function gOnWheel(e){
+  if(!gScreenActive()||gScrub.arrived||gScrub.carried)return;
+  if(!corridorCanScrub(gVid(),gScrub))return;        // nothing to scrub — leave the gesture alone
+  if(e.cancelable)e.preventDefault();
+  gScrubBy(e.deltaY);
+}
+function gOnTouchStart(e){
+  if(!gScreenActive()||gScrub.arrived||gScrub.carried){gTouchY=null;return;}
+  if(!corridorTouchIsOurs(e)){gTouchY=null;return;}
+  gTouchY=e.touches[0].clientY;
+}
+function gOnTouchMove(e){
+  if(!gScreenActive()||gScrub.arrived||gScrub.carried||gTouchY===null)return;
+  if(!corridorCanScrub(gVid(),gScrub)){gTouchY=null;return;}      // never swallow a dead gesture
+  if(e.cancelable)e.preventDefault();
+  const y=e.touches[0].clientY;
+  gScrubBy((gTouchY-y)*2.4);
+  gTouchY=y;
+}
+function gOnTouchEnd(){gTouchY=null;}
 function gScrubBy(px){
   const k=gScrub.dur/3600;
   gScrub.target=Math.max(0,Math.min(gScrub.dur,gScrub.target+px*k));
@@ -2971,19 +3102,21 @@ function gScrubBy(px){
   if(!gScrub.raf&&!gScrub.arrived&&gScreenActive())gScrub.raf=requestAnimationFrame(gScrubLoop);
 }
 function gScrubLoop(){
-  if(!gScreenActive()){gScrub.raf=null;return;}
+  if(!gScreenActive()||gScrub.carried){gScrub.raf=null;return;}
   if(!gScrub.arrived){
     const v=gVid();
     if(v&&v.readyState>=2){
       const next=gScrub.current+(gScrub.target-gScrub.current)*0.08;
       if(Math.abs(next-gScrub.current)>0.0008){gScrub.current=next;try{v.currentTime=next;}catch(e){}}
-      if(gScrub.current>=gScrub.dur-0.08&&gScrub.target>=gScrub.dur-0.02){gArrive();return;}
+      if(gScrub.dur>0&&gScrub.target>=gScrub.dur-0.02&&gScrub.current>=gScrub.dur-0.25){gArrive();return;}
     }
   }
   gScrub.raf=requestAnimationFrame(gScrubLoop);
 }
 function gArrive(){
+  if(gScrub.arrived)return;
   gScrub.arrived=true;gScrub.raf=null;
+  corridorRelease(gScrub);
   const v=gVid();if(v){try{v.currentTime=Math.max(0,gScrub.dur-0.05);}catch(e){}}
   const h=document.getElementById('g-scroll-hint');if(h)h.classList.add('gone');
   setTimeout(()=>{
@@ -2996,6 +3129,8 @@ function gArrive(){
 window.addEventListener('wheel',gOnWheel,{passive:false});
 window.addEventListener('touchstart',gOnTouchStart,{passive:true});
 window.addEventListener('touchmove',gOnTouchMove,{passive:false});
+window.addEventListener('touchend',gOnTouchEnd,{passive:true});
+window.addEventListener('touchcancel',gOnTouchEnd,{passive:true});
 
 /* Glass dismiss: click outside or Esc sinks the panel and returns the room to you —
    scrolling scrubs the cave again. Click anywhere to glide back to the arch; the glass rises on arrival. */
@@ -3003,6 +3138,7 @@ function gGlassSink(){
   const gl=document.getElementById('g-glass');if(!gl||!gl.classList.contains('show')||gl.classList.contains('sunk'))return;
   gl.classList.add('sunk');
   gScrub.arrived=false;
+  gScrub.carried=false;
   gScrub.target=Math.max(0,gScrub.dur-1.5);
   if(!gScrub.raf&&gScreenActive())gScrub.raf=requestAnimationFrame(gScrubLoop);
 }
@@ -3030,7 +3166,8 @@ function enterGanymede(){
   const _gp=new URLSearchParams(location.search);
   if(['ganymede','all'].includes(_gp.get('mock'))||_gp.get('reset')!==null){try{localStorage.removeItem('temenos_sigil_key');}catch(e){}}
   gHistory=[];gExchangeCount=0;gDustParticles=[];
-  gScrub={target:0,current:0,dur:8,raf:null,arrived:false,hinted:false};
+  corridorRelease(gScrub);
+  gScrub={target:0,current:0,dur:8,raf:null,arrived:false,hinted:false,carried:false,_stallT:null};
   const bg=document.getElementById('g-cave-bg');
   const vid=gVid();
   const gold=document.getElementById('g-gold-bg');
@@ -3038,10 +3175,12 @@ function enterGanymede(){
   if(vid){
     vid.pause();
     vid.style.filter='brightness(.90) saturate(.95)';
-    const setDur=()=>{if(vid.duration&&isFinite(vid.duration))gScrub.dur=vid.duration;};
+    const setDur=()=>{if(vid.duration&&isFinite(vid.duration)&&vid.duration>0)gScrub.dur=vid.duration;};
     if(vid.readyState>=1)setDur();else vid.addEventListener('loadedmetadata',setDur,{once:true});
     try{vid.currentTime=0;}catch(e){}
+    corridorPrime(vid,gScrub);
   }
+  corridorWatch(gVid(),gScrub,gArrive,gScreenActive);
   if(gold)gold.style.opacity='0';
   if(raysC){raysC.classList.remove('glow');raysC.style.opacity='0';}
   if(window._gRaysSetIntensity)window._gRaysSetIntensity(0);
@@ -5057,6 +5196,131 @@ document.addEventListener('keydown',function(e){if(e.key==='Escape')closeArtwork
 </script>
 <!-- ── /ARTWORK ENQUIRY MODAL ────────────────────────────────────────────── -->
 
+
+<!-- ══════════════════════════════════════════════════════════════════════════
+     MOBILE REFINEMENTS
+     Loaded last so it settles ties on equal specificity. Nothing here is a
+     workaround; each rule states an intention the desktop sheet left implicit.
+     ══════════════════════════════════════════════════════════════════════════ -->
+<style id="mobile-refinements">
+
+/* ── The films keep their frame ────────────────────────────────────────────
+   Venus.mp4 is 1280x720 and Ganymede_Dolly_final.mp4 is 1280x672. Held in a
+   portrait viewport under object-fit:cover, a 16:9 frame is magnified ~2.4x
+   and loses roughly 58% of its width — the composition collapses into a
+   vertical sliver, which is what reads as "squashed".
+
+   Instead the film is given a box of its own true ratio and centred on the
+   temple's black ground, the way a work is hung rather than wallpapered. The
+   mask is applied to the element box, which in a matched-ratio box is exactly
+   the film's own edge, so the seam dissolves into the dark instead of ending
+   in a hard rectangle — and the bottom watermark goes with it. */
+@media (orientation:portrait) and (max-width:900px){
+  #va-corridor-bg{display:flex;align-items:center;justify-content:center;background:#060402;}
+  #va-corridor-bg video{
+    width:100%;height:auto;max-height:100%;
+    aspect-ratio:16/9;
+    object-fit:cover;object-position:center center;
+    -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 8%,#000 86%,transparent 100%);
+            mask-image:linear-gradient(to bottom,transparent 0%,#000 8%,#000 86%,transparent 100%);
+  }
+  #g-cave-bg{display:flex;align-items:center;justify-content:center;background:#000;}
+  #g-cave-video{
+    position:relative;inset:auto;
+    width:100%;height:auto;max-height:100%;
+    aspect-ratio:1280/672;
+    object-fit:cover;object-position:center center;
+    -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 8%,#000 88%,transparent 100%);
+            mask-image:linear-gradient(to bottom,transparent 0%,#000 8%,#000 88%,transparent 100%);
+  }
+  /* The threshold film stays full-bleed — it is atmosphere behind the riddle,
+     not a composition. Only its focal point is corrected: 30% from the top is
+     a landscape decision and lands badly in portrait. */
+  .t-video-wrap video{object-position:center 45%;transform:scale(1.02);}
+}
+
+/* ── Rubber-band, on touch devices only ───────────────────────────────────
+   iOS will bounce the whole document past its bounds and expose the page
+   behind the temple. overscroll-behavior stops that at the source, which is
+   why none of this needs preventDefault.
+
+   Scoped to (hover:none) and (pointer:coarse) so it reaches phones and tablets
+   and nothing else. A desktop trackpad reports pointer:fine, so two-finger
+   swipe-to-navigate is left exactly as it was. It is applied across the whole
+   temple rather than only inside a corridor because the threshold and foyer
+   bounce too, and a corridor-scoped rule would leave those bouncing. */
+@media (hover:none) and (pointer:coarse){
+  html,body{overscroll-behavior:none;}
+}
+
+/* ── Safe areas ───────────────────────────────────────────────────────────
+   viewport-fit=cover admits the notch and the home indicator; these keep the
+   temple's own marks clear of both. */
+#returnBtn{top:calc(1.6rem + env(safe-area-inset-top));left:calc(1.8rem + env(safe-area-inset-left));}
+#teachingsBtn{top:calc(1.6rem + env(safe-area-inset-top));right:calc(1.8rem + env(safe-area-inset-right));}
+#va-glass{padding-bottom:calc(3rem + env(safe-area-inset-bottom));}
+#g-glass{margin-bottom:env(safe-area-inset-bottom);}
+.ws-close{top:calc(1.6rem + env(safe-area-inset-top));}
+
+@media (max-width:768px){
+
+  /* ── Touch ──────────────────────────────────────────────────────────────
+     Declared intent, so the browser never has to wait on a listener to learn
+     whether a gesture was meant for it. */
+  body{touch-action:manipulation;-webkit-tap-highlight-color:transparent;}
+  #va-glass,#g-glass,#grimoireScreen,#teachings{touch-action:pan-y;}
+  .foyer-altar,button,.va-cta-btn,.nav-btn{touch-action:manipulation;}
+
+  /* Every mark a visitor is asked to touch is at least 44px tall. */
+  .nav-btn{min-height:44px;padding:.6rem .4rem;}
+  #va-input-wrap button,.fc-send{min-width:44px;min-height:44px;}
+  .va-cta-btn{min-height:44px;}
+
+  /* ── Type ───────────────────────────────────────────────────────────────
+     Anything below 16px makes iOS zoom the page on focus and never return —
+     which reads to a visitor as the temple locking up. */
+  input,textarea,select,.fc-inp,#gi,#va-qi,.ws-inp{font-size:16px !important;}
+
+  /* clamp() lower bounds were set against desktop line lengths; on a phone
+     they collapse the oracle's voice into something cramped. */
+  #va-vthread .vc-m,.va-mirror{font-size:17px;line-height:1.8;}
+  #va-vthread .vc-q,.va-question{font-size:16px;line-height:1.7;}
+  #va-inv-line2{font-size:21px;line-height:1.6;}
+  #g-glass #g-curr-text{font-size:16px;line-height:1.8;}
+  #g-glass #g-inv-line2{font-size:20px;}
+
+  /* ── Panels ─────────────────────────────────────────────────────────────
+     Wider on a narrow screen, and shorter than the small viewport so the
+     input is never hidden beneath Safari's chrome. */
+  #va-glass{width:100%;padding-left:1.5rem;padding-right:1.5rem;max-height:80dvh;}
+  #g-glass{width:min(520px,94vw);padding:1.8rem 1.4rem 1.2rem;max-height:72dvh;bottom:calc(3% + env(safe-area-inset-bottom));}
+
+  /* ── Hints ──────────────────────────────────────────────────────────────
+     "Scroll to approach Ganymede" overflows a 390px screen with .5em tracking. */
+  #g-scroll-hint{white-space:normal;text-align:center;max-width:80vw;line-height:2;letter-spacing:.34em;}
+  #va-scroll-hint{bottom:calc(12% + env(safe-area-inset-bottom));width:86vw;}
+  #va-scroll-hint span{font-size:16px;}
+  #va-hint-secondary{letter-spacing:.34em !important;font-size:10px !important;}
+
+  /* ── Closing actions ────────────────────────────────────────────────────
+     Seal / Return sat on one line with 2.4rem between them and wrapped badly. */
+  #va-closing-actions{flex-direction:column;gap:.4rem !important;}
+  #va-closing-actions span{display:none;}
+
+  /* ── Council ────────────────────────────────────────────────────────────*/
+  #foyer-council{width:88vw;top:22%;padding:1.4rem 1.2rem 1.2rem;}
+  #foyer-oracle-wheel{width:min(220px,52vw);height:min(220px,52vw);}
+}
+
+/* ── Motion ───────────────────────────────────────────────────────────────
+   The temple breathes rather than animates, so honouring this preference
+   costs nothing: the atmosphere stays, only the perpetual motion stops. */
+@media (prefers-reduced-motion:reduce){
+  #va-corridor-bg,.va-hint-chev,.g-hint-chev,.v-room-chev,
+  #g-scroll-hint.show,#v-scroll-hint.show,#v-room-hint.show,.va-cta-btn,
+  #va-scroll-hint span{animation:none !important;}
+}
+</style>
 
 </body>
 </html>

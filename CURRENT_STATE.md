@@ -1,5 +1,44 @@
 # Ancient Temenos — Current State
-**Last updated:** 6 July 2026 (third session)
+**Last updated:** 31 July 2026 (mobile production sprint)
+
+---
+
+## 31 July 2026 — Mobile Experience QA & Production Fix
+
+The temple is being shown publicly, so mobile is now treated as production. Two reported faults, both traced to a single architectural cause, plus a mobile pass across the whole site. `index.html` only. Syntax checked; corridor logic covered by `test_corridor.js` (13 checks, all passing against the shipped source).
+
+**Root cause of the freeze.** Both approach corridors register a non-passive `touchmove` listener on `window` and call `preventDefault()` on every move until `scrub.arrived` is true. `arrived` was only reachable from inside the rAF loop, which was gated on `video.readyState >= 2` and a non-zero `duration`. On a phone neither is guaranteed: iOS will not buffer a video past its metadata until `play()` is called, and the corridor films are deliberately all-keyframe encodes (Venus 8.5MB/5.17s, Ganymede 15.4MB/8.0s). When the film could not be seeked, the arrival condition was unreachable and every touch was swallowed — permanently. Confirmed live: on the deployed site `#va-video` reports `readyState: 0`, `duration: null`, and the corridor renders as a black field under "Scroll to approach".
+
+**The fix — corridor transport.** A shared safety layer above both engines:
+- `corridorCanScrub()` — the gesture is only taken when it actually moves the film. If the film is not seekable, `preventDefault` is never called and the visitor keeps their touch.
+- `corridorPrime()` — one muted `play()`/`pause()` on entry. This is what makes a video seekable at all on iOS.
+- `corridorWatch()` — a 3.2s stall watchdog. Nothing else: a visitor moving slowly through a corridor is not stuck, and no clock is put on them.
+- `corridorCarry()` — if the film cannot be scrubbed it carries the visitor instead: plays itself at 0.8× as a slow approach, withdraws the scroll invitation, and opens the chamber on `ended`. Covers stalled buffering, media errors, and refused autoplay.
+- `touchend`/`touchcancel` release, `arrived` guarded against double-entry, arrival tolerance loosened 0.08s → 0.25s so a throttled rAF cannot leave a visitor one frame short, and Venus `dur` seeded at 5.2 instead of 0 (the old `else` fallback was unreachable).
+
+**Root cause of the squashed video.** Nothing was stretched — every video already carried `object-fit:cover`. In a 402×874 portrait viewport a 1280×720 film is magnified 3.9× and **only 25.9% of its width survives**. `#va-corridor-bg video` additionally carried `object-position:center 0%`, a landscape-only device for hiding the bottom watermark, which in portrait shows the top sliver alone.
+
+**The fix — the film keeps its frame.** In portrait the corridor films are given a box of their own true ratio (Venus `16/9`, Ganymede `1280/672`) centred on the temple's black ground. Measured after the change: box `402×226`, ratio 1.779 against the film's 1.778 — full frame, no crop. A bottom-weighted mask on the element box (which in a matched-ratio box is exactly the film's edge) dissolves the seam into the dark and takes the watermark with it. The threshold film stays full-bleed; only its focal point is corrected from 30% to 45%.
+
+**Mobile pass.**
+- `viewport-fit=cover` added — `env(safe-area-inset-*)` returned 0 before, so nothing was ever notch- or home-indicator-aware. Return/Teachings marks and both glass panels now inset.
+- `overscroll-behavior:none` on the root, gated behind `(hover:none) and (pointer:coarse)` — stops iOS rubber-band at the source rather than with `preventDefault`, while leaving desktop trackpad swipe-to-navigate untouched. Applied temple-wide rather than corridor-only because the threshold and foyer bounce too.
+- Glass panels: `dvh` alongside `vh` (iOS `vh` is the *large* viewport, so `80vh` pushed the oracle input under Safari's chrome), plus `touch-action:pan-y`, `overscroll-behavior:contain`, `-webkit-overflow-scrolling:touch`, and a `corridorTouchIsOurs()` check so a touch beginning inside a panel is never claimed by the corridor.
+- Inputs forced to 16px on mobile. `#gi` resolved to 15px, which makes iOS zoom the page on focus and never zoom back — indistinguishable from a lock-up.
+- Foyer altars had both `onclick` and `ontouchend`, firing `foyerEnter` twice on every tap. `ontouchend` removed.
+- Oracle type: `clamp()` lower bounds were set against desktop line lengths and collapsed on a phone. Mirror 17px, question 16px, invitation 21px.
+- "Scroll to approach Ganymede" overflowed 390px at .5em tracking — now wraps and tracks tighter.
+- Venus closing actions (Seal / Return) stacked instead of wrapping mid-line.
+- 44px minimum on every mark a visitor is asked to touch. `prefers-reduced-motion` honoured.
+
+**Desktop.** Verified unchanged in every intended respect. Three changes do touch shared code paths and are stated plainly: the corridor now declines to swallow a wheel event before the film is seekable (nothing scrolled in that state anyway, since the root is `overflow:hidden`); arrival fires 0.25s from the end of the film rather than 0.08s, and `vaArrive` snaps to the final frame as it always did; and `overscroll-behavior:contain` on the two glass panels, which prevents scroll chaining out of a panel but does not touch browser navigation gestures (only the viewport-defining element does that; measured `auto` on both `html` and `body` on desktop). An earlier draft applied `overscroll-behavior:none` globally, which would have disabled two-finger swipe-to-navigate in Chrome and Edge — it is now gated behind `(hover:none) and (pointer:coarse)`. An earlier draft of this work included a 26s wall-clock cap on corridor time — it would have pushed a lingering desktop visitor through the corridor, so it was removed before delivery. The portrait letterbox is scoped to `max-width:900px` so a rotated desktop monitor is not affected.
+
+**Considered and rejected.** Moving the two corridor films to jsDelivr. The hypothesis was that `raw.githubusercontent.com` does not serve HTTP range requests. Measured: it does — 206 in 279ms, against 1150ms for jsDelivr cold. The change was reverted. Asset hosts are unchanged.
+
+**Known, not fixed (outside this sprint's scope).**
+- Stray duplicate `</script>` at line 4419. Pre-existing (present in the pre-sprint file too), harmless, left alone.
+- `enterVenusAltar()` is dead code — defined at line 2078, called by nothing, already marked DORMANT. The council routing bug recorded in earlier notes is **not outstanding**: every Venus entry point (foyer altar, council recommendation, mock route, deep link) calls `enterVenusApproach()`. Left untouched.
+- The corridor films remain 8.5MB and 15.4MB. The watchdog means a slow connection is now graceful rather than fatal, but a visitor on a poor connection is carried rather than given the scrub gesture. A lighter mobile encode is the real remedy.
 
 ---
 
