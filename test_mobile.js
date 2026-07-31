@@ -274,7 +274,71 @@ const reply = (status, body) => async () => ({ ok: status >= 200 && status < 300
          grabFn('councilReset') || ''));
   }
 
-  console.log('\nL. Card parsing tolerates what the model actually returns');
+  console.log('\nL. A new card comes to rest at its first line');
+  {
+    const raw = fs.readFileSync(__dirname + '/index.html', 'utf8');
+    const render = grabFn('vaRenderCard');
+
+    // the three old trips to the bottom are gone from the renderer
+    ok('no scroll-to-bottom left in vaRenderCard',
+       !/vg\.scrollTop\s*=\s*vg\.scrollHeight/.test(render));
+    ok('the first-card special case is gone', !/isFirstCard/.test(render));
+    ok('paragraph reveals no longer re-scroll', !/[;{]\s*pin\(\)\s*[;}]/.test(render));
+    ok('the renderer settles to the card element', /vaSettleToCard\(vg,d\)/.test(render));
+    ok('nothing is focused after rendering', !/\.focus\(\)/.test(render));
+
+    const settle = grabFn('vaSettleToCard');
+    ok('reduced motion is respected',
+       /prefers-reduced-motion: reduce/.test(settle) && /reduced \? 'auto' : 'smooth'/.test(settle));
+    ok('it waits for layout and the keyboard before measuring',
+       /setTimeout/.test(settle) && /requestAnimationFrame\(\(\) => requestAnimationFrame/.test(settle));
+    ok('it yields the moment the visitor scrolls',
+       /touchstart/.test(settle) && /wheel/.test(settle));
+    ok('leaving the chamber abandons a pending settle',
+       /vaCancelSettle\(\);/.test(grabFn('enterVenusApproach')));
+
+    // the target itself, as pure geometry
+    const gctx = vm.createContext({ Math, console });
+    vm.runInContext(
+      'const VA_CARD_TOP_MARGIN = ' +
+        (raw.match(/const VA_CARD_TOP_MARGIN\s*=\s*(\d+)/) || [, '12'])[1] + ';\n' +
+      grabFn('vaCardScrollTarget') + '\nglobalThis.target = vaCardScrollTarget;', gctx);
+
+    const scroller = (scrollTop, clientHeight, scrollHeight, rectTop) => ({
+      scrollTop, clientHeight, scrollHeight,
+      getBoundingClientRect: () => ({ top: rectTop }),
+    });
+    const card = rectTop => ({ getBoundingClientRect: () => ({ top: rectTop }) });
+
+    // panel 600 tall showing 1400 of content; the new card starts 820px down
+    let vg = scroller(0, 600, 2400, 100);
+    ok('lands on the card top, less a small margin',
+       gctx.target(vg, card(920)) === 820 - 12, String(gctx.target(vg, card(920))));
+
+    // already scrolled: the delta is measured, not assumed
+    vg = scroller(300, 600, 1400, 100);
+    ok('correct when the panel is already scrolled',
+       gctx.target(vg, card(400)) === 300 + 300 - 12, String(gctx.target(vg, card(400))));
+
+    // a card near the end cannot scroll past what exists
+    vg = scroller(0, 600, 1400, 100);
+    ok('never scrolls past the end of the content',
+       gctx.target(vg, card(1500)) === 800, String(gctx.target(vg, card(1500))));
+
+    // a short thread that does not overflow stays at the top
+    vg = scroller(0, 600, 500, 100);
+    ok('a card that fits needs no scrolling', gctx.target(vg, card(140)) === 0);
+
+    // never negative
+    vg = scroller(0, 600, 1400, 100);
+    ok('a card at the very top clamps to zero', gctx.target(vg, card(100)) === 0);
+
+    ok('the target is the top of the card, never its bottom — height is unread',
+       !/offsetHeight|scrollHeight\s*\)|clientHeight\s*\+/.test(grabFn('vaCardScrollTarget')
+         .replace('vg.scrollHeight - vg.clientHeight', '')));
+  }
+
+  console.log('\nM. Card parsing tolerates what the model actually returns');
   ok('bare JSON', octx.parse('{"mirror":"a"}').mirror === 'a');
   ok('JSON wrapped in prose', octx.parse('Here you go:\n{"mirror":"b"}\nhope that helps').mirror === 'b');
   ok('prose with no JSON still becomes a card', octx.parse('just words').mirror === 'just words');

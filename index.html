@@ -2088,6 +2088,7 @@ function enterVenusApproach(){
   if(window.trackTempleEvent) trackTempleEvent('chamber_entered_venus');
   showScreen('venusApproach');
   foyerActive=false;
+  vaCancelSettle();
   corridorRelease(vaScrub);
   vaScrub={target:0,current:0,dur:5.2,raf:null,arrived:false,carried:false,_stallT:null};
   vaTouchY=null;
@@ -2129,6 +2130,84 @@ function vaOpenConversation(){
   },2600);
 }
 
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   WHERE A NEW CARD COMES TO REST
+
+   Three things used to send the view to the bottom of a reply:
+
+     1. a first-card special case that scrolled to scrollHeight outright — a
+        workaround for unstable geometry while #va-vthread grew from zero,
+        which cured a jump by resting in the wrong place;
+     2. the question's reveal, which scrolled to scrollHeight again once the
+        last paragraph had faded in;
+     3. pin() running on every paragraph reveal, which fought the visitor if
+        they had begun reading for themselves.
+
+   On a desktop the card was short enough that its bottom and its top were
+   nearly the same place. Inside a 78dvh panel on a phone they are not, so the
+   visitor arrived at the end of what Venus said and had to climb back up.
+
+   The card is built whole — every paragraph and the closing question are all
+   appended at opacity 0 before insertion — so its final height exists the
+   moment it enters the document. One settle is therefore enough, and nothing
+   needs to move again while she speaks.
+   ═══════════════════════════════════════════════════════════════════════════ */
+const VA_CARD_TOP_MARGIN = 12;      // a breath of room above her first line
+let _vaSettle = null;
+
+/* Pure geometry, measured against the scroller rather than an offsetParent, so
+   the panel's own padding cannot skew it. */
+function vaCardScrollTarget(vg, cardEl){
+  const delta = cardEl.getBoundingClientRect().top - vg.getBoundingClientRect().top;
+  const raw = vg.scrollTop + delta - VA_CARD_TOP_MARGIN;
+  const ceiling = Math.max(0, vg.scrollHeight - vg.clientHeight);
+  return Math.max(0, Math.min(raw, ceiling));
+}
+
+function vaCancelSettle(){
+  if(!_vaSettle) return;
+  clearTimeout(_vaSettle.timer);
+  if(_vaSettle.detach) _vaSettle.detach();
+  _vaSettle = null;
+}
+
+/* Settle once, after layout and the keyboard have both finished moving, and
+   yield immediately if the visitor starts reading on their own. */
+function vaSettleToCard(vg, cardEl){
+  if(!vg || !cardEl) return;
+  vaCancelSettle();
+
+  let cancelled = false;
+  const yield_ = () => { cancelled = true; vaCancelSettle(); };
+  vg.addEventListener('touchstart', yield_, {passive:true, once:true});
+  vg.addEventListener('wheel', yield_, {passive:true, once:true});
+  const detach = () => {
+    vg.removeEventListener('touchstart', yield_);
+    vg.removeEventListener('wheel', yield_);
+  };
+
+  // The keyboard dismissing changes --kb-inset, which moves the panel. Waiting
+  // one beat past that keeps the measurement honest.
+  const timer = setTimeout(() => {
+    requestAnimationFrame(() => requestAnimationFrame(() => {
+      if(cancelled) return;
+      const reduced = window.matchMedia &&
+        window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const top = vaCardScrollTarget(vg, cardEl);
+      try{
+        vg.scrollTo({top, behavior: reduced ? 'auto' : 'smooth'});
+      }catch(e){
+        vg.scrollTop = top;          // older engines without scrollTo options
+      }
+      detach();
+      _vaSettle = null;
+    }));
+  }, 220);
+
+  _vaSettle = {timer, detach};
+}
+
 function vaRenderCard(data){
   const t=document.getElementById('va-vthread');if(!t)return;
   const d=document.createElement('div');d.className='msg msg-v';
@@ -2152,34 +2231,24 @@ function vaRenderCard(data){
   if(questionText){const q=document.createElement('div');q.className='va-question';q.style.cssText='opacity:0;transition:opacity 3s ease;margin-top:1.8rem;';q.textContent=questionText;card.appendChild(q);}
   const vg=document.getElementById('va-glass');
   d.appendChild(who);d.appendChild(card);t.appendChild(d);
-  // Force a synchronous reflow immediately after insertion (reading
-  // offsetHeight forces the browser to compute layout right now, rather than
-  // deferring it to the next paint). Without this, scrollHeight/clientHeight
-  // read in the same tick as appendChild can be stale and undersized — on
-  // the very first reply that stale read produced an undersized scroll
-  // ceiling, silently corrected ~400ms later when the first paragraph's
-  // reveal timeout called pin() again with now-current geometry, and that
-  // late correction was the visible jump. Forcing the reflow here guarantees
-  // the very first pin already uses final geometry, in one write.
+  // Force a synchronous reflow immediately after insertion. Reading
+  // offsetHeight makes the browser compute layout now rather than deferring it
+  // to the next paint, so the card's final height is in the document before
+  // anything measures against it — which matters most on the very first reply,
+  // where #va-vthread has just grown from nothing.
   void d.offsetHeight;
-  const anchorTop=d.offsetTop;
-  const isFirstCard=vHistory.filter(m=>m.role==='assistant').length===1;
-  const pin=()=>{if(!vg)return;
-    // On the first card, anchorTop is calculated against a vthread that
-    // just grew from zero height — the geometry is unstable and produces a
-    // visible jump. Scroll to bottom instead, which always settles correctly.
-    if(isFirstCard){vg.scrollTop=vg.scrollHeight;return;}
-    vg.scrollTop=Math.min(anchorTop,vg.scrollHeight-vg.clientHeight);
-  };
-  pin();
-  // Pure opacity — no movement. Venus arrives, she does not shift.
+  // Her first line, not her last. Measured once, after the layout and the
+  // keyboard have both stopped moving.
+  vaSettleToCard(vg,d);
+  // Pure opacity — no movement. Venus arrives, she does not shift, and the
+  // view does not chase her: the card's full height is already in the layout.
   paras.forEach((para,i)=>{
     const sp=mirrorEl.children[i];
-    setTimeout(()=>{sp.style.opacity='1';pin();},400+i*2600);
+    setTimeout(()=>{sp.style.opacity='1';},400+i*2600);
   });
   const total=400+Math.max(0,paras.length-1)*2600+3000;
   const q=card.querySelector('.va-question');
-  if(q)setTimeout(()=>{q.style.opacity='1';if(vg)vg.scrollTop=vg.scrollHeight;},total+800);
+  if(q)setTimeout(()=>{q.style.opacity='1';},total+800);
   // Seam: the closing rite must never open while her final words are still
   // arriving. Record the real moment this card finishes revealing (paragraph
   // fade, then the question's own fade if present) so vaMaybeShowClosing can

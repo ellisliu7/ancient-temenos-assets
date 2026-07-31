@@ -1,5 +1,31 @@
 # Ancient Temenos — Current State
-**Last updated:** 31 July 2026 (mobile production sprint, round 3)
+**Last updated:** 31 July 2026 (mobile production sprint, round 4)
+
+---
+
+## 31 July 2026 — Round 4: where a Venus card comes to rest
+
+Reported from Safari on iPhone after round 3 shipped: Venus responds and the chamber scrolls, but the first reply arrives with the view at the *end* of what she said.
+
+**Root cause — three separate trips to the bottom, all inside `vaRenderCard`:**
+
+1. A first-card special case: `if(isFirstCard){vg.scrollTop=vg.scrollHeight;return;}`. Added in the 6 July session to cure a visible jump while `#va-vthread` grew from zero height — it cured the jump by resting in the wrong place. This is the one El hit.
+2. The question's reveal, which scrolled to `scrollHeight` again once the last paragraph had faded in — so even a corrected first position would have been undone seconds later.
+3. `pin()` firing on every paragraph reveal, which fought a visitor who had begun reading for themselves.
+
+On a desktop the card is short enough that its top and bottom are nearly the same place, which is why this survived. Inside a 78dvh panel on a phone they are not.
+
+Nothing was scrolling the input or the button, and nothing refocused after submission — `inp.disabled=true` during flight is what dismisses the keyboard, and no focus is restored afterwards.
+
+**Fix.** One settle, to the top of the new card. `vaCardScrollTarget()` measures the card against the scroller with `getBoundingClientRect` rather than `offsetTop`, so the panel's 2rem padding cannot skew it, and clamps to the real scroll ceiling. `vaSettleToCard()` waits 220ms plus a double `requestAnimationFrame` before measuring — past the keyboard dismissal, which moves the panel through `--kb-inset` — uses `scrollTo({behavior:'smooth'})` or `'auto'` under `prefers-reduced-motion`, and abandons itself the instant the visitor touches or wheels the panel.
+
+The card is built whole: every paragraph and the closing question are appended at opacity 0 *before* insertion, so its final height is in the layout the moment it enters the document. One settle is therefore sufficient and nothing needs to chase her while she speaks. Paragraph reveals are now pure opacity, as the comment beside them always claimed.
+
+`enterVenusApproach()` cancels any pending settle, so a stale one cannot fire into a rebuilt thread and move a returning visitor.
+
+Also rewrote the stale comment above `void d.offsetHeight`, which still described the `pin()` machinery that no longer exists.
+
+84 checks in `test_mobile.js`, 15 in `test_corridor.js`.
 
 ---
 
